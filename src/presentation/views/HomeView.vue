@@ -1,0 +1,287 @@
+<script setup lang="ts">
+  import { useUserStore } from "../stores/user.store";
+  import { useCertifiedStore } from "../stores/certified.store";
+
+  import Card from '../components/Card.vue'
+  import BirthdayList from '../components/BirthdayList.vue';
+
+  const { getUsername, getUserId } = useUserStore();
+
+  const certifiedStore = useCertifiedStore();
+
+  const { downloadCertificate, error } = certifiedStore;
+
+  const download = async () => {
+    isLoadingLetterCertfied.value = true;
+    try {
+      await downloadCertificate(getUserId);
+    } catch (error) {
+      
+    } finally {
+      isLoadingLetterCertfied.value = false;
+    };
+  };
+</script>
+
+<template>
+  <main class="flex flex-col">
+    <Card class="my-5" color="blue" width="100%" :show-footer="false">
+      <div class="flex flex-wrap flex-row">
+        <div class="flex flex-wrap gap-6 content-center w-1/2">
+          <div>
+            <img src="https://www.shareicon.net/data/512x512/2016/08/05/806962_user_512x512.png" alt="Logo"
+              class="w-[5rem]">
+          </div>
+          <div class="self-center">
+            <p class="text-xl font-bold">Hola, {{ getUsername }}</p>
+            <p class="text-base">Hoy es {{ dayName }}, {{ date }}</p>
+          </div>
+        </div>
+        <div class="self-center flex flex-wrap flex-row justify-end w-1/2 gap-6">
+          <router-link to="/perfil"
+            class="bg-[var(--info-color)] content-center px-6 py-2 h-1/2 flex rounded text-white">
+            <span class="material-symbols-outlined">
+              person
+            </span>
+            Mí perfil
+          </router-link>
+          <button class="bg-[var(--light-color)] content-center px-6 py-2 h-1/2 flex rounded">
+            <span class="material-symbols-outlined">
+              settings
+            </span>
+            Configuraciones
+          </button>
+        </div>
+      </div>
+    </Card>
+
+    <h2 class="text-2xl font-bold">Portal</h2>
+    <el-divider />
+
+    <el-row :gutter="30">
+
+      <el-col :span="8">
+        <el-card style="min-width: 300px; max-width: 100%" shadow="hover">
+          <template #header>
+            <div class="card-header">
+              <span class="font-bold text-[var(--secondary-color)]"><el-icon>
+                  <Calendar />
+                </el-icon> Tiempo Libre
+              </span>
+            </div>
+          </template>
+          <div class="flex flex-col items-center">
+
+            <div class=" flex flex-row items-center gap-8">
+              <div class="flex flex-col items-center">
+                <span class="material-symbols-outlined text-[var(--secondary-color)] font-bold text-6xl">
+                  beach_access
+                </span>
+                <span class="text-[var(--secondary-color)]">Vacaciones</span>
+              </div>
+              <div class="flex flex-col items-center">
+                <span class="material-symbols-outlined text-[var(--secondary-color)] font-bold text-6xl">
+                  healing
+                </span>
+                <span class="text-[var(--secondary-color)]">Citas médicas</span>
+              </div>
+            </div>
+            <router-link tag="span" class="items-center" to="/solicitar-ausencia"><el-button class="mt-6" size="large" color="var(--secondary-color)" round>Solicitar Tiempo Libre</el-button></router-link>
+          </div>
+        </el-card>
+
+        <el-card class="mt-6" style="min-width: 300px; max-width: 100%" shadow="hover">
+          <template #header>
+            <div class="card-header">
+              <span class="font-bold text-[var(--secondary-color)]"><el-icon>
+                  <Document />
+                </el-icon> Certificaciones</span>
+            </div>
+          </template>
+          <div class="flex flex-col items-center">
+
+            <div class=" flex flex-row items-center gap-8">
+              <div v-loading="isLoadingLetterCertfied" @click="download()"
+                class="p-3 flex flex-col items-center cursor-pointer rounded-lg hover:bg-[var(--info-alt-color)]">
+                <span class="material-symbols-outlined text-[var(--secondary-color)] font-bold text-6xl">
+                  docs
+                </span>
+                <span class="text-[var(--secondary-color)]">Carta Laboral</span>
+              </div>
+              <div class="flex flex-col items-center cursor-pointer p-3 rounded-lg hover:bg-[var(--info-alt-color)]">
+                <span class="material-symbols-outlined text-[var(--secondary-color)] font-bold text-6xl">
+                  shield_person
+                </span>
+                <span class="text-[var(--secondary-color)]">Ficha Personal</span>
+              </div>
+            </div>
+
+
+            <el-button class="mt-6" size="large" color="var(--secondary-color)" round>Más Certificados</el-button>
+          </div>
+        </el-card>
+      </el-col>
+
+      <el-col :span="16">
+        <el-card style="min-width: 300px; max-width: 100%; height: 100%;" shadow="hover">
+          <template #header>
+            <div class="card-header">
+              <span class="font-bold text-[var(--secondary-color)]"><el-icon>
+                  <Comment />
+                </el-icon> Anuncios - Comunidad</span>
+            </div>
+          </template>
+          <div class="flex flex-row gap-6">
+            <el-button icon="Plus">Nueva Publicación</el-button>
+            <el-select disabled placeholder="Todas las publicaciones" style="width: 240px">
+              <el-option />
+            </el-select>
+          </div>
+          <el-divider />
+
+          <el-scrollbar height="360px">
+            <el-card style="max-width: 100%" shadow="hover">
+              <div class="flex flex-col gap-4">
+                <div v-for="index in 10" :key="index" class="flex flex-row gap-6">
+                  <el-avatar shape="square" :size="50" :src="state.squareUrl" />
+                  <span>
+                    Lorem ipsum dolor sit amet, consectetur adipiscing elit. Ut ullamcorper malesuada turpis sed
+                    imperdiet. Cras quis euismod augue. Pellentesque placerat vel mauris at auctor.
+                    <el-divider style="margin: 10px 0;" />
+                  </span>
+                </div>
+              </div>
+
+            </el-card>
+          </el-scrollbar>
+
+        </el-card>
+      </el-col>
+
+    </el-row>
+
+    <el-row class="my-6" :gutter="30">
+      <el-col :span="24">
+        <el-card style="min-width: 300px; max-width: 100%; min-height: 300px;" shadow="hover">
+          <template #header>
+            <div class="card-header">
+              <span class="font-bold text-[var(--secondary-color)]">
+                <el-icon>
+                  <Menu />
+                </el-icon>
+                Equipo
+              </span>
+            </div>
+          </template>
+          <div class="justify-self-center">
+
+            <el-empty description="No content available" />
+          </div>
+        </el-card>
+      </el-col>
+    </el-row>
+
+    <el-row :gutter="30">
+      <el-col :span="8">
+        <el-card style="min-width: 300px; max-width: 100%" shadow="hover">
+          <template #header>
+            <div class="card-header">
+              <span class="font-bold text-[var(--secondary-color)]">Enlaces de la Empresa</span>
+            </div>
+          </template>
+          <div class="justify-self-center">
+
+            <el-empty description="No content available" />
+          </div>
+        </el-card>
+      </el-col>
+
+      <el-col :span="8">
+        <el-card style="min-width: 300px; max-width: 100%" shadow="hover">
+          <template #header>
+            <div class="card-header">
+              <span class="font-bold text-[var(--secondary-color)]">
+                <el-icon>
+                  <Bell />
+                </el-icon>
+                Cumpleaños
+              </span>
+            </div>
+          </template>
+          <div class="w-full">
+
+            <el-scrollbar height="295px">
+              <BirthdayList></BirthdayList>
+            </el-scrollbar>
+
+          </div>
+        </el-card>
+      </el-col>
+
+      <el-col :span="8">
+        <el-card style="min-width: 300px; max-width: 100%" shadow="hover">
+          <template #header>
+            <div class="card-header">
+              <span class="font-bold text-[var(--secondary-color)]">
+                <el-icon>
+                  <Menu />
+                </el-icon>
+                Bienvenido a HiCody!
+              </span>
+            </div>
+          </template>
+          <div class="flex flex-col w-full gap-10">
+            <div class="self-center">
+              <span class="text-[90px] material-symbols-outlined">
+                waving_hand
+              </span>
+            </div>
+            <div class="self-center">
+              <div class="flex flex-col">
+                <span class="text-2xl">Bienvenido <span class="font-medium">Oscar Fuentes</span>, al equipo HiCody!</span>
+                <span class="text-lg text-center">Inició el lunes, 4 de Diciembre</span>
+              </div>
+              
+            </div>
+            <div></div>
+          </div>
+        </el-card>
+      </el-col>
+    </el-row>
+
+  </main>
+</template>
+
+<script lang="ts">
+
+import { reactive, ref } from 'vue'
+
+const state = reactive({
+  circleUrl:
+    'https://cube.elemecdn.com/3/7c/3ea6beec64369c2642b92c6726f1epng.png',
+  squareUrl:
+    'https://cube.elemecdn.com/9/c2/f0ee8a3c7c9638a54940382568c9dpng.png',
+  sizeList: ['small', '', 'large'] as const,
+})
+
+const isLoadingLetterCertfied = ref(false);
+
+export default {
+  data() {
+    return {
+      dayName: '',
+      date: ''
+    };
+  },
+  mounted() {
+    const daysOfWeek = ['domingo', 'lunes', 'martes', 'miércoles', 'jueves', 'viernes', 'sábado'];
+    const today = new Date();
+    this.dayName = daysOfWeek[today.getDay()];
+    this.date = today.toLocaleDateString('es-ES', {
+      day: 'numeric',
+      month: 'long',
+    });
+  }
+};
+
+</script>
