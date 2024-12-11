@@ -1,9 +1,9 @@
 <script setup lang="ts">
-import { useAuthStore } from "../stores/auth.store";
+import { useUserStore } from "../stores/user.store";
 import Card from '../components/Card.vue'
 import SearchBar from '../components/SearchBar.vue'
 
-const { getUsername } = useAuthStore();
+const { getUsername } = useUserStore();
 
 </script>
 

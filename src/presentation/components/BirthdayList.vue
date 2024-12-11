@@ -32,7 +32,7 @@ const state = reactive({
 })
 
 const loading = ref<boolean>(false);
-const userBirthdaysList = ref<UserBirthdayList[]>([]);
+const userBirthdaysList = ref<UserBirthdayList>([]);
 
 const loadData = async () => {
   const { loading: isLoading, userBirthdaysList: birthdays } = await useUserStore().fetchBirthdaysOfMonth();

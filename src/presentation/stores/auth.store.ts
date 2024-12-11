@@ -23,13 +23,21 @@ export const useAuthStore = defineStore('auth', () => {
       let authResponse: AuthResponse;
   
       authResponse = await LoginUseCase.execute(loginForm.email, loginForm.password);
-
-      if (authResponse.status != "Success") {
+  
+      if (authResponse.status !== "Success") {
         throw new Error(authResponse.message);
       }
   
+      if (!authResponse.userInfo || !authResponse.userInfo[0]) {
+        throw new Error("User information is missing in the response.");
+      }
+  
+      if (!authResponse.tokenInfo || !authResponse.tokenInfo[0]) {
+        throw new Error("Token information is missing in the response.");
+      }
+  
       const userInfo = authResponse.userInfo[0];
-      const tokenInfo = authResponse.tokenInfo[0]!;
+      const tokenInfo = authResponse.tokenInfo[0];
   
       user.value = new User(
         userInfo.id,
@@ -42,12 +50,12 @@ export const useAuthStore = defineStore('auth', () => {
       localStorage.setItem("user", JSON.stringify(user.value));
   
       return user.value;
-  
     } catch (error) {
       resetForm();
       throw error;
     }
   };
+  
 
   return {
     user,

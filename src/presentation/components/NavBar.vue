@@ -1,8 +1,8 @@
 <script setup lang="ts">
 import { RouterLink, RouterView } from 'vue-router'
-import { useAuthStore } from "../stores/auth.store";
+import { useUserStore } from "../stores/user.store";
 
-const { getUsername } = useAuthStore();
+const { getUsername } = useUserStore();
 
 </script>
 
