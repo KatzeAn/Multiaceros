@@ -1,0 +1,1 @@
+import{_ as c,s as e,f as n,m as r,n as s,p as _}from"./index-BaQHJua5.js";const a={};function l(p,m){const o=e("el-empty"),t=e("el-card");return n(),r(t,null,{default:s(()=>[_(o)]),_:1})}const d=c(a,[["render",l]]);export{d as default};
