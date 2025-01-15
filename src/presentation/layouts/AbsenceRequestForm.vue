@@ -71,15 +71,6 @@ const ruleFormRef = ref<FormInstance>();
 const { AbsenceRequestForm, CreateAbsenceRequest } = useUserStore();
 const isLoading = ref(false);
 
-// const ruleForm = reactive<AbsenceRequest>({
-//   from: '',
-//   to: '',
-//   type: '',
-//   comment: '',
-//   evidencePath: 'c://file.pdf',
-//   requestedById: 0
-// })
-
 const rules = reactive<FormRules<AbsenceRequest>>({
   from: [
     {

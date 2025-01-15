@@ -4,7 +4,7 @@ import axios from 'axios';
 
 export class AuthModel extends AuthRepository {
 
-    private apiUrl = "https://localhost:52175/api/User/ValidateUserOrEmployee";
+    private apiUrl = "https://localhost:59372/api/User/ValidateUserOrEmployee";
 
     async signInWithEmailAndPassword(email: string, password: string): Promise<AuthResponse> {
         try {

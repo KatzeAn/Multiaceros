@@ -1,0 +1,210 @@
+<template>
+  <el-card>
+    <el-button color="var(--secondary-color)" @click="dialogVisible = true">Agregar Pausa Activa</el-button>
+
+    <el-dialog
+        v-model="dialogVisible"
+        title="Pausa Activa"
+        width="500"
+        :before-close="handleClose"
+    >
+
+        <el-form label-position="top" ref="ruleFormRef" style="max-width: 600px" :model="AbsenceRequestForm"
+                        label-width="auto" class="mt-6" :size="formSize" status-icon>
+
+            <el-row :gutter="12">
+                <el-col :span="12">
+                    <el-form-item label="Fecha" prop="from">
+                        <el-date-picker v-model="AbsenceRequestForm.from" type="date" aria-label="Selecciona una fecha"
+                                        placeholder="Selecciona una fecha" style="width: 100%" />
+                    </el-form-item>
+                </el-col>
+                <el-col :span="12">
+                    <el-form-item label="Hora" prop="to">
+                        <el-time-picker v-model="AbsenceRequestForm.to" value-format="HH:mm:ss" placeholder="Seleccione una hora"></el-time-picker>
+                    </el-form-item>
+                </el-col>
+            </el-row>
+                        
+            <el-form-item label="Descripción" prop="comment">
+                <el-input v-model="AbsenceRequestForm.comment" type="textarea" />
+            </el-form-item>
+
+        </el-form>
+
+        <template #footer>
+        <div class="dialog-footer">
+            <el-button @click="dialogVisible = false">Cancelar</el-button>
+            <el-button type="primary" @click="dialogVisible = false">
+            Agregar
+            </el-button>
+        </div>
+        </template>
+    </el-dialog>
+
+    <el-table :data="tableData" stripe style="margin-top: 2rem; width: 100%">
+        <el-table-column prop="date" label="Fecha" width="180" />
+        <el-table-column prop="name" label="Hora" width="180" />
+        <el-table-column prop="address" label="Descripción" />
+        <el-table-column prop="address" label="Acciones">
+            <el-button type="primary" @click="dialogVisible2 = true">Editar</el-button>
+            <el-button type="danger" @click="">Eliminar</el-button>
+        </el-table-column>
+    </el-table>
+
+    <el-dialog
+        v-model="dialogVisible2"
+        title="Pausa Activa"
+        width="500"
+        :before-close="handleClose"
+    >
+
+        <el-form label-position="top" ref="ruleFormRef" style="max-width: 600px" :model="AbsenceRequestForm"
+                        label-width="auto" class="mt-6" :size="formSize" status-icon>
+
+            <el-row :gutter="12">
+                <el-col :span="12">
+                    <el-form-item label="Fecha" prop="from">
+                        <el-date-picker v-model="AbsenceRequestForm.from" type="date" aria-label="Selecciona una fecha"
+                                        placeholder="Selecciona una fecha" style="width: 100%" />
+                    </el-form-item>
+                </el-col>
+                <el-col :span="12">
+                    <el-form-item label="Hora" prop="to">
+                        <el-time-picker v-model="AbsenceRequestForm.to" value-format="HH:mm:ss" placeholder="Seleccione una hora"></el-time-picker>
+                    </el-form-item>
+                </el-col>
+            </el-row>
+                        
+            <el-form-item label="Descripción" prop="comment">
+                <el-input v-model="AbsenceRequestForm.comment" type="textarea" />
+            </el-form-item>
+
+        </el-form>
+
+        <template #footer>
+        <div class="dialog-footer">
+            <el-button @click="dialogVisible2 = false">Cancelar</el-button>
+            <el-button type="primary" @click="dialogVisible2 = false">
+            Agregar
+            </el-button>
+        </div>
+        </template>
+    </el-dialog>
+  </el-card>
+</template>
+
+<script lang="ts" setup>
+
+import { ref } from 'vue';
+import { ElMessage, ElMessageBox } from 'element-plus'
+import { useUserStore } from '../../stores/user.store';
+import type { ComponentSize, FormInstance, FormRules, UploadProps, UploadUserFile } from 'element-plus'
+
+const { AbsenceRequestForm, CreateAbsenceRequest } = useUserStore();
+
+const dialogVisible = ref(false)
+const dialogVisible2 = ref(false)
+
+const isLoading = ref(false);
+const formSize = ref<ComponentSize>('default')
+const ruleFormRef = ref<FormInstance>();
+
+const tableData = [
+  {
+    date: '16-12-2024',
+    name: '10:00 AM',
+    address: 'Pausa activa',
+  },
+  {
+    date: '16-12-2024',
+    name: '03:00 PM',
+    address: 'Pausa activa',
+  },
+  {
+    date: '17-12-2024',
+    name: '10:00 AM',
+    address: 'Pausa activa',
+  },
+  {
+    date: '17-12-2024',
+    name: '03:00 PM',
+    address: 'Pausa activa',
+  },
+  {
+    date: '18-12-2024',
+    name: '10:00 AM',
+    address: 'Pausa activa',
+  },
+  {
+    date: '18-12-2024',
+    name: '03:00 PM',
+    address: 'Pausa activa',
+  },
+  {
+    date: '19-12-2024',
+    name: '10:00 AM',
+    address: 'Pausa activa',
+  },
+  {
+    date: '19-12-2024',
+    name: '03:00 PM',
+    address: 'Pausa activa',
+  },
+]
+
+const handleClose = (done: () => void) => {
+  ElMessageBox.confirm('¿Estás seguro que quieres cerrar?')
+    .then(() => {
+      done()
+    })
+    .catch(() => {
+      // catch error
+    })
+}
+
+const submitForm = async (formEl: FormInstance | undefined) => {
+  
+};
+
+const resetForm = (formEl: FormInstance | undefined) => {
+  if (!formEl) return
+  formEl.resetFields()
+}
+
+const fileList = ref<UploadUserFile[]>([
+//   {
+//     name: 'element-plus-logo.svg',
+//     url: 'https://element-plus.org/images/element-plus-logo.svg',
+//   },
+//   {
+//     name: 'element-plus-logo2.svg',
+//     url: 'https://element-plus.org/images/element-plus-logo.svg',
+//   },
+])
+
+const handleRemove: UploadProps['onRemove'] = (file, uploadFiles) => {
+  console.log(file, uploadFiles)
+}
+
+const handlePreview: UploadProps['onPreview'] = (uploadFile) => {
+  console.log(uploadFile)
+}
+
+const handleExceed: UploadProps['onExceed'] = (files, uploadFiles) => {
+  ElMessage.warning(
+    `The limit is 3, you selected ${files.length} files this time, add up to ${
+      files.length + uploadFiles.length
+    } totally`
+  )
+}
+
+const beforeRemove: UploadProps['beforeRemove'] = (uploadFile, uploadFiles) => {
+  return ElMessageBox.confirm(
+    `Cancel the transfer of ${uploadFile.name} ?`
+  ).then(
+    () => true,
+    () => false
+  )
+}
+</script>

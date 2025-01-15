@@ -86,7 +86,10 @@
                 <span class="text-[var(--secondary-color)]">Citas médicas</span>
               </div>
             </div>
-            <router-link tag="span" class="items-center" to="/solicitar-ausencia"><el-button class="mt-6" size="large" color="var(--secondary-color)" round>Solicitar Tiempo Libre</el-button></router-link>
+            <div class="flex flex-row items-center gap-5">
+              <router-link tag="span" class="items-center" to="/solicitar-ausencia"><el-button class="mt-6" size="large" color="var(--secondary-color)" round>Solicitar Tiempo Libre</el-button></router-link>
+              <router-link tag="span" class="items-center" to="/gestionar-ausencias"><el-button icon="setting" class="mt-6" size="large" color="var(--secondary-color)" round>Gestionar Ausencias</el-button></router-link>
+            </div>
           </div>
         </el-card>
 

@@ -20,7 +20,7 @@
           <input type="checkbox" id="remember">
           <label class="ml-2 font-medium text-base" for="remember">Recuerdame por 30 dias</label>
         </div>
-        <button class="font-medium text-base text-primary">Olvidé mí contraseña</button>
+        <a class="font-medium text-base text-primary cursor-pointer" @click="dialogFormVisible = true">Olvidé mí contraseña</a>
       </div>
       <div class="mt-8 flex flex-col gap-y-4">
         <button v-loading="isLoading" type="submit"
@@ -29,11 +29,26 @@
       </div>
     </div>
   </form>
+  <el-dialog v-model="dialogFormVisible" title="Restablecer contraseña" width="500">
+    <el-form :model="form">
+      <el-form-item label="Correo electrónico" :label-width="formLabelWidth">
+        <el-input v-model="form.name" autocomplete="off" />
+      </el-form-item>
+    </el-form>
+    <template #footer>
+      <div class="dialog-footer">
+        <el-button @click="dialogFormVisible = false">Cancelar</el-button>
+        <el-button type="primary" @click="dialogFormVisible = false">
+          Confirmar
+        </el-button>
+      </div>
+    </template>
+  </el-dialog>
 </template>
 
 <script setup lang="ts">
 
-  import { onMounted, ref } from 'vue';
+  import { onMounted, reactive, ref } from 'vue';
   import { useRouter } from "vue-router";
   import { ElNotification } from 'element-plus'
 
@@ -42,6 +57,20 @@
 
   const router = useRouter();
   const isLoading = ref(false);
+  const dialogFormVisible = ref(false)
+
+  const formLabelWidth = '140px'
+
+const form = reactive({
+  name: '',
+  region: '',
+  date1: '',
+  date2: '',
+  delivery: false,
+  type: [],
+  resource: '',
+  desc: '',
+})
 
   const login = async () => {
     isLoading.value = true; // Activar estado de carga

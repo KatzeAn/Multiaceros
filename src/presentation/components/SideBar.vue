@@ -15,7 +15,6 @@
         <h3>Menu</h3>
         <div class="menu">
 
-            <!-- Inicio -->
             <router-link class="button" to="/home">
                 <span class="material-symbols-outlined">
                     home
@@ -23,7 +22,6 @@
                 <span class="text">Inicio</span>
             </router-link>
 
-            <!-- Certicados -->
             <router-link class="button" to="/certificados">
                 <span class="material-symbols-outlined">
                     analytics
@@ -31,7 +29,6 @@
                 <span class="text">Certificados</span>
             </router-link>
 
-            <!-- Comprobantes -->
             <router-link class="button" to="/">
                 <span class="material-symbols-outlined">
                     attach_money
@@ -39,7 +36,6 @@
                 <span class="text">Comprobantes</span>
             </router-link>
 
-            <!-- Vacaciones y ausencias -->
             <router-link class="button" to="/">
                 <span class="material-symbols-outlined">
                     beach_access
@@ -47,13 +43,10 @@
                 <span class="text">Vacaciones y Ausencias</span>
             </router-link>
 
-            <!-- Usuarios -->
-            <router-link class="button" to="/">
-                <span class="material-symbols-outlined">
-                    group
-                </span>
-                <span class="text">Usuarios</span>
-            </router-link>
+            <router-link class="button" :to="{ path: '/portal-rrhh' }">
+    <span class="material-symbols-outlined">group</span>
+    <span class="text">Portal Recursos Humanos</span>
+</router-link>
         </div>
 
         <div class="flex"></div>
