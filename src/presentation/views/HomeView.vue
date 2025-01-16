@@ -55,199 +55,199 @@
     <h2 class="text-2xl font-bold">Portal</h2>
     <el-divider />
 
-    <el-row :gutter="30">
-
-      <el-col :span="8">
-        <el-card style="min-width: 300px; max-width: 100%" shadow="hover">
-          <template #header>
-            <div class="card-header">
-              <span class="font-bold text-[var(--secondary-color)]"><el-icon>
-                  <Calendar />
-                </el-icon> Tiempo Libre
-              </span>
-            </div>
-          </template>
+    <el-row :gutter="30" class="flex flex-wrap md:flex-row flex-col">
+  <el-col :span="8" class="md:w-1/3 w-full">
+    <el-card style="min-width: 300px; max-width: 100%" shadow="hover">
+      <template #header>
+        <div class="card-header">
+          <span class="font-bold text-[var(--secondary-color)]">
+            <el-icon>
+              <Calendar />
+            </el-icon>
+            Tiempo Libre
+          </span>
+        </div>
+      </template>
+      <div class="flex flex-col items-center">
+        <div class="flex flex-row items-center gap-8">
           <div class="flex flex-col items-center">
-
-            <div class=" flex flex-row items-center gap-8">
-              <div class="flex flex-col items-center">
-                <span class="material-symbols-outlined text-[var(--secondary-color)] font-bold text-6xl">
-                  beach_access
-                </span>
-                <span class="text-[var(--secondary-color)]">Vacaciones</span>
-              </div>
-              <div class="flex flex-col items-center">
-                <span class="material-symbols-outlined text-[var(--secondary-color)] font-bold text-6xl">
-                  healing
-                </span>
-                <span class="text-[var(--secondary-color)]">Citas médicas</span>
-              </div>
-            </div>
-            <div class="flex flex-row items-center gap-5">
-              <router-link tag="span" class="items-center" to="/solicitar-ausencia"><el-button class="mt-6" size="large" color="var(--secondary-color)" round>Solicitar Tiempo Libre</el-button></router-link>
-              <router-link tag="span" class="items-center" to="/gestionar-ausencias"><el-button icon="setting" class="mt-6" size="large" color="var(--secondary-color)" round>Gestionar Ausencias</el-button></router-link>
-            </div>
+            <span class="material-symbols-outlined text-[var(--secondary-color)] font-bold text-6xl">
+              beach_access
+            </span>
+            <span class="text-[var(--secondary-color)]">Vacaciones</span>
           </div>
-        </el-card>
-
-        <el-card class="mt-6" style="min-width: 300px; max-width: 100%" shadow="hover">
-          <template #header>
-            <div class="card-header">
-              <span class="font-bold text-[var(--secondary-color)]"><el-icon>
-                  <Document />
-                </el-icon> Certificaciones</span>
-            </div>
-          </template>
           <div class="flex flex-col items-center">
-
-            <div class=" flex flex-row items-center gap-8">
-              <div v-loading="isLoadingLetterCertfied" @click="download()"
-                class="p-3 flex flex-col items-center cursor-pointer rounded-lg hover:bg-[var(--info-alt-color)]">
-                <span class="material-symbols-outlined text-[var(--secondary-color)] font-bold text-6xl">
-                  docs
-                </span>
-                <span class="text-[var(--secondary-color)]">Carta Laboral</span>
-              </div>
-              <div class="flex flex-col items-center cursor-pointer p-3 rounded-lg hover:bg-[var(--info-alt-color)]">
-                <span class="material-symbols-outlined text-[var(--secondary-color)] font-bold text-6xl">
-                  shield_person
-                </span>
-                <span class="text-[var(--secondary-color)]">Ficha Personal</span>
-              </div>
-            </div>
-
-
-            <el-button class="mt-6" size="large" color="var(--secondary-color)" round>Más Certificados</el-button>
+            <span class="material-symbols-outlined text-[var(--secondary-color)] font-bold text-6xl">
+              healing
+            </span>
+            <span class="text-[var(--secondary-color)]">Citas médicas</span>
           </div>
-        </el-card>
-      </el-col>
+        </div>
+        <div class="flex flex-row items-center gap-3">
+          <router-link tag="span" class="items-center" to="/solicitar-ausencia">
+            <el-button class="mt-6 text-sm px-4 py-2" size="small" color="var(--secondary-color)" round>Solicitar Tiempo Libre</el-button>
+          </router-link>
+          <router-link tag="span" class="items-center" to="/gestionar-ausencias">
+            <el-button icon="setting" class="mt-6 text-sm px-4 py-2" size="small" color="var(--secondary-color)" round>Gestionar Ausencias</el-button>
+          </router-link>
+        </div>
+      </div>
+    </el-card>
+  </el-col>
 
-      <el-col :span="16">
-        <el-card style="min-width: 300px; max-width: 100%; height: 100%;" shadow="hover">
-          <template #header>
-            <div class="card-header">
-              <span class="font-bold text-[var(--secondary-color)]"><el-icon>
-                  <Comment />
-                </el-icon> Anuncios - Comunidad</span>
-            </div>
-          </template>
-          <div class="flex flex-row gap-6">
-            <el-button icon="Plus">Nueva Publicación</el-button>
-            <el-select disabled placeholder="Todas las publicaciones" style="width: 240px">
-              <el-option />
-            </el-select>
+  <el-col :span="8" class="md:w-1/3 w-full mt-4 md:mt-0">
+    <el-card style="min-width: 300px; max-width: 100%" shadow="hover">
+      <template #header>
+        <div class="card-header">
+          <span class="font-bold text-[var(--secondary-color)]">
+            <el-icon>
+              <Document />
+            </el-icon>
+            Certificaciones
+          </span>
+        </div>
+      </template>
+      <div class="flex flex-col items-center">
+        <div class="flex flex-row items-center gap-8">
+          <div v-loading="isLoadingLetterCertfied" @click="download()"
+            class="p-3 flex flex-col items-center cursor-pointer rounded-lg hover:bg-[var(--info-alt-color)]">
+            <span class="material-symbols-outlined text-[var(--secondary-color)] font-bold text-6xl">
+              docs
+            </span>
+            <span class="text-[var(--secondary-color)]">Carta Laboral</span>
           </div>
-          <el-divider />
+          <div class="flex flex-col items-center cursor-pointer p-3 rounded-lg hover:bg-[var(--info-alt-color)]">
+            <span class="material-symbols-outlined text-[var(--secondary-color)] font-bold text-6xl">
+              shield_person
+            </span>
+            <span class="text-[var(--secondary-color)]">Ficha Personal</span>
+          </div>
+        </div>
+        <el-button class="mt-6" size="large" color="var(--secondary-color)" round>Más Certificados</el-button>
+      </div>
+    </el-card>
+  </el-col>
 
-          <el-scrollbar height="360px">
-            <el-card style="max-width: 100%" shadow="hover">
-              <div class="flex flex-col gap-4">
-                <div v-for="index in 10" :key="index" class="flex flex-row gap-6">
-                  <el-avatar shape="square" :size="50" :src="state.squareUrl" />
-                  <span>
-                    Lorem ipsum dolor sit amet, consectetur adipiscing elit. Ut ullamcorper malesuada turpis sed
-                    imperdiet. Cras quis euismod augue. Pellentesque placerat vel mauris at auctor.
-                    <el-divider style="margin: 10px 0;" />
-                  </span>
-                </div>
-              </div>
-
-            </el-card>
-          </el-scrollbar>
-
-        </el-card>
-      </el-col>
-
-    </el-row>
-
-    <el-row class="my-6" :gutter="30">
-      <el-col :span="24">
-        <el-card style="min-width: 300px; max-width: 100%; min-height: 300px;" shadow="hover">
-          <template #header>
-            <div class="card-header">
-              <span class="font-bold text-[var(--secondary-color)]">
-                <el-icon>
-                  <Menu />
-                </el-icon>
-                Equipo
+  <el-col :span="16" class="md:w-2/3 w-full mt-4 md:mt-0">
+    <el-card style="min-width: 300px; max-width: 100%; height: 100%" shadow="hover">
+      <template #header>
+        <div class="card-header">
+          <span class="font-bold text-[var(--secondary-color)]">
+            <el-icon>
+              <Comment />
+            </el-icon>
+            Anuncios - Comunidad
+          </span>
+        </div>
+      </template>
+      <div class="flex flex-row gap-6">
+        <el-button icon="Plus">Nueva Publicación</el-button>
+        <el-select disabled placeholder="Todas las publicaciones" style="width: 240px">
+          <el-option />
+        </el-select>
+      </div>
+      <el-divider />
+      <el-scrollbar height="360px">
+        <el-card style="max-width: 100%" shadow="hover">
+          <div class="flex flex-col gap-4">
+            <div v-for="index in 10" :key="index" class="flex flex-row gap-6">
+              <el-avatar shape="square" :size="50" :src="state.squareUrl" />
+              <span>
+                Lorem ipsum dolor sit amet, consectetur adipiscing elit. Ut ullamcorper malesuada turpis sed imperdiet.
+                Cras quis euismod augue. Pellentesque placerat vel mauris at auctor.
+                <el-divider style="margin: 10px 0;" />
               </span>
             </div>
-          </template>
-          <div class="justify-self-center">
-
-            <el-empty description="No content available" />
           </div>
         </el-card>
-      </el-col>
-    </el-row>
+      </el-scrollbar>
+    </el-card>
+  </el-col>
+</el-row>
 
-    <el-row :gutter="30">
-      <el-col :span="8">
-        <el-card style="min-width: 300px; max-width: 100%" shadow="hover">
-          <template #header>
-            <div class="card-header">
-              <span class="font-bold text-[var(--secondary-color)]">Enlaces de la Empresa</span>
-            </div>
-          </template>
-          <div class="justify-self-center">
+<el-row class="my-6 flex flex-wrap md:flex-row flex-col" :gutter="30">
+  <el-col :span="24" class="w-full">
+    <el-card style="min-width: 300px; max-width: 100%; min-height: 300px" shadow="hover">
+      <template #header>
+        <div class="card-header">
+          <span class="font-bold text-[var(--secondary-color)]">
+            <el-icon>
+              <Menu />
+            </el-icon>
+            Equipo
+          </span>
+        </div>
+      </template>
+      <div class="justify-self-center">
+        <el-empty description="No content available" />
+      </div>
+    </el-card>
+  </el-col>
+</el-row>
 
-            <el-empty description="No content available" />
+<el-row :gutter="30" class="flex flex-wrap md:flex-row flex-col">
+  <el-col :span="8" class="md:w-1/3 w-full">
+    <el-card style="min-width: 300px; max-width: 100%" shadow="hover">
+      <template #header>
+        <div class="card-header">
+          <span class="font-bold text-[var(--secondary-color)]">Enlaces de la Empresa</span>
+        </div>
+      </template>
+      <div class="justify-self-center">
+        <el-empty description="No content available" />
+      </div>
+    </el-card>
+  </el-col>
+
+  <el-col :span="8" class="md:w-1/3 w-full mt-4 md:mt-0">
+    <el-card style="min-width: 300px; max-width: 100%" shadow="hover">
+      <template #header>
+        <div class="card-header">
+          <span class="font-bold text-[var(--secondary-color)]">
+            <el-icon>
+              <Bell />
+            </el-icon>
+            Cumpleaños
+          </span>
+        </div>
+      </template>
+      <div class="w-full">
+        <el-scrollbar height="295px">
+          <BirthdayList></BirthdayList>
+        </el-scrollbar>
+      </div>
+    </el-card>
+  </el-col>
+
+  <el-col :span="8" class="md:w-1/3 w-full mt-4 md:mt-0">
+    <el-card style="min-width: 300px; max-width: 100%" shadow="hover">
+      <template #header>
+        <div class="card-header">
+          <span class="font-bold text-[var(--secondary-color)]">
+            <el-icon>
+              <Menu />
+            </el-icon>
+            Bienvenido a HiCody!
+          </span>
+        </div>
+      </template>
+      <div class="flex flex-col w-full gap-10">
+        <div class="self-center">
+          <span class="text-[90px] material-symbols-outlined">
+            waving_hand
+          </span>
+        </div>
+        <div class="self-center">
+          <div class="flex flex-col">
+            <span class="text-2xl">Bienvenido <span class="font-medium">Oscar Fuentes</span>, al equipo HiCody!</span>
+            <span class="text-lg text-center">Inició el lunes, 4 de Diciembre</span>
           </div>
-        </el-card>
-      </el-col>
+        </div>
+      </div>
+    </el-card>
+  </el-col>
+</el-row>
 
-      <el-col :span="8">
-        <el-card style="min-width: 300px; max-width: 100%" shadow="hover">
-          <template #header>
-            <div class="card-header">
-              <span class="font-bold text-[var(--secondary-color)]">
-                <el-icon>
-                  <Bell />
-                </el-icon>
-                Cumpleaños
-              </span>
-            </div>
-          </template>
-          <div class="w-full">
-
-            <el-scrollbar height="295px">
-              <BirthdayList></BirthdayList>
-            </el-scrollbar>
-
-          </div>
-        </el-card>
-      </el-col>
-
-      <el-col :span="8">
-        <el-card style="min-width: 300px; max-width: 100%" shadow="hover">
-          <template #header>
-            <div class="card-header">
-              <span class="font-bold text-[var(--secondary-color)]">
-                <el-icon>
-                  <Menu />
-                </el-icon>
-                Bienvenido a HiCody!
-              </span>
-            </div>
-          </template>
-          <div class="flex flex-col w-full gap-10">
-            <div class="self-center">
-              <span class="text-[90px] material-symbols-outlined">
-                waving_hand
-              </span>
-            </div>
-            <div class="self-center">
-              <div class="flex flex-col">
-                <span class="text-2xl">Bienvenido <span class="font-medium">Oscar Fuentes</span>, al equipo HiCody!</span>
-                <span class="text-lg text-center">Inició el lunes, 4 de Diciembre</span>
-              </div>
-              
-            </div>
-            <div></div>
-          </div>
-        </el-card>
-      </el-col>
-    </el-row>
 
   </main>
 </template>
