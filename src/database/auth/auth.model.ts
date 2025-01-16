@@ -25,11 +25,11 @@ export class AuthModel extends AuthRepository {
         } catch (error) {
           if (axios.isAxiosError(error)) {
             const customError = error.response?.data as AuthResponse;
-      
-            throw new Error(customError.message || 'Error en la autenticación');
+
+            throw new Error(customError.message || "Error en la autenticación");
           } else {
-            console.error('Unexpected error:', error);
-            throw new Error('Error inesperado en la autenticación');
+            console.error("Unexpected error:", error);
+            throw new Error("Error inesperado en la autenticación");
           }
         }
       }

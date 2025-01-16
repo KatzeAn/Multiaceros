@@ -57,6 +57,12 @@ const router = createRouter({
         { path: 'gestionar-pausas', component: () => import('../views/PortalRRHH/manageActiveBreak.vue') },
       ],
     },
+    {
+      path: '/:pathMatch(.*)*',
+      name: 'ErrorView',
+      meta: { requiresAuth: false, hideNavbar: true },
+      component: () => import('../views/Error.vue'),
+    }
   ]
 })
 
