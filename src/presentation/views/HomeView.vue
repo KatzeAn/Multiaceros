@@ -26,34 +26,31 @@
 <template>
   <main class="flex flex-col">
     <Card class="my-5" color="blue" width="100%" :show-footer="false">
-      <div class="flex flex-wrap flex-row">
-        <div class="flex flex-wrap gap-6 content-center w-1/2">
-          <div>
-            <img src="https://www.shareicon.net/data/512x512/2016/08/05/806962_user_512x512.png" alt="Logo"
-              class="w-[5rem]">
-          </div>
-          <div class="self-center">
-            <p class="text-xl font-bold">Hola, {{ getUsername }}</p>
-            <p class="text-base">Hoy es {{ dayName }}, {{ date }}</p>
-          </div>
-        </div>
-        <div class="self-center flex flex-wrap flex-row justify-end w-1/2 gap-6">
-          <router-link to="/perfil"
-            class="bg-[var(--info-color)] content-center px-6 py-2 h-1/2 flex rounded text-white">
-            <span class="material-symbols-outlined">
-              person
-            </span>
-            Mí perfil
-          </router-link>
-          <button class="bg-[var(--light-color)] content-center px-6 py-2 h-1/2 flex rounded">
-            <span class="material-symbols-outlined">
-              settings
-            </span>
-            Configuraciones
-          </button>
-        </div>
+  <div class="flex flex-wrap flex-col sm:flex-row">
+    <div class="flex flex-wrap gap-6 content-center w-full sm:w-1/2">
+      <div>
+        <img src="https://www.shareicon.net/data/512x512/2016/08/05/806962_user_512x512.png" alt="Logo"
+          class="w-[5rem]">
       </div>
-    </Card>
+      <div class="self-center">
+        <p class="text-xl font-bold">Hola, {{ getUsername }}</p>
+        <p class="text-base">Hoy es {{ dayName }}, {{ date }}</p>
+      </div>
+    </div>
+    <div class="self-center flex flex-wrap flex-col sm:flex-row justify-end w-full sm:w-1/2 gap-6 mt-4 sm:mt-0">
+      <router-link to="/perfil"
+        class="bg-[var(--info-color)] content-center px-6 py-2 w-full sm:w-auto flex rounded text-white">
+        <span class="material-symbols-outlined">person</span>
+        Mí perfil
+      </router-link>
+      <button class="bg-[var(--light-color)] content-center px-6 py-2 w-full sm:w-auto flex rounded mt-2 sm:mt-0">
+        <span class="material-symbols-outlined">settings</span>
+        Configuraciones
+      </button>
+    </div>
+  </div>
+</Card>
+
 
     <h2 class="text-2xl font-bold">Portal</h2>
     <el-divider />
