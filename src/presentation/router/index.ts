@@ -8,19 +8,19 @@ const router = createRouter({
       path: '/',
       name: 'login',
       component: () => import('../views/LoginView.vue'),
-      meta: { hideNavbar: true },
+      meta: { hideNavbar: false },
     },
     {
       path: '/home',
       name: 'home',
       component: () => import('../views/HomeView.vue'),
-      meta: { requiresAuth: true },
+      meta: { requiresAuth: false },
     },
     {
       path: '/certificados',
       name: 'certificados',
       component: () => import('../views/CertificadosView.vue'),
-      meta: { requiresAuth: true },
+      meta: { requiresAuth: false },
     },
     {
       path: '/perfil',
@@ -37,7 +37,7 @@ const router = createRouter({
       path: '/solicitar-ausencia',
       name: 'solicitarAusencia',
       component: () => import('../views/AbsenceRequestView.vue'),
-      meta: { requiresAuth: true },
+      meta: { requiresAuth: false },
     },
     {
       path: '/gestionar-ausencias',
