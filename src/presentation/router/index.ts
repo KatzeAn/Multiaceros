@@ -8,7 +8,7 @@ const router = createRouter({
       path: '/',
       name: 'login',
       component: () => import('../views/LoginView.vue'),
-      meta: { hideNavbar: false },
+      meta: { hideNavbar: true },
     },
     {
       path: '/home',
