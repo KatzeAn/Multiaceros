@@ -2,7 +2,7 @@
     <div>
       <aside 
         v-if="!isSmallScreen" 
-          :class="`${isExpanded && 'is-expanded'}`">
+          :class="`${isExpanded ? 'is-expanded' : ''} ${isSmallScreen ? 'is-hidden' : ''}`">
         <div class="logo">
           <img src="../assets/Logo 1-.png" alt="logo">
         </div>
@@ -221,6 +221,13 @@ aside.is-expanded .button .text {
 
 aside.is-expanded button .material-symbols-outlined {
     margin-right: 1rem;
+}
+
+aside.is-hidden {
+  width: 0;
+  padding: 0; /* Opcional, para evitar que el padding ocupe espacio */
+  overflow: hidden; /* Asegura que nada sea visible */
+  transition: width 0.3s ease-out, padding 0.3s ease-out; /* Animación suave */
 }
   
   .navbar {
