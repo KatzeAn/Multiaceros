@@ -19,11 +19,11 @@ import SideBar from './presentation/components/SideBar.vue'
   </body> -->
 
   <el-container>
-    <el-aside width="64px">
+    <el-aside width="64px" v-if="!$route.meta.hideNavbar">
       <SideBar />
     </el-aside>
     <el-container>
-      <el-header height="60px" class="no-margin-padding">
+      <el-header height="60px" class="no-margin-padding" v-if="!$route.meta.hideNavbar">
         <NavBar />
       </el-header>
       <el-main class="prueba no-margin-padding">
