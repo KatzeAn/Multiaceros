@@ -15,15 +15,10 @@ const { getUsername } = useUserStore();
 
     <ul class="flex items-center text-sm ml-4">
       <li class="mr-2">
-        <!-- <a href="#" class="text-gray-400 hover:text-gray-600 font-medium">
-          <router-link to="/home">Inicio</router-link>
-        </a> -->
         <a href="#" class="text-gray-600 hover:text-gray-600 font-medium">
           <router-link to="" style="margin-left: calc(2rem + 32px);">Inicio</router-link>
         </a>
       </li>
-      <!-- <li class="text-gray-600 mr-2 font-medium">/</li>
-      <li class="text-gray-600 mr-2 font-medium">Analytics</li> -->
     </ul>
     <ul class="ml-auto flex items-center">
       <li class="mr-1 dropdown">

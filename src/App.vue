@@ -6,7 +6,7 @@ import SideBar from './presentation/components/SideBar.vue'
 
 <template>
 
-  <body class="flex flex-row">
+  <!-- <body class="flex flex-row">
     <nav v-if="!$route.meta.hideNavbar">
       <SideBar />
     </nav>
@@ -16,20 +16,28 @@ import SideBar from './presentation/components/SideBar.vue'
       <RouterView v-if="!$route.meta.hideNavbar" class="p-7"></RouterView>
       <RouterView v-if="$route.meta.hideNavbar" />
     </main>
-  </body>
+  </body> -->
+
+  <el-container>
+    <el-aside width="64px" v-if="!$route.meta.hideNavbar">
+      <SideBar />
+    </el-aside>
+    <el-container>
+      <el-header height="60px" class="no-margin-padding" v-if="!$route.meta.hideNavbar">
+        <NavBar />
+      </el-header>
+      <el-main class="prueba no-margin-padding">
+        <RouterView v-if="!$route.meta.hideNavbar" class="p-7"></RouterView>
+        <RouterView v-if="$route.meta.hideNavbar" />
+      </el-main>
+    </el-container>
+  </el-container>
 </template>
 
 <style scoped>
 
-  main {
-    margin-left: 2rem;
-    /* Mismo ancho inicial del aside */
-    transition: margin-left 0.2s ease-out;
+  .no-margin-padding {
+    margin: 0;
+    padding: 0;
   }
-
-  aside.is-expanded+main {
-    margin-left: var(--sidebar-width);
-    /* Ajusta al ancho expandido del aside */
-  }
-
 </style>
