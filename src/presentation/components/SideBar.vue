@@ -67,28 +67,43 @@
     </div>
   </template>
   
-  <script setup lang="ts">
-  import { ref, onMounted, onBeforeUnmount } from "vue";
-  
+<script setup lang="ts">
+  import { ref, onMounted, onBeforeUnmount, watch, computed } from "vue";
+  import { defineEmits } from "vue";
+
+  const emit = defineEmits(["update:asideWidth"]);
   const isExpanded = ref(false);
   const isSmallScreen = ref(window.innerWidth < 700);
-  
+
+  // Calcula el ancho dinámico del aside
+  const asideWidth = computed(() => {
+    return isSmallScreen.value ? "0px" : isExpanded.value ? "305px" : "64px";
+  });
+
+  // Propaga el ancho inicial
+  emit("update:asideWidth", asideWidth.value);
+
   const ToggleMenu = () => {
     isExpanded.value = !isExpanded.value;
   };
-  
+
+  // Actualiza el ancho en función del tamaño de la pantalla
   const handleResize = () => {
     isSmallScreen.value = window.innerWidth < 700;
   };
-  
+
+  watch(asideWidth, (newWidth) => {
+    emit("update:asideWidth", newWidth);
+  });
+
   onMounted(() => {
     window.addEventListener("resize", handleResize);
   });
-  
+
   onBeforeUnmount(() => {
     window.removeEventListener("resize", handleResize);
   });
-  </script>
+</script>
   
   <style scoped>
   
