@@ -102,7 +102,7 @@ const download = async () => {
                 to="/solicitar-ausencia"
                 ><el-button
                   class="mt-6"
-                  size="large"
+                  size="small"
                   color="var(--secondary-color)"
                   round
                   >Solicitar Tiempo Libre</el-button
@@ -115,7 +115,7 @@ const download = async () => {
                 ><el-button
                   icon="setting"
                   class="mt-6"
-                  size="large"
+                  size="small"
                   color="var(--secondary-color)"
                   round
                   >Gestionar Ausencias</el-button
