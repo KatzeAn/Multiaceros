@@ -40,21 +40,21 @@ const download = async () => {
           </div>
         </div>
         <div
-          class="self-center flex flex-wrap flex-col sm:flex-row justify-end w-full sm:w-1/2 gap-6 mt-4 sm:mt-0"
+          class="self-center flex flex-col sm:flex-row justify-end sm:w-1/2 gap-6 mt-4 sm:mt-0"
         >
-          <router-link
-            to="/perfil"
-            class="bg-[var(--info-color)] content-center px-6 py-2 w-full sm:w-auto flex rounded text-white hover:bg-blue-600"
-          >
-            <span class="material-symbols-outlined">person</span>
-            Mí perfil
-          </router-link>
-          <button
-            class="bg-[var(--light-color)] content-center px-6 py-2 w-full sm:w-auto md:w-auto flex rounded mt-2 sm:mt-0 hover:bg-gray-100"
-          >
-            <span class="material-symbols-outlined">settings</span>
-            Configuraciones
-          </button>
+        <router-link
+      to="/perfil"
+      class="bg-blue-500 text-white px-4 py-2 rounded flex items-center justify-center gap-2 hover:bg-blue-600"
+    >
+      <span class="material-symbols-outlined">person</span>
+      Mi perfil
+    </router-link>
+    <button
+      class="bg-white border border-gray-300 text-gray-700 px-4 py-2 rounded flex items-center justify-center gap-2 hover:bg-gray-100"
+    >
+      <span class="material-symbols-outlined">settings</span>
+      Configuraciones
+    </button>
         </div>
       </div>
     </Card>
