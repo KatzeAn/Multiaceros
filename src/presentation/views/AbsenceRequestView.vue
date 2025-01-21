@@ -8,19 +8,29 @@ const value = ref(new Date())
     <main>
         <el-row>
             <el-col :span="24">
-                    <el-link>
-                        <el-icon :size="20">
-                            <ArrowLeft />
-                        </el-icon>
-                        Volver
-                    </el-link>
+                <el-link>
+                    <el-icon :size="20">
+                        <ArrowLeft />
+                    </el-icon>
+                    Volver
+                </el-link>
             </el-col>
         </el-row>
         <el-row :gutter="30" class="my-4">
-            <el-col :span="12">
-                <AbsenceRequestForm></AbsenceRequestForm>
+            <el-col 
+            :xs="24" 
+            :sm="12" 
+            :md="12" 
+            :lg="12" 
+            class="mb-4 sm:mb-0">
+            <AbsenceRequestForm></AbsenceRequestForm>
             </el-col>
-            <el-col :span="12">
+            <el-col 
+            :xs="24" 
+            :sm="12" 
+            :md="12" 
+            :lg="12" 
+            class="mb-4 sm:mb-0">                
                 <div>
                     <el-calendar v-model="value" />
                 </div>
