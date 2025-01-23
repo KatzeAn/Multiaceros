@@ -23,25 +23,24 @@
           <span class="material-symbols-outlined">analytics</span>
           <span class="text">Certificados</span>
         </router-link>
-        <router-link class="button" to="/">
+        <router-link class="button" to="/comprobantes">
           <span class="material-symbols-outlined">attach_money</span>
           <span class="text">Comprobantes</span>
         </router-link>
-        <router-link class="button" to="/">
+        <router-link class="button" to="/vacaciones">
           <span class="material-symbols-outlined">beach_access</span>
           <span class="text">Vacaciones y Ausencias</span>
         </router-link>
 
-        <!-- Portal Recursos Humanos -->
-        <div>
+                <div>
           <div class="button" @click="togglePortal">
             <span class="material-symbols-outlined">group</span>
             <span class="text">Portal Recursos Humanos</span>
           </div>
           <div v-show="isPortalExpanded" class="dropdown">
-            <router-link to="/portal-rrhh/empleados">Gestionar Empleados</router-link>
-            <router-link to="/portal-rrhh/certificados">Gestionar Certificados de Cumplimiento</router-link>
-            <router-link to="/portal-rrhh/pausas">Gestionar Pausas Activas</router-link>
+            <router-link to="/portal-rrhh/gestionar-empleados">Gestionar Empleados</router-link>
+            <router-link to="/portal-rrhh/gestionar-cumplimientos">Gestionar Certificados de Cumplimiento</router-link>
+            <router-link to="/portal-rrhh/gestionar-pausas">Gestionar Pausas Activas</router-link>
           </div>
         </div>
       </div>
@@ -49,7 +48,7 @@
       <div class="flex"></div>
 
       <div class="menu">
-        <router-link class="button" to="/">
+        <router-link class="button" to="/configuracion">
           <span class="material-symbols-outlined">settings</span>
           <span class="text">Configuración</span>
         </router-link>
@@ -59,11 +58,11 @@
 </template>
 
 <script setup lang="ts">
-import { ref, onMounted, onBeforeUnmount, watch, computed } from "vue";
+import { ref, onMounted, onBeforeUnmount, computed } from "vue";
 
 const isExpanded = ref(false);
 const isSmallScreen = ref(window.innerWidth < 700);
-const isPortalExpanded = ref(false); // Estado para controlar el despliegue de "Portal Recursos Humanos"
+const isPortalExpanded = ref(false);
 
 const asideWidth = computed(() => {
   return isSmallScreen.value ? "0px" : isExpanded.value ? "305px" : "64px";
@@ -90,9 +89,6 @@ onBeforeUnmount(() => {
 });
 </script>
 
-
-
-  
   <style scoped>
   
   aside {
