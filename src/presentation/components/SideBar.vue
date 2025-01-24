@@ -41,6 +41,7 @@
             <router-link to="/portal-rrhh/gestionar-empleados">Gestionar Empleados</router-link>
             <router-link to="/portal-rrhh/gestionar-cumplimientos">Gestionar Certificados de Cumplimiento</router-link>
             <router-link to="/portal-rrhh/gestionar-pausas">Gestionar Pausas Activas</router-link>
+            <router-link to="/portal-rrhh/gestionar-postulaciones">Gestionar postulaciones</router-link>
           </div>
         </div>
       </div>
@@ -70,6 +71,9 @@ const asideWidth = computed(() => {
 
 const ToggleMenu = () => {
   isExpanded.value = !isExpanded.value;
+  if (!isExpanded.value) {
+    isPortalExpanded.value = false; // Cerrar el menú de recursos humanos cuando se cierra el menú principal
+  }
 };
 
 const togglePortal = () => {
@@ -88,6 +92,7 @@ onBeforeUnmount(() => {
   window.removeEventListener("resize", handleResize);
 });
 </script>
+
 
   <style scoped>
   
