@@ -5,6 +5,8 @@
           <el-input v-model="applicationForm.jobTitle" placeholder="Ingrese el nombre de la vacante" class="w-full"></el-input>
         </el-form-item>
   
+
+        
         <el-form-item label="Empresa" :rules="[{ required: true, message: 'Por favor ingrese el nombre de la empresa', trigger: 'blur' }]">
           <el-input v-model="applicationForm.companyName" placeholder="Nombre de la empresa" class="w-full"></el-input>
         </el-form-item>
