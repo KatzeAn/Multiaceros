@@ -2,7 +2,6 @@
   <div
     class="bg-white shadow-md rounded-lg p-4 flex items-center space-x-4 transition-all duration-300 ease-in-out hover:shadow-lg hover:bg-gray-50 hover:scale-105"
   >
-    <!-- Avatar -->
     <el-avatar
       :shape="shape"
       :size="size"
@@ -24,13 +23,26 @@
         Estado: {{ status }}
       </p>
     </div>
+    <button
+      @click="$emit('edit', id)"
+      class="ml-auto p-2 rounded-full text-gray-500 hover:text-blue-500 focus:outline-none"
+    >
+      <EditIcon />
+    </button>
   </div>
 </template>
 
 <script>
+import EditIcon from "./EditIcon.vue";
+
 export default {
   name: "EmployeeCard",
+  components: { EditIcon },
   props: {
+    id: {
+      type: Number,
+      required: true,
+    },
     fullName: {
       type: String,
       required: true,
@@ -53,14 +65,12 @@ export default {
     },
     shape: {
       type: String,
-      default: "circle", // Forma por defecto
-      validator: (value) => ["circle", "square"].includes(value),
+      default: "circle",
     },
-    
+    size: {
+      type: Number,
+      default: 50,
+    },
   },
 };
-</script>
-
-
-
-  
+</script>  

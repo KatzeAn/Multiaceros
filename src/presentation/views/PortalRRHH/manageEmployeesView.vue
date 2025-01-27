@@ -1,32 +1,42 @@
 <template>
   <div class="space-y-6">
-    <!-- Sección de Tarjetas -->
     <h2 class="text-xl font-bold">Empleados</h2>
     <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
       <EmployeeCard
         v-for="employee in employees"
         :key="employee.id"
+        :id="employee.id"
         :fullName="employee.fullName"
         :position="employee.position"
         :hireDate="employee.hireDate"
         :status="employee.status"
         :avatar="employee.avatar"
-        :shape="employee.shape" 
-        :size="employee.size" 
+        :shape="employee.shape"
+        :size="employee.size"
+        @edit="handleEdit" 
       />
     </div>
+    <el-dialog v-model="isEditModalOpen" title="Editar Empleado">
+      <EditEmployeeForm
+        v-if="selectedEmployee"
+        :employee="selectedEmployee"
+        @close="isEditModalOpen = false"
+        @save="saveEmployee"
+      />
+    </el-dialog>
   </div>
 </template>
 
 <script>
 import EmployeeCard from "./components/EmployeeCard.vue";
+import EditEmployeeForm from "./components/EditEmployeeForm.vue";
 
 export default {
-  components: { EmployeeCard },
+  components: { EmployeeCard, EditEmployeeForm },
   data() {
     return {
       employees: [
-        {
+      {
           id: 1,
           fullName: "Angela Salamanca",
           position: "Desarrollador",
@@ -87,7 +97,22 @@ export default {
           size: 50,
         },
       ],
+      isEditModalOpen: false,
+      selectedEmployee: null,
     };
+  },
+  methods: {
+    handleEdit(employeeId) {
+      this.selectedEmployee = this.employees.find(emp => emp.id === employeeId);
+      this.isEditModalOpen = true;
+    },
+    saveEmployee(updatedEmployee) {
+      const index = this.employees.findIndex(emp => emp.id === updatedEmployee.id);
+      if (index !== -1) {
+        this.$set(this.employees, index, updatedEmployee);
+      }
+      this.isEditModalOpen = false;
+    },
   },
 };
 </script>
