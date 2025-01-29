@@ -1,63 +1,134 @@
 <script setup lang="ts">
-import { RouterLink, RouterView } from 'vue-router'
-import { useUserStore } from "../stores/user.store";
+import { onMounted, onUnmounted, ref } from "vue";
 
-const { getUsername } = useUserStore();
+// Estado para los dropdowns
+const isProfileDropdownOpen = ref(false);
+const isNotificationsDropdownOpen = ref(false);
 
+// Función para alternar el dropdown de perfil
+const toggleProfileDropdown = () => {
+  isProfileDropdownOpen.value = !isProfileDropdownOpen.value;
+  isNotificationsDropdownOpen.value = false; // Cierra notificaciones si se abre el perfil
+};
+
+// Función para alternar el dropdown de notificaciones
+const toggleNotificationsDropdown = () => {
+  isNotificationsDropdownOpen.value = !isNotificationsDropdownOpen.value;
+  isProfileDropdownOpen.value = false; // Cierra perfil si se abren notificaciones
+};
+
+// Función para cerrar dropdowns al hacer clic fuera
+const closeDropdownsOnClickOutside = (event: MouseEvent) => {
+  const profileDropdown = document.querySelector(".profile-dropdown");
+  const notificationsDropdown = document.querySelector(".notifications-dropdown");
+
+  if (
+    profileDropdown &&
+    !profileDropdown.contains(event.target as Node) &&
+    notificationsDropdown &&
+    !notificationsDropdown.contains(event.target as Node)
+  ) {
+    isProfileDropdownOpen.value = false;
+    isNotificationsDropdownOpen.value = false;
+  }
+};
+
+// Montar y desmontar eventos globales
+onMounted(() => {
+  document.addEventListener("click", closeDropdownsOnClickOutside);
+});
+
+onUnmounted(() => {
+  document.removeEventListener("click", closeDropdownsOnClickOutside);
+});
 </script>
 
 <template>
-  <div class="w-full py-2 bg-neutral-50 flex items-center shadow-md shadow-black/5 sticky top-0 left-0 z-30">
-
-    <button type="button" class="text-lg text-gray-600 sidebar-toggle">
-
-    </button>
+  <div
+    class="w-full py-2 px-6 bg-neutral-50 flex items-center shadow-md shadow-black/5 sticky top-0 left-0 z-30"
+  >
+    <button type="button" class="text-lg text-gray-600 sidebar-toggle"></button>
 
     <ul class="flex items-center text-sm ml-4">
       <li class="mr-2">
         <a href="#" class="text-gray-600 hover:text-gray-600 font-medium">
-          <router-link to="" style="margin-left: calc(2rem + 32px);">Inicio</router-link>
+          <router-link to="/home">Inicio</router-link>
         </a>
       </li>
     </ul>
     <ul class="ml-auto flex items-center">
-      <li class="mr-1 dropdown">
-        <button type="button"
-          class="dropdown-toggle text-gray-400 w-8 h-8 rounded flex items-center justify-center hover:bg-gray-50 hover:text-gray-600">
-          <i class="ri-search-line">
-            <span class="material-symbols-outlined">
-              search
-            </span>
-          </i>
-        </button>
-      </li>
-      <li class="dropdown">
-        <button type="button"
-          class="dropdown-toggle text-gray-400 w-8 h-8 rounded flex items-center justify-center hover:bg-gray-50 hover:text-gray-600">
-          <i class="ri-notification-3-line">
-            <span class="material-symbols-outlined">
-              notifications
-            </span>
-          </i>
-        </button>
+      <!-- Dropdown de notificaciones -->
+      <li class="dropdown ml-3 relative notifications-dropdown">
+        <el-badge :value="12" :show-zero="false" badge-class="mt-1 mr-2">
+          <button
+            type="button"
+            class="dropdown-toggle text-gray-400 w-8 h-8 rounded flex items-center justify-center hover:bg-gray-50 hover:text-gray-600"
+            @click.stop="toggleNotificationsDropdown"
+          >
+            <i class="ri-notification-3-line">
+              <span class="material-symbols-outlined"> notifications </span>
+            </i>
+          </button>
+        </el-badge>
+
+        <!-- Cuadro desplegable de notificaciones -->
+        <div
+          v-if="isNotificationsDropdownOpen"
+          class="absolute right-0 z-10 mt-2 w-64 h-48 origin-top-right rounded-md bg-white py-2 px-4 ring-1 shadow-lg ring-black/5 focus:outline-hidden"
+          role="menu"
+          aria-orientation="vertical"
+          tabindex="-1"
+        >
+          <p class="text-gray-400 text-center">No hay notificaciones</p>
+        </div>
       </li>
 
-
-      <li class="dropdown ml-3">
-        <button type="button" class="dropdown-toggle flex gap-3 items-center">
-          <p>{{ getUsername }}</p>
-          <img src="https://www.shareicon.net/data/512x512/2016/08/05/806962_user_512x512.png" alt="" class="w-8 h-8 rounded block object-cover align-middle">
-          <span class="text-gray-400 material-symbols-outlined">
-            keyboard_arrow_down
-          </span>
+      <!-- Dropdown de perfil -->
+      <li class="dropdown ml-3 relative profile-dropdown">
+        <button
+          type="button"
+          class="dropdown-toggle flex gap-3 items-center"
+          @click.stop="toggleProfileDropdown"
+        >
+          <img
+            src="https://www.shareicon.net/data/512x512/2016/08/05/806962_user_512x512.png"
+            alt="User Avatar"
+            class="w-8 h-8 rounded block object-cover align-middle"
+          />
         </button>
+
+        <!-- Dropmenu - perfil con transición -->
+        <div
+          v-if="isProfileDropdownOpen"
+          class="absolute right-0 z-10 mt-2 w-48 origin-top-right rounded-md bg-white py-1 ring-1 shadow-lg ring-black/5 focus:outline-hidden"
+          role="menu"
+          aria-orientation="vertical"
+          tabindex="-1"
+        >
+          <a
+            href="#"
+            class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100"
+            role="menuitem"
+            >Mi perfil</a
+          >
+          <a
+            href="#"
+            class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100"
+            role="menuitem"
+            >Configuraciones</a
+          >
+          <a
+            href="#"
+            class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100"
+            role="menuitem"
+            >Cerrar Sesión</a
+          >
+        </div>
       </li>
     </ul>
   </div>
 </template>
 
 <style scoped>
-header {
-  background-color: var(--secondary-alt-color);
-}
+/* Estilos adicionales para personalizar el cuadro de notificaciones */
 </style>

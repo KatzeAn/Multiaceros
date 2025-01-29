@@ -69,7 +69,6 @@
   
 <script setup lang="ts">
   import { ref, onMounted, onBeforeUnmount, watch, computed } from "vue";
-  import { defineEmits } from "vue";
 
   const emit = defineEmits(["update:asideWidth"]);
   const isExpanded = ref(false);
