@@ -107,8 +107,6 @@ const download = async () => {
                   round
                   >Solicitar Tiempo Libre</el-button
                 ></router-link>
-
-              >
             </div>
           </div>
         </el-card>

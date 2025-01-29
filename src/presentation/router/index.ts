@@ -47,12 +47,7 @@ const router = createRouter({
       component: () => import('../views/AbsenceRequestView.vue'),
       meta: { requiresAuth: false },
     },
-    {
-      path: '/gestionar-ausencias',
-      name: 'gestionarAusencia',
-      component: () => import('../views/ManageAbsencesView.vue'),
-      meta: { requiresAuth: false },
-    },
+    
     {
       path: '/portal-rrhh',
       name: 'recursosHumanos',
@@ -64,6 +59,8 @@ const router = createRouter({
         { path: 'gestionar-cumplimientos', component: () => import('../views/PortalRRHH/manageComplienceView.vue') },
         { path: 'gestionar-pausas', component: () => import('../views/PortalRRHH/manageActiveBreak.vue') },
         { path: 'gestionar-postulaciones', component: () => import('../views/PortalRRHH/ManageApplications.vue') },
+        { path: 'gestionar-ausencias', component: () => import('../components/ManageAbsenceComponents/StatisticsAbsencesCard.vue') },
+
       ],
     },
     {
