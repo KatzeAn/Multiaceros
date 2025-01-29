@@ -1,6 +1,10 @@
 <template>
   <div class="space-y-6">
-    <h2 class="text-xl font-bold">Empleados</h2>
+    <div class="flex justify-between items-center">
+      <h2 class="text-xl font-bold">Empleados</h2>
+      <AddIcon @open-form="openForm" />
+    </div>
+
     <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
       <EmployeeCard
         v-for="employee in employees"
@@ -16,6 +20,11 @@
         @edit="handleEdit" 
       />
     </div>
+
+    <el-dialog v-model="isAddModalOpen" title="Añadir Nuevo Empleado">
+      <AddEmploye @close-form="closeForm" @add-employee="addEmployee" />
+    </el-dialog>
+
     <el-dialog v-model="isEditModalOpen" title="Editar Empleado">
       <EditEmployeeForm
         v-if="selectedEmployee"
@@ -28,15 +37,21 @@
 </template>
 
 <script>
+import AddIcon from './components/AddIcon.vue';
+import AddEmploye from './components/AddEmploye.vue';
 import EmployeeCard from "./components/EmployeeCard.vue";
 import EditEmployeeForm from "./components/EditEmployeeForm.vue";
 
 export default {
-  components: { EmployeeCard, EditEmployeeForm },
+  components: { 
+    AddIcon,
+    AddEmploye,
+    EmployeeCard,
+    EditEmployeeForm,
+  },
   data() {
     return {
-      employees: [
-      {
+      employees: [  {
           id: 1,
           fullName: "Angela Salamanca",
           position: "Desarrollador",
@@ -96,12 +111,26 @@ export default {
           shape: "square",
           size: 50,
         },
-      ],
+        ],
+      isAddModalOpen: false,
       isEditModalOpen: false,
       selectedEmployee: null,
     };
   },
   methods: {
+    // Abre el modal para agregar empleado
+    openForm() {
+      this.isAddModalOpen = true;
+    },
+    // Cierra el modal de agregar empleado
+    closeForm() {
+      this.isAddModalOpen = false;
+    },
+    // Lógica para agregar un nuevo empleado
+    addEmployee(newEmployee) {
+      this.employees.push(newEmployee);
+      this.isAddModalOpen = false;  // Cerrar el modal
+    },
     handleEdit(employeeId) {
       this.selectedEmployee = this.employees.find(emp => emp.id === employeeId);
       this.isEditModalOpen = true;
