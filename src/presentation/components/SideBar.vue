@@ -59,7 +59,7 @@
 </template>
 
 <script setup lang="ts">
-import { ref, onMounted, onBeforeUnmount, computed } from "vue";
+  import { ref, onMounted, onBeforeUnmount, watch, computed } from "vue";
 
 const isExpanded = ref(false);
 const isSmallScreen = ref(window.innerWidth < 700);
