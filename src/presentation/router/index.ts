@@ -1,6 +1,7 @@
 import { createRouter, createWebHistory } from 'vue-router'
 import { useUserStore } from '../stores/user.store';
 
+
 const router = createRouter({
   history: createWebHistory(import.meta.env.BASE_URL),
   routes: [
@@ -9,6 +10,12 @@ const router = createRouter({
       name: 'login',
       component: () => import('../views/LoginView.vue'),
       meta: { hideNavbar: true },
+    },
+    {
+      path: "/applications",
+      name: "Applications",
+      component: () => import('../views/Applications.vue'),
+      meta: { hideNavbar: true, hideSidebar: true },
     },
     {
       path: '/home',
@@ -33,6 +40,7 @@ const router = createRouter({
         { path: 'informacion-salarial', component: () => import('../views/TiempoLibreView.vue') },
       ],
     },
+    
     {
       path: '/solicitar-ausencia',
       name: 'solicitarAusencia',

@@ -28,6 +28,10 @@
           Sesión</button>
       </div>
     </div>
+    <p class="work-with-us">
+      ¿Quieres trabajar con nosotros? 
+      <router-link to="/applications">Haz clic aquí</router-link>
+    </p>
   </form>
   <el-dialog v-model="dialogFormVisible" title="Restablecer contraseña" width="500">
     <el-form :model="form">
