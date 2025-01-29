@@ -1,6 +1,6 @@
 <template>
-    <form @submit.prevent="submitForm" class="space-y-4">
-      <div>
+  <form @submit.prevent="submitForm" class="space-y-4">
+    <div>
         <label for="firstName" class="block text-sm font-medium text-gray-700">Primer Nombre</label>
         <input 
           type="text" 
@@ -138,23 +138,55 @@
           />
         </div>
       </div>
-  
-      <div>
-        <label for="benefits" class="block text-sm font-medium text-gray-700">Beneficios</label>
+    <div>
+      <label for="benefits" class="block text-sm font-medium text-gray-700">Beneficios</label>
+      
+      <div class="flex items-center mb-2">
         <el-select 
-          v-model="employee.benefits" 
-          multiple 
-          class="input" 
-          placeholder="Selecciona los beneficios"
-          required
+          v-model="newBenefit.name" 
+          class="input w-2/3" 
+          placeholder="Seleccionar beneficio"
         >
-          <el-option label="Beneficio 1" value="benefit1"></el-option>
-          <el-option label="Beneficio 2" value="benefit2"></el-option>
-          <el-option label="Beneficio 3" value="benefit3"></el-option>
+          <el-option label="Beneficio 1" value="Beneficio 1"></el-option>
+          <el-option label="Beneficio 2" value=" Beneficio 2"></el-option>
+          <el-option label="Beneficio 3" value=" Beneficio 3"></el-option>
         </el-select>
+
+        <input 
+          type="number" 
+          v-model="newBenefit.value" 
+          placeholder="Valor del beneficio" 
+          class="input w-1/3 ml-2"
+        />
+
+        <button 
+          type="button" 
+          @click="addBenefit" 
+          class="ml-2 px-4 py-2 bg-blue-600 text-white rounded-lg"
+        >
+          Agregar
+        </button>
       </div>
-  
-      <div>
+
+      <ul>
+        <li 
+          v-for="(benefit, index) in employee.benefits" 
+          :key="index" 
+          class="flex justify-between items-center py-2"
+        >
+          <span>{{ benefit.name }} - {{ benefit.value }}</span>
+          <button 
+            type="button" 
+            @click="removeBenefit(index)" 
+            class="text-red-500"
+          >
+            Eliminar
+          </button>
+        </li>
+      </ul>
+    </div>
+
+    <div>
         <label for="contractType" class="block text-sm font-medium text-gray-700">Tipo de Contrato</label>
         <select 
           id="contractType" 
@@ -207,69 +239,89 @@
       </div>
     </form>
   </template>
-  
-  <script>
-  import Add2 from './Add2.vue'; 
-  import { ElSelect, ElOption } from 'element-plus';
-  
-  export default {
-    components: {
-      Add2,
-      ElSelect,
-      ElOption,
-    },
-    data() {
-      return {
-        employee: {
-          firstName: '',
-          secondName: '',
-          firstSurname: '',
-          secondSurname: '',
-          documentNumber: '',
-          address: '',
-          phone: '',
-          email: '',
-          eps: '',
-          epsValue: '',
-          arl: '',
-          arlValue: '',
-          benefits: [],
-          contractType: '',
-          startDate: '',
-          endDate: '',
-        },
-      };
-    },
-    methods: {
-      submitForm() {
-        console.log(this.employee);
+
+<script>
+import Add2 from './Add2.vue'; 
+import { ElSelect, ElOption } from 'element-plus';
+
+export default {
+  components: {
+    Add2,
+    ElSelect,
+    ElOption,
+  },
+  data() {
+    return {
+      employee: {
+        firstName: '',
+        secondName: '',
+        firstSurname: '',
+        secondSurname: '',
+        documentNumber: '',
+        address: '',
+        phone: '',
+        email: '',
+        eps: '',
+        epsValue: '',
+        arl: '',
+        arlValue: '',
+        benefits: [],  
+        contractType: '',
+        startDate: '',
+        endDate: '',
       },
-      closeForm() {
-      },
-      addNewEPS() {
-        const newEPS = prompt('Ingrese el nombre de la nueva EPS:');
-        if (newEPS) {
-          this.employee.eps = newEPS;
-        }
-      },
-      addNewARL() {
-        const newARL = prompt('Ingrese el nombre de la nueva ARL:');
-        if (newARL) {
-          this.employee.arl = newARL;
-        }
-      },
-    },
-  };
-  </script>
-  
-  <style scoped>
-  .input {
-    width: 100%;
-    padding: 8px;
-    margin-top: 4px;
-    border: 1px solid #ccc;
-    border-radius: 4px;
+      newBenefit: {
+        name: '',
+        value: '',
+      }
+    };
+  },
+
+  methods: {
+  submitForm() {
+    console.log(this.employee);
+  },
+  closeForm() {},
+  addBenefit() {
+    if (this.newBenefit.name && this.newBenefit.value) {
+      this.employee.benefits.push({
+        name: this.newBenefit.name,
+        value: this.newBenefit.value
+      });
+      this.newBenefit.name = ''; 
+      this.newBenefit.value = ''; 
+    } else {
+      alert('Por favor, complete el beneficio y su valor.');
+    }
+  },
+  removeBenefit(index) {
+    this.employee.benefits.splice(index, 1); 
+  },
+  addNewEPS() {
+    const newEPS = prompt("Ingrese el nombre de la nueva EPS:");
+    if (newEPS) {
+      this.employee.eps = newEPS;
+    }
+  },
+  addNewARL() {
+    const newARL = prompt("Ingrese el nombre de la nueva ARL:");
+    if (newARL) {
+      this.employee.arl = newARL;
+    }
   }
-  </style>
+}
+}
+</script>
+
+<style scoped>
+.input {
+  width: 100%;
+  padding: 8px;
+  margin-top: 4px;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+}
+</style>
+
   
   
