@@ -55,6 +55,7 @@ const router = createRouter({
         { path: 'gestionar-empleados', component: () => import('../views/PortalRRHH/manageEmployeesView.vue') },
         { path: 'gestionar-cumplimientos', component: () => import('../views/PortalRRHH/manageComplienceView.vue') },
         { path: 'gestionar-pausas', component: () => import('../views/PortalRRHH/manageActiveBreak.vue') },
+        { path: 'gestionar-postulaciones', component: () => import('../views/PortalRRHH/ManageApplications.vue') },
       ],
     },
     {

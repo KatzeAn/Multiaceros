@@ -1,106 +1,99 @@
 <template>
-    <div>
-      <aside 
-        v-if="!isSmallScreen" 
-          :class="`${isExpanded ? 'is-expanded' : ''} ${isSmallScreen ? 'is-hidden' : ''}`">
-        <div class="logo">
-          <img src="../assets/Logo 1-.png" alt="logo">
-        </div>
-  
-        <div class="menu-toggle-wrap">
-          <button class="menu-toggle" @click="ToggleMenu">
-            <span class="material-symbols-outlined">menu</span>
-          </button>
-        </div>
-  
-        <h3>Menu</h3>
-        <div class="menu">
-          <router-link class="button" to="/home">
-            <span class="material-symbols-outlined">home</span>
-            <span class="text">Inicio</span>
-          </router-link>
-          <router-link class="button" to="/certificados">
-            <span class="material-symbols-outlined">analytics</span>
-            <span class="text">Certificados</span>
-          </router-link>
-          <router-link class="button" to="/">
-            <span class="material-symbols-outlined">attach_money</span>
-            <span class="text">Comprobantes</span>
-          </router-link>
-          <router-link class="button" to="/">
-            <span class="material-symbols-outlined">beach_access</span>
-            <span class="text">Vacaciones y Ausencias</span>
-          </router-link>
-          <router-link class="button" :to="{ path: '/portal-rrhh' }">
+  <div>
+    <aside 
+      v-if="!isSmallScreen" 
+      :class="`${isExpanded ? 'is-expanded' : ''} ${isSmallScreen ? 'is-hidden' : ''}`">
+      <div class="logo">
+        <img src="../assets/Logo 1-.png" alt="logo">
+      </div>
+
+      <div class="menu-toggle-wrap">
+        <button class="menu-toggle" @click="ToggleMenu">
+          <span class="material-symbols-outlined">menu</span>
+        </button>
+      </div>
+
+      <h3>Menu</h3>
+      <div class="menu">
+        <router-link class="button" to="/home">
+          <span class="material-symbols-outlined">home</span>
+          <span class="text">Inicio</span>
+        </router-link>
+        <router-link class="button" to="/certificados">
+          <span class="material-symbols-outlined">analytics</span>
+          <span class="text">Certificados</span>
+        </router-link>
+        <router-link class="button" to="/comprobantes">
+          <span class="material-symbols-outlined">attach_money</span>
+          <span class="text">Comprobantes</span>
+        </router-link>
+        <router-link class="button" to="/vacaciones">
+          <span class="material-symbols-outlined">beach_access</span>
+          <span class="text">Vacaciones y Ausencias</span>
+        </router-link>
+
+                <div>
+          <div class="button" @click="togglePortal">
             <span class="material-symbols-outlined">group</span>
             <span class="text">Portal Recursos Humanos</span>
-          </router-link>
+          </div>
+          <div v-show="isPortalExpanded" class="dropdown">
+            <router-link to="/portal-rrhh/gestionar-empleados">Gestionar Empleados</router-link>
+            <router-link to="/portal-rrhh/gestionar-cumplimientos">Gestionar Certificados de Cumplimiento</router-link>
+            <router-link to="/portal-rrhh/gestionar-pausas">Gestionar Pausas Activas</router-link>
+            <router-link to="/portal-rrhh/gestionar-postulaciones">Gestionar postulaciones</router-link>
+          </div>
         </div>
-  
-        <div class="flex"></div>
-  
-        <div class="menu">
-          <router-link class="button" to="/">
-            <span class="material-symbols-outlined">settings</span>
-            <span class="text">Configuración</span>
-          </router-link>
-        </div>
-      </aside>
-  
-      <nav v-else class="navbar">
-        <router-link class="nav-item" to="/home">
-          <span class="material-symbols-outlined">home</span>
+      </div>
+
+      <div class="flex"></div>
+
+      <div class="menu">
+        <router-link class="button" to="/configuracion">
+          <span class="material-symbols-outlined">settings</span>
+          <span class="text">Configuración</span>
         </router-link>
-        <router-link class="nav-item" to="/certificados">
-          <span class="material-symbols-outlined">analytics</span>
-        </router-link>
-        <router-link class="nav-item" to="/">
-          <span class="material-symbols-outlined">attach_money</span>
-        </router-link>
-        <router-link class="nav-item" to="/">
-          <span class="material-symbols-outlined">beach_access</span>
-        </router-link>
-        <router-link class="nav-item" :to="{ path: '/portal-rrhh' }">
-          <span class="material-symbols-outlined">group</span>
-        </router-link>
-      </nav>
-    </div>
-  </template>
-  
+      </div>
+    </aside>
+  </div>
+</template>
+
 <script setup lang="ts">
   import { ref, onMounted, onBeforeUnmount, watch, computed } from "vue";
 
-  const emit = defineEmits(["update:asideWidth"]);
-  const isExpanded = ref(false);
-  const isSmallScreen = ref(window.innerWidth < 700);
+const isExpanded = ref(false);
+const isSmallScreen = ref(window.innerWidth < 700);
+const isPortalExpanded = ref(false);
 
-  const asideWidth = computed(() => {
-    return isSmallScreen.value ? "0px" : isExpanded.value ? "305px" : "64px";
-  });
+const asideWidth = computed(() => {
+  return isSmallScreen.value ? "0px" : isExpanded.value ? "305px" : "64px";
+});
 
-  emit("update:asideWidth", asideWidth.value);
+const ToggleMenu = () => {
+  isExpanded.value = !isExpanded.value;
+  if (!isExpanded.value) {
+    isPortalExpanded.value = false; // Cerrar el menú de recursos humanos cuando se cierra el menú principal
+  }
+};
 
-  const ToggleMenu = () => {
-    isExpanded.value = !isExpanded.value;
-  };
+const togglePortal = () => {
+  isPortalExpanded.value = !isPortalExpanded.value;
+};
 
-  const handleResize = () => {
-    isSmallScreen.value = window.innerWidth < 700;
-  };
+const handleResize = () => {
+  isSmallScreen.value = window.innerWidth < 700;
+};
 
-  watch(asideWidth, (newWidth) => {
-    emit("update:asideWidth", newWidth);
-  });
+onMounted(() => {
+  window.addEventListener("resize", handleResize);
+});
 
-  onMounted(() => {
-    window.addEventListener("resize", handleResize);
-  });
-
-  onBeforeUnmount(() => {
-    window.removeEventListener("resize", handleResize);
-  });
+onBeforeUnmount(() => {
+  window.removeEventListener("resize", handleResize);
+});
 </script>
-  
+
+
   <style scoped>
   
   aside {
@@ -263,5 +256,19 @@ aside.is-hidden {
   .navbar .nav-item:hover {
     color: var(--primary-color);
   }
+  .dropdown {
+  margin-left: 2rem;
+  padding: 0.5rem 0;
+}
+.dropdown a {
+  display: block;
+  padding: 0.3rem 0.5rem;
+  color: #fff;
+  text-decoration: none;
+}
+.dropdown a:hover {
+  background-color: #4a90e2;
+  font-weight: bold;
+}
   </style>
   
