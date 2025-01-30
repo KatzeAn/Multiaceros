@@ -4,13 +4,15 @@ export class User {
   SurName: string;
   UserEmail: string;
   token: string;
+  role: string;
   
-  constructor(userId: string | number, userFirstName: string, SurName: string, UserEmail: string, token: string) {
+  constructor(userId: string | number, userFirstName: string, SurName: string, UserEmail: string, token: string, role: string) {
     this.userId = userId;
     this.userFirstName = userFirstName;
     this.SurName = SurName;
     this.UserEmail = UserEmail;
     this.token = token;
+    this.role = role;
   }
   
   isAuthenticated(): boolean {
