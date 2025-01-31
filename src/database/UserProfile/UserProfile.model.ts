@@ -6,7 +6,7 @@ import axiosInstance from "@/presentation/api/axiosInstance";
 export class UserProfileModel extends UserProfileRepository {
   async getUserProfile(userId: string): Promise<UserProfile> {
     try {
-      const response = await axiosInstance.get(`/api/getuserprofile/${userId}`);
+      const response = await axiosInstance.get(`/GetUserProfile/${userId}`);
       return response.data as UserProfile;
     } catch (error) {
         throw new Error("Unexpected error: " + error);
