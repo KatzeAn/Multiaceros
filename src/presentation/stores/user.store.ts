@@ -29,7 +29,8 @@ export const useUserStore = defineStore('user', () => {
             userData.userFirstName,
             userData.SurName,
             userData.UserEmail,
-            userData.Token
+            userData.Token,
+            userData.Role
           );
         }
     };
@@ -46,7 +47,8 @@ export const useUserStore = defineStore('user', () => {
             userData.userFirstName,
             userData.SurName,
             userData.UserEmail,
-            userData.token
+            userData.token,
+            userData.role
           );
         }
     
@@ -102,7 +104,6 @@ export const useUserStore = defineStore('user', () => {
             throw error;
         }
     };
-  
 
     return {
         isAuthenticated,

@@ -4,7 +4,7 @@ import axios from 'axios';
 
 export class AuthModel extends AuthRepository {
 
-    private apiUrl = "https://localhost:59372/api/User/ValidateUserOrEmployee";
+    private apiUrl = "https://localhost:51655/api/Auth/login";
 
     async signInWithEmailAndPassword(email: string, password: string): Promise<AuthResponse> {
         try {
@@ -34,15 +34,15 @@ export class AuthModel extends AuthRepository {
         }
       }
 
-    saveToken(token: string): void {
-        localStorage.setItem('token', token);
-    }
+    // saveToken(token: string): void {
+    //     localStorage.setItem('token', token);
+    // }
 
-    getToken(): string | null{
-        return localStorage.getItem('token');
-    }
+    // getToken(): string | null{
+    //     return localStorage.getItem('token');
+    // }
 
-    clearToken(): void {
-        localStorage.removeItem('token');
-    }
+    // clearToken(): void {
+    //     localStorage.removeItem('token');
+    // }
 }

@@ -1,8 +1,14 @@
+export interface RoleInfo {
+  roleId: string | number;
+  roleName: string;
+}
+
 export interface UserInfo {
   id: string | number;
   email: string;
   firstName: string;
   lastName: string;
+  role: RoleInfo;
 }
 
 export interface TokenInfo {
@@ -14,8 +20,8 @@ export interface TokenInfo {
 export interface AuthResponse {
   status: string;
   message: string;
-  userInfo?: UserInfo[]; 
-  tokenInfo?: TokenInfo[];
+  userInfo: UserInfo[]; 
+  tokenInfo: TokenInfo[];
 }
 
 export abstract class AuthRepository {
