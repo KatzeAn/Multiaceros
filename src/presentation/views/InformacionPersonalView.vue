@@ -245,12 +245,11 @@ import type { FormInstance, FormRules } from "element-plus";
 import { useUserProfileStore } from "../stores/UserProfile.store";
 import { useUserStore } from "../stores/user.store";
 import type { UserProfile } from "@/domain/Interfaces/UserProfile.interface";
-
 // Interfaz para el formulario
 interface BasicInformationForm {
-  firstName: string;
-  middleName: string;
-  lastName: string;
+  firstName: string | null | undefined;
+  middleName: string | null | undefined;
+  lastName: string | null | undefined;
   birthDate: Date | null;
   age: number | null;
   maritalStatus: string;
@@ -258,16 +257,16 @@ interface BasicInformationForm {
 
 // Datos del formulario
 const basicInformationForm = reactive<BasicInformationForm>({
-  firstName: "Harol",
-  middleName: "Stiven",
-  lastName: "Guzman",
+  firstName:  "",
+  middleName: "",
+  lastName: "",
   birthDate: new Date(2002, 5, 29),
   age: null,
   maritalStatus: "Single",
 });
 
 interface AddressInformationForm {
-  address: string;
+  address: string | null | undefined;
   city: string;
   state: string;
   country: string;
@@ -281,8 +280,8 @@ const addressInformationForm = reactive<AddressInformationForm>({
 });
 
 interface ContactInformationForm {
-  phone: string;
-  email: string;
+  phone: string | null | undefined;
+  email: string | null | undefined;
 }
 
 const contactInformationForm = reactive<ContactInformationForm>({
@@ -314,17 +313,30 @@ const resetForm = () => {
   
   };
   const loading = ref<boolean>(false);
-  const Userdata = ref<UserProfile | null>(null);
    const loadData = async () => {
     const userid = await useUserStore().getUserId;
     const { loading: isLoading, userProfile: UserProfile } =
       await useUserProfileStore().fetchUserProfile(userid);
     loading.value = isLoading;
-    Userdata.value = UserProfile;
-    console.log(Userdata.value);
+    const Userdata = ref<UserProfile | null>(null);
+    Userdata.value = UserProfile
+    let birthDate = new Date();
+    if (Userdata.value?.birthday != null) { 
+      birthDate = new Date(Userdata.value.birthday);
+    }
+
+    basicInformationForm.firstName = Userdata.value?.userFirstName;
+    basicInformationForm.middleName = Userdata.value?.userMiddleName;
+    basicInformationForm.lastName = Userdata.value?.surName;
+    basicInformationForm.birthDate = birthDate;
+    addressInformationForm.address = Userdata.value?.address;
+    addressInformationForm.city = "";
+    addressInformationForm.state = "";
+    contactInformationForm.email = Userdata.value?.userEmail;
+    contactInformationForm.phone = Userdata.value?.cellphone;
+
   };
    onMounted(() => {
-    console.log("Component mounted");
     loadData()
 });
 </script>
