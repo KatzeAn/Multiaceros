@@ -1,6 +1,16 @@
 <template>
   <form @submit.prevent="submitForm" class="space-y-4">
     <div>
+        <label for="documentNumber" class="block text-sm font-medium text-gray-700">Número de Documento</label>
+        <input 
+          type="number" 
+          id="documentNumber" 
+          v-model="employee.documentNumber" 
+          class="input" 
+          required 
+        />
+      </div>
+    <div>
         <label for="firstName" class="block text-sm font-medium text-gray-700">Primer Nombre</label>
         <input 
           type="text" 
@@ -45,17 +55,6 @@
       </div>
   
       <div>
-        <label for="documentNumber" class="block text-sm font-medium text-gray-700">Número de Documento</label>
-        <input 
-          type="number" 
-          id="documentNumber" 
-          v-model="employee.documentNumber" 
-          class="input" 
-          required 
-        />
-      </div>
-  
-      <div>
         <label for="address" class="block text-sm font-medium text-gray-700">Dirección</label>
         <input 
           type="text" 
@@ -87,7 +86,22 @@
           required 
         />
       </div>
-  
+       
+      <div>
+        <label for="bloodType" class="block text-sm font-medium text-gray-700">Tipo de Sangre</label>
+        <select id="bloodType" v-model="employee.bloodType" class="input" required>
+          <option value="">Seleccionar tipo de sangre</option>
+          <option value="O+">O+</option>
+          <option value="O-">O-</option>
+          <option value="A+">A+</option>
+          <option value="A-">A-</option>
+          <option value="B+">B+</option>
+          <option value="B-">B-</option>
+          <option value="AB+">AB+</option>
+          <option value="AB-">AB-</option>
+        </select>
+      </div>
+
       <div>
         <label for="eps" class="block text-sm font-medium text-gray-700">EPS</label>
         <div class="flex items-center">
@@ -138,6 +152,26 @@
           />
         </div>
       </div>
+
+        <div>
+          <label for="pensionFund" class="block text-sm font-medium text-gray-700">Fondo de Pensiones</label>
+          <el-select v-model="employee.pensionFund" class="input" placeholder="Seleccionar fondo de pensiones">
+            <el-option label="Porvenir" value="Porvenir"></el-option>
+            <el-option label="Colpensiones" value="Colpensiones"></el-option>
+            <el-option label="Protección" value="Protección"></el-option>
+          </el-select>
+        </div>
+
+          <div>
+            <label for="severanceFund" class="block text-sm font-medium text-gray-700">Caja de Cesantías</label>
+            <el-select v-model="employee.severanceFund" class="input" placeholder="Seleccionar caja de cesantías">
+              <el-option label="Colfondos" value="Colfondos"></el-option>
+              <el-option label="Protección" value="Protección"></el-option>
+              <el-option label="Porvenir" value="Porvenir"></el-option>
+            </el-select>
+          </div>
+
+
     <div>
       <label for="benefits" class="block text-sm font-medium text-gray-700">Beneficios</label>
       
@@ -199,8 +233,26 @@
           <option value="Indefinite">Indefinido</option>
         </select>
       </div>
-  
-      <div>
+      <!-- Departamento -->
+<div>
+  <label for="department" class="block text-sm font-medium text-gray-700">Departamento</label>
+  <el-select v-model="employee.department" class="input" placeholder="Seleccionar departamento">
+    <el-option label="Desarrollo" value="Desarrollo"></el-option>
+    <el-option label="Marketing" value="Marketing"></el-option>
+    <el-option label="Ventas" value="Ventas"></el-option>
+  </el-select>
+</div>
+
+<!-- Cargo -->
+<div>
+  <label for="position" class="block text-sm font-medium text-gray-700">Cargo</label>
+  <el-select v-model="employee.position" class="input" placeholder="Seleccionar cargo">
+    <el-option label="Programador" value="Programador"></el-option>
+    <el-option label="Diseñador" value="Diseñador"></el-option>
+    <el-option label="Gerente" value="Gerente"></el-option>
+  </el-select>
+</div>
+<div>
         <label for="startDate" class="block text-sm font-medium text-gray-700">Fecha de Inicio</label>
         <input 
           type="date" 
@@ -221,6 +273,10 @@
           required 
         />
       </div>
+          <div>
+          <label for="salary" class="block text-sm font-medium text-gray-700">Salario</label>
+          <input type="number" id="salary" v-model="employee.salary" class="input" required />
+        </div>
   
       <div class="flex justify-between">
         <button
@@ -253,11 +309,11 @@ export default {
   data() {
     return {
       employee: {
+        documentNumber: '',
         firstName: '',
         secondName: '',
         firstSurname: '',
         secondSurname: '',
-        documentNumber: '',
         address: '',
         phone: '',
         email: '',
@@ -267,6 +323,8 @@ export default {
         arlValue: '',
         benefits: [],  
         contractType: '',
+        department: '',
+        position: '',
         startDate: '',
         endDate: '',
       },
@@ -310,7 +368,7 @@ export default {
     }
   }
 }
-}
+};
 </script>
 
 <style scoped>
