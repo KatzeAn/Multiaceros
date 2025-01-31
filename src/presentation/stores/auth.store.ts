@@ -28,24 +28,22 @@ export const useAuthStore = defineStore('auth', () => {
         throw new Error(authResponse.message);
       }
   
-      if (!authResponse.userInfo || !authResponse.userInfo[0]) {
+      if (!authResponse.userInfo ) {
         throw new Error("User information is missing in the response.");
       }
   
-      if (!authResponse.tokenInfo || !authResponse.tokenInfo[0]) {
+      if (!authResponse.tokenInfo) {
         throw new Error("Token information is missing in the response.");
       }
 
-      const userInfo = authResponse.userInfo[0];
-      const tokenInfo = authResponse.tokenInfo[0];
   
       user.value = new User(
-        userInfo.id,
-        userInfo.firstName,
-        userInfo.lastName,
-        userInfo.email,
-        tokenInfo.accessToken,
-        userInfo.role.roleName
+        authResponse.userInfo.id,
+        authResponse.userInfo.firstName,
+        authResponse.userInfo.lastName,
+        authResponse.userInfo.email,
+        authResponse.tokenInfo.accessToken,
+        authResponse.userInfo.role.roleName
       );
   
       localStorage.setItem("user", JSON.stringify(user.value));

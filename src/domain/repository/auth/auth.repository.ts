@@ -20,8 +20,8 @@ export interface TokenInfo {
 export interface AuthResponse {
   status: string;
   message: string;
-  userInfo: UserInfo[]; 
-  tokenInfo: TokenInfo[];
+  userInfo: UserInfo; 
+  tokenInfo: TokenInfo;
 }
 
 export abstract class AuthRepository {

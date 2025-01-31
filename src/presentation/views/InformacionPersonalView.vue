@@ -264,11 +264,11 @@ const resetForm = () => {
   const { loading: isLoading, userProfile: UserProfile } = await useUserProfileStore().fetchUserProfile(userid);
   loading.value = isLoading;
   Userdata.value = UserProfile;
+  console.log (Userdata.value)
 };
-
-
-  
+ 
   onMounted(() => {
+    console.log ('Component mounted');
   loadData();
 });
 
