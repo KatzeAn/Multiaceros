@@ -21,7 +21,7 @@ const router = createRouter({
       path: '/home',
       name: 'home',
       component: () => import('../views/HomeView.vue'),
-      meta: { requiresAuth: false },
+      meta: { requiresAuth: true },
     },
     {
       path: '/certificados',
@@ -74,14 +74,13 @@ const router = createRouter({
 
 router.beforeEach((to, from, next) => {
   const userStore = useUserStore();
-
-  if (to.meta.requiresAuth) {
-    if (!userStore.isAuthenticated) {
-      next({ name: 'login' });
-    } else {
-      next();
-    }
-  } else {
+  
+  // Si la ruta requiere autenticación y el usuario no está autenticado, redirigir al login
+  if (to.meta.requiresAuth && !userStore.isAuthenticated) {
+    next({ name: 'login' });
+  } 
+  // En cualquier otro caso, permitir la navegación
+  else {
     next();
   }
 });

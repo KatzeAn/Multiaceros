@@ -38,21 +38,7 @@ export const useUserStore = defineStore('user', () => {
     loadFromLocalStorage();
 
     const isAuthenticated = computed(() => {
-        const storedUser = localStorage.getItem('user');
-        if (storedUser) {
-          const userData = JSON.parse(storedUser);
-          user.value = new User
-          (
-            userData.userId,
-            userData.userFirstName,
-            userData.SurName,
-            userData.UserEmail,
-            userData.token,
-            userData.role
-          );
-        }
-    
-        return user.value !== null && user.value.isAuthenticated();
+        return user.value ? true: false;
     });
     
     const getUsername = computed(() => {
