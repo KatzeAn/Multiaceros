@@ -1,4 +1,4 @@
-import axios from "axios";
+import axios, { type AxiosRequestConfig } from "axios";
 
 const axiosInstance = axios.create({
   baseURL: "https://localhost:51655/api",
@@ -13,12 +13,39 @@ axiosInstance.interceptors.request.use(
     if (token) {
       config.headers.Authorization = `Bearer ${token}`;
     }
-    
+
     return config;
   },
   (error) => {
     return Promise.reject(error);
   }
 );
+
+/**
+ * Función genérica para manejar peticiones HTTP con axiosInstance
+ */
+export async function apiRequest<T>(
+  method: "get" | "post" | "patch" | "put" | "delete",
+  url: string,
+  data?: any,
+  config?: AxiosRequestConfig
+): Promise<T> {
+  try {
+    const response = await axiosInstance({
+      method,
+      url,
+      data,
+      ...config, // Permite agregar headers u otras opciones
+    });
+    return response.data as T;
+  } catch (error) {
+    if (axios.isAxiosError(error)) {
+      const apiError = error.response?.data as { error?: { details?: string } };
+      throw new Error(apiError?.error?.details || "Error en la solicitud");
+    } else {
+      throw new Error("Error inesperado en la solicitud");
+    }
+  }
+}
 
 export default axiosInstance;

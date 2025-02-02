@@ -2,33 +2,33 @@
     <el-card>
         <span class="text-2xl font-bold text-[var(--secondary-color)]">Solicitar Ausencia</span>
 
-        <el-form label-position="top" ref="ruleFormRef" style="max-width: 600px" :model="AbsenceRequestForm" :rules="rules"
+        <el-form label-position="top" ref="ruleFormRef" style="max-width: 600px" :model="absenceRequestForm" :rules="rules"
             label-width="auto" class="mt-6" :size="formSize" status-icon>
 
             <el-row :gutter="12">
                 <el-col :span="12">
                     <el-form-item label="Desde" prop="from">
-                        <el-date-picker v-model="AbsenceRequestForm.from" type="date" aria-label="Selecciona una fecha"
+                        <el-date-picker v-model="absenceRequestForm.from" type="date" aria-label="Selecciona una fecha"
                             placeholder="Selecciona una fecha" style="width: 100%" />
                     </el-form-item>
                 </el-col>
                 <el-col :span="12">
                     <el-form-item label="Hasta" prop="to">
-                        <el-date-picker v-model="AbsenceRequestForm.to" type="date" aria-label="Selecciona una fecha"
+                        <el-date-picker v-model="absenceRequestForm.to" type="date" aria-label="Selecciona una fecha"
                             placeholder="Selecciona una fecha" style="width: 100%" />
                     </el-form-item>
                 </el-col>
             </el-row>
 
             <el-form-item label="Tipo de ausencia" prop="type">
-                <el-select v-model="AbsenceRequestForm.type" placeholder="Tipo de ausencia">
+                <el-select v-model="absenceRequestForm.type" placeholder="Tipo de ausencia">
                     <el-option label="Vacaciones" value="1" />
                     <el-option label="Cita medica" value="2" />
                 </el-select>
             </el-form-item>
 
             <el-form-item label="Comentario" prop="comment">
-                <el-input v-model="AbsenceRequestForm.comment" type="textarea" />
+                <el-input v-model="absenceRequestForm.comment" type="textarea" />
             </el-form-item>
 
             <el-form-item>
@@ -63,12 +63,12 @@ import { reactive, ref } from 'vue'
 import type { ComponentSize, FormInstance, FormRules, UploadProps, UploadUserFile } from 'element-plus'
 import { ElMessage, ElMessageBox } from 'element-plus'
 import type { AbsenceRequest } from '@/domain/Interfaces/AbsenceRequest.interface';
-import { useUserStore } from '../stores/user.store';
+import { useAbsenceStore } from '../stores/absence.store';
 
 const formSize = ref<ComponentSize>('default')
 const ruleFormRef = ref<FormInstance>();
 
-const { AbsenceRequestForm, CreateAbsenceRequest } = useUserStore();
+const { absenceRequestForm, createAbsenceRequest } = useAbsenceStore();
 const isLoading = ref(false);
 
 const rules = reactive<FormRules<AbsenceRequest>>({
@@ -108,7 +108,7 @@ const submitForm = async (formEl: FormInstance | undefined) => {
 
     const valid = await formEl.validate();
     if (valid) {
-      await CreateAbsenceRequest();
+      await createAbsenceRequest();
     }
   } catch (error) {
     console.error("Error en la solicitud:", error);

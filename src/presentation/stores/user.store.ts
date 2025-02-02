@@ -3,20 +3,9 @@ import type { AbsenceRequest } from "@/domain/Interfaces/AbsenceRequest.interfac
 import { GetBirthdaysOfMonthUseCase } from "@/domain/use-cases/getBirthdaysOfMonth.usecase";
 import { defineStore } from "pinia";
 import { computed, reactive, ref } from "vue";
-import { CreateAbsenceRequestUseCase } from "@/domain/use-cases/absenceRequest.usecase";
-import { ElNotification } from 'element-plus'
 
 export const useUserStore = defineStore('user', () => {
     const user = ref<User | null>(null);
-
-    const AbsenceRequestForm = reactive<AbsenceRequest>({
-        from: '',
-        to: '',
-        type: '',
-        comment: '',
-        evidencePath: 'c://file.pdf',
-        requestedById: ''
-    })
 
     const loadFromLocalStorage = () => {
         const storedUser = localStorage.getItem('user');
@@ -69,34 +58,10 @@ export const useUserStore = defineStore('user', () => {
         return result; // Retornar el estado y los datos
     };
 
-    const CreateAbsenceRequest = async () => {
-        try {
-          let absenceRequestResponse: AbsenceRequest;
-          let userId = user.value ? `${user.value.userId }`: '';
-
-          absenceRequestResponse = await CreateAbsenceRequestUseCase.execute(AbsenceRequestForm.from, AbsenceRequestForm.to, AbsenceRequestForm.type, AbsenceRequestForm.evidencePath, AbsenceRequestForm.comment, userId);
-          ElNotification({
-            title: 'Success',
-            message: 'The data was saved successfully',
-            type: 'success',
-          })
-      
-        } catch (error) {
-            ElNotification({
-                title: 'Error',
-                message: 'An error ocurred while saving the form',
-                type: 'error',
-            })
-            throw error;
-        }
-    };
-
     return {
         isAuthenticated,
         getUsername,
         getUserId,
         fetchBirthdaysOfMonth,
-        AbsenceRequestForm,
-        CreateAbsenceRequest
     }
 });

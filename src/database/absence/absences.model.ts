@@ -1,62 +1,77 @@
-import type { Absence } from "@/domain/Interfaces/Absence.interface";
+import type { AbsenceRequest } from "@/domain/Interfaces/AbsenceRequest.interface";
 import { AbsenceRepository } from "@/domain/repository/absence/absences.repository";
-import axiosInstance from "@/presentation/api/axiosInstance";
+import { apiRequest } from "@/presentation/api/axiosInstance";
 
 export class AbsenceModel extends AbsenceRepository {
-    async getMonthlyAbsences(): Promise<Absence> {
-        try {
-            const response = await axiosInstance.get(`/Absence/MonthlyAbsences`, {
-                responseType: 'json',
-            });
+  getAbsences(): Promise<Absence> {
+    throw new Error("Method not implemented.");
+  }
 
-            return response.data as Absence;
-        } catch (error) {
-            throw new Error("Unexpected error: " + error);
-        }
-    }
-    async getPendingAbsences(): Promise<Absence> {
-        try {
-            const response = await axiosInstance.get(`/Absence/Pending`, {
-                responseType: 'json',
-            });
+  getMonthlyAbsences(): Promise<Absence[]> {
+    return apiRequest<Absence[]>("get", "/Absence/MonthlyAbsences");
+  }
 
-            return response.data as Absence;
-        } catch (error) {
-            throw new Error("Unexpected error: " + error);
-        }
-    }
-    async getUpcomingAbsences(): Promise<Absence> {
-        try {
-            const response = await axiosInstance.get(`/Absence/Upcoming`, {
-                responseType: 'json',
-            });
+  getPendingAbsences(): Promise<Absence[]> {
+    return apiRequest<Absence[]>("get", "/Absence/Pending");
+  }
 
-            return response.data as Absence;
-        } catch (error) {
-            throw new Error("Unexpected error: " + error);
-        }
-    }
-    async approveAbsenceRequest(absenceId: number): Promise<Absence> {
-        try {
-            const response = await axiosInstance.patch(`/Absence/${absenceId}/approve`, {
-                responseType: 'json',
-            });
+  getUpcomingAbsences(): Promise<Absence[]> {
+    return apiRequest<Absence[]>("get", "/Absence/Upcoming");
+  }
 
-            return response.data as Absence;
-        } catch (error) {
-            throw new Error("Unexpected error: " + error);
-        }
-    }
-    async rejectAbsenceRequest(absenceId: number): Promise<Absence> {
-        try {
-            const response = await axiosInstance.patch(`/Absence/${absenceId}/reject`, {
-                responseType: 'json',
-            });
+  createAbsenceRequest(
+    from: string,
+    to: string,
+    type: string,
+    evidencePath: string,
+    comment: string,
+    requestedById: string
+  ): Promise<AbsenceRequest> {
+    return apiRequest<AbsenceRequest>("post", "/Absence/CreateAbsence", {
+      absenceRequest: {
+        startDate: new Date(from),
+        endDate: new Date(to),
+        absenceType: type,
+        comment,
+        evidenceFilePath: evidencePath,
+        requestedById,
+        createdBy: requestedById,
+      },
+    });
+  }
 
-            return response.data as Absence;
-        } catch (error) {
-            throw new Error("Unexpected error: " + error);
-        }
-    }
-    
+  updateAbsenceRequest(
+    absenceId: number,
+    from: string,
+    to: string,
+    type: string,
+    evidencePath: string,
+    comment: string,
+    requestedById: string
+  ): Promise<AbsenceRequest> {
+    return apiRequest<AbsenceRequest>("post", "/Absence/UpdateAbsence", {
+      absenceRequest: {
+        id: absenceId,
+        startDate: new Date(from),
+        endDate: new Date(to),
+        absenceType: type,
+        comment,
+        evidenceFilePath: evidencePath,
+        requestedById,
+        createdBy: requestedById,
+      },
+    });
+  }
+
+  deleteAbsenceRequest(absenceId: number): Promise<Absence> {
+    return apiRequest<Absence>("patch", `/Absence/${absenceId}/reject`);
+  }
+
+  approveAbsenceRequest(absenceId: number): Promise<Absence> {
+    return apiRequest<Absence>("patch", `/Absence/${absenceId}/approve`);
+  }
+
+  rejectAbsenceRequest(absenceId: number): Promise<Absence> {
+    return apiRequest<Absence>("patch", `/Absence/${absenceId}/reject`);
+  }
 }

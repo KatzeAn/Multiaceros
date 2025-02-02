@@ -25,7 +25,6 @@ export class AuthModel extends AuthRepository {
       if (axios.isAxiosError(error)) {
         const apiError = error.response?.data as ApiErrorResponse;
 
-        // Extraemos mensaje de error o damos un fallback
         const errorMessage =
           apiError?.error?.details || "Error en la autenticación";
 
