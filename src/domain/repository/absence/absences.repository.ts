@@ -1,7 +1,7 @@
 import type { AbsenceRequest } from "@/domain/Interfaces/AbsenceRequest.interface";
 
 export abstract class AbsenceRepository {
-    abstract getAbsences(): Promise<Absence>;
+    abstract getAbsences(): Promise<Absence[]>;
     abstract getMonthlyAbsences(): Promise<Absence[]>;
     abstract getPendingAbsences(): Promise<Absence[]>;
     abstract getUpcomingAbsences(): Promise<Absence[]>;

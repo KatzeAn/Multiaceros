@@ -3,8 +3,8 @@ import { AbsenceRepository } from "@/domain/repository/absence/absences.reposito
 import { apiRequest } from "@/presentation/api/axiosInstance";
 
 export class AbsenceModel extends AbsenceRepository {
-  getAbsences(): Promise<Absence> {
-    throw new Error("Method not implemented.");
+  getAbsences(): Promise<Absence[]> {
+    return apiRequest<Absence[]>("get", "/Absence");
   }
 
   getMonthlyAbsences(): Promise<Absence[]> {
@@ -49,7 +49,7 @@ export class AbsenceModel extends AbsenceRepository {
     comment: string,
     requestedById: string
   ): Promise<AbsenceRequest> {
-    return apiRequest<AbsenceRequest>("post", "/Absence/UpdateAbsence", {
+    return apiRequest<AbsenceRequest>("put", "/Absence/UpdateAbsence", {
       absenceRequest: {
         id: absenceId,
         startDate: new Date(from),
