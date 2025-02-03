@@ -1,4 +1,4 @@
-import type { AbsenceRequest } from "@/domain/Interfaces/AbsenceRequest.interface";
+import type { AbsenceRequest } from "@/domain/Interfaces/Absence/AbsenceRequest.interface";
 import { AbsenceRepository } from "@/domain/repository/absence/absences.repository";
 import { apiRequest } from "@/presentation/api/axiosInstance";
 

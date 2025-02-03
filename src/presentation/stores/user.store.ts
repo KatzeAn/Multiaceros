@@ -1,5 +1,5 @@
 import { User } from "@/domain/entities/user";
-import type { AbsenceRequest } from "@/domain/Interfaces/AbsenceRequest.interface";
+import type { AbsenceRequest } from "@/domain/Interfaces/Absence/AbsenceRequest.interface";
 import { GetBirthdaysOfMonthUseCase } from "@/domain/use-cases/getBirthdaysOfMonth.usecase";
 import { defineStore } from "pinia";
 import { computed, reactive, ref } from "vue";
