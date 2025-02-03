@@ -96,11 +96,20 @@ const clearFilters = () => {
 .sidebar {
   width: 100%;
   max-width: 16rem;
-  height: 100vh;
   background-color: var(--secondary-alt-color);
   color: var(--light-color);
   padding-top: 1rem;
-  border-right: 3px solid var(--gray-color); 
+  border-right: 3px solid var(--gray-color);
+  position: fixed; 
+  bottom: 0;
+  min-height: 100vh; 
+  z-index: 10;
+}
+
+.content {
+  margin-left: 16rem;
+  padding: 20px;
+  overflow-y: auto; 
 }
 
 input[type="number"] {
