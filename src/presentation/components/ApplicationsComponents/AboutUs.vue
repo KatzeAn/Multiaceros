@@ -1,5 +1,6 @@
 <template>
-    <div class="demo-collapse p-6 bg-gray-50 rounded-lg shadow-lg max-w-3xl mx-auto">
+  
+    <div class="demo-collapse p-6 bg-gray-50 rounded-lg shadow-lg w-full">
       <el-collapse v-model="activeNames" @change="handleChange" class="space-y-4">
         <el-collapse-item 
           title="Conoce Hicody" 

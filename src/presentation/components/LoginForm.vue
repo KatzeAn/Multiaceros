@@ -3,7 +3,7 @@
     class="bg-white px-10 py-20 rounded-3xl border-2 border-gray-100"
     @submit.prevent="login()"
   >
-    <h1 class="text-5xl font-semibold">Portal HiCody</h1>
+    <h1 class="text-5xl font-semibold">Portal Multiaceros</h1>
     <p class="font-medium text-lg text-gray-500 mt-4">
       !Bienvenido de vuelta! Por favor ingresa tus credenciales.
     </p>
@@ -40,7 +40,7 @@
           >
         </div>
         <a
-          class="font-medium text-base text-primary cursor-pointer"
+          class="font-medium text-base text-secondary cursor-pointer"
           @click="dialogFormVisible = true"
           >Olvidé mí contraseña</a
         >
@@ -49,7 +49,7 @@
         <button
           v-loading="isLoading"
           type="submit"
-          class="active:scale-[.98] active:duration-75 hover:scale-[1.01] ease-in-out transition-all py-3 rounded-xl bg-primary text-white text-lg font-bold"
+          class="active:scale-[.98] active:duration-75 hover:scale-[1.01] ease-in-out transition-all py-3 rounded-xl bg-secondary text-white text-lg font-bold"
         >
           Iniciar Sesión
         </button>
@@ -59,7 +59,7 @@
       ¿Quieres trabajar con nosotros?
       <router-link
         to="/applications"
-        class="font-medium text-base text-primary cursor-pointer"
+        class="font-medium text-base text-secondary cursor-pointer"
         >Haz clic aquí</router-link
       >
     </p>
