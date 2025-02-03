@@ -106,21 +106,7 @@ const download = async () => {
                   color="var(--secondary-color)"
                   round
                   >Solicitar Tiempo Libre</el-button
-                ></router-link
-              >
-              <router-link
-                tag="span"
-                class="items-center"
-                to="/gestionar-ausencias"
-                ><el-button
-                  icon="setting"
-                  class="mt-6"
-                  size="small"
-                  color="var(--secondary-color)"
-                  round
-                  >Gestionar Ausencias</el-button
-                ></router-link
-              >
+                ></router-link>
             </div>
           </div>
         </el-card>

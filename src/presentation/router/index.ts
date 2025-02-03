@@ -21,7 +21,7 @@ const router = createRouter({
       path: '/home',
       name: 'home',
       component: () => import('../views/HomeView.vue'),
-      meta: { requiresAuth: false },
+      meta: { requiresAuth: true },
     },
     {
       path: '/certificados',
@@ -47,12 +47,7 @@ const router = createRouter({
       component: () => import('../views/AbsenceRequestView.vue'),
       meta: { requiresAuth: false },
     },
-    {
-      path: '/gestionar-ausencias',
-      name: 'gestionarAusencia',
-      component: () => import('../views/ManageAbsencesView.vue'),
-      meta: { requiresAuth: false },
-    },
+    
     {
       path: '/portal-rrhh',
       name: 'recursosHumanos',
@@ -64,6 +59,8 @@ const router = createRouter({
         { path: 'gestionar-cumplimientos', component: () => import('../views/PortalRRHH/manageComplienceView.vue') },
         { path: 'gestionar-pausas', component: () => import('../views/PortalRRHH/manageActiveBreak.vue') },
         { path: 'gestionar-postulaciones', component: () => import('../views/PortalRRHH/ManageApplications.vue') },
+        { path: 'gestionar-ausencias', component: () => import('../components/ManageAbsenceComponents/StatisticsAbsencesCard.vue') },
+
       ],
     },
     {
@@ -77,14 +74,13 @@ const router = createRouter({
 
 router.beforeEach((to, from, next) => {
   const userStore = useUserStore();
-
-  if (to.meta.requiresAuth) {
-    if (!userStore.isAuthenticated) {
-      next({ name: 'login' });
-    } else {
-      next();
-    }
-  } else {
+  
+  // Si la ruta requiere autenticación y el usuario no está autenticado, redirigir al login
+  if (to.meta.requiresAuth && !userStore.isAuthenticated) {
+    next({ name: 'login' });
+  } 
+  // En cualquier otro caso, permitir la navegación
+  else {
     next();
   }
 });

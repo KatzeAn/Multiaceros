@@ -1,9 +1,12 @@
+import { AuthModel } from '@/database/auth/auth.model';
 import { User } from '@/domain/entities/user';
 import type { AuthResponse } from '@/domain/repository/auth/auth.repository';
-import { LoginUseCase } from '@/domain/use-cases/login.usecase';
+import type { ApiErrorResponse } from '@/domain/Interfaces/ApiErrorResponse.interface';
+import axios from 'axios';
 import { defineStore } from 'pinia';
-import { reactive, ref } from 'vue';
+import { reactive, ref, watch } from 'vue';
 
+// Estado inicial del formulario de login
 const loginFormInitialState = {
   email: '',
   password: '',
@@ -11,57 +14,70 @@ const loginFormInitialState = {
 
 export const useAuthStore = defineStore('auth', () => {
   const user = ref<User | null>(null);
-
+  const errorMessage = ref<string | null | undefined>(null);
   const loginForm = reactive({ ...loginFormInitialState });
 
-  const resetForm = () => {
-    loginForm.password = loginFormInitialState.password;
+  // Resetear el formulario de login
+  const resetLoginForm = () => {
+    Object.assign(loginForm, loginFormInitialState);
   };
 
-  const LoginWithEmailAndPassword = async () => {
+  // Login con email y password
+  const loginWithEmailAndPassword = async () => {
     try {
-      let authResponse: AuthResponse;
-  
-      authResponse = await LoginUseCase.execute(loginForm.email, loginForm.password);
-  
-      if (authResponse.status !== "Success") {
-        throw new Error(authResponse.message);
-      }
-  
-      if (!authResponse.userInfo || !authResponse.userInfo[0]) {
-        throw new Error("User information is missing in the response.");
-      }
-  
-      if (!authResponse.tokenInfo || !authResponse.tokenInfo[0]) {
-        throw new Error("Token information is missing in the response.");
+      const authService = new AuthModel();
+      const authResponse: AuthResponse = await authService.signInWithEmailAndPassword(
+        loginForm.email,
+        loginForm.password
+      );
+
+      if (authResponse.status !== 'Success') {
+        throw new Error(authResponse.message || 'Error en la autenticación');
       }
 
-      const userInfo = authResponse.userInfo[0];
-      const tokenInfo = authResponse.tokenInfo[0];
-  
+      if (!authResponse.userInfo || !authResponse.tokenInfo) {
+        throw new Error('La información del usuario o el token están ausentes.');
+      }
+
+      // Crear la instancia del usuario
       user.value = new User(
-        userInfo.id,
-        userInfo.firstName,
-        userInfo.lastName,
-        userInfo.email,
-        tokenInfo.accessToken,
-        userInfo.role.roleName
+        authResponse.userInfo.id,
+        authResponse.userInfo.firstName,
+        authResponse.userInfo.lastName,
+        authResponse.userInfo.email,
+        authResponse.tokenInfo.accessToken,
+        authResponse.userInfo.role.roleName
       );
-  
-      localStorage.setItem("user", JSON.stringify(user.value));
-  
+
       return user.value;
     } catch (error) {
-      resetForm();
-      throw error;
+      errorMessage.value = error as string;
+      resetLoginForm();
+      throw errorMessage;
     }
   };
-  
+
+  // Logout
+  const logout = () => {
+    user.value = null;
+    localStorage.removeItem('user');
+  };
+
+  // Sincronizar usuario con localStorage automáticamente
+  watch(user, (newUser) => {
+    if (newUser) {
+      localStorage.setItem('user', JSON.stringify(newUser));
+    } else {
+      localStorage.removeItem('user');
+    }
+  }, { deep: true });
 
   return {
     user,
+    errorMessage,
     loginForm,
-    LoginWithEmailAndPassword,
-    resetForm,
+    loginWithEmailAndPassword,
+    logout,
+    resetLoginForm,
   };
 });

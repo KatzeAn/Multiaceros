@@ -43,7 +43,6 @@
             <router-link to="/portal-rrhh/gestionar-pausas">Gestionar Pausas Activas</router-link>
             <router-link to="/portal-rrhh/gestionar-postulaciones">Gestionar postulaciones</router-link>
             <router-link to="/portal-rrhh/gestionar-ausencias">Gestionar Ausencias</router-link>
-
           </div>
         </div>
       </div>
