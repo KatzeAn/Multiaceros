@@ -14,7 +14,9 @@
           </p>
   
           <div class="mt-10">
-          <Carousel />
+             <div class="carousel-wrapper" style="width: 100%; height: 60vh;">
+              <Carousel />
+             </div>
           </div>
         </div>
   
@@ -121,5 +123,10 @@ import NavbarApplications from '../components/ApplicationsComponents/NavbarAppli
     color: #4b5563; 
     line-height: 1.75; 
   }
+
+  .carousel-wrapper {
+  height: 400px; /* Ajusta la altura según sea necesario */
+  width: 100%;
+}
   </style>
   
