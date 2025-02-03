@@ -32,7 +32,7 @@
           <span class="text">Vacaciones y Ausencias</span>
         </router-link>
 
-                <div>
+        <div>
           <div class="button" @click="togglePortal">
             <span class="material-symbols-outlined">group</span>
             <span class="text">Portal Recursos Humanos</span>
@@ -62,37 +62,40 @@
 <script setup lang="ts">
   import { ref, onMounted, onBeforeUnmount, watch, computed } from "vue";
 
-const isExpanded = ref(false);
-const isSmallScreen = ref(window.innerWidth < 700);
-const isPortalExpanded = ref(false);
+  const isExpanded = ref(false);
+  const isSmallScreen = ref(window.innerWidth < 700);
+  const isPortalExpanded = ref(false);
 
-const asideWidth = computed(() => {
-  return isSmallScreen.value ? "0px" : isExpanded.value ? "305px" : "64px";
-});
+  const asideWidth = computed(() => {
+    return isSmallScreen.value ? "0px" : isExpanded.value ? "305px" : "64px";
+  });
 
-const ToggleMenu = () => {
-  isExpanded.value = !isExpanded.value;
-  if (!isExpanded.value) {
-    isPortalExpanded.value = false; // Cerrar el menú de recursos humanos cuando se cierra el menú principal
-  }
-};
+  const ToggleMenu = () => {
+    isExpanded.value = !isExpanded.value;
+    if (!isExpanded.value) {
+      isPortalExpanded.value = false;
+    }
+  };
+  const togglePortal = () => {
+    if (!isExpanded.value) {
+      isExpanded.value = true;
+    }
+    isPortalExpanded.value = !isPortalExpanded.value;
+  };
 
-const togglePortal = () => {
-  isPortalExpanded.value = !isPortalExpanded.value;
-};
+  const handleResize = () => {
+    isSmallScreen.value = window.innerWidth < 700;
+  };
 
-const handleResize = () => {
-  isSmallScreen.value = window.innerWidth < 700;
-};
+  onMounted(() => {
+    window.addEventListener("resize", handleResize);
+  });
 
-onMounted(() => {
-  window.addEventListener("resize", handleResize);
-});
-
-onBeforeUnmount(() => {
-  window.removeEventListener("resize", handleResize);
-});
+  onBeforeUnmount(() => {
+    window.removeEventListener("resize", handleResize);
+  });
 </script>
+
 
 
   <style scoped>
