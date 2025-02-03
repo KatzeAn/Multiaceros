@@ -117,6 +117,11 @@
 
     transition: 0.2s ease-out;
 }
+.dropdown {
+  width: 100%; 
+  font-size: 14px; 
+}
+
 
 aside .flex {
     flex: 1 1 0;
@@ -233,9 +238,9 @@ aside.is-expanded button .material-symbols-outlined {
 
 aside.is-hidden {
   width: 0;
-  padding: 0; /* Opcional, para evitar que el padding ocupe espacio */
-  overflow: hidden; /* Asegura que nada sea visible */
-  transition: width 0.3s ease-out, padding 0.3s ease-out; /* Animación suave */
+  padding: 0; 
+  overflow: hidden; 
+  transition: width 0.3s ease-out, padding 0.3s ease-out;
 }
   
   .navbar {
