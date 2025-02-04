@@ -32,7 +32,7 @@
           <span v-if="isExpanded" class="text">Vacaciones y Ausencias</span>
         </router-link>
 
-        <div>
+        <div class="menu-item">
           <div class="button" @click="togglePortal">
             <span class="material-symbols-outlined">group</span>
             <span v-if="isExpanded" class="text">Portal Recursos Humanos</span>
@@ -69,12 +69,25 @@
       <router-link class="nav-item" to="/vacaciones">
         <span class="material-symbols-outlined">beach_access</span>
       </router-link>
-      <router-link class="nav-item" to="/portal-rrhh">
-        <span class="material-symbols-outlined">group</span>
-      </router-link>
+      <div class="menu-item">
+        <div @click="togglePortal" class="nav-item">
+          <span class="material-symbols-outlined">group</span>
+        </div>
+        <div 
+          v-show="isPortalExpanded" 
+          :class="['dropdown', isSmallScreen ? 'navbar-dropdown' : 'sidebar-dropdown']"
+        >
+          <router-link to="/portal-rrhh/gestionar-empleados">Gestionar Empleados</router-link>
+          <router-link to="/portal-rrhh/gestionar-cumplimientos">Gestionar Certificados de Cumplimiento</router-link>
+          <router-link to="/portal-rrhh/gestionar-pausas">Gestionar Pausas Activas</router-link>
+          <router-link to="/portal-rrhh/gestionar-postulaciones">Gestionar postulaciones</router-link>
+          <router-link to="/portal-rrhh/gestionar-ausencias">Gestionar Ausencias</router-link>
+        </div>
+      </div>
     </nav>
   </div>
 </template>
+
 
 <script setup lang="ts">
 import { ref, onMounted, onBeforeUnmount } from "vue";
@@ -187,6 +200,9 @@ aside .menu .button:hover .text {
   padding: 0.7rem 0;
   z-index: 99;
 }
+.menu-item {
+  position: relative;
+}
 
 .navbar .nav-item {
   text-decoration: none;
@@ -217,6 +233,56 @@ aside .menu .button:hover .text {
   background-color: var(--primary-alt-color);
   font-weight: bold;
 }
+.menu-item {
+  position: relative;
+}
+
+.navbar-dropdown {
+  position: absolute;
+  bottom: 100%; 
+  left: 50%; 
+  transform: translateX(-50%);
+  width: 250px; 
+  font-size: 1rem; 
+  margin-bottom: 0.9rem;
+  padding: 0.5rem 0; 
+  background-color: var(--secondary-color);
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+  z-index: 100;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  border-radius: 5px; 
+}
+.sidebar-dropdown {
+  position: absolute;
+  left: 100%; 
+  top: 0;
+  width: 200px;
+  font-size: 0.85rem;
+  margin-left: 0.2rem;
+  padding: 0.3rem 0;
+  background-color: var(--secondary-color);
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+  z-index: 100;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+}
+
+.dropdown a {
+  display: block;
+  padding: 0.2rem 0.5rem;
+  color: #fff;
+  text-decoration: none;
+  font-size: 0.85rem;
+}
+
+.dropdown a:hover {
+  background-color: var(--primary-alt-color);
+  font-weight: bold;
+}
+
 
 </style>
 
