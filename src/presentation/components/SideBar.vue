@@ -39,7 +39,6 @@
           </div>
           <div v-show="isPortalExpanded" class="dropdown">
             <router-link to="/portal-rrhh/gestionar-empleados">Gestionar Empleados</router-link>
-            <router-link to="/portal-rrhh/gestionar-cumplimientos">Gestionar Certificados de Cumplimiento</router-link>
             <router-link to="/portal-rrhh/gestionar-pausas">Gestionar Pausas Activas</router-link>
             <router-link to="/portal-rrhh/gestionar-postulaciones">Gestionar postulaciones</router-link>
             <router-link to="/portal-rrhh/gestionar-ausencias">Gestionar Ausencias</router-link>
@@ -78,7 +77,6 @@
           :class="['dropdown', isSmallScreen ? 'navbar-dropdown' : 'sidebar-dropdown']"
         >
           <router-link to="/portal-rrhh/gestionar-empleados">Gestionar Empleados</router-link>
-          <router-link to="/portal-rrhh/gestionar-cumplimientos">Gestionar Certificados de Cumplimiento</router-link>
           <router-link to="/portal-rrhh/gestionar-pausas">Gestionar Pausas Activas</router-link>
           <router-link to="/portal-rrhh/gestionar-postulaciones">Gestionar postulaciones</router-link>
           <router-link to="/portal-rrhh/gestionar-ausencias">Gestionar Ausencias</router-link>
