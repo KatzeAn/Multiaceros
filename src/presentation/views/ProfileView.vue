@@ -8,7 +8,7 @@
         <el-col :span="21">
           <div class="flex flex-col">
             <div class="flex flex-col">
-              <span class="text-3xl font-bold">Harol Guzman</span>
+              <span class="text-3xl font-bold">{{ getUsername }}</span>
               <span class="my-2 font-light">Backend Developer</span>
             </div>
           </div>
@@ -42,9 +42,11 @@
   <script lang="ts" setup>
   import { computed, reactive } from 'vue';
   import { useRoute, useRouter } from 'vue-router';
+  import { useUserStore } from "../stores/user.store";
   
   const route = useRoute();
   const router = useRouter();
+  const { getUsername, getUserId } = useUserStore();
   
   const state = reactive({
     circleUrl:
