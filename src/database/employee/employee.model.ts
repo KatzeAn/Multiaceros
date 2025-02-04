@@ -4,7 +4,7 @@ import { apiRequest } from "@/presentation/api/axiosInstance";
 
 export class EmployeeModel implements EmployeeRepository {
     getEmploymentCertificate(userId: number): Promise<Blob> {
-        return apiRequest<Blob>("get", `Employee/${userId}/employment-certificate`);
+        return apiRequest<Blob>("get", `Employee/${userId}/employment-certificate`, undefined, { responseType: "blob" });
     }
     getActiveEmployees(): Promise<Employee[]> {
         return apiRequest<Employee[]>("get", "Employee/employeeactivate");
