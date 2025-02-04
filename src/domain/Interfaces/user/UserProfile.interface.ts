@@ -1,4 +1,5 @@
 export interface UserProfile {
+  userId?: string | number;
   numberDocument: string;
   userFirstName: string;
   userMiddleName?: string; 

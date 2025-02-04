@@ -1,4 +1,4 @@
-import type { UserProfile } from "@/domain/Interfaces/UserProfile.interface";
+import type { UserProfile } from "@/domain/Interfaces/user/UserProfile.interface";
 import { GetUserProfileUseCase } from "@/domain/use-cases/UserProfile.usecase";
 import { defineStore } from "pinia";
 

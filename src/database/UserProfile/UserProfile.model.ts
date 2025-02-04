@@ -1,5 +1,5 @@
-import type { UserProfile } from "@/domain/Interfaces/UserProfile.interface";
-import { UserProfileRepository } from "@/domain/repository/UserProfile.repository";
+import type { UserProfile } from "@/domain/Interfaces/user/UserProfile.interface";
+import { UserProfileRepository } from "@/domain/repository/user/UserProfile.repository";
 import axiosInstance from "@/presentation/api/axiosInstance";
 
 

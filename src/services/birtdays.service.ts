@@ -1,4 +1,4 @@
-import { UserModel } from "@/database/auth/user.model";
+import { UserModel } from "@/database/user/user.model";
 
 export class BirthdaysService {
     public static getBirthdaysOfMonths(): Promise<UserBirthdayList> {
