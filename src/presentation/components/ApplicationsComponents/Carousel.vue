@@ -1,10 +1,10 @@
 <template>
     
-    <el-carousel :interval="4000" type="card" height="300px">
-      <el-carousel-item v-for="(image, index) in images" :key="index">
-        <img :src="image" alt="Imagen del carrusel" class="carousel-image" />
-      </el-carousel-item>
-    </el-carousel>
+    <el-carousel :interval="4000" type="card" height="60vh">
+  <el-carousel-item v-for="(image, index) in images" :key="index">
+    <img :src="image" alt="Imagen del carrusel" class="carousel-image" />
+  </el-carousel-item>
+</el-carousel>
   </template>
   
   <script setup>
