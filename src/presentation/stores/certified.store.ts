@@ -1,6 +1,7 @@
 import { defineStore } from "pinia";
 import { ref } from "vue";
 import { EmployeeModel } from "@/database/employee/employee.model";
+import { ElNotification } from "element-plus";
 
 export const useCertifiedStore = defineStore("certified", () => {
   const error = ref<string | null>(null);
@@ -17,7 +18,7 @@ export const useCertifiedStore = defineStore("certified", () => {
       const link = document.createElement("a");
       link.href = url;
 
-      const fileName = `certificado_${userId}.pdf`; 
+      const fileName = `certificado_${userId}.pdf`;
       link.download = fileName;
 
       document.body.appendChild(link);
@@ -25,8 +26,14 @@ export const useCertifiedStore = defineStore("certified", () => {
       document.body.removeChild(link);
 
       window.URL.revokeObjectURL(url);
-    } catch (err: any) {
-      error.value = err.message || "Ocurrió un error al descargar el certificado.";
+    } catch (error) {
+      console.error("Error creating absence request:", error);
+      ElNotification({
+        title: "Error",
+        message: "An error occurred while saving the form",
+        type: "error",
+      });
+      throw error;
     }
   };
 
