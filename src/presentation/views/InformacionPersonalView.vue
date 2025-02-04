@@ -244,7 +244,7 @@ import { ref, reactive, onMounted } from "vue";
 import type { FormInstance, FormRules } from "element-plus";
 import { useUserProfileStore } from "../stores/UserProfile.store";
 import { useUserStore } from "../stores/user.store";
-import type { UserProfile } from "@/domain/Interfaces/UserProfile.interface";
+import type { UserProfile } from "@/domain/Interfaces/user/UserProfile.interface";
 // Interfaz para el formulario
 interface BasicInformationForm {
   firstName: string | null | undefined;
