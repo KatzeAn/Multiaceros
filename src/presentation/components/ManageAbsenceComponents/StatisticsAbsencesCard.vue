@@ -1,49 +1,5 @@
 <template>
-    <!-- <el-row :gutter="16">
-      <el-col :span="12">
-        <div class="statistic-card bg-[var(--gray-color)]">
-          <el-statistic :value="0">
-            <template #title>
-              <div style="display: inline-flex; align-items: center">
-                Ausencias Mensuales
-                <el-tooltip
-                  effect="dark"
-                  content="Numero de ausencias que se han creado durante el mes"
-                  placement="top"
-                >
-                  <el-icon style="margin-left: 4px" :size="12">
-                    <Warning />
-                  </el-icon>
-                </el-tooltip>
-              </div>
-            </template>
-          </el-statistic>
-        </div>
-      </el-col>
-      <el-col :span="12">
-        <div class="statistic-card bg-[var(--gray-color)]">
-          <el-statistic :value="0">
-            <template #title>
-              <div style="display: inline-flex; align-items: center">
-                Total de Ausencias
-                <el-tooltip
-                  effect="dark"
-                  content="Historico de ausencias que se han creado"
-                  placement="top"
-                >
-                  <el-icon style="margin-left: 4px" :size="12">
-                    <Warning />
-                  </el-icon>
-                </el-tooltip>
-              </div>
-            </template>
-          </el-statistic>
-        </div>
-      </el-col>
-      <el-divider class="p-0 m-0"></el-divider>
-    </el-row> -->
-
-    <el-row class="" :gutter="16" >
+ <el-row class="" :gutter="16" >
     <el-col :span="24">
       <span class="font-bold text-2xl ">Estadística mensual</span>
     </el-col>
@@ -122,11 +78,49 @@
         </el-statistic>
       </div>
     </el-col>
-  </el-row>
-  </template>
-  
-  <script lang="ts" setup>
+  </el-row> 
+  <div class="table-container">
+    <el-table :data="tableData" class="custom-table">
+    <el-table-column prop="name" label="Nombre" width="150" />
+    <el-table-column prop="from" label="Desde" width="180" />
+    <el-table-column prop="to" label="Hasta" width="180" />
+    <el-table-column prop="totalDays" label="Total de Días" width="120" />
+    <el-table-column prop="type" label="Tipo" width="150" />
+    <el-table-column prop="status" label="Estado" width="150">
+      <template #default="scope">
+        <el-tag :type="getStatusType(scope.row.status)">{{ scope.row.status }}</el-tag>
+      </template>
+    </el-table-column>
+  </el-table>
+</div>
+</template>
 
+
+  <script lang="ts" setup>
+import { ref } from 'vue';
+
+const tableData = ref([
+  { name: 'Tom', from: '2016-05-03', to: '2016-05-03', totalDays: 1, type: 'Vacaciones', status: 'Pendiente' },
+  { name: 'Alice', from: '2016-05-03', to: '2016-05-03', totalDays: 2, type: 'Enfermedad', status: 'Aprobado' },
+  { name: 'Bob', from: '2016-05-03', to: '2016-05-03', totalDays: 3, type: 'Permiso', status: 'Cancelado' },
+  { name: 'Tom', from: '2016-05-03', to: '2016-05-03', totalDays: 1, type: 'Vacaciones', status: 'Pendiente' },
+  { name: 'Alice', from: '2016-05-03', to: '2016-05-03', totalDays: 2, type: 'Enfermedad', status: 'Aprobado' },
+  { name: 'Bob', from: '2016-05-03', to: '2016-05-03', totalDays: 3, type: 'Permiso', status: 'Cancelado' },
+  { name: 'Tom', from: '2016-05-03', to: '2016-05-03', totalDays: 1, type: 'Vacaciones', status: 'Pendiente' },
+  { name: 'Alice', from: '2016-05-03', to: '2016-05-03', totalDays: 2, type: 'Enfermedad', status: 'Aprobado' },
+  { name: 'Bob', from: '2016-05-03', to: '2016-05-03', totalDays: 3, type: 'Permiso', status: 'Cancelado' },
+]);
+
+
+
+const getStatusType = (status) => {
+  switch (status) {
+    case 'Aprobado': return 'success';
+    case 'Pendiente': return 'warning';
+    case 'Cancelado': return 'danger';
+    default: return '';
+  }
+};
 
   </script>
   
@@ -140,5 +134,15 @@
     padding: 20px;
     border-radius: 4px;
   }
+
+
+.custom-table ::v-deep(.el-table__header th) {
+  background-color: #cee4ff;
+  color: gray;
+  text-align: center;
+}
+
+
+
   </style>
   
