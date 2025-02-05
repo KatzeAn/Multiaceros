@@ -24,7 +24,6 @@ export const useAbsenceStore = defineStore("absence", () => {
     try {
       const absenceService = new AbsenceModel();
 
-      // Verifica si el método existe antes de llamarlo
       if (typeof absenceService[type] === "function") {
         const absencesResponse = await (
           absenceService[type] as () => Promise<Absence[]>
@@ -42,7 +41,6 @@ export const useAbsenceStore = defineStore("absence", () => {
     return result;
   };
 
-  // Métodos específicos reutilizando la función genérica
   const fetchMonthlyAbsences = () => fetchAbsences("getMonthlyAbsences");
   const fetchPendingAbsences = () => fetchAbsences("getPendingAbsences");
   const fetchUpcomingAbsences = () => fetchAbsences("getUpcomingAbsences");
@@ -66,7 +64,6 @@ export const useAbsenceStore = defineStore("absence", () => {
       });
     }
   };
-
   const createAbsenceRequest = async () => {
     try {
       const absenceService = new AbsenceModel();
@@ -96,12 +93,85 @@ export const useAbsenceStore = defineStore("absence", () => {
       throw error;
     }
   };
+  const updateAbsenceRequest = async (absenceId: number) => {
+    try {
+      const absenceService = new AbsenceModel();
+      const userId = useUserStore().getUserId;
+  
+      await absenceService.updateAbsenceRequest(
+        absenceId,
+        absenceRequestForm.from,
+        absenceRequestForm.to,
+        absenceRequestForm.type,
+        absenceRequestForm.evidencePath,
+        absenceRequestForm.comment,
+        userId
+      );
+  
+      ElNotification({
+        title: "Success",
+        message: "The absence was updated successfully",
+        type: "success",
+      });
+    } catch (error) {
+      console.error("Error updating the absence:", error);
+      ElNotification({
+        title: "Error",
+        message: "An error occurred while updating the absence",
+        type: "error",
+      });
+      throw error;
+    }
+  };
+  const deleteAbsenceRequest = async (absenceId: number) => {
+    try {
+      const absenceService = new AbsenceModel();
+      await absenceService.deleteAbsenceRequest(absenceId);
+  
+      ElNotification({
+        title: "Success",
+        message: "The absence was deleted successfully",
+        type: "success",
+      });
+    } catch (error) {
+      console.error("Error deleting the absence:", error);
+      ElNotification({
+        title: "Error",
+        message: "An error occurred while deleting the absence",
+        type: "error",
+      });
+      throw error;
+    }
+  };
+  const rejectAbsence = async (absenceId: number) => {
+    try {
+      const absenceService = new AbsenceModel();
+      await absenceService.rejectAbsenceRequest(absenceId);
+
+      ElNotification({
+        title: "Success",
+        message: "The absence was rejected successfully",
+        type: "success",
+      });
+    } catch (error) {
+      console.error("Error rejecting the absence:", error);
+      ElNotification({
+        title: "Error",
+        message: "An unexpected error occurred",
+        type: "error",
+      });
+    }
+  };
+    
 
   return {
+    updateAbsenceRequest,
+    deleteAbsenceRequest,
     fetchMonthlyAbsences,
     fetchPendingAbsences,
     fetchUpcomingAbsences,
     approveAbsence,
+    rejectAbsence,
     absenceRequestForm,
     createAbsenceRequest,
   };

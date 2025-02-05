@@ -1,7 +1,7 @@
 import axios, { type AxiosRequestConfig } from "axios";
 
 const axiosInstance = axios.create({
-  baseURL: "https://localhost:51655/api",
+  baseURL: "https://localhost:53793/api",
   timeout: 10000,
 });
 
