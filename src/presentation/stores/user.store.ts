@@ -1,8 +1,7 @@
+import { UserModel } from "@/database/user/user.model";
 import { User } from "@/domain/entities/user";
-import type { AbsenceRequest } from "@/domain/Interfaces/AbsenceRequest.interface";
-import { GetBirthdaysOfMonthUseCase } from "@/domain/use-cases/getBirthdaysOfMonth.usecase";
 import { defineStore } from "pinia";
-import { computed, reactive, ref } from "vue";
+import { computed, ref } from "vue";
 
 export const useUserStore = defineStore('user', () => {
     const user = ref<User | null>(null);
@@ -33,6 +32,10 @@ export const useUserStore = defineStore('user', () => {
     const getUsername = computed(() => {
         return user.value ? `${user.value.userFirstName } ${user.value.SurName}`: '';
     });
+
+    const getUserEmail = computed(() => {
+        return user.value ? `${user.value.UserEmail }`: '';
+    }); 
     
     const getUserId = computed(() => {
         return user.value ? `${user.value.userId }`: '';
@@ -45,22 +48,24 @@ export const useUserStore = defineStore('user', () => {
         };
     
         try {
-            result.loading = true; // Activar indicador de carga
-            const birthdaysResponse: UserBirthdayList = await GetBirthdaysOfMonthUseCase.execute();
-            result.userBirthdaysList = birthdaysResponse; // Asignar datos obtenidos
+            result.loading = true;
+            const userService = new UserModel();
+            const birthdaysResponse: UserBirthdayList = await userService.getBirthdaysOfMonth();
+            result.userBirthdaysList = birthdaysResponse;
         } catch (error) {
             console.error('Error fetching birthdays:', error);
-            result.userBirthdaysList = []; // En caso de error, lista vacía
+            result.userBirthdaysList = [];
         } finally {
-            result.loading = false; // Detener la carga
+            result.loading = false;
         }
     
-        return result; // Retornar el estado y los datos
+        return result;
     };
 
     return {
         isAuthenticated,
         getUsername,
+        getUserEmail,
         getUserId,
         fetchBirthdaysOfMonth,
     }

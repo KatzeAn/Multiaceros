@@ -1,149 +1,271 @@
 <template>
+  <!-- MODAL PARA AÑADIR EMPLEADO -->
+  <el-dialog v-model="isAddModalOpen" title="Añadir Nuevo Empleado">
+    <AddEmployee @close-form="closeForm" @add-employee="AddEmployee" />
+  </el-dialog>
+
   <div class="space-y-6">
     <div class="flex justify-between items-center">
-      <h2 class="text-xl font-bold">Empleados</h2>
-      <AddIcon @open-form="openForm" />
+      <h2 class="text-xl font-bold">Gestionar Empleados</h2>
+      <el-button type="primary" icon="Plus" @click="openAddModal">
+        Agregar Empleado
+      </el-button>
     </div>
 
-    <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
-      <EmployeeCard
-        v-for="employee in employees"
-        :key="employee.id"
-        :id="employee.id"
-        :fullName="employee.fullName"
-        :position="employee.position"
-        :hireDate="employee.hireDate"
-        :status="employee.status"
-        :avatar="employee.avatar"
-        :shape="employee.shape"
-        :size="employee.size"
-        @edit="handleEdit" 
-      />
-    </div>
+    <el-card class="p-7">
+      <el-button
+        icon="Delete"
+        type="danger"
+        class="mb-4"
+        :disabled="!selectedRows.length"
+        @click="deleteSelected"
+      >
+        Eliminar Seleccionados
+      </el-button>
 
-    <el-dialog v-model="isAddModalOpen" title="Añadir Nuevo Empleado">
-      <AddEmploye @close-form="closeForm" @add-employee="addEmployee" />
-    </el-dialog>
+      <el-table
+        :data="paginatedData"
+        style="width: 100%"
+        stripe
+        @selection-change="handleSelectionChange"
+      >
+        <!-- Checkbox para seleccionar múltiples filas -->
+        <el-table-column type="selection" width="55" />
 
-    <el-dialog v-model="isEditModalOpen" title="Editar Empleado">
-      <EditEmployeeForm
-        v-if="selectedEmployee"
-        :employee="selectedEmployee"
-        @close="isEditModalOpen = false"
-        @save="saveEmployee"
+        <el-table-column label="Nombre" prop="name" />
+        <el-table-column label="Correo Electrónico" prop="email" />
+        <el-table-column label="Cargo" prop="jobTitle" />
+        <el-table-column label="Departamento" prop="department" />
+        <el-table-column label="Estado" prop="status">
+          <template #default="{ row }">
+            <el-tag :type="row.status ? 'success' : 'danger'">
+              {{ row.status ? "Activo" : "Inactivo" }}
+            </el-tag>
+          </template>
+        </el-table-column>
+
+        <el-table-column align="right">
+          <template #header>
+            <el-input
+              v-model="search"
+              size="small"
+              placeholder="Buscar..."
+              clearable
+            />
+          </template>
+          <template #default="scope">
+            <el-button
+              size="small"
+              @click="handleEdit(scope.$index, scope.row)"
+            >
+              Editar
+            </el-button>
+            <el-popconfirm
+              width="220"
+              icon="InfoFilled"
+              icon-color="#626AEF"
+              title="¿Estás seguro de eliminar?"
+              @cancel="onCancel"
+            >
+              <template #reference>
+                <el-button
+                  size="small"
+                  type="danger"
+                  @click="handleDelete(scope.$index, scope.row)"
+                >
+                  Eliminar
+                </el-button>
+              </template>
+              <template #actions="{ confirm, cancel }">
+                <el-button size="small" @click="cancel">No</el-button>
+                <el-button
+                  type="danger"
+                  size="small"
+                  :disabled="!clicked"
+                  @click="confirm"
+                >
+                  Sí
+                </el-button>
+              </template>
+            </el-popconfirm>
+          </template>
+        </el-table-column>
+      </el-table>
+
+      <!-- Paginación -->
+      <el-pagination
+        v-model:current-page="currentPage"
+        :page-size="pageSize"
+        :page-sizes="[10, 20, 50]"
+        layout="total, sizes, prev, pager, next"
+        :total="tableData.length"
+        @size-change="handleSizeChange"
+        @current-change="handlePageChange"
       />
-    </el-dialog>
+    </el-card>
   </div>
 </template>
 
-<script>
-import AddIcon from './components/AddIcon.vue';
-import AddEmploye from './components/AddEmploye.vue';
-import EmployeeCard from "./components/EmployeeCard.vue";
-import EditEmployeeForm from "./components/EditEmployeeForm.vue";
+<script lang="ts" setup>
+import { computed, ref } from "vue";
+import AddEmployee from "@/presentation/views/PortalRRHH/components/AddEmployee.vue";
 
-export default {
-  components: { 
-    AddIcon,
-    AddEmploye,
-    EmployeeCard,
-    EditEmployeeForm,
-  },
-  data() {
-    return {
-      employees: [  {
-          id: 1,
-          fullName: "Angela Salamanca",
-          position: "Desarrollador",
-          hireDate: "2022-06-15",
-          status: "En periodo de prueba",
-          avatar:"https://cube.elemecdn.com/9/c2/f0ee8a3c7c9638a54940382568c9dpng.png",
-          shape: "square",
-          size: 50,
-        },
-        {
-          id: 2,
-          fullName: "Eduardo Fuentes",
-          position: "Desarrollador",
-          hireDate: "2023-03-01",
-          status: "Activo",
-          avatar:"https://cube.elemecdn.com/9/c2/f0ee8a3c7c9638a54940382568c9dpng.png",
-          shape: "square",
-          size: 50,
-        },
-        {
-          id: 3,
-          fullName: "Oscar Fuentes",
-          position: "Desarrollador",
-          hireDate: "2020-01-20",
-          status: "Activo",
-          avatar:"https://cube.elemecdn.com/9/c2/f0ee8a3c7c9638a54940382568c9dpng.png",
-          shape: "square",
-          size: 50,
-        },
-        {
-          id: 4,
-          fullName: "Harol Guzman",
-          position: "Desarrollador",
-          hireDate: "2020-01-20",
-          status: "Activo",
-          avatar:"https://cube.elemecdn.com/9/c2/f0ee8a3c7c9638a54940382568c9dpng.png",
-          shape: "square",
-          size: 50,
-        },
-        {
-          id: 5,
-          fullName: "Alejandro Yara",
-          position: "Desarrollador",
-          hireDate: "2020-01-20",
-          status: "En periodo de prueba",
-          avatar:"https://cube.elemecdn.com/9/c2/f0ee8a3c7c9638a54940382568c9dpng.png",
-          shape: "square",
-          size: 50,
-        },
-        {
-          id: 6,
-          fullName: "Jhon Alfaro",
-          position: "Desarrollador",
-          hireDate: "2020-01-20",
-          status: "Inactivo",
-          avatar:"https://cube.elemecdn.com/9/c2/f0ee8a3c7c9638a54940382568c9dpng.png",
-          shape: "square",
-          size: 50,
-        },
-        ],
-      isAddModalOpen: false,
-      isEditModalOpen: false,
-      selectedEmployee: null,
-    };
-  },
-  methods: {
-    // Abre el modal para agregar empleado
-    openForm() {
-      this.isAddModalOpen = true;
-    },
-    // Cierra el modal de agregar empleado
-    closeForm() {
-      this.isAddModalOpen = false;
-    },
-    // Lógica para agregar un nuevo empleado
-    addEmployee(newEmployee) {
-      this.employees.push(newEmployee);
-      this.isAddModalOpen = false;  // Cerrar el modal
-    },
-    handleEdit(employeeId) {
-      this.selectedEmployee = this.employees.find(emp => emp.id === employeeId);
-      this.isEditModalOpen = true;
-    },
-    saveEmployee(updatedEmployee) {
-      const index = this.employees.findIndex(emp => emp.id === updatedEmployee.id);
-      if (index !== -1) {
-        this.$set(this.employees, index, updatedEmployee);
-      }
-      this.isEditModalOpen = false;
-    },
-  },
+interface User {
+  name: string;
+  email: string;
+  jobTitle: string;
+  department: string;
+  status: boolean;
+}
+
+// Estado para el modal de añadir empleado
+const isAddModalOpen = ref(false);
+
+// Función para abrir el modal
+const openAddModal = () => {
+  isAddModalOpen.value = true;
 };
+
+// Función para cerrar el modal
+const closeForm = () => {
+  isAddModalOpen.value = false;
+};
+
+const clicked = ref(false);
+function onCancel() {
+  clicked.value = true;
+}
+
+const search = ref("");
+const currentPage = ref(1);
+const pageSize = ref(10); // Número de filas por página
+const selectedRows = ref<User[]>([]); // Almacena las filas seleccionadas
+
+const filterTableData = computed(() =>
+  tableData.filter(
+    (data) =>
+      !search.value ||
+      data.name.toLowerCase().includes(search.value.toLowerCase())
+  )
+);
+
+// Obtener solo los datos de la página actual
+const paginatedData = computed(() => {
+  const start = (currentPage.value - 1) * pageSize.value;
+  return filterTableData.value.slice(start, start + pageSize.value);
+});
+
+const handlePageChange = (page: number) => {
+  currentPage.value = page;
+};
+
+const handleSizeChange = (size: number) => {
+  pageSize.value = size;
+  currentPage.value = 1; // Reiniciar a la primera página
+};
+
+const handleSelectionChange = (rows: User[]) => {
+  selectedRows.value = rows;
+};
+
+const deleteSelected = () => {
+  selectedRows.value.forEach((row) => {
+    const index = tableData.findIndex((item) => item.email === row.email);
+    if (index !== -1) {
+      tableData.splice(index, 1);
+    }
+  });
+  selectedRows.value = [];
+};
+
+const handleEdit = (index: number, row: User) => {
+  console.log("Editar:", index, row);
+};
+
+const handleDelete = (index: number, row: User) => {
+  const idx = tableData.findIndex((item) => item.email === row.email);
+  if (idx !== -1) {
+    tableData.splice(idx, 1);
+  }
+};
+
+const tableData: User[] = [
+  {
+    name: "Tom",
+    email: "tom@email.com",
+    jobTitle: "Gerente",
+    department: "TI",
+    status: true,
+  },
+  {
+    name: "John",
+    email: "john@email.com",
+    jobTitle: "Gerente",
+    department: "TI",
+    status: false,
+  },
+  {
+    name: "Morgan",
+    email: "morgan@email.com",
+    jobTitle: "Asistente",
+    department: "TI",
+    status: true,
+  },
+  {
+    name: "Jessy",
+    email: "jessy@email.com",
+    jobTitle: "Director",
+    department: "TI",
+    status: true,
+  },
+  {
+    name: "Ana",
+    email: "ana@email.com",
+    jobTitle: "Analista",
+    department: "RRHH",
+    status: true,
+  },
+  {
+    name: "Luis",
+    email: "luis@email.com",
+    jobTitle: "Desarrollador",
+    department: "TI",
+    status: false,
+  },
+  {
+    name: "Elena",
+    email: "elena@email.com",
+    jobTitle: "Contadora",
+    department: "Finanzas",
+    status: true,
+  },
+  {
+    name: "Carlos",
+    email: "carlos@email.com",
+    jobTitle: "Abogado",
+    department: "Legal",
+    status: false,
+  },
+  {
+    name: "María",
+    email: "maria@email.com",
+    jobTitle: "Diseñadora",
+    department: "Marketing",
+    status: true,
+  },
+  {
+    name: "Pedro",
+    email: "pedro@email.com",
+    jobTitle: "Soporte",
+    department: "TI",
+    status: true,
+  },
+  {
+    name: "Sofía",
+    email: "sofia@email.com",
+    jobTitle: "Secretaria",
+    department: "Administración",
+    status: true,
+  },
+];
 </script>
-
-

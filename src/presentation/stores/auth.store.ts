@@ -1,12 +1,9 @@
 import { AuthModel } from '@/database/auth/auth.model';
 import { User } from '@/domain/entities/user';
 import type { AuthResponse } from '@/domain/repository/auth/auth.repository';
-import type { ApiErrorResponse } from '@/domain/Interfaces/ApiErrorResponse.interface';
-import axios from 'axios';
 import { defineStore } from 'pinia';
 import { reactive, ref, watch } from 'vue';
 
-// Estado inicial del formulario de login
 const loginFormInitialState = {
   email: '',
   password: '',
@@ -17,12 +14,10 @@ export const useAuthStore = defineStore('auth', () => {
   const errorMessage = ref<string | null | undefined>(null);
   const loginForm = reactive({ ...loginFormInitialState });
 
-  // Resetear el formulario de login
   const resetLoginForm = () => {
     Object.assign(loginForm, loginFormInitialState);
   };
 
-  // Login con email y password
   const loginWithEmailAndPassword = async () => {
     try {
       const authService = new AuthModel();
@@ -39,7 +34,6 @@ export const useAuthStore = defineStore('auth', () => {
         throw new Error('La información del usuario o el token están ausentes.');
       }
 
-      // Crear la instancia del usuario
       user.value = new User(
         authResponse.userInfo.id,
         authResponse.userInfo.firstName,

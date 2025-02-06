@@ -1,5 +1,5 @@
-import type { UserProfile } from "@/domain/Interfaces/UserProfile.interface";
-import { GetUserProfileUseCase } from "@/domain/use-cases/UserProfile.usecase";
+import { UserProfileModel } from "@/database/user/UserProfile/UserProfile.model";
+import type { UserProfile } from "@/domain/Interfaces/user/UserProfile.interface";
 import { defineStore } from "pinia";
 
 export const useUserProfileStore = defineStore('userProfile', () => {
@@ -11,7 +11,8 @@ export const useUserProfileStore = defineStore('userProfile', () => {
 
         try {
             result.loading = true;
-            const userProfileResponse: UserProfile = await GetUserProfileUseCase.execute(userId);
+            const userServices = new UserProfileModel();
+            const userProfileResponse: UserProfile = await userServices.getUserProfile(userId);
             result.userProfile = userProfileResponse; 
         } catch (error) {
             console.error('Error fetching user profile:', error);

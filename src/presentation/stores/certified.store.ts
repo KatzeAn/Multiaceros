@@ -1,47 +1,39 @@
 import { defineStore } from "pinia";
-import axiosInstance from "../api/axiosInstance"; // Importa tu configuración de Axios
 import { ref } from "vue";
+import { EmployeeModel } from "@/database/employee/employee.model";
+import { ElNotification } from "element-plus";
 
 export const useCertifiedStore = defineStore("certified", () => {
-  // Estado
-  const error = ref<string | null>(null); // Guardará cualquier error
+  const error = ref<string | null>(null);
 
-  // Acción para descargar el archivo
-  const downloadCertificate = async (userId: string) => {
+  const downloadCertificate = async (userId: number) => {
     error.value = null;
 
     try {
-      // Realizar la solicitud al endpoint para obtener el archivo
-      const response = await axiosInstance.get(`/Employee/${userId}/employment-certificate`, {
-        responseType: "blob", // Especificamos que el tipo de respuesta es un archivo binario
-      });
+      const employeeService = new EmployeeModel();
+      const response = await employeeService.getEmploymentCertificate(userId);
 
-      // Crear una URL temporal para el archivo
-      const blob = new Blob([response.data], { type: response.headers["content-type"] });
-      const url = window.URL.createObjectURL(blob);
+      const url = window.URL.createObjectURL(response);
 
-      // Crear un enlace para la descarga
       const link = document.createElement("a");
       link.href = url;
 
-      // Definir el nombre del archivo descargado
-      const contentDisposition = response.headers["content-disposition"];
-      const fileName = contentDisposition
-        ? contentDisposition.split("filename=")[1]?.replace(/"/g, "") || "certificado.pdf"
-        : "certificado.pdf";
+      const fileName = `certificado_${userId}.pdf`;
       link.download = fileName;
 
-      // Iniciar la descarga
+      document.body.appendChild(link);
       link.click();
+      document.body.removeChild(link);
 
-      // Limpiar la URL temporal
       window.URL.revokeObjectURL(url);
-    } catch (err: any) {
-      // Manejar errores
-      console.error("Error al descargar el certificado:", err);
-      error.value = err.response?.data?.message || "Ocurrió un error al descargar el certificado.";
-    } finally {
-      // Finalizar carga
+    } catch (error) {
+      console.error("Error creating absence request:", error);
+      ElNotification({
+        title: "Error",
+        message: "An error occurred while saving the form",
+        type: "error",
+      });
+      throw error;
     }
   };
 

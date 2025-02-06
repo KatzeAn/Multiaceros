@@ -62,7 +62,7 @@
 import { reactive, ref } from 'vue'
 import type { ComponentSize, FormInstance, FormRules, UploadProps, UploadUserFile } from 'element-plus'
 import { ElMessage, ElMessageBox } from 'element-plus'
-import type { AbsenceRequest } from '@/domain/Interfaces/AbsenceRequest.interface';
+import type { AbsenceRequest } from '@/domain/Interfaces/Absence/AbsenceRequest.interface';
 import { useAbsenceStore } from '../stores/absence.store';
 
 const formSize = ref<ComponentSize>('default')

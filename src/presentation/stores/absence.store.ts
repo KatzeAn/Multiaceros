@@ -1,4 +1,4 @@
-import type { AbsenceRequest } from "@/domain/Interfaces/AbsenceRequest.interface";
+import type { AbsenceRequest } from "@/domain/Interfaces/Absence/AbsenceRequest.interface";
 import { ElNotification } from "element-plus";
 import { defineStore } from "pinia";
 import { reactive } from "vue";
