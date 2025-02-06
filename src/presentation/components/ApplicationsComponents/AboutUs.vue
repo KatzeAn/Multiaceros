@@ -1,5 +1,4 @@
 <template>
-   <button class="btn btn-primary">Botón Bootstrap</button>
     <div class="demo-collapse p-6 bg-gray-50 rounded-lg shadow-lg w-full">
       <el-collapse v-model="activeNames" @change="handleChange" class="space-y-4">
         <el-collapse-item 
