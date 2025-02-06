@@ -36,7 +36,7 @@
           <li>
             <div class="text-gray-500 hover:text-white">
               <router-link
-                to="#"
+                to="/home"
                 class="flex item-center w-full pl-2 pr-4 py-2 hover:bg-gray-800 rounded"
               >
                 <span class="material-symbols-outlined pr-2"
@@ -90,7 +90,7 @@
           <li>
             <div class="text-gray-500 hover:text-white">
               <router-link
-                to="#"
+                to="/"
                 class="flex item-center w-full pl-2 pr-4 py-2 hover:bg-gray-800 rounded"
               >
                 <span class="material-symbols-outlined pr-2">work_alert</span>
@@ -102,7 +102,7 @@
           <li>
             <div class="text-gray-500 hover:text-white">
               <router-link
-                to="#"
+                to="/"
                 class="flex item-center w-full pl-2 pr-4 py-2 hover:bg-gray-800 rounded"
               >
                 <span class="material-symbols-outlined pr-2">support</span>
@@ -148,7 +148,7 @@
                 :key="subIndex"
               >
                 <router-link
-                  to="#"
+                  :to="subItem.route"
                   class="inline-block w-full px-4 py-2 hover:bg-gray-800 hover:text-white rounded"
                 >
                   {{ subItem.title }}
@@ -169,7 +169,7 @@
           <li>
             <div class="text-gray-500 hover:text-white">
               <router-link
-                to="#"
+                to="/"
                 class="flex item-center w-full pl-2 pr-4 py-2 hover:bg-gray-800 rounded"
               >
                 <span class="material-symbols-outlined pr-2">settings</span>
@@ -224,19 +224,19 @@ const menuItems = ref([
     [
       {
         title: "Información personal",
-        route: "#"
+        route: "/perfil/informacion-personal"
       },
       {
         title: "Información profesional",
-        route: "#"
+        route: "/perfil/informacion-profesional"
       },
       {
         title: "Información salarial",
-        route: "#"
+        route: "/perfil/informacion-salarial"
       },
       {
         title: "Tiempo libre",
-        route: "#"
+        route: "/perfil/tiempo-libre"
       },
     ],
   },
@@ -247,11 +247,11 @@ const menuItems = ref([
     [
       {
         title: "Comprobantes de pago",
-        route: "#"
+        route: "/"
       },
       {
         title: "Mis beneficios",
-        route: "#"
+        route: "/"
       },
     ],
   },
@@ -262,11 +262,11 @@ const menuItems = ref([
     [
       {
         title: "Crear una ausencia",
-        route: "#"
+        route: "/ausencias/solicitar-ausencia"
       },
       {
         title: "Mis ausencias",
-        route: "#"
+        route: "/ausencias/mis-ausencias"
       }
     ],
   },
@@ -277,18 +277,17 @@ const menuItems = ref([
     [
       {
         title: "Desempeño",
-        route: "#"
+        route: "/"
       },
       {
         title: "Retroalimentación",
-        route: "#"
+        route: "/"
       },
       {
         title: "Clima laboral",
-        route: "#"
+        route: "/"
       },
     ],
-    route: "#"
   },
   {
     title: "Políticas y Documentos",
@@ -297,18 +296,17 @@ const menuItems = ref([
     [
       {
         title: "Manual del empleado",
-        route: "#"
+        route: "/"
       },
       {
         title: "Reglamentos",
-        route: "#"
+        route: "/"
       },
       {
         title: "procedimientos",
-        route: "#"
+        route: "/"
       },
     ],
-    route: "#"
   },
   {
     title: "Solicitudes  y trámites",
@@ -317,14 +315,13 @@ const menuItems = ref([
     [
       {
         title: "Carta laboral",
-        route: "#"
+        route: "/"
       },
       {
         title: "Actualización de datos",
-        route: "#"
+        route: "/"
       },
     ],
-    route: "#"
   },
 ]);
 
@@ -332,39 +329,39 @@ const menuItems = ref([
 const recursosHumanosSubItems = ref([
   {
     title: "Gestión de empleados",
-    route: "#"
+    route: "/portal-rrhh/gestionar-empleados"
   },
   {
     title: "Gestión de vacantes y reclutamiento",
-    route: "#"
+    route: "/portal-rrhh/gestionar-vacantes"
   },
   {
     title: "Control de asistencia",
-    route: "#"
+    route: "/portal-rrhh/gestionar-ausencias"
   },
   {
     title: "Nómina y compensaciones",
-    route: "#"
+    route: "/portal-rrhh/gestionar-nomina"
   },
   {
     title: "Gestión de beneficios",
-    route: "#"
+    route: "/portal-rrhh/gestionar-beneficios"
   },
   {
     title: "Evaluaciones de desempeño",
-    route: "#"
+    route: "/portal-rrhh/evaluaciones"
   },
   {
     title: "Capacitaciones",
-    route: "#"
+    route: "/portal-rrhh/capacitaciones"
   },
   {
     title: "Reporte y análisis",
-    route: "#"
+    route: "/portal-rrhh/reportes"
   },
   {
     title: "Políticas y procedimientos",
-    route: "#"
+    route: "/portal-rrhh/gestionar-politicas"
   },
 ]);
 
@@ -379,5 +376,9 @@ const toggleMenu = (index: number) => {
 .rotate-180 {
   transform: rotate(180deg);
   transition: transform 0.3s ease;
+}
+
+.router-link-exact-active {
+  border-right: 4px solid #6b7280;
 }
 </style>
