@@ -88,7 +88,11 @@
         <span>{{ getTotalDays(scope.row.startDate, scope.row.endDate) }}</span>
       </template>
     </el-table-column>
-    <el-table-column prop="absenceType" label="Tipo" width="150" />
+    <el-table-column label="Tipo" width="150">
+      <template #default="scope">
+        <span>{{ getAbsenceType(scope.row.absenceType) }}</span>
+      </template>
+    </el-table-column>
     <el-table-column prop="comment" label="Comentario" width="200" />
     <el-table-column prop="status" label="Estado" width="150">
       <template #default="scope">
@@ -129,6 +133,14 @@ const getStatusName = (status: number) => {
     case 1: return 'Pendiente';
     case 2: return 'Aprobado';
     case 3: return 'Rechazado';
+    default: return 'Desconocido';
+  }
+};
+const getAbsenceType = (type: string | number) => {
+  const typeNumber = Number(type); 
+  switch (typeNumber) {
+    case 1: return 'Vacaciones';
+    case 2: return 'Cita Medica';
     default: return 'Desconocido';
   }
 };
@@ -176,6 +188,9 @@ const getTotalDays = (startDate: string, endDate: string) => {
     height: 100%;
     padding: 20px;
     border-radius: 4px;
+  }
+  .custom-table {
+    margin-top: 20px;
   }
 
 
