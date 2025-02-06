@@ -89,10 +89,11 @@
       </template>
     </el-table-column>
     <el-table-column prop="absenceType" label="Tipo" width="150" />
+    <el-table-column prop="comment" label="Comentario" width="200" />
     <el-table-column prop="status" label="Estado" width="150">
       <template #default="scope">
-        <el-tag :type="getStatusType(scope.row.status)">{{ scope.row.comment }}</el-tag>
-      </template>
+        <el-tag :type="getStatusType(scope.row.status)">{{ getStatusName(scope.row.status) }}</el-tag>  
+        </template>
     </el-table-column>
     <el-table-column label="Acciones" width="200">
       <template #default="scope">
@@ -121,6 +122,14 @@ const getStatusType = (status: number) => {
     case 2: return 'warning';
     case 3: return 'danger';
     default: return '';
+  }
+};
+const getStatusName = (status: number) => {
+  switch (status) {
+    case 1: return 'Pendiente';
+    case 2: return 'Aprobado';
+    case 3: return 'Rechazado';
+    default: return 'Desconocido';
   }
 };
 
