@@ -191,9 +191,9 @@
           />
         </div>
         <div class="flex flex-col pl-3">
-          <div class="text-sm text-gray-50">Jane Doeson</div>
+          <div class="text-sm text-gray-50">{{ getUsername }}</div>
           <span class="text-xs text-[#acacb0] font-light tracking-tight"
-            >janedoeson@gmail.com</span
+            >{{ getUserEmail }}</span
           >
         </div>
       </div>
@@ -208,7 +208,10 @@
 
 <script setup lang="ts">
 import { ref } from "vue";
+import { useUserStore } from "@/presentation/stores/user.store"
 
+const { getUsername, getUserEmail } = useUserStore();
+ 
 // Estado para controlar qué menús están abiertos
 const openMenus = ref<boolean[]>([]);
 

@@ -32,6 +32,10 @@ export const useUserStore = defineStore('user', () => {
     const getUsername = computed(() => {
         return user.value ? `${user.value.userFirstName } ${user.value.SurName}`: '';
     });
+
+    const getUserEmail = computed(() => {
+        return user.value ? `${user.value.UserEmail }`: '';
+    }); 
     
     const getUserId = computed(() => {
         return user.value ? `${user.value.userId }`: '';
@@ -61,6 +65,7 @@ export const useUserStore = defineStore('user', () => {
     return {
         isAuthenticated,
         getUsername,
+        getUserEmail,
         getUserId,
         fetchBirthdaysOfMonth,
     }
