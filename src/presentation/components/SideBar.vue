@@ -309,7 +309,7 @@ const menuItems = ref([
   },
   {
     title: "Solicitudes  y trámites",
-    icon: "policy",
+    icon: "procedure",
     subItems: 
     [
       {
