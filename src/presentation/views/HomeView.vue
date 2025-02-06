@@ -99,7 +99,7 @@ const download = async () => {
               <router-link
                 tag="span"
                 class="items-center"
-                to="/solicitar-ausencia"
+                to="/ausencias/solicitar-ausencia"
                 ><el-button
                   class="mt-6"
                   size="small"

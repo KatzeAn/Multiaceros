@@ -4,7 +4,7 @@ import NavBar from './presentation/components/NavBar.vue';
 import SideBar from './presentation/components/SideBar.vue';
 import { ref } from 'vue';
 
-const asideWidth = ref("64px"); // Valor inicial
+const asideWidth = ref("258px"); // Valor inicial
 
 </script>
 

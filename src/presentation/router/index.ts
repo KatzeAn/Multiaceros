@@ -40,12 +40,15 @@ const router = createRouter({
         { path: 'informacion-salarial', component: () => import('../views/TiempoLibreView.vue') },
       ],
     },
-    
+
     {
-      path: '/solicitar-ausencia',
-      name: 'solicitarAusencia',
+      path: '/ausencias',
       component: () => import('../views/AbsenceRequestView.vue'),
-      meta: { requiresAuth: false },
+      children: [
+        { path: '', redirect: '/ausencias/solicitar-ausencia' },
+        { path: 'solicitar-ausencia', component: () => import('../views/AbsenceRequestView.vue') },
+        { path: 'mis-ausencias', component: () => import('../views/InformacionProfesionalView.vue') },
+      ],
     },
     
     {
@@ -58,7 +61,7 @@ const router = createRouter({
         { path: 'gestionar-empleados', component: () => import('../views/PortalRRHH/manageEmployeesView.vue') },
         { path: 'gestionar-cumplimientos', component: () => import('../views/PortalRRHH/manageComplienceView.vue') },
         { path: 'gestionar-pausas', component: () => import('../views/PortalRRHH/manageActiveBreak.vue') },
-        { path: 'gestionar-postulaciones', component: () => import('../views/PortalRRHH/ManageApplications.vue') },
+        { path: 'gestionar-vacantes', component: () => import('../views/PortalRRHH/ManageApplications.vue') },
         { path: 'gestionar-ausencias', component: () => import('../components/ManageAbsenceComponents/StatisticsAbsencesCard.vue') },
 
       ],
