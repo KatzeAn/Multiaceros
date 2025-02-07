@@ -32,14 +32,14 @@
         <!-- Checkbox para seleccionar múltiples filas -->
         <el-table-column type="selection" width="55" />
 
-        <el-table-column label="Nombre" prop="name" />
+        <el-table-column label="Nombre" prop="fullName" />
         <el-table-column label="Correo Electrónico" prop="email" />
         <el-table-column label="Cargo" prop="jobTitle" />
-        <el-table-column label="Departamento" prop="department" />
+        <el-table-column label="Departamento" prop="division" />
         <el-table-column label="Estado" prop="status">
           <template #default="{ row }">
-            <el-tag :type="row.status ? 'success' : 'danger'">
-              {{ row.status ? "Activo" : "Inactivo" }}
+            <el-tag :type="row.isActive ? 'success' : 'danger'">
+              {{ row.isActive ? "Activo" : "Inactivo" }}
             </el-tag>
           </template>
         </el-table-column>
@@ -98,7 +98,7 @@
         :page-size="pageSize"
         :page-sizes="[10, 20, 50]"
         layout="total, sizes, prev, pager, next"
-        :total="tableData.length"
+        :total="employeeList.length"
         @size-change="handleSizeChange"
         @current-change="handlePageChange"
       />
@@ -107,16 +107,18 @@
 </template>
 
 <script lang="ts" setup>
-import { computed, ref } from "vue";
+import { computed, onMounted, ref } from "vue";
+import { useEmployeeStore } from "@/presentation/stores/employee.store";
 import AddEmployee from "@/presentation/views/PortalRRHH/components/AddEmployee.vue";
+import type { BasicEmployee } from "@/domain/Interfaces/Employee/basicEmployee.interface";
 
-interface User {
-  name: string;
-  email: string;
-  jobTitle: string;
-  department: string;
-  status: boolean;
-}
+// interface User {
+//   name: string;
+//   email: string;
+//   jobTitle: string;
+//   department: string;
+//   status: boolean;
+// }
 
 // Estado para el modal de añadir empleado
 const isAddModalOpen = ref(false);
@@ -139,13 +141,13 @@ function onCancel() {
 const search = ref("");
 const currentPage = ref(1);
 const pageSize = ref(10); // Número de filas por página
-const selectedRows = ref<User[]>([]); // Almacena las filas seleccionadas
+const selectedRows = ref<BasicEmployee[]>([]); // Almacena las filas seleccionadas
 
 const filterTableData = computed(() =>
-  tableData.filter(
+employeeList.value.filter(
     (data) =>
       !search.value ||
-      data.name.toLowerCase().includes(search.value.toLowerCase())
+      data.fullName.toLowerCase().includes(search.value.toLowerCase())
   )
 );
 
@@ -164,108 +166,42 @@ const handleSizeChange = (size: number) => {
   currentPage.value = 1; // Reiniciar a la primera página
 };
 
-const handleSelectionChange = (rows: User[]) => {
+const handleSelectionChange = (rows: BasicEmployee[]) => {
   selectedRows.value = rows;
 };
 
 const deleteSelected = () => {
   selectedRows.value.forEach((row) => {
-    const index = tableData.findIndex((item) => item.email === row.email);
+    const index = employeeList.value.findIndex((item) => item.email === row.email);
     if (index !== -1) {
-      tableData.splice(index, 1);
+      employeeList.value.splice(index, 1);
     }
   });
   selectedRows.value = [];
 };
 
-const handleEdit = (index: number, row: User) => {
+const handleEdit = (index: number, row: BasicEmployee) => {
   console.log("Editar:", index, row);
 };
 
-const handleDelete = (index: number, row: User) => {
-  const idx = tableData.findIndex((item) => item.email === row.email);
+const handleDelete = (index: number, row: BasicEmployee) => {
+  const idx = employeeList.value.findIndex((item) => item.email === row.email);
   if (idx !== -1) {
-    tableData.splice(idx, 1);
+    employeeList.value.splice(idx, 1);
   }
 };
 
-const tableData: User[] = [
-  {
-    name: "Tom",
-    email: "tom@email.com",
-    jobTitle: "Gerente",
-    department: "TI",
-    status: true,
-  },
-  {
-    name: "John",
-    email: "john@email.com",
-    jobTitle: "Gerente",
-    department: "TI",
-    status: false,
-  },
-  {
-    name: "Morgan",
-    email: "morgan@email.com",
-    jobTitle: "Asistente",
-    department: "TI",
-    status: true,
-  },
-  {
-    name: "Jessy",
-    email: "jessy@email.com",
-    jobTitle: "Director",
-    department: "TI",
-    status: true,
-  },
-  {
-    name: "Ana",
-    email: "ana@email.com",
-    jobTitle: "Analista",
-    department: "RRHH",
-    status: true,
-  },
-  {
-    name: "Luis",
-    email: "luis@email.com",
-    jobTitle: "Desarrollador",
-    department: "TI",
-    status: false,
-  },
-  {
-    name: "Elena",
-    email: "elena@email.com",
-    jobTitle: "Contadora",
-    department: "Finanzas",
-    status: true,
-  },
-  {
-    name: "Carlos",
-    email: "carlos@email.com",
-    jobTitle: "Abogado",
-    department: "Legal",
-    status: false,
-  },
-  {
-    name: "María",
-    email: "maria@email.com",
-    jobTitle: "Diseñadora",
-    department: "Marketing",
-    status: true,
-  },
-  {
-    name: "Pedro",
-    email: "pedro@email.com",
-    jobTitle: "Soporte",
-    department: "TI",
-    status: true,
-  },
-  {
-    name: "Sofía",
-    email: "sofia@email.com",
-    jobTitle: "Secretaria",
-    department: "Administración",
-    status: true,
-  },
-];
+const loading = ref(true);
+const employeeList = ref<BasicEmployee[]>([]);
+
+const loadData = async () => {
+  const { loading: isLoading, employeeList: userEmployeeList } = await useEmployeeStore().fetchEmployee();
+  loading.value = isLoading;
+  console.log(userEmployeeList);
+  employeeList.value = userEmployeeList;
+};
+
+onMounted(() => {
+  loadData();
+});
 </script>

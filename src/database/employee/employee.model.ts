@@ -1,3 +1,4 @@
+import type { BasicEmployee } from "@/domain/Interfaces/Employee/basicEmployee.interface";
 import type { Employee } from "@/domain/Interfaces/Employee/employee.interface";
 import type { EmployeeRepository } from "@/domain/repository/employee/employee.repository";
 import { apiRequest } from "@/presentation/api/axiosInstance";
@@ -9,8 +10,8 @@ export class EmployeeModel implements EmployeeRepository {
     getActiveEmployees(): Promise<Employee[]> {
         return apiRequest<Employee[]>("get", "Employee/employeeactivate");
     }
-    getEmployees(): Promise<Employee[]> {
-        return apiRequest<Employee[]>("get", "Employee/getallemployees");
+    getEmployees(): Promise<BasicEmployee[]> {
+        return apiRequest<BasicEmployee[]>("get", "Employee/All");
     }
     createEmployee(employee: Employee): Promise<Employee> {
         return apiRequest<Employee>("post", "Employee/createemployees", employee);
