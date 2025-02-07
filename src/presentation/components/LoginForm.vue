@@ -77,7 +77,7 @@
     <template #footer>
       <div class="dialog-footer">
         <el-button @click="dialogFormVisible = false">Cancelar</el-button>
-        <el-button type="primary" @click="dialogFormVisible = false">
+        <el-button type="primary" @click="resetPasswordHandler">
           Confirmar
         </el-button>
       </div>
@@ -92,7 +92,7 @@ import { ElNotification } from "element-plus";
 
 import { useAuthStore } from "../stores/auth.store";
 import { useUserStore } from "../stores/user.store";
-const { loginWithEmailAndPassword, loginForm, resetLoginForm } = useAuthStore();
+const { loginWithEmailAndPassword, loginForm, resetLoginForm, resetPassword } = useAuthStore();
 
 const router = useRouter();
 const isLoading = ref(false);
@@ -129,6 +129,28 @@ const login = async () => {
     });
   } finally {
     isLoading.value = false;
+  }
+};
+
+const resetPasswordHandler = async () => {
+  try {
+    const email = form.name;
+    const response = await resetPassword(email);
+    
+    ElNotification({
+      title: "Éxito",
+      message: `Correo de recuperación enviado a ${email}`,
+      type: "success",
+    });
+    dialogFormVisible.value = false; 
+  } catch (error) {
+    console.log(error)
+    console.error("Error al enviar el correo de recuperación", error);
+    ElNotification({
+      title: "Error",
+      message: "No se pudo enviar el correo de recuperación.",
+      type: "error",
+    });
   }
 };
 
