@@ -12,8 +12,7 @@ export const useJobPostingStore = defineStore("jobPosting", () => {
         "get",
         "/JobPostings/GetAllJobPostings"
       );
-      console.log("Respuesta de la API en el Store:", response);
-      jobPostings.value = response.data; // 👈 Aquí extraemos solo el array
+      jobPostings.value = response.data; 
     } catch (error) {
       console.error("Error fetching job postings:", error);
     }
