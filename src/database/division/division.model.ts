@@ -1,9 +1,13 @@
 import type { Division } from "@/domain/Interfaces/Division/division.interface";
 import type { DivisionWithEmployee } from "@/domain/Interfaces/Division/divisionWithEmployee.interface";
+import type { Teammate } from "@/domain/Interfaces/Division/teammate.interface";
 import type { DivisionRepository } from "@/domain/repository/division/division.repository";
 import { apiRequest } from "@/presentation/api/axiosInstance";
 
 export class DivisionModel implements DivisionRepository {
+    getTeammates(userId: number): Promise<Teammate[]> {
+        return apiRequest<Teammate[]>('get', `/Division/Division/Team/${userId}`);
+    }
     getDivisions(): Promise<Division[]> {
         return apiRequest<Division[]>('get', '/Division/GetAllDivisions');
     }

@@ -197,7 +197,6 @@ const employeeList = ref<BasicEmployee[]>([]);
 const loadData = async () => {
   const { loading: isLoading, employeeList: userEmployeeList } = await useEmployeeStore().fetchEmployee();
   loading.value = isLoading;
-  console.log(userEmployeeList);
   employeeList.value = userEmployeeList;
 };
 
