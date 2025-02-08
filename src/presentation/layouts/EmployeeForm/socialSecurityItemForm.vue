@@ -121,8 +121,12 @@
           v-model="employeeRequestForm.severanceFundId"
           placeholder="Seleccione el fondo"
         >
-          <el-option label="Compensar" :value="1" />
-          <el-option label="Colsubsidio" :value="2" />
+          <el-option
+            v-for="severanceFund in severanceFundOptions"
+            :key="severanceFund.id"
+            :label="severanceFund.severanceFundName"
+            :value="severanceFund.id"
+          />
         </el-select>
       </el-form-item>
     </el-col>
@@ -135,17 +139,20 @@ import { useEpsStore } from "@/presentation/stores/eps.store";
 import { useArlStore } from "@/presentation/stores/arl.store";
 import { usePensionFund } from "@/presentation/stores/pensionFund.store";
 import { useFamilyCompensationFund } from "@/presentation/stores/familyCompensationFund.store";
+import { useSeveranceFundStore } from "@/presentation/stores/severanceFund.store";
 import { onMounted, ref } from "vue";
 import type { Eps } from "@/domain/Interfaces/Eps/eps.interface";
 import type { Arl } from "@/domain/Interfaces/Arl/Arl.interface";
 import type { PensionFunds } from "@/domain/Interfaces/PensionFunds/pensionFunds.interface";
 import type { FamilyCompesationFunds } from "@/domain/Interfaces/FamilyCompesationFunds/FamilyCompesationFunds.interface";
+import type { SeveranceFund } from "@/domain/Interfaces/severanceFund/severanceFund.interface";
 
 const { employeeRequestForm } = useEmployeeStore();
 const { fetchEps } = useEpsStore();
 const { fetchArl } = useArlStore();
 const { fetchPensionFunds } = usePensionFund();
 const { fetchFamilyCompensationFund } = useFamilyCompensationFund();
+const { fetchSeveranceFund } = useSeveranceFundStore();
 
 const loadingEps = ref(false);
 const epsOptions = ref<Eps[]>([]);
@@ -158,6 +165,9 @@ const pensionFundOptions = ref<PensionFunds[]>([]);
 
 const loadingFamilyCompensationFund = ref(false);
 const pensionFamilyCompensationFundOptions = ref<FamilyCompesationFunds[]>([]);
+
+const loadingSeveranceFund = ref(false);
+const severanceFundOptions = ref<SeveranceFund[]>([]);
 
 const loadData = async () => {
   const { loading: isEpsLoading, epsList: epsList } = await fetchEps();
@@ -179,6 +189,13 @@ const loadData = async () => {
   } = await fetchFamilyCompensationFund();
   loadingFamilyCompensationFund.value = isFamilyCompensationFundLoading;
   pensionFamilyCompensationFundOptions.value = familyCompensationFundList;
+
+  const {
+    loading: isSeveranceFundLoading,
+    severanceFundList: severanceFundList,
+  } = await fetchSeveranceFund();
+  loadingSeveranceFund.value = isSeveranceFundLoading;
+  severanceFundOptions.value = severanceFundList;
 };
 
 onMounted(() => {
