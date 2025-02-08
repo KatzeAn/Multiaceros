@@ -24,7 +24,7 @@
           placeholder="Seleccione el departamento"
         >
           <el-option
-            v-for="division in DivisionOptions"
+            v-for="division in divisionOptions"
             :key="division.id"
             :label="division.name"
             :value="division.id"
@@ -39,8 +39,12 @@
           v-model="employeeRequestForm.jobTitleId"
           placeholder="Seleccione el cargo"
         >
-          <el-option label="Gerente" :value="1" />
-          <el-option label="Analista" :value="2" />
+          <el-option
+            v-for="jobTitle in jobTitleOptions"
+            :key="jobTitle.id"
+            :label="jobTitle.name"
+            :value="jobTitle.id"
+          />
         </el-select>
       </el-form-item>
     </el-col>
@@ -95,25 +99,37 @@
 </template>
 
 <script lang="ts" setup>
-import type { Division } from "@/domain/Interfaces/Division/division.interface";
+import { onMounted, ref } from "vue";
 import { useEmployeeStore } from "@/presentation/stores/employee.store";
 import { useDivisionStore } from "@/presentation/stores/division.store";
-import { onMounted, ref } from "vue";
+import { useJobTitleStore } from "@/presentation/stores/jobTitle.store";
+import type { Division } from "@/domain/Interfaces/Division/division.interface";
+import type { JobTitle } from "@/domain/Interfaces/JobTitle/JobTitle.interface";
 
 const { employeeRequestForm } = useEmployeeStore();
-const { fetchDivisions } = useDivisionStore();
 
-const loading = ref(false);
-const DivisionOptions = ref<Division[]>([]);
+const { fetchDivisions } = useDivisionStore();
+const { fetchJobTitles } = useJobTitleStore();
+
+const loadingDivision = ref(false);
+const divisionOptions = ref<Division[]>([]);
+
+const loadingJobTitle = ref(false);
+const jobTitleOptions = ref<JobTitle[]>([]);
 
 const loadData = async () => {
-  const { loading: isLoading, divisionList: divisionList } =
+  const { loading: isDivisionLoading, divisionList: divisionList } =
     await fetchDivisions();
-  loading.value = isLoading;
-  DivisionOptions.value = divisionList;
+  loadingDivision.value = isDivisionLoading;
+  divisionOptions.value = divisionList;
+
+  const { loading: isJobTitleLoading, jobTitleList: jobList } =
+    await fetchJobTitles();
+  loadingJobTitle.value = isJobTitleLoading;
+  jobTitleOptions.value = jobList;
 };
 
 onMounted(async () => {
-  loadData();
+  await loadData();
 });
 </script>

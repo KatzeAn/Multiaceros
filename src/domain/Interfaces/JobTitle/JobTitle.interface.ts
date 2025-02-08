@@ -1,6 +1,6 @@
 export interface JobTitle {
-  jobTitleId?: number;
-  newName: string;
+  id?: number;
+  name: string;
   createdBy?: string;
   modifiedBy?: string;
 }
