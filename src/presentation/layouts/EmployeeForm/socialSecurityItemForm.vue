@@ -37,7 +37,7 @@
 
   <el-row :gutter="30">
     <el-col :span="12">
-      <el-form-item label="ARL" prop="arlData.arlId">
+      <el-form-item label="ARL" prop="arlData.id">
         <el-select
           v-model="employeeRequestForm.arlData.id"
           placeholder="Seleccione la ARL"
@@ -83,7 +83,7 @@
     </el-col>
 
     <el-col :span="12">
-      <el-form-item label="Tipo de fondo de pensión" prop="arlData.riskId">
+      <el-form-item label="Tipo de fondo de pensión" prop="pensionFundInfoData.pensionFundTypeId">
         <el-select
           v-model="employeeRequestForm.pensionFundInfoData.pensionFundTypeId"
           placeholder="Seleccione el tipo"
@@ -154,48 +154,38 @@ const { fetchPensionFunds } = usePensionFund();
 const { fetchFamilyCompensationFund } = useFamilyCompensationFund();
 const { fetchSeveranceFund } = useSeveranceFundStore();
 
-const loadingEps = ref(false);
 const epsOptions = ref<Eps[]>([]);
-
-const loadingArl = ref(false);
 const arlOptions = ref<Arl[]>([]);
-
-const loadingPensionFund = ref(false);
 const pensionFundOptions = ref<PensionFunds[]>([]);
-
-const loadingFamilyCompensationFund = ref(false);
 const pensionFamilyCompensationFundOptions = ref<FamilyCompesationFunds[]>([]);
-
-const loadingSeveranceFund = ref(false);
 const severanceFundOptions = ref<SeveranceFund[]>([]);
 
+const loading = ref(false);
+
 const loadData = async () => {
-  const { loading: isEpsLoading, epsList: epsList } = await fetchEps();
-  loadingEps.value = isEpsLoading;
+  loading.value = true;
+
+  const [
+    { epsList },
+    { arlList },
+    { pensionFundList },
+    { familyCompensationFundList },
+    { severanceFundList },
+  ] = await Promise.all([
+    fetchEps(),
+    fetchArl(),
+    fetchPensionFunds(),
+    fetchFamilyCompensationFund(),
+    fetchSeveranceFund(),
+  ]);
+
   epsOptions.value = epsList;
-
-  const { loading: isArlLoading, arlList: arlList } = await fetchArl();
-  loadingArl.value = isArlLoading;
   arlOptions.value = arlList;
-
-  const { loading: isPensionFundLoading, pensionFundList: pensionFundList } =
-    await fetchPensionFunds();
-  loadingPensionFund.value = isPensionFundLoading;
   pensionFundOptions.value = pensionFundList;
-
-  const {
-    loading: isFamilyCompensationFundLoading,
-    familyCompensationFundList: familyCompensationFundList,
-  } = await fetchFamilyCompensationFund();
-  loadingFamilyCompensationFund.value = isFamilyCompensationFundLoading;
   pensionFamilyCompensationFundOptions.value = familyCompensationFundList;
-
-  const {
-    loading: isSeveranceFundLoading,
-    severanceFundList: severanceFundList,
-  } = await fetchSeveranceFund();
-  loadingSeveranceFund.value = isSeveranceFundLoading;
   severanceFundOptions.value = severanceFundList;
+
+  loading.value = false;
 };
 
 onMounted(() => {
