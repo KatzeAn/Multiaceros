@@ -40,7 +40,7 @@ export class EmployeeModel implements EmployeeRepository {
         userPhotoUrl: employee.userData.userPhotoUrl,
       },
       ArlData: {
-        arlId: employee.arlData.arlId,
+        arlId: employee.arlData.id,
         riskId: employee.arlData.riskId,
       },
       ContractData: {
@@ -49,7 +49,7 @@ export class EmployeeModel implements EmployeeRepository {
         contractEndDate: employee.contractData.contractEndDate ? new Date(employee.contractData.contractEndDate) : undefined,
       },
       EpsData: {
-        epsId: employee.epsData.epsId,
+        epsId: employee.epsData.id,
         epsTypeId: employee.epsData.epsTypeId,
       },
       BonificationData: {
@@ -59,7 +59,7 @@ export class EmployeeModel implements EmployeeRepository {
       },
       Benefits: employee.benefits,
       PensionFundInfoData: {
-        pensionFundId: employee.pensionFundInfoData.pensionFundId,
+        pensionFundId: employee.pensionFundInfoData.id,
         pensionFundTypeId: employee.pensionFundInfoData.pensionFundTypeId,
       },
     });

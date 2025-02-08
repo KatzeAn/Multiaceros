@@ -1,5 +1,5 @@
 export interface Arl {
-    arlId?: number;
+    id?: number;
     nameArl: string;
     modifiedBy?: string;
     isActive?: boolean;

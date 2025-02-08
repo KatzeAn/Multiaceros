@@ -7,16 +7,16 @@
 
   <el-row :gutter="30">
     <el-col :span="12">
-      <el-form-item label="EPS" prop="epsData.epsId">
+      <el-form-item label="EPS" prop="epsData.id">
         <el-select
-          v-model="employeeRequestForm.epsData.epsId"
+          v-model="employeeRequestForm.epsData.id"
           placeholder="Seleccione la EPS"
         >
           <el-option
             v-for="eps in epsOptions"
-            :key="eps.epsId"
+            :key="eps.id"
             :label="eps.epsName"
-            :value="eps.epsId"
+            :value="eps.id"
           />
         </el-select>
       </el-form-item>
@@ -39,14 +39,14 @@
     <el-col :span="12">
       <el-form-item label="ARL" prop="arlData.arlId">
         <el-select
-          v-model="employeeRequestForm.arlData.arlId"
+          v-model="employeeRequestForm.arlData.id"
           placeholder="Seleccione la ARL"
         >
           <el-option
             v-for="arl in arlOptions"
-            :key="arl.arlId"
+            :key="arl.id"
             :label="arl.nameArl"
-            :value="arl.arlId"
+            :value="arl.id"
           />
         </el-select>
       </el-form-item>
@@ -67,16 +67,16 @@
 
   <el-row :gutter="30">
     <el-col :span="12">
-      <el-form-item label="Fondo de pensiones" prop="arlData.arlId">
+      <el-form-item label="Fondo de pensiones" prop="pensionFundInfoData.id">
         <el-select
-          v-model="employeeRequestForm.pensionFundInfoData.pensionFundId"
-          placeholder="Seleccione el fondo"
+          v-model="employeeRequestForm.pensionFundInfoData.id"
+          placeholder="Seleccione el fondo de pensiones"
         >
           <el-option
             v-for="pension in pensionFundOptions"
-            :key="pension.pensionFundId"
+            :key="pension.id"
             :label="pension.pensionFundName"
-            :value="pension.pensionFundId"
+            :value="pension.id"
           />
         </el-select>
       </el-form-item>
@@ -103,7 +103,7 @@
       >
         <el-select
           v-model="employeeRequestForm.familyCompensationFundId"
-          placeholder="Seleccione la caja"
+          placeholder="Seleccione la caja de compensación"
         >
           <el-option
             v-for="familyCompensation in pensionFamilyCompensationFundOptions"

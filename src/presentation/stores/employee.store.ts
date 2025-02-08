@@ -36,7 +36,7 @@ export const useEmployeeStore = defineStore("employee", () => {
       bonusEndDate: "",
     },
     arlData: {
-      arlId: undefined,
+      id: undefined,
       riskId: undefined,
     },
     contractData: {
@@ -45,11 +45,11 @@ export const useEmployeeStore = defineStore("employee", () => {
       contractEndDate: "",
     },
     epsData: {
-      epsId: undefined,
+      id: undefined,
       epsTypeId: undefined,
     },
     pensionFundInfoData: {
-      pensionFundId: undefined,
+      id: undefined,
       pensionFundTypeId: undefined,
     },
     benefits: [
