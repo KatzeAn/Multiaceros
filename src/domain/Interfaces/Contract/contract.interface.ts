@@ -2,6 +2,6 @@ export interface Contract {
   employeeId: number;
   contractStartDate: string;
   contractEndDate: string;
-  contractTypeId: number;
+  contractTypeId: number | undefined;
   updatedBy: string;
 }

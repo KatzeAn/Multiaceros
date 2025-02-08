@@ -1,6 +1,6 @@
 <template>
   <!-- MODAL PARA AÑADIR EMPLEADO -->
-  <el-dialog v-model="isAddModalOpen" title="Añadir Nuevo Empleado">
+  <el-dialog v-model="isAddModalOpen" title="Añadir Nuevo Empleado" top="6vh">
     <AddEmployee @close-form="closeForm" @add-employee="AddEmployee" />
   </el-dialog>
 
