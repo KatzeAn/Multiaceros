@@ -12,8 +12,12 @@
           v-model="employeeRequestForm.epsData.epsId"
           placeholder="Seleccione la EPS"
         >
-          <el-option label="Sura" :value="1" />
-          <el-option label="Sanitas" :value="2" />
+          <el-option
+            v-for="eps in epsOptions"
+            :key="eps.epsId"
+            :label="eps.epsName"
+            :value="eps.epsId"
+          />
         </el-select>
       </el-form-item>
     </el-col>
@@ -38,8 +42,12 @@
           v-model="employeeRequestForm.arlData.arlId"
           placeholder="Seleccione la ARL"
         >
-          <el-option label="Sura" :value="1" />
-          <el-option label="Colpatria" :value="2" />
+          <el-option
+            v-for="arl in arlOptions"
+            :key="arl.arlId"
+            :label="arl.nameArl"
+            :value="arl.arlId"
+          />
         </el-select>
       </el-form-item>
     </el-col>
@@ -64,11 +72,12 @@
           v-model="employeeRequestForm.pensionFundInfoData.pensionFundId"
           placeholder="Seleccione el fondo"
         >
-          <el-option label="Porvenir" :value="1" />
-          <el-option label="Colpatria" :value="2" />
-          <el-option label="Protección" :value="3" />
-          <el-option label="BBVA" :value="4" />
-          <el-option label="Suramericana" :value="5" />
+          <el-option
+            v-for="pension in pensionFundOptions"
+            :key="pension.pensionFundId"
+            :label="pension.pensionFundName"
+            :value="pension.pensionFundId"
+          />
         </el-select>
       </el-form-item>
     </el-col>
@@ -96,8 +105,12 @@
           v-model="employeeRequestForm.familyCompensationFundId"
           placeholder="Seleccione la caja"
         >
-          <el-option label="Compensar" :value="1" />
-          <el-option label="Colsubsidio" :value="2" />
+          <el-option
+            v-for="familyCompensation in pensionFamilyCompensationFundOptions"
+            :key="familyCompensation.id"
+            :label="familyCompensation.compensationFundName"
+            :value="familyCompensation.id"
+          />
         </el-select>
       </el-form-item>
     </el-col>
@@ -117,8 +130,58 @@
 </template>
 
 <script lang="ts" setup>
-
 import { useEmployeeStore } from "@/presentation/stores/employee.store";
-const { employeeRequestForm } = useEmployeeStore();
+import { useEpsStore } from "@/presentation/stores/eps.store";
+import { useArlStore } from "@/presentation/stores/arl.store";
+import { usePensionFund } from "@/presentation/stores/pensionFund.store";
+import { useFamilyCompensationFund } from "@/presentation/stores/familyCompensationFund.store";
+import { onMounted, ref } from "vue";
+import type { Eps } from "@/domain/Interfaces/Eps/eps.interface";
+import type { Arl } from "@/domain/Interfaces/Arl/Arl.interface";
+import type { PensionFunds } from "@/domain/Interfaces/PensionFunds/pensionFunds.interface";
+import type { FamilyCompesationFunds } from "@/domain/Interfaces/FamilyCompesationFunds/FamilyCompesationFunds.interface";
 
+const { employeeRequestForm } = useEmployeeStore();
+const { fetchEps } = useEpsStore();
+const { fetchArl } = useArlStore();
+const { fetchPensionFunds } = usePensionFund();
+const { fetchFamilyCompensationFund } = useFamilyCompensationFund();
+
+const loadingEps = ref(false);
+const epsOptions = ref<Eps[]>([]);
+
+const loadingArl = ref(false);
+const arlOptions = ref<Arl[]>([]);
+
+const loadingPensionFund = ref(false);
+const pensionFundOptions = ref<PensionFunds[]>([]);
+
+const loadingFamilyCompensationFund = ref(false);
+const pensionFamilyCompensationFundOptions = ref<FamilyCompesationFunds[]>([]);
+
+const loadData = async () => {
+  const { loading: isEpsLoading, epsList: epsList } = await fetchEps();
+  loadingEps.value = isEpsLoading;
+  epsOptions.value = epsList;
+
+  const { loading: isArlLoading, arlList: arlList } = await fetchArl();
+  loadingArl.value = isArlLoading;
+  arlOptions.value = arlList;
+
+  const { loading: isPensionFundLoading, pensionFundList: pensionFundList } =
+    await fetchPensionFunds();
+  loadingPensionFund.value = isPensionFundLoading;
+  pensionFundOptions.value = pensionFundList;
+
+  const {
+    loading: isFamilyCompensationFundLoading,
+    familyCompensationFundList: familyCompensationFundList,
+  } = await fetchFamilyCompensationFund();
+  loadingFamilyCompensationFund.value = isFamilyCompensationFundLoading;
+  pensionFamilyCompensationFundOptions.value = familyCompensationFundList;
+};
+
+onMounted(() => {
+  loadData();
+});
 </script>
