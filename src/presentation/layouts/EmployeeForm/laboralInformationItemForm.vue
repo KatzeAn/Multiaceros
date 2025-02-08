@@ -110,30 +110,27 @@ const { fetchDivisions } = useDivisionStore();
 const { fetchJobTitles } = useJobTitleStore();
 const { fetchContractType } = useContracTypeStore();
 
-const loadingDivision = ref(false);
 const divisionOptions = ref<Division[]>([]);
-
-const loadingJobTitle = ref(false);
 const jobTitleOptions = ref<JobTitle[]>([]);
-
-const loadingContractType = ref(false);
 const contractTypeOptions = ref<ContractType[]>([]);
 
+const loading = ref(false);
+
 const loadData = async () => {
-  const { loading: isDivisionLoading, divisionList: divisionList } =
-    await fetchDivisions();
-  loadingDivision.value = isDivisionLoading;
+  loading.value = true;
+
+  const [{ divisionList }, { jobTitleList }, { contractTypeList }] =
+    await Promise.all([
+      fetchDivisions(),
+      fetchJobTitles(),
+      fetchContractType(),
+    ]);
+
   divisionOptions.value = divisionList;
+  jobTitleOptions.value = jobTitleList;
+  contractTypeOptions.value = contractTypeList;
 
-  const { loading: isJobTitleLoading, jobTitleList: jobList } =
-    await fetchJobTitles();
-  loadingJobTitle.value = isJobTitleLoading;
-  jobTitleOptions.value = jobList;
-
-  const { loading: isContractTypeLoading, contractTypeList: contractList } =
-    await fetchContractType();
-  loadingContractType.value = isContractTypeLoading;
-  contractTypeOptions.value = contractList;
+  loading.value = false;
 };
 
 onMounted(() => {
