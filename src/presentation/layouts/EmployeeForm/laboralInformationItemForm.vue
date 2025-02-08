@@ -57,16 +57,12 @@
           v-model="employeeRequestForm.contractData.contractTypeId"
           placeholder="Seleccione el tipo de contrato"
         >
-          <el-option label="Contrato A Término Fijo" :value="1" />
-          <el-option label="Contrato A Término Indefinido" :value="2" />
-          <el-option label="Contrato De Obra O Labor" :value="3" />
           <el-option
-            label="Contrato Civil Por Prestacion De Servicios"
-            value="4"
+            v-for="contractType in contractTypeOptions"
+            :key="contractType.id"
+            :label="contractType.typeOfContract"
+            :value="contractType.id"
           />
-          <el-option label="Contrato De Pasantia" value="5" />
-          <el-option label="Contrato Ocasional De Trabajo" value="6" />
-          <el-option label="Contrato" value="7" />
         </el-select>
       </el-form-item>
     </el-col>
@@ -103,19 +99,25 @@ import { onMounted, ref } from "vue";
 import { useEmployeeStore } from "@/presentation/stores/employee.store";
 import { useDivisionStore } from "@/presentation/stores/division.store";
 import { useJobTitleStore } from "@/presentation/stores/jobTitle.store";
+import { useContracTypeStore } from "@/presentation/stores/contractType.store";
 import type { Division } from "@/domain/Interfaces/Division/division.interface";
 import type { JobTitle } from "@/domain/Interfaces/JobTitle/JobTitle.interface";
+import type { ContractType } from "@/domain/Interfaces/Contract/contractType.interface";
 
 const { employeeRequestForm } = useEmployeeStore();
 
 const { fetchDivisions } = useDivisionStore();
 const { fetchJobTitles } = useJobTitleStore();
+const { fetchContractType } = useContracTypeStore();
 
 const loadingDivision = ref(false);
 const divisionOptions = ref<Division[]>([]);
 
 const loadingJobTitle = ref(false);
 const jobTitleOptions = ref<JobTitle[]>([]);
+
+const loadingContractType = ref(false);
+const contractTypeOptions = ref<ContractType[]>([]);
 
 const loadData = async () => {
   const { loading: isDivisionLoading, divisionList: divisionList } =
@@ -127,9 +129,14 @@ const loadData = async () => {
     await fetchJobTitles();
   loadingJobTitle.value = isJobTitleLoading;
   jobTitleOptions.value = jobList;
+
+  const { loading: isContractTypeLoading, contractTypeList: contractList } =
+    await fetchContractType();
+  loadingContractType.value = isContractTypeLoading;
+  contractTypeOptions.value = contractList;
 };
 
-onMounted(async () => {
-  await loadData();
+onMounted(() => {
+  loadData();
 });
 </script>
