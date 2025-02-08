@@ -9,7 +9,10 @@
   <el-row :gutter="30">
     <el-col :span="8">
       <el-form-item label="Número de Documento" prop="userData.numberDocument">
-        <el-input type="number" v-model="employeeRequestForm.userData.numberDocument" />
+        <el-input
+          type="number"
+          v-model="employeeRequestForm.userData.numberDocument"
+        />
       </el-form-item>
     </el-col>
 
@@ -39,8 +42,12 @@
           v-model="employeeRequestForm.bloodTypeId"
           placeholder="Seleccione el tipo de sangre"
         >
-          <el-option label="A+" :value="1" />
-          <el-option label="O-" :value="2" />
+          <el-option
+            v-for="bloodType in bloodTypeOptions"
+            :key="bloodType.id"
+            :label="bloodType.name"
+            :value="bloodType.id"
+          />
         </el-select>
       </el-form-item>
     </el-col>
@@ -68,10 +75,28 @@
 
 <script lang="ts" setup>
 import { useEmployeeStore } from "@/presentation/stores/employee.store";
+import { useBloodTypeStore } from "@/presentation/stores/bloodType.store";
+
 import type { UploadUserFile } from "element-plus";
-import { ref } from "vue";
+import { onMounted, ref } from "vue";
+import type { BloodType } from "@/domain/Interfaces/BloodType/bloodType.interface";
 
 const { employeeRequestForm } = useEmployeeStore();
+const { fetchBloodType } = useBloodTypeStore();
+
 const fileList = ref<UploadUserFile[]>([]);
 
+const loading = ref(false);
+const bloodTypeOptions = ref<BloodType[]>([]);
+
+const loadData = async () => {
+  const { loading: isLoading, bloodTypeList: bloodTypeList } =
+    await fetchBloodType();
+  loading.value = isLoading;
+  bloodTypeOptions.value = bloodTypeList;
+};
+
+onMounted(async () => {
+  await loadData();
+});
 </script>
