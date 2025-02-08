@@ -23,8 +23,12 @@
           v-model="employeeRequestForm.divisionId"
           placeholder="Seleccione el departamento"
         >
-          <el-option label="Finanzas" :value="1" />
-          <el-option label="RRHH" :value="2" />
+          <el-option
+            v-for="division in DivisionOptions"
+            :key="division.id"
+            :label="division.name"
+            :value="division.id"
+          />
         </el-select>
       </el-form-item>
     </el-col>
@@ -91,8 +95,25 @@
 </template>
 
 <script lang="ts" setup>
-
+import type { Division } from "@/domain/Interfaces/Division/division.interface";
 import { useEmployeeStore } from "@/presentation/stores/employee.store";
-const { employeeRequestForm } = useEmployeeStore();
+import { useDivisionStore } from "@/presentation/stores/division.store";
+import { onMounted, ref } from "vue";
 
+const { employeeRequestForm } = useEmployeeStore();
+const { fetchDivisions } = useDivisionStore();
+
+const loading = ref(false);
+const DivisionOptions = ref<Division[]>([]);
+
+const loadData = async () => {
+  const { loading: isLoading, divisionList: divisionList } =
+    await fetchDivisions();
+  loading.value = isLoading;
+  DivisionOptions.value = divisionList;
+};
+
+onMounted(async () => {
+  loadData();
+});
 </script>
