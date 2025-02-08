@@ -1,5 +1,5 @@
 export interface Benefits {
-  benefitId?: number;
+  id?: number;
   nameBenefit: string;
   isActive: boolean;
   createdBy?: string;

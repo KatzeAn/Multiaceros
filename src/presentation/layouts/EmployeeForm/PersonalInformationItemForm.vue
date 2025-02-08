@@ -96,7 +96,7 @@ const loadData = async () => {
   bloodTypeOptions.value = bloodTypeList;
 };
 
-onMounted(async () => {
-  await loadData();
+onMounted(() => {
+  loadData();
 });
 </script>

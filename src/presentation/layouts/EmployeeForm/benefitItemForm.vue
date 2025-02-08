@@ -9,13 +9,13 @@
     <el-col :span="10">
       <el-form-item label="Beneficios" prop="benefits">
         <el-select
-          v-model="employeeRequestForm.newBenefit.benefitId"
+          v-model="employeeRequestForm.newBenefit.id"
           placeholder="Seleccione el beneficio"
         >
           <el-option
             v-for="benefit in benefitsOptions"
             :key="benefit.id"
-            :label="benefit.name"
+            :label="benefit.nameBenefit"
             :value="benefit.id"
           />
         </el-select>
@@ -51,7 +51,7 @@
           class="flex justify-between items-center py-2"
         >
           <span>
-            {{ benefitsOptions.find((b) => b.id === benefit.benefitId)?.name }}
+            {{ benefitsOptions.find((b) => b.id === benefit.id)?.nameBenefit }}
             -
             {{ benefit.valueBenefit }}
           </span>
@@ -70,32 +70,36 @@
 
 <script lang="ts" setup>
 import { useEmployeeStore } from "@/presentation/stores/employee.store";
-import { onMounted } from "vue";
+import { useBenefitStore } from "@/presentation/stores/benefit.store";
+import { onMounted, ref } from "vue";
+import type { Benefits } from "@/domain/Interfaces/Benefits/Benefits.interface";
+import { ElNotification } from "element-plus";
+
+const { fetchBenefit } = useBenefitStore();
 const { employeeRequestForm } = useEmployeeStore();
 
-const benefitsOptions = [
-  { id: 1, name: "Prima de Servicios" },
-  { id: 2, name: "Auxilio de Transporte" },
-  { id: 3, name: "Bono de Alimentación" },
-  { id: 4, name: "Seguro Médico Complementario" },
-  { id: 5, name: "Beca de Estudios" },
-];
+const benefitsOptions = ref<Benefits[]>([]);
+const isLoading = ref(false);
 
 const addBenefit = () => {
   if (
-    employeeRequestForm.newBenefit.benefitId &&
+    employeeRequestForm.newBenefit.id &&
     Number(employeeRequestForm.newBenefit.valueBenefits) > 0
   ) {
     employeeRequestForm.benefits.push({
-      benefitId: Number(employeeRequestForm.newBenefit.benefitId),
+      id: Number(employeeRequestForm.newBenefit.id),
       valueBenefit: Number(employeeRequestForm.newBenefit.valueBenefits),
     });
 
     // Limpiar los valores después de agregar
-    employeeRequestForm.newBenefit.benefitId = "";
+    employeeRequestForm.newBenefit.id = "";
     employeeRequestForm.newBenefit.valueBenefits = "";
   } else {
-    alert("Seleccione un beneficio y asigne un valor mayor a 0.");
+    ElNotification({
+      title: "Advertencia",
+      message: "Seleccione un beneficio y dele un valor mayor a 0",
+      type: "warning",
+    });
   }
 };
 
@@ -103,7 +107,14 @@ const removeBenefit = (index: number) => {
   employeeRequestForm.benefits.splice(index, 1);
 };
 
+const loadData = async () => {
+  const { loading, benefitList } = await fetchBenefit();
+  isLoading.value = loading;
+  benefitsOptions.value = benefitList;
+};
+
 onMounted(() => {
   removeBenefit(0);
+  loadData();
 });
 </script>

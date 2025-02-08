@@ -25,7 +25,7 @@ export interface EmployeeRequest {
   benefits: Partial<Benefits>[];
   pensionFundInfoData: Partial<PensionFunds>;
   newBenefit: {
-    benefitId: "", // ID del beneficio seleccionado
+    id: "", // ID del beneficio seleccionado
     valueBenefits: "", // Valor del beneficio
   },
 }

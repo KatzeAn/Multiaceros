@@ -55,11 +55,11 @@ export const useEmployeeStore = defineStore("employee", () => {
     benefits: [
       {
         valueBenefit: undefined,
-        benefitId: undefined,
+        id: undefined,
       },
     ],
     newBenefit: {
-      benefitId: "", // ID del beneficio seleccionado
+      id: "", // ID del beneficio seleccionado
       valueBenefits: "", // Valor del beneficio
     },
   });
