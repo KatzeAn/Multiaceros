@@ -2,10 +2,9 @@
   <el-form
     ref="ruleFormRef"
     :model="employeeRequestForm"
-    :rules="rules"
     label-width="auto"
     class="w-full"
-    :size="formSize"
+    size="default"
     label-position="top"
     status-icon
   >
@@ -44,8 +43,8 @@
 
 <script lang="ts" setup>
 import { useEmployeeStore } from "../../../stores/employee.store";
-import { reactive, ref } from "vue";
-import type { ComponentSize, FormInstance } from "element-plus";
+import { ref } from "vue";
+import type { FormInstance } from "element-plus";
 import PersonalInformationItemForm from "@/presentation/layouts/EmployeeForm/PersonalInformationItemForm.vue";
 import ContactInformationItemForm from "@/presentation/layouts/EmployeeForm/ContactInformationItemForm.vue";
 import LaboralInformationItemForm from "@/presentation/layouts/EmployeeForm/laboralInformationItemForm.vue";
@@ -56,85 +55,84 @@ import BenefitItemForm from "@/presentation/layouts/EmployeeForm/benefitItemForm
 const isLoading = ref(false);
 const { employeeRequestForm, createEmployeeRequest } = useEmployeeStore();
 
-const formSize = ref<ComponentSize>("default");
 const ruleFormRef = ref<FormInstance>();
 
-const rules = reactive({
-  userData: {
-    numberDocument: [
-      {
-        required: true,
-        message: "El número de documento es obligatorio",
-        trigger: "blur",
-      },
-    ],
-    userFirstName: [
-      {
-        required: true,
-        message: "El primer nombre es obligatorio",
-        trigger: "blur",
-      },
-    ],
-    surName: [
-      {
-        required: true,
-        message: "El primer apellido es obligatorio",
-        trigger: "blur",
-      },
-    ],
-    birthday: [
-      {
-        required: true,
-        message: "La fecha de nacimiento es obligatoria",
-        trigger: "blur",
-      },
-    ],
-    cellPhone: [
-      { required: true, message: "El celular es obligatorio", trigger: "blur" },
-    ],
-    address: [
-      {
-        required: true,
-        message: "La dirección es obligatoria",
-        trigger: "blur",
-      },
-    ],
-  },
-  salary: [
-    { required: true, message: "El salario es obligatorio", trigger: "blur" },
-  ],
-  divisionId: [
-    {
-      required: true,
-      message: "Debe seleccionar un departamento",
-      trigger: "change",
-    },
-  ],
-  jobTitleId: [
-    { required: true, message: "Debe seleccionar un cargo", trigger: "change" },
-  ],
-  epsData: {
-    epsId: [
-      {
-        required: true,
-        message: "Debe seleccionar una EPS",
-        trigger: "change",
-      },
-    ],
-  },
-  arlData: {
-    arlId: [
-      {
-        required: true,
-        message: "Debe seleccionar una ARL",
-        trigger: "change",
-      },
-    ],
-  },
-  bloodTypeId: [
-    { required: true, message: "El tipo de sangre es obligatorio" },
-  ],
-});
+// const rules = reactive({
+//   userData: {
+//     numberDocument: [
+//       {
+//         required: true,
+//         message: "El número de documento es obligatorio",
+//         trigger: "blur",
+//       },
+//     ],
+//     userFirstName: [
+//       {
+//         required: true,
+//         message: "El primer nombre es obligatorio",
+//         trigger: "blur",
+//       },
+//     ],
+//     surName: [
+//       {
+//         required: true,
+//         message: "El primer apellido es obligatorio",
+//         trigger: "blur",
+//       },
+//     ],
+//     birthday: [
+//       {
+//         required: true,
+//         message: "La fecha de nacimiento es obligatoria",
+//         trigger: "blur",
+//       },
+//     ],
+//     cellPhone: [
+//       { required: true, message: "El celular es obligatorio", trigger: "blur" },
+//     ],
+//     address: [
+//       {
+//         required: true,
+//         message: "La dirección es obligatoria",
+//         trigger: "blur",
+//       },
+//     ],
+//   },
+//   salary: [
+//     { required: true, message: "El salario es obligatorio", trigger: "blur" },
+//   ],
+//   divisionId: [
+//     {
+//       required: true,
+//       message: "Debe seleccionar un departamento",
+//       trigger: "change",
+//     },
+//   ],
+//   jobTitleId: [
+//     { required: true, message: "Debe seleccionar un cargo", trigger: "change" },
+//   ],
+//   epsData: {
+//     epsId: [
+//       {
+//         required: true,
+//         message: "Debe seleccionar una EPS",
+//         trigger: "change",
+//       },
+//     ],
+//   },
+//   arlData: {
+//     arlId: [
+//       {
+//         required: true,
+//         message: "Debe seleccionar una ARL",
+//         trigger: "change",
+//       },
+//     ],
+//   },
+//   bloodTypeId: [
+//     { required: true, message: "El tipo de sangre es obligatorio" },
+//   ],
+// });
 
 const submitForm = async (formEl: FormInstance | undefined) => {
   if (!formEl) return;
