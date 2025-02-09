@@ -1,5 +1,6 @@
 <script setup lang="ts">
 import { onMounted, onUnmounted, ref } from "vue";
+import mujer from '@/presentation/assets/mujer.jpg';
 
 // Estado para los dropdowns
 const isProfileDropdownOpen = ref(false);
@@ -90,11 +91,7 @@ onUnmounted(() => {
           class="dropdown-toggle flex gap-3 items-center"
           @click.stop="toggleProfileDropdown"
         >
-          <img
-            src="https://www.shareicon.net/data/512x512/2016/08/05/806962_user_512x512.png"
-            alt="User Avatar"
-            class="w-8 h-8 rounded block object-cover align-middle"
-          />
+        <img :src="mujer" alt="Perfil" class="w-8 h-8 rounded-full object-cover" />
         </button>
 
         <!-- Dropmenu - perfil con transición -->

@@ -185,10 +185,7 @@
     >
       <div class="flex items-center">
         <div class="w-8 h-8 rounded-full">
-          <img
-            src="https://www.shareicon.net/data/512x512/2016/08/05/806962_user_512x512.png"
-            alt="avatar"
-          />
+          <img :src="mujer" alt="Perfil" class="w-[2rem] h-[2rem] rounded-full object-cover" />
         </div>
         <div class="flex flex-col pl-3">
           <div class="text-sm text-gray-50">{{ getUsername }}</div>
@@ -209,6 +206,7 @@
 <script setup lang="ts">
 import { ref } from "vue";
 import { useUserStore } from "@/presentation/stores/user.store"
+import mujer from '@/presentation/assets/mujer.jpg';
 
 const { getUsername, getUserEmail } = useUserStore();
  
