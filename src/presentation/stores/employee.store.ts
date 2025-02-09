@@ -71,11 +71,28 @@ export const useEmployeeStore = defineStore("employee", () => {
         message: "El número de documento es obligatorio",
         trigger: "blur",
       },
+      {
+        pattern: /^\d{4,11}$/,
+        message: "El documento debe tener entre 4 y 11 dígitos numéricos",
+        trigger: "blur",
+      },
     ],
     userFirstName: [
       {
         required: true,
         message: "El primer nombre es obligatorio",
+        trigger: "blur",
+      },
+      {
+        pattern: /^[a-zA-ZÁáÉéÍíÓóÚúÑñ\s]+$/,
+        message: "Solo se permiten letras y espacios",
+        trigger: "blur",
+      },
+    ],
+    userMiddleName: [
+      {
+        pattern: /^[a-zA-ZÁáÉéÍíÓóÚúÑñ\s]*$/,
+        message: "Solo se permiten letras y espacios",
         trigger: "blur",
       },
     ],
@@ -86,16 +103,6 @@ export const useEmployeeStore = defineStore("employee", () => {
         trigger: "blur",
       },
     ],
-    birthday: [
-      {
-        required: true,
-        message: "La fecha de nacimiento es obligatoria",
-        trigger: "blur",
-      },
-    ],
-    cellPhone: [
-      { required: true, message: "El celular es obligatorio", trigger: "blur" },
-    ],
     address: [
       {
         required: true,
@@ -103,34 +110,164 @@ export const useEmployeeStore = defineStore("employee", () => {
         trigger: "blur",
       },
     ],
+    cellPhone: [
+      { required: true, message: "El celular es obligatorio", trigger: "blur" },
+      {
+        pattern: /^\+?[0-9]{7,15}$/,
+        message:
+          "Número inválido. Debe contener entre 7 y 15 dígitos y puede empezar con '+'",
+        trigger: "blur",
+      },
+    ],
+    userEmail: [
+      { required: true, message: "El correo es obligatorio", trigger: "blur" },
+      { type: "email", message: "Formato de correo inválido", trigger: "blur" },
+    ],
+    birthday: [
+      {
+        required: true,
+        message: "La fecha de nacimiento es obligatoria",
+        trigger: "blur",
+      },
+    ],
   };
 
   const epsDataRules: Record<string, Array<FormItemRule>> = {
-    epsId: [
+    id: [
       {
         required: true,
         message: "Debe seleccionar una EPS",
         trigger: "change",
       },
     ],
+    epsTypeId: [
+      {
+        required: true,
+        message: "Debe seleccionar un tipo de EPS",
+        trigger: "change",
+      },
+    ],
   };
 
   const arlDataRules: Record<string, Array<FormItemRule>> = {
-    arlId: [
+    id: [
       {
         required: true,
         message: "Debe seleccionar una ARL",
         trigger: "change",
       },
     ],
+    riskId: [
+      {
+        required: true,
+        message: "Debe seleccionar un nivel de riesgo",
+        trigger: "change",
+      },
+    ],
+  };
+
+  const contractDataRules: Record<string, Array<FormItemRule>> = {
+    contractTypeId: [
+      {
+        required: true,
+        message: "Debe seleccionar un tipo de contrato",
+        trigger: "change",
+      },
+    ],
+    contractStartDate: [
+      {
+        required: true,
+        message: "Debe seleccionar una fecha de inicio",
+        trigger: "blur",
+      },
+    ],
+    contractEndDate: [
+      {
+        type: "date",
+        message: "La fecha de finalización debe ser válida",
+        trigger: "blur",
+      },
+    ],
+  };
+
+  const bonificationDataRules: Record<string, Array<FormItemRule>> = {
+    bonificationValue: [
+      {
+        required: true,
+        message: "Debe ingresar un valor de bonificación",
+        trigger: "blur",
+      },
+      {
+        type: "number",
+        min: 0.01,
+        max: 1000000000,
+        message: "Debe estar entre 0.01 y 1,000,000,000",
+        trigger: "blur",
+      },
+    ],
+    activeBonusDate: [
+      {
+        required: true,
+        message: "Debe ingresar la fecha de inicio de la bonificación",
+        trigger: "blur",
+      },
+    ],
+    bonusEndDate: [
+      {
+        required: true,
+        message: "Debe ingresar la fecha de fin de la bonificación",
+        trigger: "blur",
+      },
+    ],
+  };
+
+  // const benefitsRules: Record<string, Array<FormItemRule>> = {
+  //   benefitId: [
+  //     {
+  //       required: true,
+  //       message: "Debe seleccionar un beneficio",
+  //       trigger: "change",
+  //     },
+  //   ],
+  //   valueBenefits: [
+  //     {
+  //       type: "number",
+  //       min: 0.01,
+  //       max: 1000000000,
+  //       message: "Debe estar entre 0.01 y 1,000,000,000",
+  //       trigger: "blur",
+  //     },
+  //   ],
+  // };
+
+  const pensionFundInfoRules: Record<string, Array<FormItemRule>> = {
+    id: [
+      {
+        required: true,
+        message: "Debe seleccionar un fondo de pensiones",
+        trigger: "change",
+      },
+    ],
+    pensionFundTypeId: [
+      {
+        required: true,
+        message: "Debe seleccionar un tipo de fondo de pensiones",
+        trigger: "change",
+      },
+    ],
   };
 
   const rules: FormRules<EmployeeRequest> = reactive({
-    salary: {
-      required: true,
-      message: "El salario es obligatorio",
-      trigger: "blur",
-    },
+    salary: [
+      { required: true, message: "El salario es obligatorio", trigger: "blur" },
+      {
+        type: "number",
+        min: 0,
+        max: 1000000000,
+        message: "El salario debe estar entre 0 y 1,000,000,000",
+        trigger: "blur",
+      },
+    ],
     divisionId: [
       {
         required: true,
@@ -146,11 +283,32 @@ export const useEmployeeStore = defineStore("employee", () => {
       },
     ],
     bloodTypeId: [
-      { required: true, message: "El tipo de sangre es obligatorio" },
+      {
+        required: true,
+        message: "El tipo de sangre es obligatorio",
+        trigger: "change",
+      },
+    ],
+    severanceFundId: [
+      {
+        required: true,
+        message: "Debe seleccionar un fondo de cesantías",
+        trigger: "change",
+      },
+    ],
+    familyCompensationFundId: [
+      {
+        required: true,
+        message: "Debe seleccionar una caja de compensación",
+        trigger: "change",
+      },
     ],
     userData: userDataRules,
     epsData: epsDataRules,
     arlData: arlDataRules,
+    contractData: contractDataRules,
+    bonificationData: bonificationDataRules,
+    pensionFundInfoData: pensionFundInfoRules,
   });
 
   const fetchEmployee = async () => {
