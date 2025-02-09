@@ -294,6 +294,9 @@ import { reactive, ref } from "vue";
 const state = reactive({
   avatars: [
     new URL('@/presentation/assets/mujer.jpg', import.meta.url).href,
+    new URL('@/presentation/assets/mujer2.jpg', import.meta.url).href,
+    new URL('@/presentation/assets/mujer3.jpg', import.meta.url).href,
+    new URL('@/presentation/assets/homnre2.jpg', import.meta.url).href,
     new URL('@/presentation/assets/hombre3.jpg', import.meta.url).href,
     new URL('@/presentation/assets/hombre2.jpg', import.meta.url).href,
     new URL('@/presentation/assets/hombre.png', import.meta.url).href,
