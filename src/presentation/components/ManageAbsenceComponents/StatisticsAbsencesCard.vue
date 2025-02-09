@@ -132,7 +132,9 @@
         <el-table-column prop="comment" label="Comentario" width="200" />
         <el-table-column prop="status" label="Estado" width="150">
           <template #default="scope">
-            <el-tag type="success">Aprobada</el-tag>
+            <el-tag :type="getStatusType(scope.row.status)">
+              {{ getStatusName(scope.row.status) }}
+            </el-tag>
           </template>
         </el-table-column>
       </el-table>
@@ -156,7 +158,9 @@
         <el-table-column prop="comment" label="Comentario" width="200" />
         <el-table-column prop="status" label="Estado" width="150">
           <template #default="scope">
-            <el-tag type="danger">Rechazada</el-tag>
+            <el-tag :type="getStatusType(scope.row.status)">
+              {{ getStatusName(scope.row.status) }}
+            </el-tag>
           </template>
         </el-table-column>
       </el-table>
@@ -164,6 +168,7 @@
 
     <el-tab-pane label="Historial" name="all">
       <el-table :data="allAbsences" class="custom-table">
+        <el-table-column prop="fullName" label="Nombre" width="150" />
         <el-table-column prop="startDate" label="Desde" width="180" />
         <el-table-column prop="endDate" label="Hasta" width="180" />
         <el-table-column label="Total de Días" width="120">
@@ -177,7 +182,13 @@
           </template>
         </el-table-column>
         <el-table-column prop="comment" label="Comentario" width="200" />
-        <el-table-column prop="status" label="Estado" width="150"/>
+        <el-table-column prop="status" label="Estado" width="150">
+          <template #default="scope">
+            <el-tag :type="getStatusType(scope.row.status)">
+              {{ getStatusName(scope.row.status) }}
+            </el-tag>
+          </template>
+        </el-table-column>
       </el-table>
     </el-tab-pane>
   </el-tabs>
@@ -237,7 +248,6 @@ const fetchAllAbsences = async () => {
   allAbsences.value = result.absenceList;
 };
 
-// Llamar a las ausencias pendientes al cargar
 onMounted(() => {
   fetchAbsences();
 });
@@ -272,6 +282,7 @@ const getTotalDays = (startDate: string, endDate: string) => {
 
 
   <style scoped>
+  
   .el-statistic {
     --el-statistic-content-font-size: 28px;
   }
