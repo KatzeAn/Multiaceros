@@ -4,8 +4,36 @@ import { DivisionModel } from "@/database/division/division.model";
 import type { Teammate } from "@/domain/Interfaces/Division/teammate.interface";
 import { stringToNumber } from "../common/helper/stringTonumber.helper";
 import type { Division } from "@/domain/Interfaces/Division/division.interface";
+import { reactive } from "vue";
+import { ElNotification } from "element-plus";
 
 export const useDivisionStore = defineStore("division", () => {
+  const divisionForm = reactive<Partial<Division>>({
+    name: "",
+  });
+
+  const createDivisionRequest = async () => {
+    try {
+      const divisionModel = new DivisionModel();
+      divisionModel.createDivision(
+        divisionForm.name ? divisionForm.name : "",
+        "FE"
+      );
+
+      ElNotification({
+        title: "Success",
+        message: "The data was saved successfully",
+        type: "success",
+      });
+    } catch (error) {
+      ElNotification({
+        title: "Error",
+        message: "An error occurred while saving the form",
+        type: "error",
+      });
+    }
+  };
+
   const fetchDivisions = async () => {
     const result = {
       loading: true,
@@ -55,7 +83,9 @@ export const useDivisionStore = defineStore("division", () => {
   };
 
   return {
+    createDivisionRequest,
     fetchMyTeammate,
-    fetchDivisions
+    fetchDivisions,
+    divisionForm,
   };
 });
