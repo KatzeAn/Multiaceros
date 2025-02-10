@@ -91,12 +91,7 @@ import { useRouter } from "vue-router";
 import { ElNotification } from "element-plus";
 
 import { useAuthStore } from "../stores/auth.store";
-<<<<<<< HEAD
-import { useUserStore } from "../stores/user.store";
 const { loginWithEmailAndPassword, loginForm, resetLoginForm, resetPassword } = useAuthStore();
-=======
-const { loginWithEmailAndPassword, loginForm, resetLoginForm } = useAuthStore();
->>>>>>> main
 
 const router = useRouter();
 const isLoading = ref(false);
@@ -135,7 +130,6 @@ const login = async () => {
     isLoading.value = false;
   }
 };
-
 const resetPasswordHandler = async () => {
   try {
     const email = form.name;
@@ -162,5 +156,4 @@ onMounted(() => {
   resetLoginForm();
 });
 </script>
-
 <style></style>

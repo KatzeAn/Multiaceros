@@ -14,8 +14,11 @@ const { downloadCertificate, error } = certifiedStore;
 const download = async () => {
   isLoadingLetterCertfied.value = true;
   try {
-    await downloadCertificate(getUserId);
-  } catch (error) {
+    const userId = stringToNumber(getUserId);
+    
+    if (userId !== null) {  
+        await downloadCertificate(userId);
+    }  } catch (error) {
   } finally {
     isLoadingLetterCertfied.value = false;
   }
@@ -310,6 +313,7 @@ const download = async () => {
 <script lang="ts">
 import { reactive, ref } from "vue";
 import MyTeam from "../components/MyTeam.vue";
+import { stringToNumber } from "../common/helper/stringTonumber.helper";
 
 const state = reactive({
   avatars: [

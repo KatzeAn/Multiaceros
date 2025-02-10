@@ -27,4 +27,5 @@ export interface AuthResponse {
 export abstract class AuthRepository {
     abstract signInWithEmailAndPassword(email: string, password: string): Promise<AuthResponse>;
     abstract resetPassword(email: string): Promise<string>;
+    abstract confirmPasswordReset(token: string, newPassword: string): Promise<string>;
 }
