@@ -1,30 +1,44 @@
+import { defineStore } from "pinia";
+import { reactive, ref } from "vue";
 import { JobTitleModel } from "@/database/jobTitle/jobTitle.model";
 import type { JobTitle } from "@/domain/Interfaces/JobTitle/JobTitle.interface";
-import { defineStore } from "pinia";
+import { ElNotification } from "element-plus";
 
 export const useJobTitleStore = defineStore("jobTitle", () => {
+  const isLoading = ref(false);
+
   const fetchJobTitles = async () => {
-    const result = {
-      loading: true,
-      jobTitleList: [] as JobTitle[],
-    };
-
     try {
-      result.loading = true;
+      isLoading.value = true;
       const jobTitleModel = new JobTitleModel();
-      const response: JobTitle[] = await jobTitleModel.getJobTitles();
-      result.jobTitleList = response;
+      return await jobTitleModel.getJobTitles();
     } catch (error) {
-      console.error("Error fetching job titles:", error);
-      result.jobTitleList = [];
+      ElNotification({
+        title: "Error",
+        message: "No se pudieron cargar los cargos",
+        type: "error",
+      });
     } finally {
-      result.loading = false;
+      isLoading.value = false;
     }
+  };
 
-    return result;
+  const createJobTitleRequest = async (jobTitle: JobTitle) => {
+    try {
+      isLoading.value = true;
+      const jobTitleModel = new JobTitleModel();
+      await jobTitleModel.createJobTitle(jobTitle);
+      await fetchJobTitles(); // Recargar lista después de crear
+    } catch (error) {
+      throw error;
+    } finally {
+      isLoading.value = false;
+    }
   };
 
   return {
-    fetchJobTitles
-  }
+    isLoading,
+    fetchJobTitles,
+    createJobTitleRequest,
+  };
 });
