@@ -9,10 +9,8 @@
     </div>
 </template>
 
-<script>
-export default {
-    name: 'Error404'
-}
+<script lang="ts" setup>
+
 </script>
 
 <style scoped>

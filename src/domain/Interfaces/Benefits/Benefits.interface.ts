@@ -4,4 +4,5 @@ export interface Benefits {
   isActive: boolean;
   createdBy?: string;
   modifiedBy?: string;
+  valueBenefit?: number;
 }

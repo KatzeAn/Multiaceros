@@ -3,4 +3,5 @@ export interface Arl {
     nameArl: string;
     modifiedBy?: string;
     isActive?: boolean;
+    riskId?: number;
 }

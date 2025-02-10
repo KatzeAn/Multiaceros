@@ -12,6 +12,7 @@ export interface User {
   modifiedDate?: Date;
   isActive?: true;
   birthday: Date;
+  userPhotoUrl?: string;
   cityCountryAndStateInfo?: {
     cityId: number;
     cityName: string;

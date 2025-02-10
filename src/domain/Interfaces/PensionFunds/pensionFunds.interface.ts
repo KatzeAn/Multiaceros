@@ -1,6 +1,7 @@
 export interface PensionFunds {
-  pensionFundId?: number;
+  id?: number;
   pensionFundName: string;
+  pensionFundTypeId?: number;
   isActive: boolean;
   modifiedBy?: string;
   createdBy?: string;
