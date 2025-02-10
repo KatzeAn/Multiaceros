@@ -59,7 +59,7 @@ const router = createRouter({
       children: [
         { path: '', redirect: 'portal-rrhh/gestionar-empleados' },
         { path: 'gestionar-empleados', component: () => import('../views/PortalRRHH/manageEmployeesView.vue') },
-        { path: 'gestionar-cumplimientos', component: () => import('../views/PortalRRHH/manageComplienceView.vue') },
+        { path: 'gestionar-departamentos', component: () => import('../views/PortalRRHH/manageDepartments.vue') },
         { path: 'gestionar-pausas', component: () => import('../views/PortalRRHH/manageActiveBreak.vue') },
         { path: 'gestionar-vacantes', component: () => import('../views/PortalRRHH/ManageApplications.vue') },
         { path: 'gestionar-ausencias', component: () => import('../components/ManageAbsenceComponents/StatisticsAbsencesCard.vue') },

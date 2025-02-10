@@ -1,5 +1,5 @@
 export interface Eps {
-  epsId?: number;
+  id?: number;
   epsName: string;
-  typeOfEps: string;
+  epsTypeId: number;
 }

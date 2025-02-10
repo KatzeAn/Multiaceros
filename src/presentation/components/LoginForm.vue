@@ -86,12 +86,11 @@
 </template>
 
 <script setup lang="ts">
-import { nextTick, onMounted, reactive, ref } from "vue";
+import { onMounted, reactive, ref } from "vue";
 import { useRouter } from "vue-router";
 import { ElNotification } from "element-plus";
 
 import { useAuthStore } from "../stores/auth.store";
-import { useUserStore } from "../stores/user.store";
 const { loginWithEmailAndPassword, loginForm, resetLoginForm } = useAuthStore();
 
 const router = useRouter();

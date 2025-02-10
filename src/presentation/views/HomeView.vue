@@ -42,19 +42,19 @@ const download = async () => {
         <div
           class="self-center flex flex-col sm:flex-row justify-end sm:w-1/2 gap-6 mt-4 sm:mt-0"
         >
-        <router-link
-      to="/perfil"
-      class="bg-blue-500 text-white px-4 py-2 rounded flex items-center justify-center gap-2 hover:bg-blue-600"
-    >
-      <span class="material-symbols-outlined">person</span>
-      Mi perfil
-    </router-link>
-    <button
-      class="bg-white border border-gray-300 text-gray-700 px-4 py-2 rounded flex items-center justify-center gap-2 hover:bg-gray-100"
-    >
-      <span class="material-symbols-outlined">settings</span>
-      Configuraciones
-    </button>
+          <router-link
+            to="/perfil"
+            class="bg-blue-500 text-white px-4 py-2 rounded flex items-center justify-center gap-2 hover:bg-blue-600"
+          >
+            <span class="material-symbols-outlined">person</span>
+            Mi perfil
+          </router-link>
+          <button
+            class="bg-white border border-gray-300 text-gray-700 px-4 py-2 rounded flex items-center justify-center gap-2 hover:bg-gray-100"
+          >
+            <span class="material-symbols-outlined">settings</span>
+            Configuraciones
+          </button>
         </div>
       </div>
     </Card>
@@ -106,7 +106,8 @@ const download = async () => {
                   color="var(--secondary-color)"
                   round
                   >Solicitar Tiempo Libre</el-button
-                ></router-link>
+                ></router-link
+              >
             </div>
           </div>
         </el-card>
@@ -164,51 +165,51 @@ const download = async () => {
 
       <!-- Card para anuncios - comunidad -->
       <el-card class="col-[1/-1] md:col-span-3 lg:col-span-2" shadow="hover">
-  <template #header>
-    <div class="card-header">
-      <span class="font-bold text-[var(--secondary-color)]">
-        <el-icon>
-          <Comment />
-        </el-icon>
-        Anuncios - Comunidad
-      </span>
-    </div>
-  </template>
-  <div class="flex flex-row gap-6">
-    <el-button icon="Plus">Nueva Publicación</el-button>
-    <el-select disabled placeholder="Todas las publicaciones">
-      <el-option />
-    </el-select>
-  </div>
-  <el-divider />
-
-  <el-scrollbar height="360px">
-    <el-card shadow="hover">
-      <div class="flex flex-col gap-4">
-        <div
-          v-for="index in 10"
-          :key="index"
-          class="flex flex-row gap-4 items-start"
-        >
-          <el-avatar
-            shape="square"
-            :size="50"
-            :src="state.squareUrl"
-            class="flex-shrink-0"
-          /> 
-          <div class="flex-1">
-            <p class="text-sm">
-              Lorem ipsum dolor sit amet, consectetur adipiscing elit. Ut
-              ullamcorper malesuada turpis sed imperdiet. Cras quis euismod
-              augue. Pellentesque placerat vel mauris at auctor.
-            </p>
-            <el-divider style="margin: 10px 0" />
+        <template #header>
+          <div class="card-header">
+            <span class="font-bold text-[var(--secondary-color)]">
+              <el-icon>
+                <Comment />
+              </el-icon>
+              Anuncios - Comunidad
+            </span>
           </div>
+        </template>
+        <div class="flex flex-row gap-6">
+          <el-button icon="Plus">Nueva Publicación</el-button>
+          <el-select disabled placeholder="Todas las publicaciones">
+            <el-option />
+          </el-select>
         </div>
-      </div>
-    </el-card>
-  </el-scrollbar>
-</el-card>
+        <el-divider />
+
+        <el-scrollbar height="360px">
+          <el-card shadow="hover">
+            <div class="flex flex-col gap-4">
+              <div
+                v-for="index in 10"
+                :key="index"
+                class="flex flex-row gap-4 items-start"
+              >
+                <el-avatar
+                  shape="square"
+                  :size="50"
+                  :src="state.squareUrl"
+                  class="flex-shrink-0"
+                />
+                <div class="flex-1">
+                  <p class="text-sm">
+                    Lorem ipsum dolor sit amet, consectetur adipiscing elit. Ut
+                    ullamcorper malesuada turpis sed imperdiet. Cras quis
+                    euismod augue. Pellentesque placerat vel mauris at auctor.
+                  </p>
+                  <el-divider style="margin: 10px 0" />
+                </div>
+              </div>
+            </div>
+          </el-card>
+        </el-scrollbar>
+      </el-card>
 
       <!-- Card para equipo -->
       <el-card class="col-[1/-1]" style="min-height: 300px" shadow="hover">
@@ -222,9 +223,27 @@ const download = async () => {
             </span>
           </div>
         </template>
-        <div class="justify-self-center">
-          <el-empty description="No content available" />
-        </div>
+        <MyTeam></MyTeam>
+        <!-- <div class="flex flex-row gap-40">
+          <div class="flex flex-col items-center">
+            <el-avatar shape="square" :size="80" :src="state.squareUrl" />
+            <span class="font-semibold text-gray-600 text-sm"
+              >Harol Guzman</span
+            >
+          </div>
+          <div class="flex flex-col items-center">
+            <el-avatar shape="square" :size="80" :src="state.squareUrl" />
+            <span class="font-semibold text-gray-600 text-sm"
+              >Wilmar Alfaro</span
+            >
+          </div>
+          <div class="flex flex-col items-center">
+            <el-avatar shape="square" :size="80" :src="state.squareUrl" />
+            <span class="font-semibold text-gray-600 text-sm"
+              >Eduardo Fuentes</span
+            >
+          </div>
+        </div> -->
       </el-card>
 
       <!-- Card para enlaces -->
@@ -297,6 +316,7 @@ const download = async () => {
 
 <script lang="ts">
 import { reactive, ref } from "vue";
+import MyTeam from "../components/MyTeam.vue";
 
 const state = reactive({
   circleUrl:
