@@ -1,17 +1,13 @@
 <template>
   <el-card shadow="none">
     <template #header>
-      <h2 class="text-xl text-gray-700 font-semibold">Gestionar Cargos</h2>
+      <h2 class="text-xl text-gray-700 font-semibold">Gestionar EPS</h2>
     </template>
 
     <el-card shadow="never" class="mb-6">
-      <el-form ref="ruleFormRef" :rules="rules" :model="jobTitleForm">
-        <el-form-item prop="name" label="Nombre">
-          <el-input
-            v-model="jobTitleForm.name"
-            placeholder="Nombre"
-            clearable
-          />
+      <el-form ref="ruleFormRef" :rules="rules" :model="epsForm">
+        <el-form-item prop="epsName" label="Nombre">
+          <el-input v-model="epsForm.epsName" placeholder="Nombre" clearable />
         </el-form-item>
         <el-form-item>
           <el-button
@@ -19,7 +15,7 @@
             type="primary"
             @click="submitForm(ruleFormRef)"
           >
-            Crear cargo
+            Crear EPS
           </el-button>
         </el-form-item>
       </el-form>
@@ -51,7 +47,7 @@
       :page-size="pageSize"
       :page-sizes="[10, 20, 50]"
       layout="total, sizes, prev, pager, next"
-      :total="jobTitles.length"
+      :total="epsList.length"
       @size-change="handleSizeChange"
       @current-change="handlePageChange"
     />
@@ -59,10 +55,10 @@
 </template>
 
 <script lang="ts" setup>
-import { useJobTitleViewModel } from "@/presentation/viewmodels/jobTitleViewModel";
+import { useEpsViewModel } from "@/presentation/viewmodels/epsViewModel";
 
 const {
-  jobTitles,
+  epsList,
   isLoading,
   search,
   currentPage,
@@ -73,6 +69,6 @@ const {
   handlePageChange,
   handleSizeChange,
   submitForm,
-  jobTitleForm,
-} = useJobTitleViewModel();
+  epsForm,
+} = useEpsViewModel();
 </script>

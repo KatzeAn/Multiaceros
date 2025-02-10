@@ -1,30 +1,46 @@
+import { defineStore } from "pinia";
+import { ElNotification } from "element-plus";
 import { EpsModel } from "@/database/eps/eps.model";
 import type { Eps } from "@/domain/Interfaces/Eps/eps.interface";
-import { defineStore } from "pinia";
+import { ref } from "vue";
 
 export const useEpsStore = defineStore("eps", () => {
+  const isLoading = ref(false);
+
   const fetchEps = async () => {
-    const result = {
-      loading: true,
-      epsList: [] as Eps[],
-    };
-
     try {
-      result.loading = true;
+      isLoading.value = true;
       const epsModel = new EpsModel();
-      const response: Eps[] = await epsModel.getEps();
-      result.epsList = response;
+      const data = await epsModel.getEps();
+      return Array.isArray(data) ? data : [];
     } catch (error) {
-      console.error("Error fetching eps:", error);
-      result.epsList = [];
+      ElNotification({
+        title: "Error",
+        message: "No se pudieron cargar los EPS",
+        type: "error",
+      });
+      return [];
     } finally {
-      result.loading = false;
+      isLoading.value = false;
     }
+  };
 
-    return result;
+  const createEpsRequest = async (eps: Eps) => {
+    try {
+      isLoading.value = true;
+      const epsModel = new EpsModel();
+      await epsModel.createEps(eps);
+      await fetchEps(); // Recargar lista después de crear
+    } catch (error) {
+      throw error;
+    } finally {
+      isLoading.value = false;
+    }
   };
 
   return {
+    isLoading,
     fetchEps,
+    createEpsRequest,
   };
 });

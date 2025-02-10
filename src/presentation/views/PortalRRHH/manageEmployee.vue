@@ -10,6 +10,9 @@
       <el-tab-pane label="Cargos" name="gestionar-cargos">
         <router-view />
       </el-tab-pane>
+      <el-tab-pane label="Eps" name="gestionar-eps">
+        <router-view />
+      </el-tab-pane>
     </el-tabs>
   </main>
 </template>
