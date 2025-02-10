@@ -40,8 +40,22 @@ export async function apiRequest<T>(
     return response.data as T;
   } catch (error) {
     if (axios.isAxiosError(error)) {
-      const apiError = error.response?.data as { error?: { details?: string } };
-      throw new Error(apiError?.error?.details || "Error en la solicitud");
+      const apiError = error.response?.data as {
+        error?: { details?: string };
+        title?: string;
+        errors?: Record<string, string[]>;
+      };
+
+      if (apiError?.errors) {
+        const errorMessages = Object.entries(apiError.errors)
+          .map(([field, messages]) => `${field}: ${messages.join(", ")}`)
+          .join(" | ");
+        throw new Error(errorMessages || "Error de validación en la solicitud");
+      }
+
+      throw new Error(
+        apiError?.error?.details || apiError?.title || "Error en la solicitud"
+      );
     } else {
       throw new Error("Error inesperado en la solicitud");
     }

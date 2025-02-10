@@ -118,47 +118,50 @@
 
       <!-- Recursos humanos -->
       <div class="px-6 pt-4">
-      <ul class="flex flex-col space-y-2">
-        <li>
-          <div class="text-gray-500 hover:text-white">
-            <div
-              class="flex justify-between w-full pl-2 pr-4 py-2 hover:bg-gray-800 rounded cursor-pointer"
-              @click="toggleMenu(menuItems.length)"
-            >
-              <div class="flex">
-                <span class="material-symbols-outlined pr-2">admin_panel_settings</span>
-                Recursos humanos <!-- Título fijo -->
-              </div>
-              <span
-                class="material-symbols-outlined"
-                :class="{ 'rotate-180': openMenus[menuItems.length] }"
+        <ul class="flex flex-col space-y-2">
+          <li>
+            <div class="text-gray-500 hover:text-white">
+              <div
+                class="flex justify-between w-full pl-2 pr-4 py-2 hover:bg-gray-800 rounded cursor-pointer"
+                @click="toggleMenu(menuItems.length)"
               >
-                keyboard_arrow_down
-              </span>
-            </div>
-          </div>
-
-          <div
-            v-show="openMenus[menuItems.length]"
-            class="ml-4 pl-2 text-gray-500 border-l border-gray-700"
-          >
-            <ul class="flex flex-col">
-              <li
-                v-for="(subItem, subIndex) in recursosHumanosSubItems"
-                :key="subIndex"
-              >
-                <router-link
-                  :to="subItem.route"
-                  class="inline-block w-full px-4 py-2 hover:bg-gray-800 hover:text-white rounded"
+                <div class="flex">
+                  <span class="material-symbols-outlined pr-2"
+                    >admin_panel_settings</span
+                  >
+                  Recursos humanos
+                  <!-- Título fijo -->
+                </div>
+                <span
+                  class="material-symbols-outlined"
+                  :class="{ 'rotate-180': openMenus[menuItems.length] }"
                 >
-                  {{ subItem.title }}
-                </router-link>
-              </li>
-            </ul>
-          </div>
-        </li>
-      </ul>
-    </div>
+                  keyboard_arrow_down
+                </span>
+              </div>
+            </div>
+
+            <div
+              v-show="openMenus[menuItems.length]"
+              class="ml-4 pl-2 text-gray-500 border-l border-gray-700"
+            >
+              <ul class="flex flex-col">
+                <li
+                  v-for="(subItem, subIndex) in recursosHumanosSubItems"
+                  :key="subIndex"
+                >
+                  <router-link
+                    :to="subItem.route"
+                    class="inline-block w-full px-4 py-2 hover:bg-gray-800 hover:text-white rounded"
+                  >
+                    {{ subItem.title }}
+                  </router-link>
+                </li>
+              </ul>
+            </div>
+          </li>
+        </ul>
+      </div>
 
       <div class="px-6 pt-4"></div>
       <div class="px-6 pt-4"><hr class="border-gray-700" /></div>
@@ -192,9 +195,9 @@
         </div>
         <div class="flex flex-col pl-3">
           <div class="text-sm text-gray-50">{{ getUsername }}</div>
-          <span class="text-xs text-[#acacb0] font-light tracking-tight"
-            >{{ getUserEmail }}</span
-          >
+          <span class="text-xs text-[#acacb0] font-light tracking-tight">{{
+            getUserEmail
+          }}</span>
         </div>
       </div>
       <button>
@@ -208,10 +211,10 @@
 
 <script setup lang="ts">
 import { ref } from "vue";
-import { useUserStore } from "@/presentation/stores/user.store"
+import { useUserStore } from "@/presentation/stores/user.store";
 
 const { getUsername, getUserEmail } = useUserStore();
- 
+
 // Estado para controlar qué menús están abiertos
 const openMenus = ref<boolean[]>([]);
 
@@ -220,106 +223,100 @@ const menuItems = ref([
   {
     title: "Mi Perfil",
     icon: "person",
-    subItems: 
-    [
+    subItems: [
       {
         title: "Información personal",
-        route: "/perfil/informacion-personal"
+        route: "/perfil/informacion-personal",
       },
       {
         title: "Información profesional",
-        route: "/perfil/informacion-profesional"
+        route: "/perfil/informacion-profesional",
       },
       {
         title: "Información salarial",
-        route: "/perfil/informacion-salarial"
+        route: "/perfil/informacion-salarial",
       },
       {
         title: "Tiempo libre",
-        route: "/perfil/tiempo-libre"
+        route: "/perfil/tiempo-libre",
       },
     ],
   },
   {
     title: "Nómina",
     icon: "payments",
-    subItems: 
-    [
+    subItems: [
       {
         title: "Comprobantes de pago",
-        route: "/"
+        route: "/",
       },
       {
         title: "Mis beneficios",
-        route: "/"
+        route: "/",
       },
     ],
   },
   {
     title: "Tiempo Libre",
     icon: "travel",
-    subItems: 
-    [
+    subItems: [
       {
         title: "Crear una ausencia",
-        route: "/ausencias/solicitar-ausencia"
+        route: "/ausencias/solicitar-ausencia",
       },
       {
         title: "Mis ausencias",
-        route: "/ausencias/mis-ausencias"
-      }
+        route: "/ausencias/mis-ausencias",
+      },
     ],
   },
   {
     title: "Evaluaciones",
     icon: "spellcheck",
-    subItems: 
-    [
+    subItems: [
       {
         title: "Desempeño",
-        route: "/"
+        route: "/",
       },
       {
         title: "Retroalimentación",
-        route: "/"
+        route: "/",
       },
       {
         title: "Clima laboral",
-        route: "/"
+        route: "/",
       },
     ],
   },
   {
     title: "Políticas y Documentos",
     icon: "policy",
-    subItems: 
-    [
+    subItems: [
       {
         title: "Manual del empleado",
-        route: "/"
+        route: "/",
       },
       {
         title: "Reglamentos",
-        route: "/"
+        route: "/",
       },
       {
         title: "procedimientos",
-        route: "/"
+        route: "/",
       },
     ],
   },
   {
     title: "Solicitudes  y trámites",
     icon: "procedure",
-    subItems: 
-    [
+    subItems: [
       {
         title: "Carta laboral",
-        route: "/"
+        route: "/",
       },
       {
         title: "Actualización de datos",
-        route: "/"
+        route: "/",
       },
     ],
   },
@@ -329,39 +326,39 @@ const menuItems = ref([
 const recursosHumanosSubItems = ref([
   {
     title: "Gestión de empleados",
-    route: "/portal-rrhh/gestionar-empleados"
+    route: "/portal-rrhh/empleados",
   },
   {
     title: "Gestión de vacantes y reclutamiento",
-    route: "/portal-rrhh/gestionar-vacantes"
+    route: "/portal-rrhh/gestionar-vacantes",
   },
   {
     title: "Control de asistencia",
-    route: "/portal-rrhh/gestionar-ausencias"
+    route: "/portal-rrhh/gestionar-ausencias",
   },
   {
     title: "Nómina y compensaciones",
-    route: "/portal-rrhh/gestionar-nomina"
+    route: "/portal-rrhh/gestionar-nomina",
   },
   {
     title: "Gestión de beneficios",
-    route: "/portal-rrhh/gestionar-beneficios"
+    route: "/portal-rrhh/gestionar-beneficios",
   },
   {
     title: "Evaluaciones de desempeño",
-    route: "/portal-rrhh/evaluaciones"
+    route: "/portal-rrhh/evaluaciones",
   },
   {
     title: "Capacitaciones",
-    route: "/portal-rrhh/capacitaciones"
+    route: "/portal-rrhh/capacitaciones",
   },
   {
     title: "Reporte y análisis",
-    route: "/portal-rrhh/reportes"
+    route: "/portal-rrhh/reportes",
   },
   {
     title: "Políticas y procedimientos",
-    route: "/portal-rrhh/gestionar-politicas"
+    route: "/portal-rrhh/gestionar-politicas",
   },
 ]);
 
