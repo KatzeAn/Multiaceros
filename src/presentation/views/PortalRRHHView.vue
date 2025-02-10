@@ -7,6 +7,9 @@
       <el-tab-pane label="Departamentos" name="gestionar-departamentos">
         <router-view />
       </el-tab-pane>
+      <el-tab-pane label="Cargos" name="gestionar-cargos">
+        <router-view />
+      </el-tab-pane>
     </el-tabs>
   </main>
 </template>

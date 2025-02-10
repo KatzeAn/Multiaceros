@@ -1,0 +1,84 @@
+<template>
+  <el-card shadow="none">
+    <template #header>
+      <h2 class="text-xl text-gray-700 font-semibold">Gestionar Cargos</h2>
+    </template>
+
+    <el-card shadow="never" class="mb-6">
+      <el-form ref="ruleFormRef" :rules="rules" :model="jobTitleForm">
+        <el-form-item prop="name" label="Nombre">
+          <el-input
+            v-model="jobTitleForm.name"
+            placeholder="Nombre"
+            clearable
+          />
+        </el-form-item>
+        <el-form-item>
+          <el-button
+            :loading="isLoading"
+            type="primary"
+            @click="submitForm(ruleFormRef)"
+          >
+            Crear cargo
+          </el-button>
+        </el-form-item>
+      </el-form>
+    </el-card>
+
+    <el-table :data="paginatedData" border class="w-full mb-4" stripe>
+      <el-table-column prop="id" label="ID" />
+      <el-table-column prop="name" label="Nombre" />
+      <el-table-column prop="isActive" label="Estado">
+        <template #default="{ row }">
+          <el-tag :type="row.isActive ? 'success' : 'danger'">
+            {{ row.isActive ? "Activo" : "Inactivo" }}
+          </el-tag>
+        </template>
+      </el-table-column>
+      <el-table-column label="Acciones">
+        <template #default="scope">
+          <el-button size="small"> Editar </el-button>
+          <el-button :loading="isLoading" size="small" type="danger">
+            Desactivar
+          </el-button>
+        </template>
+      </el-table-column>
+    </el-table>
+
+    <!-- Paginación -->
+    <el-pagination
+      v-model:current-page="currentPage"
+      :page-size="pageSize"
+      :page-sizes="[10, 20, 50]"
+      layout="total, sizes, prev, pager, next"
+      :total="jobTitles.length"
+      @size-change="handleSizeChange"
+      @current-change="handlePageChange"
+    />
+  </el-card>
+</template>
+
+<script lang="ts" setup>
+import { useJobTitleViewModel } from "@/presentation/viewmodels/jobTitleViewModel";
+import { onMounted } from "vue";
+
+const {
+  jobTitles,
+  isLoading,
+  search,
+  currentPage,
+  pageSize,
+  ruleFormRef,
+  rules,
+  paginatedData,
+  handlePageChange,
+  handleSizeChange,
+  loadJobTitles,
+  submitForm,
+  jobTitleForm,
+} = useJobTitleViewModel();
+
+onMounted(async () => {
+  await loadJobTitles();
+});
+</script>
