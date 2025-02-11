@@ -43,8 +43,7 @@
 </template>
 
 <script lang="ts" setup>
-import { useEmployeeStore } from "../../../stores/employee.store";
-import { ref } from "vue";
+import { useEmployeeViewModel } from "@/presentation/viewmodels/employeeViewModel";
 import type { FormInstance } from "element-plus";
 import PersonalInformationItemForm from "@/presentation/layouts/EmployeeForm/PersonalInformationItemForm.vue";
 import ContactInformationItemForm from "@/presentation/layouts/EmployeeForm/ContactInformationItemForm.vue";
@@ -53,26 +52,13 @@ import SocialSecurityItemForm from "@/presentation/layouts/EmployeeForm/socialSe
 import BonificationItemForm from "@/presentation/layouts/EmployeeForm/bonificationItemForm.vue";
 import BenefitItemForm from "@/presentation/layouts/EmployeeForm/benefitItemForm.vue";
 
-const isLoading = ref(false);
-const { employeeRequestForm, createEmployeeRequest, rules } = useEmployeeStore();
-
-const ruleFormRef = ref<FormInstance>();
-
-const submitForm = async (formEl: FormInstance | undefined) => {
-  if (!formEl) return;
-  try {
-    isLoading.value = true;
-
-    const valid = await formEl.validate();
-    if (valid) {
-      await createEmployeeRequest();
-    }
-  } catch (error) {
-    console.error("Error en la solicitud:", error);
-  } finally {
-    isLoading.value = false;
-  }
-};
+const {
+  isLoading,
+  ruleFormRef,
+  rules,
+  submitForm,
+  employeeRequestForm,
+} = useEmployeeViewModel();
 
 const resetForm = (formEl: FormInstance | undefined) => {
   if (!formEl) return;

@@ -42,7 +42,7 @@
       :page-size="pageSize"
       :page-sizes="[10, 20, 50]"
       layout="total, sizes, prev, pager, next"
-      :total="arlList.length"
+      :total="employeeList.length"
       @size-change="handleSizeChange"
       @current-change="handlePageChange"
     />
@@ -50,7 +50,8 @@
 </template>
 
 <script lang="ts" setup>
-import { useArlViewModel } from "@/presentation/viewmodels/arlViewModel";
+import { useEmployeeViewModel } from "@/presentation/viewmodels/employeeViewModel";
+import AddEmployee from "../components/AddEmployee.vue";
 import { ref } from "vue";
 
 const isAddModalOpen = ref(false);
@@ -64,17 +65,13 @@ const closeForm = () => {
 };
 
 const {
-  arlList,
+  employeeList,
   isLoading,
   search,
   currentPage,
   pageSize,
-  ruleFormRef,
-  rules,
   paginatedData,
   handlePageChange,
   handleSizeChange,
-  submitForm,
-  arlForm,
-} = useArlViewModel();
+} = useEmployeeViewModel();
 </script>

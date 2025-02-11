@@ -74,14 +74,14 @@
 </template>
 
 <script lang="ts" setup>
-import { useEmployeeStore } from "@/presentation/stores/employee.store";
+import { useEmployeeViewModel } from "@/presentation/viewmodels/employeeViewModel";
 import { useBloodTypeStore } from "@/presentation/stores/bloodType.store";
 
 import type { UploadUserFile } from "element-plus";
 import { onMounted, ref } from "vue";
 import type { BloodType } from "@/domain/Interfaces/BloodType/bloodType.interface";
 
-const { employeeRequestForm } = useEmployeeStore();
+const { employeeRequestForm } = useEmployeeViewModel();
 const { fetchBloodType } = useBloodTypeStore();
 
 const fileList = ref<UploadUserFile[]>([]);

@@ -13,7 +13,7 @@
           placeholder="Seleccione el beneficio"
         >
           <el-option
-            v-for="benefit in benefitsOptions"
+            v-for="benefit in benefitList"
             :key="benefit.id"
             :label="benefit.nameBenefit"
             :value="benefit.id"
@@ -51,7 +51,7 @@
           class="flex justify-between items-center py-2"
         >
           <span>
-            {{ benefitsOptions.find((b) => b.id === benefit.id)?.nameBenefit }}
+            {{ benefitList.find((b) => b.id === benefit.id)?.nameBenefit }}
             -
             {{ benefit.valueBenefit }}
           </span>
@@ -69,17 +69,14 @@
 </template>
 
 <script lang="ts" setup>
-import { useEmployeeStore } from "@/presentation/stores/employee.store";
-import { useBenefitStore } from "@/presentation/stores/benefit.store";
-import { onMounted, ref } from "vue";
-import type { Benefits } from "@/domain/Interfaces/Benefits/Benefits.interface";
+import { useEmployeeViewModel } from "@/presentation/viewmodels/employeeViewModel";
+import { useBenefitViewModel } from "@/presentation/viewmodels/benefitViewModel";
+
+import { onMounted } from "vue";
 import { ElNotification } from "element-plus";
 
-const { fetchBenefit } = useBenefitStore();
-const { employeeRequestForm } = useEmployeeStore();
-
-const benefitsOptions = ref<Benefits[]>([]);
-const isLoading = ref(false);
+const { employeeRequestForm } = useEmployeeViewModel();
+const { benefitList } = useBenefitViewModel();
 
 const addBenefit = () => {
   if (
@@ -107,14 +104,7 @@ const removeBenefit = (index: number) => {
   employeeRequestForm.benefits.splice(index, 1);
 };
 
-const loadData = async () => {
-  const { loading, benefitList } = await fetchBenefit();
-  isLoading.value = loading;
-  benefitsOptions.value = benefitList;
-};
-
 onMounted(() => {
   removeBenefit(0);
-  loadData();
 });
 </script>
