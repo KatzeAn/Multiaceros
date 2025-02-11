@@ -7,7 +7,7 @@ export class SeveranceFundModel implements SeveranceFundRepository {
         return apiRequest<SeveranceFund[]>("get", "/SeveranceFund/GetSeveranceFund");
     }
     createSeveranceFund(data: SeveranceFund): Promise<SeveranceFund> {
-        return apiRequest<SeveranceFund>("post", "/SeveranceFund/CreateSeveranceFund", { data });
+        return apiRequest<SeveranceFund>("post", "/SeveranceFund/CreateSeveranceFund", { SeveranceFundName: data.severanceFundName, CreatedBy: data.createdBy });
     }
     updateSeveranceFund(data: SeveranceFund): Promise<SeveranceFund> {
         return apiRequest<SeveranceFund>("put", "/SeveranceFund/UpdateSeveranceFund", { data });

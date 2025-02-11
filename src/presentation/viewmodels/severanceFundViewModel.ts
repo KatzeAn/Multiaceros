@@ -62,6 +62,7 @@ export function useSeveranceFundViewModel() {
     try {
       await formEl.validate();
 
+      severanceFundForm.createdBy = "Fe";
       await severanceFundStore.createSeveranceFundRequest(severanceFundForm);
       await loadSeveranceFund();
 

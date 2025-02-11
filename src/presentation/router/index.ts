@@ -139,6 +139,13 @@ const router = createRouter({
               "../views/PortalRRHH/manageEmployee/manageFamilyCompensationFundView.vue"
             ),
         },
+        {
+          path: "gestionar-fondos-cesantias",
+          component: () =>
+            import(
+              "../views/PortalRRHH/manageEmployee/manageSeveranceFundView.vue"
+            ),
+        },
       ],
     },
 
