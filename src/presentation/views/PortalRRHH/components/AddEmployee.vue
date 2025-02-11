@@ -35,8 +35,6 @@
       >
         Enviar Solicitud
       </el-button>
-      <el-button type="danger" @click="resetForm(ruleFormRef)"
-        >Reiniciar formulario</el-button
       >
     </el-form-item>
   </el-form>
@@ -44,7 +42,6 @@
 
 <script lang="ts" setup>
 import { useEmployeeViewModel } from "@/presentation/viewmodels/employeeViewModel";
-import type { FormInstance } from "element-plus";
 import PersonalInformationItemForm from "@/presentation/layouts/EmployeeForm/PersonalInformationItemForm.vue";
 import ContactInformationItemForm from "@/presentation/layouts/EmployeeForm/ContactInformationItemForm.vue";
 import LaboralInformationItemForm from "@/presentation/layouts/EmployeeForm/laboralInformationItemForm.vue";
@@ -52,16 +49,6 @@ import SocialSecurityItemForm from "@/presentation/layouts/EmployeeForm/socialSe
 import BonificationItemForm from "@/presentation/layouts/EmployeeForm/bonificationItemForm.vue";
 import BenefitItemForm from "@/presentation/layouts/EmployeeForm/benefitItemForm.vue";
 
-const {
-  isLoading,
-  ruleFormRef,
-  rules,
-  submitForm,
-  employeeRequestForm,
-} = useEmployeeViewModel();
-
-const resetForm = (formEl: FormInstance | undefined) => {
-  if (!formEl) return;
-  formEl.resetFields();
-};
+const { isLoading, ruleFormRef, rules, submitForm, employeeRequestForm } =
+  useEmployeeViewModel();
 </script>
