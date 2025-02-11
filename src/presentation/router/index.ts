@@ -104,7 +104,9 @@ const router = createRouter({
         {
           path: "gestionar-departamentos",
           component: () =>
-            import("../views/PortalRRHH/manageEmployee/manageDepartmentsView.vue"),
+            import(
+              "../views/PortalRRHH/manageEmployee/manageDepartmentsView.vue"
+            ),
         },
         {
           path: "gestionar-cargos",
@@ -122,6 +124,13 @@ const router = createRouter({
           path: "gestionar-arl",
           component: () =>
             import("../views/PortalRRHH/manageEmployee/manageArlView.vue"),
+        },
+        {
+          path: "gestionar-fondos-pension",
+          component: () =>
+            import(
+              "../views/PortalRRHH/manageEmployee/managePensionFundView.vue"
+            ),
         },
       ],
     },

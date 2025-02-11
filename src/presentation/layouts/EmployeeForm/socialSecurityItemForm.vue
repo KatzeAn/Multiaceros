@@ -83,7 +83,10 @@
     </el-col>
 
     <el-col :span="12">
-      <el-form-item label="Tipo de fondo de pensión" prop="pensionFundInfoData.pensionFundTypeId">
+      <el-form-item
+        label="Tipo de fondo de pensión"
+        prop="pensionFundInfoData.pensionFundTypeId"
+      >
         <el-select
           v-model="employeeRequestForm.pensionFundInfoData.pensionFundTypeId"
           placeholder="Seleccione el tipo"
@@ -137,7 +140,7 @@
 import { useEmployeeStore } from "@/presentation/stores/employee.store";
 import { useEpsStore } from "@/presentation/stores/eps.store";
 import { useArlStore } from "@/presentation/stores/arl.store";
-import { usePensionFund } from "@/presentation/stores/pensionFund.store";
+import { usePensionFundStore } from "@/presentation/stores/pensionFund.store";
 import { useFamilyCompensationFund } from "@/presentation/stores/familyCompensationFund.store";
 import { useSeveranceFundStore } from "@/presentation/stores/severanceFund.store";
 import { onMounted, ref } from "vue";
@@ -150,7 +153,7 @@ import type { SeveranceFund } from "@/domain/Interfaces/severanceFund/severanceF
 const { employeeRequestForm } = useEmployeeStore();
 const { fetchEps } = useEpsStore();
 const { fetchArl } = useArlStore();
-const { fetchPensionFunds } = usePensionFund();
+const { fetchPensionFund } = usePensionFundStore();
 const { fetchFamilyCompensationFund } = useFamilyCompensationFund();
 const { fetchSeveranceFund } = useSeveranceFundStore();
 
@@ -174,7 +177,7 @@ const loadData = async () => {
   ] = await Promise.all([
     fetchEps(),
     fetchArl(),
-    fetchPensionFunds(),
+    fetchPensionFund(),
     fetchFamilyCompensationFund(),
     fetchSeveranceFund(),
   ]);
