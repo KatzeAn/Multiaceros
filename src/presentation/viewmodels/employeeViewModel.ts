@@ -358,6 +358,7 @@ export function useEmployeeViewModel() {
         message: "Empleado creado correctamente",
         type: "success",
       });
+      await loadEmployee();
     } catch (error) {
       ElNotification({
         title: "Error",
