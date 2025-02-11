@@ -45,6 +45,9 @@ export const useAbsenceStore = defineStore("absence", () => {
   const fetchPendingAbsences = () => fetchAbsences("getPendingAbsences");
   const fetchUpcomingAbsences = () => fetchAbsences("getUpcomingAbsences");
   const fetchAllAbsences = () => fetchAbsences("getAbsences");
+  const fetchApprovedAbsences = () => fetchAbsences("getApprovedAbsences");
+  const fetchRejectedAbsences = () => fetchAbsences("getRejectedAbsences");
+
 
 
   const approveAbsence = async (absenceId: number) => {
@@ -175,5 +178,7 @@ export const useAbsenceStore = defineStore("absence", () => {
     absenceRequestForm,
     createAbsenceRequest,
     fetchAllAbsences,
-  };
+    fetchApprovedAbsences,
+    fetchRejectedAbsences,
+    };
 });

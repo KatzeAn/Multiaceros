@@ -10,4 +10,7 @@ export abstract class AbsenceRepository {
     abstract deleteAbsenceRequest(absenceId: number, modifiedBy: string): Promise<Absence>;
     abstract approveAbsenceRequest(absenceId: number): Promise<Absence>;
     abstract rejectAbsenceRequest(absenceId: number): Promise<Absence>;
+    abstract getApprovedAbsences(): Promise<Absence[]>;
+    abstract getRejectedAbsences(): Promise<Absence[]>;
+
 }

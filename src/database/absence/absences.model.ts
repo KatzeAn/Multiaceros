@@ -18,6 +18,14 @@ export class AbsenceModel extends AbsenceRepository {
   getUpcomingAbsences(): Promise<Absence[]> {
     return apiRequest<Absence[]>("get", "/Absence/Upcoming");
   }
+  getApprovedAbsences(): Promise<Absence[]> {
+    return apiRequest<Absence[]>("get", "/Absence/Approved");
+  }
+  
+  getRejectedAbsences(): Promise<Absence[]> {
+    return apiRequest<Absence[]>("get", "/Absence/Rejected");
+  }
+  
 
   createAbsenceRequest(
     from: string,
