@@ -29,7 +29,7 @@
 
     <el-table :data="paginatedData" border class="w-full mb-4" stripe>
       <el-table-column prop="id" label="ID" />
-      <el-table-column prop="epsName" label="Nombre" />
+      <el-table-column prop="name" label="Nombre" />
       <el-table-column prop="isActive" label="Estado">
         <template #default="{ row }">
           <el-tag :type="row.isActive ? 'success' : 'danger'">
