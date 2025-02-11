@@ -35,7 +35,6 @@
       >
         Enviar Solicitud
       </el-button>
-      >
     </el-form-item>
   </el-form>
 </template>
