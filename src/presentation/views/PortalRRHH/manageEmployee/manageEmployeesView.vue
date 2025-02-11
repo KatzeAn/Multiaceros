@@ -14,7 +14,7 @@
       </div>
     </template>
 
-    <el-table :data="paginatedData" border class="w-full mb-4" stripe>
+    <el-table :data="paginatedData" border class="w-full min-h-96 mb-4" stripe>
       <el-table-column label="Nombre" prop="fullName" />
       <el-table-column label="Correo Electrónico" prop="email" />
       <el-table-column label="Cargo" prop="jobTitle" />
