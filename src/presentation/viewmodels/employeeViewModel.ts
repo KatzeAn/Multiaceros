@@ -353,7 +353,7 @@ export function useEmployeeViewModel() {
 
       await employeeStore.createEmployeeRequest(employeeRequestForm);
       await loadEmployee();
-
+      resetForm(ruleFormRef.value);
       ElNotification({
         title: "Éxito",
         message: "Empleado creado correctamente",
@@ -366,6 +366,11 @@ export function useEmployeeViewModel() {
         type: "error",
       });
     }
+  };
+
+  const resetForm = (formEl: FormInstance | undefined) => {
+    if (!formEl) return;
+    formEl.resetFields();
   };
 
   watch([search, currentPage, pageSize], () => {
