@@ -1,30 +1,46 @@
+import { defineStore } from "pinia";
+import { ElNotification } from "element-plus";
+import { ref } from "vue";
 import { BenefitModel } from "@/database/benefits/benefit.model";
 import type { Benefits } from "@/domain/Interfaces/Benefits/Benefits.interface";
-import { defineStore } from "pinia";
 
-export const useBenefitStore = defineStore("benefit", () => {
+export const useBenefitStore = defineStore("Benefit", () => {
+  const isLoading = ref(false);
+
   const fetchBenefit = async () => {
-    const result = {
-      loading: true,
-      benefitList: [] as Benefits[],
-    };
-
     try {
-      result.loading = true;
+      isLoading.value = true;
       const benefitModel = new BenefitModel();
-      const response: Benefits[] = await benefitModel.getBenefits();
-      result.benefitList = response;
+      const data = await benefitModel.getBenefits();
+      return Array.isArray(data) ? data : [];
     } catch (error) {
-      console.error("Error fetching benefits:", error);
-      result.benefitList = [];
+      ElNotification({
+        title: "Error",
+        message: "No se pudieron cargar los beneficios",
+        type: "error",
+      });
+      return [];
     } finally {
-      result.loading = false;
+      isLoading.value = false;
     }
+  };
 
-    return result;
+  const createBenefitRequest = async (data: Benefits) => {
+    try {
+      isLoading.value = true;
+      const benefitModel = new BenefitModel();
+      await benefitModel.createBenefit(data);
+      await fetchBenefit(); // Recargar lista después de crear
+    } catch (error) {
+      throw error;
+    } finally {
+      isLoading.value = false;
+    }
   };
 
   return {
+    isLoading,
     fetchBenefit,
+    createBenefitRequest,
   };
 });
