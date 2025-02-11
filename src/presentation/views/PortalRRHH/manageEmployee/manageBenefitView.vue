@@ -19,7 +19,7 @@
             type="primary"
             @click="submitForm(ruleFormRef)"
           >
-            Crear ARL
+            Crear beneficio
           </el-button>
         </el-form-item>
       </el-form>
