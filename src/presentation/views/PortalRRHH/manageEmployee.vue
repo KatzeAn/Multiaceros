@@ -31,6 +31,12 @@
       >
         <router-view v-if="activeName === 'gestionar-fondos-cesantias'" />
       </el-tab-pane>
+      <el-tab-pane
+        label="Beneficios"
+        name="gestionar-beneficios"
+      >
+        <router-view v-if="activeName === 'gestionar-beneficios'" />
+      </el-tab-pane>
     </el-tabs>
   </main>
 </template>
