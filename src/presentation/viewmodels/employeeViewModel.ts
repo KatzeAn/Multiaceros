@@ -356,14 +356,13 @@ export function useEmployeeViewModel() {
 
       ElNotification({
         title: "Éxito",
-        message: "Employee creado correctamente",
+        message: "Empleado creado correctamente",
         type: "success",
       });
     } catch (error) {
-      const errorMessage = error as string;
       ElNotification({
         title: "Error",
-        message: errorMessage,
+        message: "Error al crear el empleado",
         type: "error",
       });
     }
