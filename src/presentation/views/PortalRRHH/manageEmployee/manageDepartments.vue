@@ -1,5 +1,5 @@
 <template>
-  <el-card shadow="none">
+  <el-card shadow="never">
     <template #header>
       <h2 class="text-xl text-gray-700 font-semibold">
         Gestionar Departamentos

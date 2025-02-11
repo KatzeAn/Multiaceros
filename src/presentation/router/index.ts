@@ -90,12 +90,12 @@ const router = createRouter({
 
     {
       path: "/portal-rrhh/empleados",
-      name: "manageEmployee",
       component: () => import("../views/PortalRRHH/manageEmployee.vue"),
       children: [
         { path: "", redirect: "/portal-rrhh/empleados/gestionar-empleados" },
         {
           path: "gestionar-empleados",
+          name: "manageEmployee",
           component: () =>
             import(
               "../views/PortalRRHH/manageEmployee/manageEmployeesView.vue"
@@ -116,9 +116,7 @@ const router = createRouter({
         {
           path: "gestionar-eps",
           component: () =>
-            import(
-              "../views/PortalRRHH/manageEmployee/manageEps.vue"
-            ),
+            import("../views/PortalRRHH/manageEmployee/manageEps.vue"),
         },
       ],
     },

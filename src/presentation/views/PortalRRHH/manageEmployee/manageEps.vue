@@ -1,11 +1,11 @@
 <template>
-  <el-card shadow="none">
+  <el-card shadow="never">
     <template #header>
       <h2 class="text-xl text-gray-700 font-semibold">Gestionar EPS</h2>
     </template>
 
     <el-card shadow="never" class="mb-6">
-      <el-form ref="ruleFormRef" :rules="rules" :model="epsForm">
+      <el-form inline ref="ruleFormRef" :rules="rules" :model="epsForm">
         <el-form-item prop="epsName" label="Nombre">
           <el-input v-model="epsForm.epsName" placeholder="Nombre" clearable />
         </el-form-item>
@@ -23,7 +23,7 @@
 
     <el-table :data="paginatedData" border class="w-full mb-4" stripe>
       <el-table-column prop="id" label="ID" />
-      <el-table-column prop="name" label="Nombre" />
+      <el-table-column prop="epsName" label="Nombre" />
       <el-table-column prop="isActive" label="Estado">
         <template #default="{ row }">
           <el-tag :type="row.isActive ? 'success' : 'danger'">

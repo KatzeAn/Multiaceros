@@ -103,7 +103,6 @@ export function useEpsViewModel() {
     paginatedData,
     handlePageChange,
     handleSizeChange,
-    loadEps,
     submitForm,
     epsForm,
   };

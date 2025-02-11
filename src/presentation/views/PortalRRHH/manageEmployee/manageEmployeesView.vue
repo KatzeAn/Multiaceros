@@ -4,7 +4,7 @@
     <AddEmployee @close-form="closeForm" />
   </el-dialog>
 
-  <el-card class="p-7" shadow="none">
+  <el-card class="p-7" shadow="never">
     <template #header>
       <div class="flex justify-between items-center">
         <h2 class="text-xl font-bold">Gestionar Empleados</h2>

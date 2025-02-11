@@ -1,11 +1,11 @@
 <template>
-  <el-card shadow="none">
+  <el-card shadow="never">
     <template #header>
       <h2 class="text-xl text-gray-700 font-semibold">Gestionar Cargos</h2>
     </template>
 
     <el-card shadow="never" class="mb-6">
-      <el-form ref="ruleFormRef" :rules="rules" :model="jobTitleForm">
+      <el-form inline ref="ruleFormRef" :rules="rules" :model="jobTitleForm">
         <el-form-item prop="name" label="Nombre">
           <el-input
             v-model="jobTitleForm.name"
