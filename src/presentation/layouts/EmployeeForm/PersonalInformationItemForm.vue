@@ -74,7 +74,7 @@
 </template>
 
 <script lang="ts" setup>
-import { defineProps, ref, onMounted } from "vue";
+import { ref, onMounted } from "vue";
 import { useBloodTypeStore } from "@/presentation/stores/bloodType.store";
 import type { UploadUserFile } from "element-plus";
 import type { BloodType } from "@/domain/Interfaces/BloodType/bloodType.interface";
