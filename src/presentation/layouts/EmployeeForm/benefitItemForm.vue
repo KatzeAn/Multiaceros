@@ -24,11 +24,10 @@
 
     <el-col :span="10">
       <el-form-item label="Valor" prop="benefits">
-        <el-input-number
+        <el-input
+          type="number"
           style="width: 100%"
-          :min="0"
           v-model="employeeRequestForm.newBenefit.valueBenefits"
-          :step="1"
         />
       </el-form-item>
     </el-col>
