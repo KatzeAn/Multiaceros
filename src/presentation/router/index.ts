@@ -132,6 +132,13 @@ const router = createRouter({
               "../views/PortalRRHH/manageEmployee/managePensionFundView.vue"
             ),
         },
+        {
+          path: "gestionar-fondos-compensacion",
+          component: () =>
+            import(
+              "../views/PortalRRHH/manageEmployee/manageFamilyCompensationFundView.vue"
+            ),
+        },
       ],
     },
 

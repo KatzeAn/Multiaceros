@@ -141,7 +141,7 @@ import { useEmployeeStore } from "@/presentation/stores/employee.store";
 import { useEpsStore } from "@/presentation/stores/eps.store";
 import { useArlStore } from "@/presentation/stores/arl.store";
 import { usePensionFundStore } from "@/presentation/stores/pensionFund.store";
-import { useFamilyCompensationFund } from "@/presentation/stores/familyCompensationFund.store";
+import { useFamilyCompensationFundStore } from "@/presentation/stores/familyCompensationFund.store";
 import { useSeveranceFundStore } from "@/presentation/stores/severanceFund.store";
 import { onMounted, ref } from "vue";
 import type { Eps } from "@/domain/Interfaces/Eps/eps.interface";
@@ -154,7 +154,7 @@ const { employeeRequestForm } = useEmployeeStore();
 const { fetchEps } = useEpsStore();
 const { fetchArl } = useArlStore();
 const { fetchPensionFund } = usePensionFundStore();
-const { fetchFamilyCompensationFund } = useFamilyCompensationFund();
+const { fetchFamilyCompensationFund } = useFamilyCompensationFundStore();
 const { fetchSeveranceFund } = useSeveranceFundStore();
 
 const epsOptions = ref<Eps[]>([]);

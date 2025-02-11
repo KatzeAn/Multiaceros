@@ -62,6 +62,7 @@ export function useFamilyCompensationFundViewModel() {
     try {
       await formEl.validate();
 
+      familyCompensationFundForm.createdBy = "Fe";
       await familyCompensationFundStore.createFamilyCompensationFundRequest(
         familyCompensationFundForm
       );

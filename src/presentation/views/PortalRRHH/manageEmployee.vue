@@ -19,6 +19,9 @@
       <el-tab-pane label="Fondos de Pensión" name="gestionar-fondos-pension">
         <router-view v-if="activeName === 'gestionar-fondos-pension'" />
       </el-tab-pane>
+      <el-tab-pane label="Fondos de Compensación" name="gestionar-fondos-compensacion">
+        <router-view v-if="activeName === 'gestionar-fondos-compensacion'" />
+      </el-tab-pane>
     </el-tabs>
   </main>
 </template>
