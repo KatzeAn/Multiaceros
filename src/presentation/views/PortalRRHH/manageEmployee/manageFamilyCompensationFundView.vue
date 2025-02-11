@@ -44,8 +44,8 @@
       </el-table-column>
       <el-table-column label="Acciones">
         <template #default="scope">
-          <el-button size="small"> Editar </el-button>
-          <el-button :loading="isLoading" size="small" type="danger">
+          <el-button size="small" disabled> Editar </el-button>
+          <el-button :loading="isLoading" size="small" type="danger" disabled>
             Desactivar
           </el-button>
         </template>
