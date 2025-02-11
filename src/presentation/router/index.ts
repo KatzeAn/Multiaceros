@@ -146,6 +146,13 @@ const router = createRouter({
               "../views/PortalRRHH/manageEmployee/manageSeveranceFundView.vue"
             ),
         },
+        {
+          path: "gestionar-beneficios",
+          component: () =>
+            import(
+              "../views/PortalRRHH/manageEmployee/manageBenefitView.vue"
+            ),
+        },
       ],
     },
 
