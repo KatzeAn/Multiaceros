@@ -30,8 +30,8 @@
       <el-table-column prop="nameBenefit" label="Nombre" />
       <el-table-column prop="isActive" label="Estado">
         <template #default="{ row }">
-          <el-tag :type="row.isActive ? 'success' : 'danger'">
-            {{ row.isActive ? "Activo" : "Inactivo" }}
+          <el-tag :type="row.isActive ? 'success' : 'success'">
+            {{ row.isActive ? "Activo" : "Activo" }}
           </el-tag>
         </template>
       </el-table-column>

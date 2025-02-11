@@ -330,7 +330,7 @@ const recursosHumanosSubItems = ref([
   },
   {
     title: "Gestión de vacantes y reclutamiento",
-    route: "/portal-rrhh/gestionar-vacantes",
+    route: "/portal-rrhh/aplicaciones",
   },
   {
     title: "Control de asistencia",

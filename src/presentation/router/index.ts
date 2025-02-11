@@ -157,6 +157,22 @@ const router = createRouter({
     },
 
     {
+      path: "/portal-rrhh/aplicaciones",
+      component: () => import("../views/PortalRRHH/manageApplications.view.vue"),
+      children: [
+        { path: "", redirect: "/portal-rrhh/aplicaciones/gestionar-candidatos" },
+        {
+          path: "gestionar-candidatos",
+          name: "manageApplicants",
+          component: () =>
+            import(
+              "../views/PortalRRHH/manageApplications/manageApplicants.view.vue"
+            ),
+        },
+      ],
+    },
+
+    {
       path: "/:pathMatch(.*)*",
       name: "ErrorView",
       meta: { requiresAuth: false, hideNavbar: true },
