@@ -59,7 +59,7 @@
 </template>
 
 <script lang="ts" setup>
-import { usePensionFundViewModel } from "@/presentation/viewmodels/pensionViewModel";
+import { usePensionFundViewModel } from "@/presentation/viewmodels/pensionFundViewModel";
 
 const {
   pensionFundList,
