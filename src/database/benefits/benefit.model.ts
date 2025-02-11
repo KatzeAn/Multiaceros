@@ -7,7 +7,7 @@ export class BenefitModel implements BenefitRepository {
     return apiRequest<Benefits[]>("get", "/Benefits/GetBenefits");
   }
   createBenefit(data: Benefits): Promise<Benefits> {
-    return apiRequest<Benefits>("post", "/Benefits/CreateBenefits", { data });
+    return apiRequest<Benefits>("post", "/Benefits/CreateBenefits", { NameBenefit: data.nameBenefit, CreatedBy: data.createdBy });
   }
   updateBenefit(data: Benefits): Promise<Benefits> {
     return apiRequest<Benefits>("put", "/Benefits/UpdateBenefits", { data });
