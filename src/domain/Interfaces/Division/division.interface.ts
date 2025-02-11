@@ -1,4 +1,5 @@
 export interface Division {
-    id: number;
+    id?: number;
     name: string;
+    createdBy?: string;
 }
