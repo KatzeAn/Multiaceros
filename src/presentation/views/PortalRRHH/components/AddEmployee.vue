@@ -10,22 +10,25 @@
     status-icon
   >
     <!-- Datos personales -->
-    <PersonalInformationItemForm />
+    <PersonalInformationItemForm :employeeRequestForm="employeeRequestForm" />
 
     <!-- Información de contacto -->
-    <ContactInformationItemForm />
+    <ContactInformationItemForm :employeeRequestForm="employeeRequestForm" />
 
     <!-- Información laboral -->
-    <LaboralInformationItemForm />
+    <LaboralInformationItemForm :employeeRequestForm="employeeRequestForm" />
 
     <!-- Seguridad Social -->
-    <SocialSecurityItemForm />
+    <SocialSecurityItemForm :employeeRequestForm="employeeRequestForm" />
 
     <!-- Bonificaciones -->
-    <BonificationItemForm />
+    <BonificationItemForm :employeeRequestForm="employeeRequestForm" />
 
-    <!-- Beneficios-->
-    <BenefitItemForm />
+    <!-- Beneficios -->
+    <BenefitItemForm
+      :employeeRequestForm="employeeRequestForm"
+      @update-benefits="updateBenefits"
+    />
 
     <el-form-item class="mt-6">
       <el-button
@@ -50,4 +53,8 @@ import BenefitItemForm from "@/presentation/layouts/EmployeeForm/benefitItemForm
 
 const { isLoading, ruleFormRef, rules, submitForm, employeeRequestForm } =
   useEmployeeViewModel();
+
+const updateBenefits = (newBenefits: any) => {
+  employeeRequestForm.value.benefits = newBenefits;
+};
 </script>

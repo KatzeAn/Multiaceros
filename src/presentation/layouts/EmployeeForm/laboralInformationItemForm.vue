@@ -98,13 +98,17 @@
 import { onMounted, ref } from "vue";
 import { useContracTypeStore } from "@/presentation/stores/contractType.store";
 
-import { useEmployeeViewModel } from "@/presentation/viewmodels/employeeViewModel";
 import { useDepartmentViewModel } from "@/presentation/viewmodels/departmentViewModel";
 import { useJobTitleViewModel } from "@/presentation/viewmodels/jobTitleViewModel";
 
 import type { ContractType } from "@/domain/Interfaces/Contract/contractType.interface";
 
-const { employeeRequestForm } = useEmployeeViewModel();
+import type { EmployeeRequest } from "@/domain/Interfaces/Employee/EmployeeRequest.interface";
+
+const props = defineProps<{
+  employeeRequestForm: EmployeeRequest;
+}>();
+
 const { divisionList } = useDepartmentViewModel();
 const { jobTitles } = useJobTitleViewModel();
 

@@ -9,7 +9,7 @@
     <el-col :span="10">
       <el-form-item label="Beneficios" prop="benefits">
         <el-select
-          v-model="employeeRequestForm.newBenefit.id"
+          v-model="newBenefit.id"
           placeholder="Seleccione el beneficio"
         >
           <el-option
@@ -27,16 +27,16 @@
         <el-input
           type="number"
           style="width: 100%"
-          v-model="employeeRequestForm.newBenefit.valueBenefits"
+          v-model="newBenefit.valueBenefits"
         />
       </el-form-item>
     </el-col>
 
     <el-col :span="4">
       <div class="h-full flex items-center justify-start m-1">
-        <el-button type="primary" class="w-full" @click="addBenefit"
-          >Agregar</el-button
-        >
+        <el-button type="primary" class="w-full" @click="addBenefit">
+          Agregar
+        </el-button>
       </div>
     </el-col>
   </el-row>
@@ -45,13 +45,12 @@
     <el-col :span="24">
       <ul>
         <li
-          v-for="(benefit, index) in employeeRequestForm.benefits"
+          v-for="(benefit, index) in reactiveEmployeeRequest.benefits"
           :key="index"
           class="flex justify-between items-center py-2"
         >
           <span>
-            {{ benefitList.find((b) => b.id === benefit.id)?.nameBenefit }}
-            -
+            {{ benefitList.find((b) => b.id === benefit.id)?.nameBenefit }} -
             {{ benefit.valueBenefit }}
           </span>
           <button
@@ -68,28 +67,38 @@
 </template>
 
 <script lang="ts" setup>
-import { useEmployeeViewModel } from "@/presentation/viewmodels/employeeViewModel";
+import { ref } from "vue";
 import { useBenefitViewModel } from "@/presentation/viewmodels/benefitViewModel";
-
-import { onMounted } from "vue";
 import { ElNotification } from "element-plus";
 
-const { employeeRequestForm } = useEmployeeViewModel();
+import type { EmployeeRequest } from "@/domain/Interfaces/Employee/EmployeeRequest.interface";
+
+const props = defineProps<{ employeeRequestForm: EmployeeRequest }>();
+
+const emit = defineEmits(["updateBenefits"]);
+
 const { benefitList } = useBenefitViewModel();
 
+const reactiveEmployeeRequest = ref<EmployeeRequest>({
+  ...props.employeeRequestForm,
+});
+
+const newBenefit = ref({
+  id: "",
+  valueBenefits: "",
+});
+
 const addBenefit = () => {
-  if (
-    employeeRequestForm.newBenefit.id &&
-    Number(employeeRequestForm.newBenefit.valueBenefits) > 0
-  ) {
-    employeeRequestForm.benefits.push({
-      id: Number(employeeRequestForm.newBenefit.id),
-      valueBenefit: Number(employeeRequestForm.newBenefit.valueBenefits),
+  if (newBenefit.value.id && Number(newBenefit.value.valueBenefits) > 0) {
+    reactiveEmployeeRequest.value.benefits.push({
+      id: Number(newBenefit.value.id),
+      valueBenefit: Number(newBenefit.value.valueBenefits),
     });
 
-    // Limpiar los valores después de agregar
-    employeeRequestForm.newBenefit.id = "";
-    employeeRequestForm.newBenefit.valueBenefits = "";
+    emit("updateBenefits", reactiveEmployeeRequest.value.benefits);
+
+    newBenefit.value.id = "";
+    newBenefit.value.valueBenefits = "";
   } else {
     ElNotification({
       title: "Advertencia",
@@ -100,10 +109,7 @@ const addBenefit = () => {
 };
 
 const removeBenefit = (index: number) => {
-  employeeRequestForm.benefits.splice(index, 1);
+  reactiveEmployeeRequest.value.benefits.splice(index, 1);
+  emit("updateBenefits", reactiveEmployeeRequest.value.benefits);
 };
-
-onMounted(() => {
-  removeBenefit(0);
-});
 </script>

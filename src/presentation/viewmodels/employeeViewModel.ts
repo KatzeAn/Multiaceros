@@ -19,7 +19,7 @@ export function useEmployeeViewModel() {
   const pageSize = ref(10);
   const ruleFormRef = ref<FormInstance>();
 
-  const employeeRequestForm = reactive<EmployeeRequest>({
+  const employeeRequestForm = ref<EmployeeRequest>({
     createdBy: "Admin",
     salary: undefined,
     divisionId: undefined,
@@ -266,7 +266,7 @@ export function useEmployeeViewModel() {
     ],
   };
 
-  const rules: FormRules<EmployeeRequest> = reactive({
+  const rules = reactive({
     salary: [
       { required: true, message: "El salario es obligatorio", trigger: "blur" },
       {
@@ -350,8 +350,7 @@ export function useEmployeeViewModel() {
     if (!formEl) return;
     try {
       await formEl.validate();
-
-      await employeeStore.createEmployeeRequest(employeeRequestForm);
+      await employeeStore.createEmployeeRequest(employeeRequestForm.value);
       await loadEmployee();
       resetForm(ruleFormRef.value);
       ElNotification({

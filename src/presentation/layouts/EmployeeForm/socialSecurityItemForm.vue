@@ -137,19 +137,21 @@
 </template>
 
 <script lang="ts" setup>
-
-import { useEmployeeViewModel } from "@/presentation/viewmodels/employeeViewModel";
 import { useArlViewModel } from "@/presentation/viewmodels/arlViewModel";
 import { useEpsViewModel } from "@/presentation/viewmodels/epsViewModel";
 import { usePensionFundViewModel } from "@/presentation/viewmodels/pensionFundViewModel";
 import { useSeveranceFundViewModel } from "@/presentation/viewmodels/severanceFundViewModel";
 import { useFamilyCompensationFundViewModel } from "@/presentation/viewmodels/familyCompensationFundViewModel";
 
-const { employeeRequestForm } = useEmployeeViewModel();
+import type { EmployeeRequest } from "@/domain/Interfaces/Employee/EmployeeRequest.interface";
+
+const props = defineProps<{
+  employeeRequestForm: EmployeeRequest;
+}>();
+
 const { arlList } = useArlViewModel();
 const { epsList } = useEpsViewModel();
 const { pensionFundList } = usePensionFundViewModel();
 const { severanceFundList } = useSeveranceFundViewModel();
 const { familyCompensationFundList } = useFamilyCompensationFundViewModel();
-
 </script>

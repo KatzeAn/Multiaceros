@@ -5,4 +5,6 @@ export interface Benefits {
   createdBy?: string;
   modifiedBy?: string;
   valueBenefit?: number;
+  activeBenefitDate?: string;
+  benefitEndDate?: string;
 }

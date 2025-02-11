@@ -30,6 +30,9 @@
 </template>
 
 <script lang="ts" setup>
-import { useEmployeeViewModel } from "@/presentation/viewmodels/employeeViewModel";
-const { employeeRequestForm } = useEmployeeViewModel();
+import type { EmployeeRequest } from '@/domain/Interfaces/Employee/EmployeeRequest.interface';
+
+const props = defineProps<{
+  employeeRequestForm: EmployeeRequest;
+}>();
 </script>
