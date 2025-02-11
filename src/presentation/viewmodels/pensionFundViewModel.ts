@@ -59,6 +59,7 @@ export function usePensionFundViewModel() {
     try {
       await formEl.validate();
 
+      pensionFundForm.createdBy = "Fe";
       await pensionFundStore.createPensionFundRequest(pensionFundForm);
       await loadPensionFund();
 
