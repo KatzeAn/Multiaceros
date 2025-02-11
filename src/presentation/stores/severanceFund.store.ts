@@ -1,31 +1,46 @@
+import { defineStore } from "pinia";
+import { ElNotification } from "element-plus";
+import { ref } from "vue";
 import { SeveranceFundModel } from "@/database/severanceFund/severanceFund.model";
 import type { SeveranceFund } from "@/domain/Interfaces/severanceFund/severanceFund.interface";
-import { defineStore } from "pinia";
 
 export const useSeveranceFundStore = defineStore("severanceFund", () => {
+  const isLoading = ref(false);
+
   const fetchSeveranceFund = async () => {
-    const result = {
-      loading: true,
-      severanceFundList: [] as SeveranceFund[],
-    };
-
     try {
-      result.loading = true;
+      isLoading.value = true;
       const severanceFundModel = new SeveranceFundModel();
-      const response: SeveranceFund[] =
-        await severanceFundModel.getSeveranceFund();
-      result.severanceFundList = response;
+      const data = await severanceFundModel.getSeveranceFund();
+      return Array.isArray(data) ? data : [];
     } catch (error) {
-      console.error("Error fetching severance fund:", error);
-      result.severanceFundList = [];
+      ElNotification({
+        title: "Error",
+        message: "No se pudieron cargar los fondos de cesantías",
+        type: "error",
+      });
+      return [];
     } finally {
-      result.loading = false;
+      isLoading.value = false;
     }
+  };
 
-    return result;
+  const createSeveranceFundRequest = async (data: SeveranceFund) => {
+    try {
+      isLoading.value = true;
+      const severanceFundModel = new SeveranceFundModel();
+      await severanceFundModel.createSeveranceFund(data);
+      await fetchSeveranceFund(); // Recargar lista después de crear
+    } catch (error) {
+      throw error;
+    } finally {
+      isLoading.value = false;
+    }
   };
 
   return {
+    isLoading,
     fetchSeveranceFund,
+    createSeveranceFundRequest,
   };
 });
