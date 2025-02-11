@@ -1,12 +1,12 @@
 <template>
   <el-card shadow="never">
     <template #header>
-      <h2 class="text-xl text-gray-700 font-semibold">Gestionar ARL</h2>
+      <h2 class="text-xl text-gray-700 font-semibold">Gestionar Fondos de pensión</h2>
     </template>
 
     <el-card shadow="never" class="mb-6">
       <el-form inline ref="ruleFormRef" :rules="rules" :model="pensionFundForm">
-        <el-form-item prop="nameArl" label="Nombre">
+        <el-form-item prop="pensionFundName" label="Nombre">
           <el-input
             v-model="pensionFundForm.pensionFundName"
             placeholder="Nombre"
@@ -19,7 +19,7 @@
             type="primary"
             @click="submitForm(ruleFormRef)"
           >
-            Crear ARL
+            Crear fondo
           </el-button>
         </el-form-item>
       </el-form>
