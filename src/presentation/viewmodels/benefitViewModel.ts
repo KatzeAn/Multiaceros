@@ -59,6 +59,7 @@ export function useBenefitViewModel() {
     try {
       await formEl.validate();
 
+      benefitForm.createdBy = "Fe";
       await benefitStore.createBenefitRequest(benefitForm);
       await loadBenefit();
 
