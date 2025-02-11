@@ -13,6 +13,9 @@
       <el-tab-pane label="Eps" name="gestionar-eps">
         <router-view v-if="activeName === 'gestionar-eps'" />
       </el-tab-pane>
+      <el-tab-pane label="Arl" name="gestionar-arl">
+        <router-view v-if="activeName === 'gestionar-arl'" />
+      </el-tab-pane>
     </el-tabs>
   </main>
 </template>

@@ -1,30 +1,46 @@
+import { defineStore } from "pinia";
+import { ElNotification } from "element-plus";
+import { ref } from "vue";
 import { ArlModel } from "@/database/arl/arl.model";
 import type { Arl } from "@/domain/Interfaces/Arl/Arl.interface";
-import { defineStore } from "pinia";
 
 export const useArlStore = defineStore("arl", () => {
+  const isLoading = ref(false);
+
   const fetchArl = async () => {
-    const result = {
-      loading: true,
-      arlList: [] as Arl[],
-    };
-
     try {
-      result.loading = true;
+      isLoading.value = true;
       const arlModel = new ArlModel();
-      const response: Arl[] = await arlModel.getAll();
-      result.arlList = response;
+      const data = await arlModel.getAll();
+      return Array.isArray(data) ? data : [];
     } catch (error) {
-      console.error("Error fetching arl:", error);
-      result.arlList = [];
+      ElNotification({
+        title: "Error",
+        message: "No se pudieron cargar las ARL",
+        type: "error",
+      });
+      return [];
     } finally {
-      result.loading = false;
+      isLoading.value = false;
     }
+  };
 
-    return result;
+  const createArlRequest = async (data: Arl) => {
+    try {
+      isLoading.value = true;
+      const arlModel = new ArlModel();
+      await arlModel.create(data.nameArl);
+      await fetchArl(); // Recargar lista después de crear
+    } catch (error) {
+      throw error;
+    } finally {
+      isLoading.value = false;
+    }
   };
 
   return {
+    isLoading,
     fetchArl,
+    createArlRequest,
   };
 });

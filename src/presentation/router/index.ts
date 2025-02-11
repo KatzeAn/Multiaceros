@@ -118,6 +118,11 @@ const router = createRouter({
           component: () =>
             import("../views/PortalRRHH/manageEmployee/manageEps.vue"),
         },
+        {
+          path: "gestionar-arl",
+          component: () =>
+            import("../views/PortalRRHH/manageEmployee/manageArl.vue"),
+        },
       ],
     },
 
