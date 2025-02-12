@@ -14,52 +14,52 @@
         <p class="text-gray-600 mt-2">Cargando nómina...</p>
       </div>
 
-      <div v-else-if="nomina" class="p-6 border border-gray-300 rounded-lg bg-gray-100 shadow-md">
+      <div v-else-if="nomina && nomina.length" class="p-6 border border-gray-300 rounded-lg bg-gray-100 shadow-md">
         <h3 class="text-xl font-semibold text-gray-800 mb-2">Información de Nómina</h3>
 
-        <div class="mb-4 p-4 bg-white shadow rounded-lg">
-          <h4 class="text-lg font-bold text-gray-700">{{ meses[nomina.month - 1] }} {{ nomina.year }}</h4>
+        <div v-for="empleado in nomina" :key="empleado.user" class="mb-6 p-4 bg-white shadow rounded-lg">
           <div class="grid grid-cols-2 gap-4 text-gray-700">
-            <p><strong>Empleado:</strong> {{ nomina.fullName }}</p>
-            <p><strong>Documento:</strong> {{ nomina.numberDocument }}</p>
-            <p><strong>Cargo:</strong> {{ nomina.charge }}</p>
-            <p><strong>Salario Básico:</strong> ${{ formatCurrency(nomina.basicSalary) }}</p>
-            <p><strong>Días Trabajados:</strong> {{ nomina.daysWorkedInTheMonth }}</p>
+            <p><strong>Empleado:</strong> {{ empleado.fullName }}</p>
+            <p><strong>Documento:</strong> {{ empleado.numberDocument }}</p>
+            <p><strong>Cargo:</strong> {{ empleado.charge }}</p>
+            <p><strong>Salario Básico:</strong> {{ formatCurrency(empleado.basicSalary) }}</p>
+            <p><strong>Días Trabajados:</strong> {{ empleado.daysWorkedInTheMonth }}</p>
           </div>
 
           <h3 class="text-lg font-semibold text-gray-800 mt-2">Ingresos</h3>
           <div class="grid grid-cols-2 gap-4 text-gray-700">
-            <p><strong>Salario:</strong> ${{ formatCurrency(nomina.salary) }}</p>
-            <p><strong>Auxilio de Transporte:</strong> ${{ formatCurrency(nomina.transportationAssistance) }}</p>
-            <p><strong>Beneficio:</strong> ${{ formatCurrency(nomina.valueBenefit) }}</p>
-            <p><strong>Bonificaciones:</strong> ${{ formatCurrency(nomina.totalBonificationMonth) }}</p>
+            <p><strong>Salario:</strong> {{ formatCurrency(empleado.salary) }}</p>
+            <p><strong>Auxilio de Transporte:</strong> {{ formatCurrency(empleado.transportationAssistance) }}</p>
+            <p><strong>Beneficio:</strong> {{ formatCurrency(empleado.valueBenefit) }}</p>
+            <p><strong>Bonificaciones:</strong> {{ formatCurrency(empleado.totalBonificationMonth) }}</p>
           </div>
 
           <h3 class="text-lg font-semibold text-gray-800 mt-2">Deducciones</h3>
           <div class="grid grid-cols-2 gap-4 text-gray-700">
-            <p><strong>Salud:</strong> ${{ formatCurrency(nomina.healthContribution) }}</p>
-            <p><strong>Pensión:</strong> ${{ formatCurrency(nomina.pensionContribution) }}</p>
-            <p><strong>Fondo de Solidaridad:</strong> ${{ formatCurrency(nomina.solidarityFundContribution) }}</p>
+            <p><strong>Salud:</strong> {{ formatCurrency(empleado.healthContribution) }}</p>
+            <p><strong>Pensión:</strong> {{ formatCurrency(empleado.pensionContribution) }}</p>
+            <p><strong>Fondo de Solidaridad:</strong> {{ formatCurrency(empleado.solidarityFundContribution) }}</p>
           </div>
 
           <h3 class="text-lg font-semibold text-gray-800 mt-2">Resumen</h3>
           <div class="grid grid-cols-2 gap-4 text-gray-700">
-            <p><strong>Total Ingresos:</strong> ${{ formatCurrency(nomina.totalIncome) }}</p>
-            <p><strong>Total Deducciones:</strong> ${{ formatCurrency(nomina.totalDeductions) }}</p>
+            <p><strong>Total Ingresos:</strong> {{ formatCurrency(empleado.totalIncome) }}</p>
+            <p><strong>Total Deducciones:</strong> {{ formatCurrency(empleado.totalDeductions) }}</p>
           </div>
 
           <p class="text-2xl font-bold py-4 text-center">
-            Salario Neto a Pagar: ${{ formatCurrency(nomina.netPayable) }}
+            Salario Neto a Pagar: {{ formatCurrency(empleado.netPayable) }}
           </p>
         </div>
       </div>
 
-      <div v-else class="text-center text-gray-600 py-4">
-        <p>No hay información disponible.</p>
+      <div v-else class="text-center py-4 text-gray-600">
+        <p>No hay información de nómina disponible.</p>
       </div>
     </el-card>
   </div>
 </template>
+
 
 <script setup>
 import { ref, onMounted } from "vue";
@@ -76,20 +76,21 @@ const fetchNomina = async () => {
   try {
     const response = await payrollStore.fetchPayrollPayments();
 
-    if (!response || !response.length) {
-      nomina.value = null;
+    if (!response || !Array.isArray(response)) {
+      nomina.value = [];
       return;
     }
 
     const userId = parseInt(userStore.getUserId);
-
-    nomina.value = response.find(n => n.userId === userId) || null;
+    nomina.value = response.filter(n => n.user === userId) || [];
   } catch (error) {
     console.error("Error al cargar la nómina:", error);
   } finally {
     loading.value = false;
   }
 };
+
+
 
 const descargarNomina = async () => {
   try {
