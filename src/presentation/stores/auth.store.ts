@@ -18,6 +18,18 @@ export const useAuthStore = defineStore('auth', () => {
     Object.assign(loginForm, loginFormInitialState);
   };
 
+  const resetPassword = async (email: string) => {
+    try {
+      const authService = new AuthModel();
+      const response = await authService.resetPassword(email);
+  
+      return response;  
+    } catch (error) {
+      errorMessage.value = error as string;
+      throw errorMessage;
+    }
+  };
+  
   const loginWithEmailAndPassword = async () => {
     try {
       const authService = new AuthModel();
@@ -73,5 +85,6 @@ export const useAuthStore = defineStore('auth', () => {
     loginWithEmailAndPassword,
     logout,
     resetLoginForm,
+    resetPassword, 
   };
 });

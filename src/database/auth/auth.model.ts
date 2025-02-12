@@ -9,9 +9,9 @@ import axios from "axios";
 
 export class AuthModel extends AuthRepository {
   resetPassword(email: string): Promise<string> {
-    return apiRequest("post", "/Auth/reset-password", { email });
+    return apiRequest("post", "/Auth/forgot-password", { UserEmail: email });
   }
-  private apiUrl = "https://localhost:51655/api/Auth/login";
+  private apiUrl = "https://localhost:53793/api/Auth/login";
 
   async signInWithEmailAndPassword(
     email: string,

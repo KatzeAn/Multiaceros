@@ -4,7 +4,7 @@ import { useCertifiedStore } from "../stores/certified.store";
 
 import Card from "../components/Card.vue";
 import BirthdayList from "../components/BirthdayList.vue";
-
+import mujer from '@/presentation/assets/mujer.jpg';
 const { getUsername, getUserId } = useUserStore();
 
 const certifiedStore = useCertifiedStore();
@@ -14,8 +14,11 @@ const { downloadCertificate, error } = certifiedStore;
 const download = async () => {
   isLoadingLetterCertfied.value = true;
   try {
-    await downloadCertificate(getUserId);
-  } catch (error) {
+    const userId = stringToNumber(getUserId);
+    
+    if (userId !== null) {  
+        await downloadCertificate(userId);
+    }  } catch (error) {
   } finally {
     isLoadingLetterCertfied.value = false;
   }
@@ -28,12 +31,7 @@ const download = async () => {
       <div class="flex flex-wrap flex-col sm:flex-row">
         <div class="flex flex-wrap gap-6 content-center w-full sm:w-1/2">
           <div>
-            <img
-              src="https://www.shareicon.net/data/512x512/2016/08/05/806962_user_512x512.png"
-              alt="Logo"
-              class="w-[5rem]"
-            />
-          </div>
+            <img :src="mujer" alt="Perfil" class="w-[5rem] h-[5rem] rounded-full object-cover" />          </div>
           <div class="self-center">
             <p class="text-xl font-bold">Hola, {{ getUsername }}</p>
             <p class="text-base">Hoy es {{ dayName }}, {{ date }}</p>
@@ -165,51 +163,49 @@ const download = async () => {
 
       <!-- Card para anuncios - comunidad -->
       <el-card class="col-[1/-1] md:col-span-3 lg:col-span-2" shadow="hover">
-        <template #header>
-          <div class="card-header">
-            <span class="font-bold text-[var(--secondary-color)]">
-              <el-icon>
-                <Comment />
-              </el-icon>
-              Anuncios - Comunidad
-            </span>
-          </div>
-        </template>
-        <div class="flex flex-row gap-6">
-          <el-button icon="Plus">Nueva Publicación</el-button>
-          <el-select disabled placeholder="Todas las publicaciones">
-            <el-option />
-          </el-select>
-        </div>
-        <el-divider />
+  <template #header>
+    <div class="card-header">
+      <span class="font-bold text-[var(--secondary-color)]">
+        <el-icon>
+          <Comment />
+        </el-icon>
+        Anuncios - Comunidad
+      </span>
+    </div>
+  </template>
 
-        <el-scrollbar height="360px">
-          <el-card shadow="hover">
-            <div class="flex flex-col gap-4">
-              <div
-                v-for="index in 10"
-                :key="index"
-                class="flex flex-row gap-4 items-start"
-              >
-                <el-avatar
-                  shape="square"
-                  :size="50"
-                  :src="state.squareUrl"
-                  class="flex-shrink-0"
-                />
-                <div class="flex-1">
-                  <p class="text-sm">
-                    Lorem ipsum dolor sit amet, consectetur adipiscing elit. Ut
-                    ullamcorper malesuada turpis sed imperdiet. Cras quis
-                    euismod augue. Pellentesque placerat vel mauris at auctor.
-                  </p>
-                  <el-divider style="margin: 10px 0" />
-                </div>
-              </div>
-            </div>
-          </el-card>
-        </el-scrollbar>
-      </el-card>
+  <div class="flex flex-row gap-6">
+    <el-button icon="Plus">Nueva Publicación</el-button>
+    <el-select disabled placeholder="Todas las publicaciones">
+      <el-option />
+    </el-select>
+  </div>
+
+  <el-divider />
+
+  <el-scrollbar height="360px">
+    <el-card shadow="hover">
+      <div class="flex flex-col gap-4">
+        <div
+          v-for="(image, index) in state.avatars"
+          :key="index"
+          class="flex flex-row gap-4 items-start"
+        >
+          <el-avatar shape="square" :size="50" :src="image" class="flex-shrink-0" />
+          <div class="flex-1">
+            <p class="text-sm">
+              Lorem ipsum dolor sit amet, consectetur adipiscing elit. Ut
+              ullamcorper malesuada turpis sed imperdiet. Cras quis euismod
+              augue. Pellentesque placerat vel mauris at auctor.
+            </p>
+            <el-divider style="margin: 10px 0" />
+          </div>
+        </div>
+      </div>
+    </el-card>
+  </el-scrollbar>
+</el-card>
+
 
       <!-- Card para equipo -->
       <el-card class="col-[1/-1]" style="min-height: 300px" shadow="hover">
@@ -317,13 +313,21 @@ const download = async () => {
 <script lang="ts">
 import { reactive, ref } from "vue";
 import MyTeam from "../components/MyTeam.vue";
+import { stringToNumber } from "../common/helper/stringTonumber.helper";
 
 const state = reactive({
-  circleUrl:
-    "https://cube.elemecdn.com/3/7c/3ea6beec64369c2642b92c6726f1epng.png",
-  squareUrl:
-    "https://cube.elemecdn.com/9/c2/f0ee8a3c7c9638a54940382568c9dpng.png",
-  sizeList: ["small", "", "large"] as const,
+  avatars: [
+    new URL('@/presentation/assets/mujer.jpg', import.meta.url).href,
+    new URL('@/presentation/assets/mujer2.jpg', import.meta.url).href,
+    new URL('@/presentation/assets/mujer3.jpg', import.meta.url).href,
+    new URL('@/presentation/assets/homnre2.jpg', import.meta.url).href,
+    new URL('@/presentation/assets/hombre3.jpg', import.meta.url).href,
+    new URL('@/presentation/assets/hombre2.jpg', import.meta.url).href,
+    new URL('@/presentation/assets/hombre.png', import.meta.url).href,
+    new URL('@/presentation/assets/mujer2.jpg', import.meta.url).href,
+    new URL('@/presentation/assets/mujer3.jpg', import.meta.url).href,
+    new URL('@/presentation/assets/homnre2.jpg', import.meta.url).href,
+  ],
 });
 
 const isLoadingLetterCertfied = ref(false);
