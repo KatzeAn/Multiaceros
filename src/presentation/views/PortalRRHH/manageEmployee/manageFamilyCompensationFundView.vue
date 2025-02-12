@@ -1,14 +1,21 @@
 <template>
   <el-card shadow="never">
     <template #header>
-      <h2 class="text-xl text-gray-700 font-semibold">Gestionar Cargos</h2>
+      <h2 class="text-xl text-gray-700 font-semibold">
+        Gestionar Fondos de compensación familiar
+      </h2>
     </template>
 
     <el-card shadow="never" class="mb-6">
-      <el-form inline ref="ruleFormRef" :rules="rules" :model="jobTitleForm">
-        <el-form-item prop="name" label="Nombre">
+      <el-form
+        inline
+        ref="ruleFormRef"
+        :rules="rules"
+        :model="familyCompensationFundForm"
+      >
+        <el-form-item prop="compensationFundName" label="Nombre">
           <el-input
-            v-model="jobTitleForm.name"
+            v-model="familyCompensationFundForm.compensationFundName"
             placeholder="Nombre"
             clearable
           />
@@ -19,7 +26,7 @@
             type="primary"
             @click="submitForm(ruleFormRef)"
           >
-            Crear cargo
+            Crear fondo
           </el-button>
         </el-form-item>
       </el-form>
@@ -27,7 +34,7 @@
 
     <el-table :data="paginatedData" border class="w-full min-h-96 mb-4" stripe>
       <el-table-column prop="id" label="ID" />
-      <el-table-column prop="name" label="Nombre" />
+      <el-table-column prop="compensationFundName" label="Nombre" />
       <el-table-column prop="isActive" label="Estado">
         <template #default="{ row }">
           <el-tag :type="row.isActive ? 'success' : 'danger'">
@@ -51,7 +58,7 @@
       :page-size="pageSize"
       :page-sizes="[10, 20, 50]"
       layout="total, sizes, prev, pager, next"
-      :total="jobTitles.length"
+      :total="familyCompensationFundList.length"
       @size-change="handleSizeChange"
       @current-change="handlePageChange"
     />
@@ -59,10 +66,10 @@
 </template>
 
 <script lang="ts" setup>
-import { useJobTitleViewModel } from "@/presentation/viewmodels/jobTitleViewModel";
+import { useFamilyCompensationFundViewModel } from "@/presentation/viewmodels/familyCompensationFundViewModel";
 
 const {
-  jobTitles,
+  familyCompensationFundList,
   isLoading,
   search,
   currentPage,
@@ -73,6 +80,6 @@ const {
   handlePageChange,
   handleSizeChange,
   submitForm,
-  jobTitleForm,
-} = useJobTitleViewModel();
+  familyCompensationFundForm,
+} = useFamilyCompensationFundViewModel();
 </script>

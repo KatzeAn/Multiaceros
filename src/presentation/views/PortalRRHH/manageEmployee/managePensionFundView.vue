@@ -1,24 +1,33 @@
 <template>
-  <!-- MODAL PARA AÑADIR EMPLEADO -->
-  <el-dialog v-model="isAddModalOpen" title="Añadir Nuevo Empleado" top="6vh">
-    <AddEmployee @close-form="closeForm" />
-  </el-dialog>
-
   <el-card shadow="never">
     <template #header>
-      <div class="flex flex-row justify-between">
-        <h2 class="text-xl text-gray-700 font-semibold">Gestionar Empleados</h2>
-        <el-button type="primary" icon="Plus" @click="openAddModal">
-          Agregar Empleado
-        </el-button>
-      </div>
+      <h2 class="text-xl text-gray-700 font-semibold">Gestionar Fondos de pensión</h2>
     </template>
 
+    <el-card shadow="never" class="mb-6">
+      <el-form inline ref="ruleFormRef" :rules="rules" :model="pensionFundForm">
+        <el-form-item prop="pensionFundName" label="Nombre">
+          <el-input
+            v-model="pensionFundForm.pensionFundName"
+            placeholder="Nombre"
+            clearable
+          />
+        </el-form-item>
+        <el-form-item>
+          <el-button
+            :loading="isLoading"
+            type="primary"
+            @click="submitForm(ruleFormRef)"
+          >
+            Crear fondo
+          </el-button>
+        </el-form-item>
+      </el-form>
+    </el-card>
+
     <el-table :data="paginatedData" border class="w-full min-h-96 mb-4" stripe>
-      <el-table-column label="Nombre" prop="fullName" />
-      <el-table-column label="Correo Electrónico" prop="email" />
-      <el-table-column label="Cargo" prop="jobTitle" />
-      <el-table-column label="Departamento" prop="division" />
+      <el-table-column prop="id" label="ID" />
+      <el-table-column prop="pensionFundName" label="Nombre" />
       <el-table-column prop="isActive" label="Estado">
         <template #default="{ row }">
           <el-tag :type="row.isActive ? 'success' : 'danger'">
@@ -42,7 +51,7 @@
       :page-size="pageSize"
       :page-sizes="[10, 20, 50]"
       layout="total, sizes, prev, pager, next"
-      :total="employeeList.length"
+      :total="pensionFundList.length"
       @size-change="handleSizeChange"
       @current-change="handlePageChange"
     />
@@ -50,28 +59,20 @@
 </template>
 
 <script lang="ts" setup>
-import { useEmployeeViewModel } from "@/presentation/viewmodels/employeeViewModel";
-import AddEmployee from "../components/AddEmployee.vue";
-import { ref } from "vue";
-
-const isAddModalOpen = ref(false);
-
-const openAddModal = () => {
-  isAddModalOpen.value = true;
-};
-
-const closeForm = () => {
-  isAddModalOpen.value = false;
-};
+import { usePensionFundViewModel } from "@/presentation/viewmodels/pensionFundViewModel";
 
 const {
-  employeeList,
+  pensionFundList,
   isLoading,
   search,
   currentPage,
   pageSize,
+  ruleFormRef,
+  rules,
   paginatedData,
   handlePageChange,
   handleSizeChange,
-} = useEmployeeViewModel();
+  submitForm,
+  pensionFundForm,
+} = usePensionFundViewModel();
 </script>

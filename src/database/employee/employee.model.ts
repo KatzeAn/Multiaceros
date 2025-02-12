@@ -57,7 +57,12 @@ export class EmployeeModel implements EmployeeRepository {
         activeBonusDate: employee.bonificationData.activeBonusDate ? new Date(employee.bonificationData.activeBonusDate) : undefined,
         bonusEndDate: employee.bonificationData.bonusEndDate ? new Date(employee.bonificationData.bonusEndDate) : undefined,
       },
-      Benefits: employee.benefits,
+      Benefits: employee.benefits.map(benefit => ({
+        benefitId: benefit.id,
+        valueBenefits: benefit.valueBenefit,
+        activeBenefitDate: benefit.activeBenefitDate,
+        benefitEndDate: benefit.benefitEndDate,
+      })),
       PensionFundInfoData: {
         pensionFundId: employee.pensionFundInfoData.id,
         pensionFundTypeId: employee.pensionFundInfoData.pensionFundTypeId,

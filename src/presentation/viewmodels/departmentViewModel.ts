@@ -1,20 +1,19 @@
 import { ref, computed, reactive, watch, onMounted } from "vue";
-import { useJobTitleStore } from "../stores/jobTitle.store";
+import { useDivisionStore } from "../stores/division.store";
 import { ElNotification, type FormInstance } from "element-plus";
-import type { JobTitle } from "@/domain/Interfaces/JobTitle/JobTitle.interface";
+import type { Division } from "@/domain/Interfaces/Division/division.interface";
 
-export function useJobTitleViewModel() {
-  const jobTitleStore = useJobTitleStore();
-  const jobTitles = ref<JobTitle[]>([]);
-  const isLoading = computed(() => jobTitleStore.isLoading);
+export function useDepartmentViewModel() {
+  const divisionStore = useDivisionStore();
+  const divisionList = ref<Division[]>([]);
+  const isLoading = computed(() => divisionStore.isLoading);
 
   const search = ref("");
   const currentPage = ref(1);
   const pageSize = ref(10);
   const ruleFormRef = ref<FormInstance>();
 
-  const jobTitleForm = reactive<JobTitle>({
-    id: 0,
+  const divisionForm = reactive<Division>({
     name: "",
   });
 
@@ -30,7 +29,7 @@ export function useJobTitleViewModel() {
   });
 
   const filterTableData = computed(() =>
-    jobTitles.value.filter(
+    divisionList.value.filter(
       (data) =>
         !search.value ||
         data.name.toLowerCase().includes(search.value.toLowerCase())
@@ -51,25 +50,25 @@ export function useJobTitleViewModel() {
     currentPage.value = 1;
   };
 
-  const loadJobTitles = async () => {
-    jobTitles.value = (await jobTitleStore.fetchJobTitles()) || [];
+  const loadDivision = async () => {
+    divisionList.value = (await divisionStore.fetchDivision()) || [];
   };
 
   const submitForm = async (formEl: FormInstance | undefined) => {
     if (!formEl) return;
     try {
       await formEl.validate();
-      jobTitleForm.createdBy = "Fe";
-      await jobTitleStore.createJobTitleRequest(jobTitleForm);
-      await loadJobTitles();
+
+      await divisionStore.createDivisionRequest(divisionForm);
+      await loadDivision();
 
       ElNotification({
         title: "Éxito",
-        message: "Cargo creado correctamente",
+        message: "EPS creado correctamente",
         type: "success",
       });
 
-      jobTitleForm.name = "";
+      divisionForm.name = "";
     } catch (error) {
       const errorMessage = error as string;
       ElNotification({
@@ -89,11 +88,11 @@ export function useJobTitleViewModel() {
   });
 
   onMounted(async () => {
-    await loadJobTitles();
-  })
+    await loadDivision();
+  });
 
   return {
-    jobTitles,
+    divisionList,
     isLoading,
     search,
     currentPage,
@@ -104,6 +103,6 @@ export function useJobTitleViewModel() {
     handlePageChange,
     handleSizeChange,
     submitForm,
-    jobTitleForm,
+    divisionForm,
   };
 }

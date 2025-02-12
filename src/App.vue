@@ -1,11 +1,10 @@
 <script setup lang="ts">
-import { RouterLink, RouterView } from 'vue-router';
-import NavBar from './presentation/components/NavBar.vue';
-import SideBar from './presentation/components/SideBar.vue';
-import { ref } from 'vue';
+import { RouterLink, RouterView } from "vue-router";
+import NavBar from "./presentation/components/NavBar.vue";
+import SideBar from "./presentation/components/SideBar.vue";
+import { ref } from "vue";
 
 const asideWidth = ref("258px"); // Valor inicial
-
 </script>
 
 <template>
@@ -14,7 +13,11 @@ const asideWidth = ref("258px"); // Valor inicial
       <SideBar @update:asideWidth="(width) => (asideWidth = width)" />
     </el-aside>
     <el-container>
-      <el-header height="60px" class="no-margin-padding" v-if="!$route.meta.hideNavbar">
+      <el-header
+        height="60px"
+        class="no-margin-padding"
+        v-if="!$route.meta.hideNavbar"
+      >
         <NavBar />
       </el-header>
       <el-main class="prueba no-margin-padding">
@@ -26,16 +29,16 @@ const asideWidth = ref("258px"); // Valor inicial
 </template>
 
 <style scoped>
-  .no-margin-padding {
-    margin: 0;
-    padding: 0;
-  }
-  .is-hidden {
-    background-color: black;
-  }
+.no-margin-padding {
+  margin: 0;
+  padding: 0;
+}
+.is-hidden {
+  background-color: black;
+}
 
-  .el-aside,
-  .el-main {
-    transition: all 0.3s ease;
-  }
+.el-aside,
+.el-main {
+  transition: all 0.3s ease;
+}
 </style>

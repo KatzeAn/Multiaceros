@@ -20,15 +20,19 @@
 
     <el-col :span="8">
       <el-form-item label="Email" prop="userData.userEmail">
-        <el-input type="email" v-model="employeeRequestForm.userData.userEmail" />
+        <el-input
+          type="email"
+          v-model="employeeRequestForm.userData.userEmail"
+        />
       </el-form-item>
     </el-col>
   </el-row>
 </template>
 
 <script lang="ts" setup>
+import type { EmployeeRequest } from '@/domain/Interfaces/Employee/EmployeeRequest.interface';
 
-import { useEmployeeStore } from "@/presentation/stores/employee.store";
-const { employeeRequestForm } = useEmployeeStore();
-
+const props = defineProps<{
+  employeeRequestForm: EmployeeRequest;
+}>();
 </script>

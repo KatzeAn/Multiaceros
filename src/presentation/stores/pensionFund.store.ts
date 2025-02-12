@@ -1,30 +1,46 @@
+import { defineStore } from "pinia";
+import { ElNotification } from "element-plus";
+import { ref } from "vue";
 import { PensionFundsModel } from "@/database/pensionFunds/pensionFunds.model";
 import type { PensionFunds } from "@/domain/Interfaces/PensionFunds/pensionFunds.interface";
-import { defineStore } from "pinia";
 
-export const usePensionFund = defineStore("pensionFund", () => {
-  const fetchPensionFunds = async () => {
-    const result = {
-      loading: true,
-      pensionFundList: [] as PensionFunds[],
-    };
+export const usePensionFundStore = defineStore("pensionFund", () => {
+  const isLoading = ref(false);
 
+  const fetchPensionFund = async () => {
     try {
-      result.loading = true;
+      isLoading.value = true;
       const pensionFundModel = new PensionFundsModel();
-      const response: PensionFunds[] = await pensionFundModel.getPensionFunds();
-      result.pensionFundList = response;
+      const data = await pensionFundModel.getPensionFunds();
+      return Array.isArray(data) ? data : [];
     } catch (error) {
-      console.error("Error fetching pension funds:", error);
-      result.pensionFundList = [];
+      ElNotification({
+        title: "Error",
+        message: "No se pudieron cargar los fondos de pensión",
+        type: "error",
+      });
+      return [];
     } finally {
-      result.loading = false;
+      isLoading.value = false;
     }
+  };
 
-    return result;
+  const createPensionFundRequest = async (data: PensionFunds) => {
+    try {
+      isLoading.value = true;
+      const pensionFundModel = new PensionFundsModel();
+      await pensionFundModel.createPensionFund(data);
+      await fetchPensionFund(); // Recargar lista después de crear
+    } catch (error) {
+      throw error;
+    } finally {
+      isLoading.value = false;
+    }
   };
 
   return {
-    fetchPensionFunds,
+    isLoading,
+    fetchPensionFund,
+    createPensionFundRequest,
   };
 });

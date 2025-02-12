@@ -29,7 +29,7 @@
 
     <div class="px-6 pt-4"><hr class="border-gray-700" /></div>
 
-    <el-scrollbar height="350px">
+    <el-scrollbar height="700px">
       <div class="px-6 pt-4">
         <ul class="flex flex-col space-y-2">
           <!-- Inicio -->
@@ -328,7 +328,7 @@ const recursosHumanosSubItems = ref([
   },
   {
     title: "Gestión de vacantes y reclutamiento",
-    route: "/portal-rrhh/gestionar-vacantes",
+    route: "/portal-rrhh/aplicaciones",
   },
   {
     title: "Control de asistencia",

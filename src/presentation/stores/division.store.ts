@@ -1,91 +1,46 @@
 import { defineStore } from "pinia";
-import { useUserStore } from "./user.store";
-import { DivisionModel } from "@/database/division/division.model";
-import type { Teammate } from "@/domain/Interfaces/Division/teammate.interface";
-import { stringToNumber } from "../common/helper/stringTonumber.helper";
-import type { Division } from "@/domain/Interfaces/Division/division.interface";
-import { reactive } from "vue";
 import { ElNotification } from "element-plus";
+import { ref } from "vue";
+import { DivisionModel } from "@/database/division/division.model";
+import type { Division } from "@/domain/Interfaces/Division/division.interface";
 
 export const useDivisionStore = defineStore("division", () => {
-  const divisionForm = reactive<Partial<Division>>({
-    name: "",
-  });
+  const isLoading = ref(false);
 
-  const createDivisionRequest = async () => {
+  const fetchDivision = async () => {
     try {
+      isLoading.value = true;
       const divisionModel = new DivisionModel();
-      divisionModel.createDivision(
-        divisionForm.name ? divisionForm.name : "",
-        "FE"
-      );
-
-      ElNotification({
-        title: "Success",
-        message: "The data was saved successfully",
-        type: "success",
-      });
+      const data = await divisionModel.getDivisions();
+      return Array.isArray(data) ? data : [];
     } catch (error) {
       ElNotification({
         title: "Error",
-        message: "An error occurred while saving the form",
+        message: "No se pudieron cargar los departamentos",
         type: "error",
       });
+      return [];
+    } finally {
+      isLoading.value = false;
     }
   };
 
-  const fetchDivisions = async () => {
-    const result = {
-      loading: true,
-      divisionList: [] as Division[],
-    };
-
+  const createDivisionRequest = async (data: Division) => {
     try {
-      result.loading = true;
+      isLoading.value = true;
       const divisionModel = new DivisionModel();
-      const response: Division[] = await divisionModel.getDivisions();
-      result.divisionList = response;
+      await divisionModel.createDivision(data.name, data.createdBy ?? "");
+      await fetchDivision(); // Recargar lista después de crear
     } catch (error) {
-      console.error("Error fetching division:", error);
-      result.divisionList = [];
+      throw error;
     } finally {
-      result.loading = false;
+      isLoading.value = false;
     }
-
-    return result;
-  };
-
-  const fetchMyTeammate = async () => {
-    const userId = stringToNumber(useUserStore().getUserId);
-
-    if (userId === null) {
-      throw new Error("An unexpected error");
-    }
-
-    const result = {
-      loading: true,
-      teammateList: [] as Teammate[],
-    };
-
-    try {
-      result.loading = true;
-      const divisionService = new DivisionModel();
-      const response: Teammate[] = await divisionService.getTeammates(userId);
-      result.teammateList = response;
-    } catch (error) {
-      console.error("Error fetching teammates:", error);
-      result.teammateList = [];
-    } finally {
-      result.loading = false;
-    }
-
-    return result;
   };
 
   return {
+    isLoading,
+    fetchDivision,
     createDivisionRequest,
-    fetchMyTeammate,
-    fetchDivisions,
-    divisionForm,
   };
 });

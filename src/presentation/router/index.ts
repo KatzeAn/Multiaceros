@@ -11,6 +11,12 @@ const router = createRouter({
       meta: { hideNavbar: true },
     },
     {
+      path: "/resetpassword",
+      name: "resetpassword",
+      component: () => import("../views/ResetPasswordView.vue"),
+      meta: { hideNavbar: true },
+    },
+    {
       path: "/applications",
       name: "Applications",
       component: () => import("../views/Applications.vue"),
@@ -95,24 +101,83 @@ const router = createRouter({
 
     {
       path: "/portal-rrhh/empleados",
-      name: "manageEmployee",
-      component: () => import("../views/manageEmployee.vue"),
+      component: () => import("../views/PortalRRHH/manageEmployee.vue"),
       children: [
         { path: "", redirect: "/portal-rrhh/empleados/gestionar-empleados" },
         {
           path: "gestionar-empleados",
-          component: () => import("../views/PortalRRHH/manageEmployee/manageEmployeesView.vue"),
+          name: "manageEmployee",
+          component: () =>
+            import(
+              "../views/PortalRRHH/manageEmployee/manageEmployeesView.vue"
+            ),
         },
         {
           path: "gestionar-departamentos",
           component: () =>
-            import("../views/PortalRRHH/manageEmployee/manageDepartments.vue"),
+            import(
+              "../views/PortalRRHH/manageEmployee/manageDepartmentsView.vue"
+            ),
         },
         {
           path: "gestionar-cargos",
           component: () =>
             import(
               "../views/PortalRRHH/manageEmployee/manageJobTitlesView.vue"
+            ),
+        },
+        {
+          path: "gestionar-eps",
+          component: () =>
+            import("../views/PortalRRHH/manageEmployee/manageEpsView.vue"),
+        },
+        {
+          path: "gestionar-arl",
+          component: () =>
+            import("../views/PortalRRHH/manageEmployee/manageArlView.vue"),
+        },
+        {
+          path: "gestionar-fondos-pension",
+          component: () =>
+            import(
+              "../views/PortalRRHH/manageEmployee/managePensionFundView.vue"
+            ),
+        },
+        {
+          path: "gestionar-fondos-compensacion",
+          component: () =>
+            import(
+              "../views/PortalRRHH/manageEmployee/manageFamilyCompensationFundView.vue"
+            ),
+        },
+        {
+          path: "gestionar-fondos-cesantias",
+          component: () =>
+            import(
+              "../views/PortalRRHH/manageEmployee/manageSeveranceFundView.vue"
+            ),
+        },
+        {
+          path: "gestionar-beneficios",
+          component: () =>
+            import(
+              "../views/PortalRRHH/manageEmployee/manageBenefitView.vue"
+            ),
+        },
+      ],
+    },
+
+    {
+      path: "/portal-rrhh/aplicaciones",
+      component: () => import("../views/PortalRRHH/manageApplications.view.vue"),
+      children: [
+        { path: "", redirect: "/portal-rrhh/aplicaciones/gestionar-candidatos" },
+        {
+          path: "gestionar-candidatos",
+          name: "manageApplicants",
+          component: () =>
+            import(
+              "../views/PortalRRHH/manageApplications/manageApplicants.view.vue"
             ),
         },
       ],

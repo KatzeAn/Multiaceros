@@ -74,20 +74,20 @@
 </template>
 
 <script lang="ts" setup>
-import { useEmployeeStore } from "@/presentation/stores/employee.store";
+import { ref, onMounted } from "vue";
 import { useBloodTypeStore } from "@/presentation/stores/bloodType.store";
-
 import type { UploadUserFile } from "element-plus";
-import { onMounted, ref } from "vue";
 import type { BloodType } from "@/domain/Interfaces/BloodType/bloodType.interface";
+import type { EmployeeRequest } from "@/domain/Interfaces/Employee/EmployeeRequest.interface";
 
-const { employeeRequestForm } = useEmployeeStore();
+const props = defineProps<{
+  employeeRequestForm: EmployeeRequest;
+}>();
+
 const { fetchBloodType } = useBloodTypeStore();
-
 const fileList = ref<UploadUserFile[]>([]);
-
-const loading = ref(false);
 const bloodTypeOptions = ref<BloodType[]>([]);
+const loading = ref(false);
 
 const loadData = async () => {
   const { loading: isLoading, bloodTypeList: bloodTypeList } =

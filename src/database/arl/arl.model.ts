@@ -7,12 +7,12 @@ export class ArlModel extends ArlRepository {
     return apiRequest<Arl[]>("get", "/Arl");
   }
   create(nameArl: string): Promise<Arl> {
-    return apiRequest<Arl>("post", "/Arl/CreateArl", { nameArl });
+    return apiRequest<Arl>("post", "/Arl", { nameArl });
   }
   update(arl: Arl): Promise<Arl> {
-    return apiRequest<Arl>("put", "/Arl/UpdateArl", arl);
+    return apiRequest<Arl>("put", "/Arl", arl);
   }
   delete(arlID: number): Promise<Arl> {
-    return apiRequest<Arl>("patch", `/Arl/${arlID}/ArlDelete`);
+    return apiRequest<Arl>("delete", `/Arl/${arlID}`);
   }
 }
