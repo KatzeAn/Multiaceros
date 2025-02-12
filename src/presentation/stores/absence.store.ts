@@ -7,12 +7,12 @@ import { AbsenceModel } from "@/database/absence/absences.model";
 
 export const useAbsenceStore = defineStore("absence", () => {
   const absenceRequestForm = reactive<AbsenceRequest>({
-    from: "",
-    to: "",
-    type: "",
-    comment: "",
-    evidencePath: "c://file.pdf",
-    requestedById: "",
+    StartDate: "",
+    EndDate: "",
+    AbsenceTypeId: "",
+    Comment: "",
+    EvidenceFilePath: "c://file.pdf",
+    UserId: "",
   });
 
   const fetchAbsences = async (type: keyof AbsenceModel) => {
@@ -75,11 +75,11 @@ export const useAbsenceStore = defineStore("absence", () => {
       const userId = useUserStore().getUserId;
 
       await absenceService.createAbsenceRequest(
-        absenceRequestForm.from,
-        absenceRequestForm.to,
-        absenceRequestForm.type,
-        absenceRequestForm.evidencePath,
-        absenceRequestForm.comment,
+        absenceRequestForm.StartDate,
+        absenceRequestForm.EndDate,
+        absenceRequestForm.AbsenceTypeId,
+        absenceRequestForm.EvidenceFilePath,
+        absenceRequestForm.Comment,
         userId
       );
 
@@ -105,11 +105,11 @@ export const useAbsenceStore = defineStore("absence", () => {
   
       await absenceService.updateAbsenceRequest(
         absenceId,
-        absenceRequestForm.from,
-        absenceRequestForm.to,
-        absenceRequestForm.type,
-        absenceRequestForm.evidencePath,
-        absenceRequestForm.comment,
+        absenceRequestForm.StartDate,
+        absenceRequestForm.EndDate,
+        absenceRequestForm.AbsenceTypeId,
+        absenceRequestForm.EvidenceFilePath,
+        absenceRequestForm.Comment,
         userId
       );
   

@@ -28,25 +28,32 @@ export class AbsenceModel extends AbsenceRepository {
   
 
   createAbsenceRequest(
-    from: string,
-    to: string,
-    type: string,
-    evidencePath: string,
-    comment: string,
-    requestedById: string
+    StartDate: string,
+    EndDate: string,
+    AbsenceTypeId: string,
+    EvidenceFilePath: string,
+    Comment: string,
+    UserId: string
   ): Promise<AbsenceRequest> {
     return apiRequest<AbsenceRequest>("post", "/Absence/CreateAbsence", {
-      absenceRequest: {
-        startDate: new Date(from),
-        endDate: new Date(to),
-        absenceType: type,
-        comment,
-        evidenceFilePath: evidencePath,
-        requestedById,
-        createdBy: requestedById,
+      absenceRequest: { 
+        StartDate: new Date(StartDate).toISOString(), 
+        EndDate: new Date(EndDate).toISOString(),
+        AbsenceTypeId, 
+        Comment,
+        EvidenceFilePath,
+        UserId,
+        createdBy: String(UserId),  
       },
     });
   }
+  
+    
+
+  
+
+
+
 
   updateAbsenceRequest(
     absenceId: number,

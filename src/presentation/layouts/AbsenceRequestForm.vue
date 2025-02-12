@@ -7,28 +7,28 @@
 
           <el-row :gutter="12">
               <el-col :span="12">
-                  <el-form-item label="Desde" prop="from">
-                      <el-date-picker v-model="absenceRequestForm.from" type="date" aria-label="Selecciona una fecha"
+                  <el-form-item label="Desde" prop="StartDate">
+                      <el-date-picker v-model="absenceRequestForm.StartDate" type="date" aria-label="Selecciona una fecha"
                       placeholder="Selecciona una fecha" style="width: 100%"  :disabled-date="disabledDate"/>
                   </el-form-item>
               </el-col>
               <el-col :span="12">
-                  <el-form-item label="Hasta" prop="to">
-                      <el-date-picker v-model="absenceRequestForm.to" type="date" aria-label="Selecciona una fecha"
+                  <el-form-item label="Hasta" prop="EndDate">
+                      <el-date-picker v-model="absenceRequestForm.EndDate" type="date" aria-label="Selecciona una fecha"
                           placeholder="Selecciona una fecha" style="width: 100%" :disabled-date="disabledDate"/>
                   </el-form-item>
               </el-col>
           </el-row>
 
-          <el-form-item label="Tipo de ausencia" prop="type">
-              <el-select v-model="absenceRequestForm.type" placeholder="Tipo de ausencia">
-                  <el-option label="Vacaciones" value="1" />
+          <el-form-item label="Tipo de ausencia" prop="AbsenceTypeId">
+              <el-select v-model="absenceRequestForm.AbsenceTypeId" placeholder="Tipo de ausencia">
+                  <el-option label="Vacaciones" value="5" />
                   <el-option label="Cita medica" value="2" />
               </el-select>
           </el-form-item>
 
-          <el-form-item label="Comentario" prop="comment">
-              <el-input v-model="absenceRequestForm.comment" type="textarea" />
+          <el-form-item label="Comentario" prop="Comment">
+              <el-input v-model="absenceRequestForm.Comment" type="textarea" />
           </el-form-item>
 
           <el-form-item>
@@ -72,7 +72,7 @@ const { absenceRequestForm, createAbsenceRequest } = useAbsenceStore();
 const isLoading = ref(false);
 
 const rules = reactive<FormRules<AbsenceRequest>>({
-  from: [
+  StartDate: [
     {
       type: 'date',
       required: true,
@@ -80,7 +80,7 @@ const rules = reactive<FormRules<AbsenceRequest>>({
       trigger: 'change',
     },
   ],
-  to: [
+  EndDate: [
     {
       type: 'date',
       required: true,
@@ -88,14 +88,14 @@ const rules = reactive<FormRules<AbsenceRequest>>({
       trigger: 'change',
     },
   ],
-  type: [
+  AbsenceTypeId: [
     {
       required: true,
       message: 'Por favor selecciona un tipo de ausencia',
       trigger: 'change',
     },
   ],
-  comment: [
+  Comment: [
     { required: true, message: 'Por favor ingrese un comentario', trigger: 'blur' },
   ],
 })
