@@ -365,6 +365,7 @@ export function useEmployeeViewModel() {
         message: "Error al crear el empleado",
         type: "error",
       });
+      return false;
     }
   };
 

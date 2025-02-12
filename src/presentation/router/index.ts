@@ -11,6 +11,12 @@ const router = createRouter({
       meta: { hideNavbar: true },
     },
     {
+      path: "/resetpassword",
+      name: "resetpassword",
+      component: () => import("../views/ResetPasswordView.vue"),
+      meta: { hideNavbar: true },
+    },
+    {
       path: "/applications",
       name: "Applications",
       component: () => import("../views/Applications.vue"),
