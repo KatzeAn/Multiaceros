@@ -23,8 +23,28 @@ export const usePayrollPaymentStore = defineStore("payrollPayment", () => {
     return result;
   };
 
+  const fetchPayrollSlip = async (userId: number) => {
+    const result = {
+      loading: true,
+      payrollSlip: null as Blob | null,
+    };
+
+    try {
+      result.loading = true;
+      const payrollService = new PayrollPaymentModel();
+      result.payrollSlip = await payrollService.getPayrollSlip(userId);
+    } catch (error) {
+      console.error("Error fetching payroll slip:", error);
+      result.payrollSlip = null;
+    } finally {
+      result.loading = false;
+    }
+
+    return result;
+  };
+
   return {
     fetchPayrollPayments,
-    
+    fetchPayrollSlip,
   };
 });
