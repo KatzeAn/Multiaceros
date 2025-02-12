@@ -79,55 +79,178 @@
        </div>
      </el-col>
    </el-row> 
-  <el-table :data="tableData" class="custom-table">
-    <el-table-column prop="fullName" label="Nombre" width="150" />
-    <el-table-column prop="startDate" label="Desde" width="180" />
-    <el-table-column prop="endDate" label="Hasta" width="180" />
-    <el-table-column label="Total de Días" width="120">
-      <template #default="scope">
-        <span>{{ getTotalDays(scope.row.startDate, scope.row.endDate) }}</span>
-      </template>
-    </el-table-column>
-    <el-table-column label="Tipo" width="150">
-      <template #default="scope">
-        <span>{{ getAbsenceType(scope.row.absenceType) }}</span>
-      </template>
-    </el-table-column>
-    <el-table-column prop="comment" label="Comentario" width="200" />
-    <el-table-column prop="status" label="Estado" width="150">
-      <template #default="scope">
-        <el-tag :type="getStatusType(scope.row.status)">{{ getStatusName(scope.row.status) }}</el-tag>  
-        </template>
-    </el-table-column>
-    <el-table-column label="Acciones" width="200">
-      <template #default="scope">
-        <div class="action-buttons">
-          <el-button class="approve-btn" @click="approveAbsence(scope.row.id)">
-            Aprobar
-          </el-button>
-          <el-button class="reject-btn" @click="rejectAbsence(scope.row.id)">
-            Rechazar
-          </el-button>
-        </div>
-      </template>
-    </el-table-column>
-  </el-table>
+   <el-tabs v-model="activeTab">
+    <el-tab-pane label="Pendientes" name="pending">
+      <el-table :data="pendingAbsences" class="custom-table">
+        <el-table-column prop="employeeFullName" label="Nombre" width="150" />
+        <el-table-column prop="startDate" label="Desde" width="180">
+            <template #default="{ row }">
+              {{ formatDate(row.startDate) }}
+            </template>
+          </el-table-column>
+
+          <el-table-column prop="endDate" label="Hasta" width="180">
+            <template #default="{ row }">
+              {{ formatDate(row.endDate) }}
+            </template>
+          </el-table-column>
+        <el-table-column label="Total de Días" width="120">
+          <template #default="scope">
+            <span>{{ getTotalDays(scope.row.startDate, scope.row.endDate) }}</span>
+          </template>
+        </el-table-column>
+        <el-table-column label="Tipo" width="150">
+          <template #default="scope">
+            <span>{{ getAbsenceType(scope.row.absenceTypeId) }}</span>
+          </template>
+        </el-table-column>
+        <el-table-column prop="comment" label="Comentario" width="200" />
+        <el-table-column prop="status" label="Estado" width="150">
+          <template #default="scope">
+            <el-tag :type="getStatusType(scope.row.status)">
+              {{ getStatusName(scope.row.status) }}
+            </el-tag>
+          </template>
+        </el-table-column>
+        <el-table-column label="Acciones" width="200">
+          <template #default="scope">
+            <div class="action-buttons">
+              <el-button class="approve-btn" @click="approveAbsence(scope.row.id)">Aprobar</el-button>
+              <el-button class="reject-btn" @click="rejectAbsence(scope.row.id)">Rechazar</el-button>
+            </div>
+          </template>
+        </el-table-column>
+      </el-table>
+    </el-tab-pane>
+
+    <el-tab-pane label="Aprobadas" name="approved">
+      <el-table :data="approvedAbsences" class="custom-table">
+        <el-table-column prop="employeeFullName" label="Nombre" width="150" />
+        <el-table-column prop="startDate" label="Desde" width="180">
+                <template #default="{ row }">
+                  {{ formatDate(row.startDate) }}
+                </template>
+              </el-table-column>
+
+              <el-table-column prop="endDate" label="Hasta" width="180">
+                <template #default="{ row }">
+                  {{ formatDate(row.endDate) }}
+                </template>
+              </el-table-column>
+        <el-table-column label="Total de Días" width="120">
+          <template #default="scope">
+            <span>{{ getTotalDays(scope.row.startDate, scope.row.endDate) }}</span>
+          </template>
+        </el-table-column>
+        <el-table-column label="Tipo" width="150">
+          <template #default="scope">
+            <span>{{ getAbsenceType(scope.row.absenceTypeId) }}</span>
+          </template>
+        </el-table-column>
+        <el-table-column prop="comment" label="Comentario" width="200" />
+        <el-table-column prop="status" label="Estado" width="150">
+          <template #default="scope">
+            <el-tag :type="getStatusType(scope.row.status)">
+              {{ getStatusName(scope.row.status) }}
+            </el-tag>
+          </template>
+        </el-table-column>
+      </el-table>
+    </el-tab-pane>
+
+    <el-tab-pane label="Rechazadas" name="rejected">
+      <el-table :data="rejectedAbsences" class="custom-table">
+        <el-table-column prop="employeeFullName" label="Nombre" width="150" />
+        <el-table-column prop="startDate" label="Desde" width="180">
+        <template #default="{ row }">
+                  {{ formatDate(row.startDate) }}
+              </template>
+          </el-table-column>
+              <el-table-column prop="endDate" label="Hasta" width="180">
+                <template #default="{ row }">
+                  {{ formatDate(row.endDate) }}
+                </template>
+              </el-table-column>
+        <el-table-column label="Total de Días" width="120">
+          <template #default="scope">
+            <span>{{ getTotalDays(scope.row.startDate, scope.row.endDate) }}</span>
+          </template>
+        </el-table-column>
+        <el-table-column label="Tipo" width="150">
+          <template #default="scope">
+            <span>{{ getAbsenceType(scope.row.absenceTypeId) }}</span>
+          </template>
+        </el-table-column>
+        <el-table-column prop="comment" label="Comentario" width="200" />
+        <el-table-column prop="status" label="Estado" width="150">
+          <template #default="scope">
+            <el-tag :type="getStatusType(scope.row.status)">
+              {{ getStatusName(scope.row.status) }}
+            </el-tag>
+          </template>
+        </el-table-column>
+      </el-table>
+    </el-tab-pane>
+
+    <el-tab-pane label="Historial" name="all">
+      <el-table :data="allAbsences" class="custom-table">
+        <el-table-column prop="employeeFullName" label="Nombre" width="150" />
+        <el-table-column prop="startDate" label="Desde" width="180">
+              <template #default="{ row }">
+                {{ formatDate(row.startDate) }}
+              </template>
+            </el-table-column>
+
+            <el-table-column prop="endDate" label="Hasta" width="180">
+              <template #default="{ row }">
+                {{ formatDate(row.endDate) }}
+              </template>
+            </el-table-column>
+        <el-table-column label="Total de Días" width="120">
+          <template #default="scope">
+            <span>{{ getTotalDays(scope.row.startDate, scope.row.endDate) }}</span>
+          </template>
+        </el-table-column>
+        <el-table-column label="Tipo" width="150">
+          <template #default="scope">
+            <span>{{ getAbsenceType(scope.row.absenceTypeId) }}</span>
+          </template>
+        </el-table-column>
+        <el-table-column prop="comment" label="Comentario" width="200" />
+        <el-table-column prop="status" label="Estado" width="150">
+          <template #default="scope">
+            <el-tag :type="getStatusType(scope.row.status)">
+              {{ getStatusName(scope.row.status) }}
+            </el-tag>
+          </template>
+        </el-table-column>
+      </el-table>
+    </el-tab-pane>
+  </el-tabs>
 </template>
 
 <script lang="ts" setup>
-import { ref, onMounted } from 'vue';
+import { ref, onMounted, watch } from 'vue';
 import { useAbsenceStore } from '@/presentation/stores/absence.store';
 
+const activeTab = ref('pending'); 
+const allAbsences = ref<Absence[]>([]); 
 const tableData = ref<Absence[]>([]);
+const pendingAbsences = ref<Absence[]>([]);
+const approvedAbsences = ref<Absence[]>([]);
+const rejectedAbsences = ref<Absence[]>([]);
+
+const absenceStore = useAbsenceStore();
 
 const getStatusType = (status: number) => {
   switch (status) {
-    case 1: return 'success'; 
-    case 2: return 'warning';
-    case 3: return 'danger';
+    case 1: return 'warning'; 
+    case 2: return 'success'; 
+    case 3: return 'danger'; 
     default: return '';
   }
 };
+
 const getStatusName = (status: number) => {
   switch (status) {
     case 1: return 'Pendiente';
@@ -136,50 +259,74 @@ const getStatusName = (status: number) => {
     default: return 'Desconocido';
   }
 };
+
 const getAbsenceType = (type: string | number) => {
-  const typeNumber = Number(type); 
+  const typeNumber = Number(type);
   switch (typeNumber) {
-    case 1: return 'Vacaciones';
-    case 2: return 'Cita Medica';
+    case 4: return 'Vacaciones';
+    case 5: return 'Cita Médica';
+    case 6: return 'Vacaciones';
+    case 7: return 'Cita Médica';
     default: return 'Desconocido';
   }
 };
 
-const absenceStore = useAbsenceStore();
-
 const fetchAbsences = async () => {
   const result = await absenceStore.fetchPendingAbsences();
-  console.log(result.absenceList);
-  tableData.value = result.absenceList;
+  pendingAbsences.value = result.absenceList; 
+};
+
+const fetchAllAbsences = async () => {
+  const result = await absenceStore.fetchAllAbsences();
+  allAbsences.value = result.absenceList;
 };
 
 onMounted(() => {
   fetchAbsences();
 });
 
-const approveAbsence = (absenceId: number) => {
-  absenceStore.approveAbsence(absenceId);
+watch(activeTab, async (newTab) => {
+  if (newTab === 'approved') {
+    const result = await absenceStore.fetchApprovedAbsences(); 
+    approvedAbsences.value = result.absenceList;
+  } else if (newTab === 'rejected') {
+    const result = await absenceStore.fetchRejectedAbsences(); 
+    rejectedAbsences.value = result.absenceList;
+  } else if (newTab === 'all') {
+    await fetchAllAbsences();
+  } else if (newTab === 'pending') {
+    await fetchAbsences();
+  }
+});
+
+
+const approveAbsence = async (absenceId: number) => {
+  await absenceStore.approveAbsence(absenceId);
+  fetchAbsences(); 
 };
 
-const rejectAbsence = (absenceId: number) => {
-  absenceStore.rejectAbsence(absenceId);
+const rejectAbsence = async (absenceId: number) => {
+  await absenceStore.rejectAbsence(absenceId);
+  fetchAbsences(); 
 };
 
 const formatDate = (dateString: string) => {
+  if (!dateString) return "Fecha no disponible";
   const date = new Date(dateString);
-  return date.toLocaleDateString();
+  return date.toLocaleDateString("es-CO", { year: "numeric", month: "2-digit", day: "2-digit" });
 };
 
 const getTotalDays = (startDate: string, endDate: string) => {
   const start = new Date(startDate);
   const end = new Date(endDate);
-  const difference = Math.floor((end.getTime() - start.getTime()) / (1000 * 3600 * 24));
-  return difference + 1; 
+  return Math.floor((end.getTime() - start.getTime()) / (1000 * 3600 * 24)) + 1;
 };
+  
 </script>
 
 
   <style scoped>
+  
   .el-statistic {
     --el-statistic-content-font-size: 28px;
   }

@@ -7,12 +7,12 @@ import { AbsenceModel } from "@/database/absence/absences.model";
 
 export const useAbsenceStore = defineStore("absence", () => {
   const absenceRequestForm = reactive<AbsenceRequest>({
-    from: "",
-    to: "",
-    type: "",
-    comment: "",
-    evidencePath: "c://file.pdf",
-    requestedById: "",
+    StartDate: "",
+    EndDate: "",
+    AbsenceTypeId: "",
+    Comment: "",
+    EvidenceFilePath: "c://file.pdf",
+    UserId: "",
   });
 
   const fetchAbsences = async (type: keyof AbsenceModel) => {
@@ -44,6 +44,11 @@ export const useAbsenceStore = defineStore("absence", () => {
   const fetchMonthlyAbsences = () => fetchAbsences("getMonthlyAbsences");
   const fetchPendingAbsences = () => fetchAbsences("getPendingAbsences");
   const fetchUpcomingAbsences = () => fetchAbsences("getUpcomingAbsences");
+  const fetchAllAbsences = () => fetchAbsences("getAbsences");
+  const fetchApprovedAbsences = () => fetchAbsences("getApprovedAbsences");
+  const fetchRejectedAbsences = () => fetchAbsences("getRejectedAbsences");
+
+
 
   const approveAbsence = async (absenceId: number) => {
     try {
@@ -70,11 +75,11 @@ export const useAbsenceStore = defineStore("absence", () => {
       const userId = useUserStore().getUserId;
 
       await absenceService.createAbsenceRequest(
-        absenceRequestForm.from,
-        absenceRequestForm.to,
-        absenceRequestForm.type,
-        absenceRequestForm.evidencePath,
-        absenceRequestForm.comment,
+        absenceRequestForm.StartDate,
+        absenceRequestForm.EndDate,
+        absenceRequestForm.AbsenceTypeId,
+        absenceRequestForm.EvidenceFilePath,
+        absenceRequestForm.Comment,
         userId
       );
 
@@ -100,11 +105,11 @@ export const useAbsenceStore = defineStore("absence", () => {
   
       await absenceService.updateAbsenceRequest(
         absenceId,
-        absenceRequestForm.from,
-        absenceRequestForm.to,
-        absenceRequestForm.type,
-        absenceRequestForm.evidencePath,
-        absenceRequestForm.comment,
+        absenceRequestForm.StartDate,
+        absenceRequestForm.EndDate,
+        absenceRequestForm.AbsenceTypeId,
+        absenceRequestForm.EvidenceFilePath,
+        absenceRequestForm.Comment,
         userId
       );
   
@@ -162,8 +167,6 @@ export const useAbsenceStore = defineStore("absence", () => {
       });
     }
   };
-    
-
   return {
     updateAbsenceRequest,
     deleteAbsenceRequest,
@@ -174,5 +177,8 @@ export const useAbsenceStore = defineStore("absence", () => {
     rejectAbsence,
     absenceRequestForm,
     createAbsenceRequest,
-  };
+    fetchAllAbsences,
+    fetchApprovedAbsences,
+    fetchRejectedAbsences,
+    };
 });

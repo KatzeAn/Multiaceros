@@ -1,49 +1,49 @@
 <template>
-    <el-card>
-        <span class="text-2xl font-bold text-[var(--secondary-color)]">Solicitar Ausencia</span>
+  <el-card>
+      <span class="text-2xl font-bold text-[var(--secondary-color)]">Solicitar Ausencia</span>
 
-        <el-form label-position="top" ref="ruleFormRef" style="max-width: 600px" :model="absenceRequestForm" :rules="rules"
-            label-width="auto" class="mt-6" :size="formSize" status-icon>
+      <el-form label-position="top" ref="ruleFormRef" style="max-width: 600px" :model="absenceRequestForm" :rules="rules"
+          label-width="auto" class="mt-6" :size="formSize" status-icon>
 
-            <el-row :gutter="12">
-                <el-col :span="12">
-                    <el-form-item label="Desde" prop="from">
-                        <el-date-picker v-model="absenceRequestForm.from" type="date" aria-label="Selecciona una fecha"
-                            placeholder="Selecciona una fecha" style="width: 100%" />
-                    </el-form-item>
-                </el-col>
-                <el-col :span="12">
-                    <el-form-item label="Hasta" prop="to">
-                        <el-date-picker v-model="absenceRequestForm.to" type="date" aria-label="Selecciona una fecha"
-                            placeholder="Selecciona una fecha" style="width: 100%" />
-                    </el-form-item>
-                </el-col>
-            </el-row>
+          <el-row :gutter="12">
+              <el-col :span="12">
+                  <el-form-item label="Desde" prop="StartDate">
+                      <el-date-picker v-model="absenceRequestForm.StartDate" type="date" aria-label="Selecciona una fecha"
+                      placeholder="Selecciona una fecha" style="width: 100%"  :disabled-date="disabledDate"/>
+                  </el-form-item>
+              </el-col>
+              <el-col :span="12">
+                  <el-form-item label="Hasta" prop="EndDate">
+                      <el-date-picker v-model="absenceRequestForm.EndDate" type="date" aria-label="Selecciona una fecha"
+                          placeholder="Selecciona una fecha" style="width: 100%" :disabled-date="disabledDate"/>
+                  </el-form-item>
+              </el-col>
+          </el-row>
 
-            <el-form-item label="Tipo de ausencia" prop="type">
-                <el-select v-model="absenceRequestForm.type" placeholder="Tipo de ausencia">
-                    <el-option label="Vacaciones" value="1" />
-                    <el-option label="Cita medica" value="2" />
-                </el-select>
-            </el-form-item>
+          <el-form-item label="Tipo de ausencia" prop="AbsenceTypeId">
+              <el-select v-model="absenceRequestForm.AbsenceTypeId" placeholder="Tipo de ausencia">
+                  <el-option label="Vacaciones" value="5" />
+                  <el-option label="Cita medica" value="2" />
+              </el-select>
+          </el-form-item>
 
-            <el-form-item label="Comentario" prop="comment">
-                <el-input v-model="absenceRequestForm.comment" type="textarea" />
-            </el-form-item>
+          <el-form-item label="Comentario" prop="Comment">
+              <el-input v-model="absenceRequestForm.Comment" type="textarea" />
+          </el-form-item>
 
-            <el-form-item>
-                <el-upload v-model:file-list="fileList" class="upload-demo"
-                    action="https://run.mocky.io/v3/9d059bf9-4660-45f2-925d-ce80ad6c4d15" multiple
-                    :on-preview="handlePreview" :on-remove="handleRemove" :before-remove="beforeRemove" :limit="3"
-                    :on-exceed="handleExceed">
-                    <el-button type="primary">Adjuntar evidencia</el-button>
-                    <template #tip>
-                        <div class="el-upload__tip">
-                            <!-- pdf & png/jpg files with a size less than 2mb. -->
-                        </div>
-                    </template>
-                </el-upload>
-            </el-form-item>
+          <el-form-item>
+              <el-upload v-model:file-list="fileList" class="upload-demo"
+                  action="https://run.mocky.io/v3/9d059bf9-4660-45f2-925d-ce80ad6c4d15" multiple
+                  :on-preview="handlePreview" :on-remove="handleRemove" :before-remove="beforeRemove" :limit="3"
+                  :on-exceed="handleExceed">
+                  <el-button type="primary">Adjuntar evidencia</el-button>
+                  <template #tip>
+                      <div class="el-upload__tip">
+                          <!-- pdf & png/jpg files with a size menos de 2MB. -->
+                      </div>
+                  </template>
+              </el-upload>
+          </el-form-item>
 
             <el-form-item>
                 <el-button :loading="isLoading" class="mt-6" size="large" color="var(--secondary-color)" round
@@ -72,7 +72,7 @@ const { absenceRequestForm, createAbsenceRequest } = useAbsenceStore();
 const isLoading = ref(false);
 
 const rules = reactive<FormRules<AbsenceRequest>>({
-  from: [
+  StartDate: [
     {
       type: 'date',
       required: true,
@@ -80,7 +80,7 @@ const rules = reactive<FormRules<AbsenceRequest>>({
       trigger: 'change',
     },
   ],
-  to: [
+  EndDate: [
     {
       type: 'date',
       required: true,
@@ -88,14 +88,14 @@ const rules = reactive<FormRules<AbsenceRequest>>({
       trigger: 'change',
     },
   ],
-  type: [
+  AbsenceTypeId: [
     {
       required: true,
       message: 'Por favor selecciona un tipo de ausencia',
       trigger: 'change',
     },
   ],
-  comment: [
+  Comment: [
     { required: true, message: 'Por favor ingrese un comentario', trigger: 'blur' },
   ],
 })
@@ -158,4 +158,23 @@ const beforeRemove: UploadProps['beforeRemove'] = (uploadFile, uploadFiles) => {
     () => false
   )
 }
+const holidays: string[] = [
+    "2025-01-01", "2025-03-24", "2025-04-17", "2025-04-18", "2025-05-01", "2025-06-02",
+    "2025-06-23", "2025-06-30", "2025-07-20", "2025-08-07", "2025-08-18", "2025-10-13",
+    "2025-11-03", "2025-11-17", "2025-12-08", "2025-12-25"
+];
+
+const disabledDate = (date: Date): boolean => {
+    const today = new Date();
+    today.setHours(0, 0, 0, 0);
+
+    const formattedDate: string = date.toISOString().split("T")[0];
+
+    return (
+        date < today ||              
+        date.getDay() === 0 ||      
+        date.getDay() === 6 ||        
+        holidays.includes(formattedDate) 
+    );
+};
 </script>
