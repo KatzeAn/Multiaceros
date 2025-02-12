@@ -1,7 +1,7 @@
 <template>
   <main>
     <el-tabs type="border-card" v-model="activeName">
-      <el-tab-pane label="Empleados" name="gestionar-candidatos">
+      <el-tab-pane label="Candidatos" name="gestionar-candidatos">
         <router-view v-if="activeName === 'gestionar-candidatos'" />
       </el-tab-pane>
     </el-tabs>
