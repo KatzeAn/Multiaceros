@@ -1,25 +1,24 @@
 import { ref, computed, reactive, watch, onMounted } from "vue";
-import { useJobTitleStore } from "../stores/jobTitle.store";
+import { useSeveranceFundStore } from "../stores/severanceFund.store";
 import { ElNotification, type FormInstance } from "element-plus";
-import type { JobTitle } from "@/domain/Interfaces/JobTitle/JobTitle.interface";
+import type { SeveranceFund } from "@/domain/Interfaces/severanceFund/severanceFund.interface";
 
-export function useJobTitleViewModel() {
-  const jobTitleStore = useJobTitleStore();
-  const jobTitles = ref<JobTitle[]>([]);
-  const isLoading = computed(() => jobTitleStore.isLoading);
+export function useSeveranceFundViewModel() {
+  const severanceFundStore = useSeveranceFundStore();
+  const severanceFundList = ref<SeveranceFund[]>([]);
+  const isLoading = computed(() => severanceFundStore.isLoading);
 
   const search = ref("");
   const currentPage = ref(1);
   const pageSize = ref(10);
   const ruleFormRef = ref<FormInstance>();
 
-  const jobTitleForm = reactive<JobTitle>({
-    id: 0,
-    name: "",
+  const severanceFundForm = reactive<SeveranceFund>({
+    severanceFundName: "",
   });
 
   const rules = reactive({
-    name: [
+    severanceFundName: [
       { required: true, message: "El nombre es obligatorio", trigger: "blur" },
       {
         pattern: /^[a-zA-ZÁáÉéÍíÓóÚúÑñ\s]+$/,
@@ -30,10 +29,12 @@ export function useJobTitleViewModel() {
   });
 
   const filterTableData = computed(() =>
-    jobTitles.value.filter(
+    severanceFundList.value.filter(
       (data) =>
         !search.value ||
-        data.name.toLowerCase().includes(search.value.toLowerCase())
+        data.severanceFundName
+          .toLowerCase()
+          .includes(search.value.toLowerCase())
     )
   );
 
@@ -51,25 +52,27 @@ export function useJobTitleViewModel() {
     currentPage.value = 1;
   };
 
-  const loadJobTitles = async () => {
-    jobTitles.value = (await jobTitleStore.fetchJobTitles()) || [];
+  const loadSeveranceFund = async () => {
+    severanceFundList.value =
+      (await severanceFundStore.fetchSeveranceFund()) || [];
   };
 
   const submitForm = async (formEl: FormInstance | undefined) => {
     if (!formEl) return;
     try {
       await formEl.validate();
-      jobTitleForm.createdBy = "Fe";
-      await jobTitleStore.createJobTitleRequest(jobTitleForm);
-      await loadJobTitles();
+
+      severanceFundForm.createdBy = "Fe";
+      await severanceFundStore.createSeveranceFundRequest(severanceFundForm);
+      await loadSeveranceFund();
 
       ElNotification({
         title: "Éxito",
-        message: "Cargo creado correctamente",
+        message: "Fondo de cesantías creado correctamente",
         type: "success",
       });
 
-      jobTitleForm.name = "";
+      severanceFundForm.severanceFundName = "";
     } catch (error) {
       const errorMessage = error as string;
       ElNotification({
@@ -89,11 +92,11 @@ export function useJobTitleViewModel() {
   });
 
   onMounted(async () => {
-    await loadJobTitles();
-  })
+    await loadSeveranceFund();
+  });
 
   return {
-    jobTitles,
+    severanceFundList,
     isLoading,
     search,
     currentPage,
@@ -104,6 +107,6 @@ export function useJobTitleViewModel() {
     handlePageChange,
     handleSizeChange,
     submitForm,
-    jobTitleForm,
+    severanceFundForm,
   };
 }

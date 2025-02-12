@@ -48,6 +48,9 @@
 </template>
 
 <script lang="ts" setup>
-import { useEmployeeStore } from "@/presentation/stores/employee.store";
-const { employeeRequestForm } = useEmployeeStore();
+import type { EmployeeRequest } from "@/domain/Interfaces/Employee/EmployeeRequest.interface";
+
+const props = defineProps<{
+  employeeRequestForm: EmployeeRequest;
+}>();
 </script>

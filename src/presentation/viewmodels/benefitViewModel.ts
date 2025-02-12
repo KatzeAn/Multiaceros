@@ -1,25 +1,24 @@
 import { ref, computed, reactive, watch, onMounted } from "vue";
-import { useJobTitleStore } from "../stores/jobTitle.store";
 import { ElNotification, type FormInstance } from "element-plus";
-import type { JobTitle } from "@/domain/Interfaces/JobTitle/JobTitle.interface";
+import { useBenefitStore } from "../stores/benefit.store";
+import type { Benefits } from "@/domain/Interfaces/Benefits/Benefits.interface";
 
-export function useJobTitleViewModel() {
-  const jobTitleStore = useJobTitleStore();
-  const jobTitles = ref<JobTitle[]>([]);
-  const isLoading = computed(() => jobTitleStore.isLoading);
+export function useBenefitViewModel() {
+  const benefitStore = useBenefitStore();
+  const benefitList = ref<Benefits[]>([]);
+  const isLoading = computed(() => benefitStore.isLoading);
 
   const search = ref("");
   const currentPage = ref(1);
   const pageSize = ref(10);
   const ruleFormRef = ref<FormInstance>();
 
-  const jobTitleForm = reactive<JobTitle>({
-    id: 0,
-    name: "",
+  const benefitForm = reactive<Benefits>({
+    nameBenefit: "",
   });
 
   const rules = reactive({
-    name: [
+    nameBenefit: [
       { required: true, message: "El nombre es obligatorio", trigger: "blur" },
       {
         pattern: /^[a-zA-ZÁáÉéÍíÓóÚúÑñ\s]+$/,
@@ -30,10 +29,10 @@ export function useJobTitleViewModel() {
   });
 
   const filterTableData = computed(() =>
-    jobTitles.value.filter(
+    benefitList.value.filter(
       (data) =>
         !search.value ||
-        data.name.toLowerCase().includes(search.value.toLowerCase())
+        data.nameBenefit.toLowerCase().includes(search.value.toLowerCase())
     )
   );
 
@@ -51,25 +50,26 @@ export function useJobTitleViewModel() {
     currentPage.value = 1;
   };
 
-  const loadJobTitles = async () => {
-    jobTitles.value = (await jobTitleStore.fetchJobTitles()) || [];
+  const loadBenefit = async () => {
+    benefitList.value = (await benefitStore.fetchBenefit()) || [];
   };
 
   const submitForm = async (formEl: FormInstance | undefined) => {
     if (!formEl) return;
     try {
       await formEl.validate();
-      jobTitleForm.createdBy = "Fe";
-      await jobTitleStore.createJobTitleRequest(jobTitleForm);
-      await loadJobTitles();
+
+      benefitForm.createdBy = "Fe";
+      await benefitStore.createBenefitRequest(benefitForm);
+      await loadBenefit();
 
       ElNotification({
         title: "Éxito",
-        message: "Cargo creado correctamente",
+        message: "Beneficio creado correctamente",
         type: "success",
       });
 
-      jobTitleForm.name = "";
+      benefitForm.nameBenefit = "";
     } catch (error) {
       const errorMessage = error as string;
       ElNotification({
@@ -89,11 +89,11 @@ export function useJobTitleViewModel() {
   });
 
   onMounted(async () => {
-    await loadJobTitles();
-  })
+    await loadBenefit();
+  });
 
   return {
-    jobTitles,
+    benefitList,
     isLoading,
     search,
     currentPage,
@@ -104,6 +104,6 @@ export function useJobTitleViewModel() {
     handlePageChange,
     handleSizeChange,
     submitForm,
-    jobTitleForm,
+    benefitForm,
   };
 }

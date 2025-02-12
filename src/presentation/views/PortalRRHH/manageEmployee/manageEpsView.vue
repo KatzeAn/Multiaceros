@@ -1,24 +1,29 @@
 <template>
-  <!-- MODAL PARA AÑADIR EMPLEADO -->
-  <el-dialog v-model="isAddModalOpen" title="Añadir Nuevo Empleado" top="6vh">
-    <AddEmployee @close-form="closeForm" />
-  </el-dialog>
-
   <el-card shadow="never">
     <template #header>
-      <div class="flex flex-row justify-between">
-        <h2 class="text-xl text-gray-700 font-semibold">Gestionar Empleados</h2>
-        <el-button type="primary" icon="Plus" @click="openAddModal">
-          Agregar Empleado
-        </el-button>
-      </div>
+      <h2 class="text-xl text-gray-700 font-semibold">Gestionar EPS</h2>
     </template>
 
+    <el-card shadow="never" class="mb-6">
+      <el-form inline ref="ruleFormRef" :rules="rules" :model="epsForm">
+        <el-form-item prop="epsName" label="Nombre">
+          <el-input v-model="epsForm.epsName" placeholder="Nombre" clearable />
+        </el-form-item>
+        <el-form-item>
+          <el-button
+            :loading="isLoading"
+            type="primary"
+            @click="submitForm(ruleFormRef)"
+          >
+            Crear EPS
+          </el-button>
+        </el-form-item>
+      </el-form>
+    </el-card>
+
     <el-table :data="paginatedData" border class="w-full min-h-96 mb-4" stripe>
-      <el-table-column label="Nombre" prop="fullName" />
-      <el-table-column label="Correo Electrónico" prop="email" />
-      <el-table-column label="Cargo" prop="jobTitle" />
-      <el-table-column label="Departamento" prop="division" />
+      <el-table-column prop="id" label="ID" />
+      <el-table-column prop="epsName" label="Nombre" />
       <el-table-column prop="isActive" label="Estado">
         <template #default="{ row }">
           <el-tag :type="row.isActive ? 'success' : 'danger'">
@@ -42,7 +47,7 @@
       :page-size="pageSize"
       :page-sizes="[10, 20, 50]"
       layout="total, sizes, prev, pager, next"
-      :total="employeeList.length"
+      :total="epsList.length"
       @size-change="handleSizeChange"
       @current-change="handlePageChange"
     />
@@ -50,28 +55,20 @@
 </template>
 
 <script lang="ts" setup>
-import { useEmployeeViewModel } from "@/presentation/viewmodels/employeeViewModel";
-import AddEmployee from "../components/AddEmployee.vue";
-import { ref } from "vue";
-
-const isAddModalOpen = ref(false);
-
-const openAddModal = () => {
-  isAddModalOpen.value = true;
-};
-
-const closeForm = () => {
-  isAddModalOpen.value = false;
-};
+import { useEpsViewModel } from "@/presentation/viewmodels/epsViewModel";
 
 const {
-  employeeList,
+  epsList,
   isLoading,
   search,
   currentPage,
   pageSize,
+  ruleFormRef,
+  rules,
   paginatedData,
   handlePageChange,
   handleSizeChange,
-} = useEmployeeViewModel();
+  submitForm,
+  epsForm,
+} = useEpsViewModel();
 </script>

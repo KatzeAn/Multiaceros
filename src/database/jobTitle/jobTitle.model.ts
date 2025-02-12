@@ -4,7 +4,7 @@ import { apiRequest } from "@/presentation/api/axiosInstance";
 
 export class JobTitleModel implements JobTitleRepository {
     getJobTitles(): Promise<JobTitle[]> {
-        return apiRequest<JobTitle[]>("get", "/JobTitle/GetAllJobTitles");
+        return apiRequest<JobTitle[]>("get", "/JobTitle");
     }
     createJobTitle(jobTitle: JobTitle): Promise<JobTitle> {
         return apiRequest<JobTitle>("post", "/JobTitle/CreateJobTitle", jobTitle);

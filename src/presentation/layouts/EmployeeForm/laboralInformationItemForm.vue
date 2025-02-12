@@ -24,7 +24,7 @@
           placeholder="Seleccione el departamento"
         >
           <el-option
-            v-for="division in divisionOptions"
+            v-for="division in divisionList"
             :key="division.id"
             :label="division.name"
             :value="division.id"
@@ -40,7 +40,7 @@
           placeholder="Seleccione el cargo"
         >
           <el-option
-            v-for="jobTitle in jobTitleOptions"
+            v-for="jobTitle in jobTitles"
             :key="jobTitle.id"
             :label="jobTitle.name"
             :value="jobTitle.id"
@@ -96,22 +96,24 @@
 
 <script lang="ts" setup>
 import { onMounted, ref } from "vue";
-import { useEmployeeStore } from "@/presentation/stores/employee.store";
-import { useDivisionStore } from "@/presentation/stores/division.store";
-import { useJobTitleStore } from "@/presentation/stores/jobTitle.store";
 import { useContracTypeStore } from "@/presentation/stores/contractType.store";
-import type { Division } from "@/domain/Interfaces/Division/division.interface";
-import type { JobTitle } from "@/domain/Interfaces/JobTitle/JobTitle.interface";
+
+import { useDepartmentViewModel } from "@/presentation/viewmodels/departmentViewModel";
+import { useJobTitleViewModel } from "@/presentation/viewmodels/jobTitleViewModel";
+
 import type { ContractType } from "@/domain/Interfaces/Contract/contractType.interface";
 
-const { employeeRequestForm } = useEmployeeStore();
+import type { EmployeeRequest } from "@/domain/Interfaces/Employee/EmployeeRequest.interface";
 
-const { fetchDivisions } = useDivisionStore();
-const { fetchJobTitles } = useJobTitleStore();
+const props = defineProps<{
+  employeeRequestForm: EmployeeRequest;
+}>();
+
+const { divisionList } = useDepartmentViewModel();
+const { jobTitles } = useJobTitleViewModel();
+
 const { fetchContractType } = useContracTypeStore();
 
-const divisionOptions = ref<Division[]>([]);
-const jobTitleOptions = ref<JobTitle[]>([]);
 const contractTypeOptions = ref<ContractType[]>([]);
 
 const loading = ref(false);
@@ -119,17 +121,9 @@ const loading = ref(false);
 const loadData = async () => {
   loading.value = true;
 
-  const [{ divisionList }, { jobTitleList }, { contractTypeList }] =
-    await Promise.all([
-      fetchDivisions(),
-      fetchJobTitles(),
-      fetchContractType(),
-    ]);
+  const [{ contractTypeList }] = await Promise.all([fetchContractType()]);
 
-  divisionOptions.value = divisionList;
-  jobTitleOptions.value = jobTitleList;
   contractTypeOptions.value = contractTypeList;
-
   loading.value = false;
 };
 

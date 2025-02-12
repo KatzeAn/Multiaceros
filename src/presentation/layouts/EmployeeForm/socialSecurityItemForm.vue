@@ -13,7 +13,7 @@
           placeholder="Seleccione la EPS"
         >
           <el-option
-            v-for="eps in epsOptions"
+            v-for="eps in epsList"
             :key="eps.id"
             :label="eps.epsName"
             :value="eps.id"
@@ -43,7 +43,7 @@
           placeholder="Seleccione la ARL"
         >
           <el-option
-            v-for="arl in arlOptions"
+            v-for="arl in arlList"
             :key="arl.id"
             :label="arl.nameArl"
             :value="arl.id"
@@ -73,7 +73,7 @@
           placeholder="Seleccione el fondo de pensiones"
         >
           <el-option
-            v-for="pension in pensionFundOptions"
+            v-for="pension in pensionFundList"
             :key="pension.id"
             :label="pension.pensionFundName"
             :value="pension.id"
@@ -83,7 +83,10 @@
     </el-col>
 
     <el-col :span="12">
-      <el-form-item label="Tipo de fondo de pensión" prop="pensionFundInfoData.pensionFundTypeId">
+      <el-form-item
+        label="Tipo de fondo de pensión"
+        prop="pensionFundInfoData.pensionFundTypeId"
+      >
         <el-select
           v-model="employeeRequestForm.pensionFundInfoData.pensionFundTypeId"
           placeholder="Seleccione el tipo"
@@ -106,7 +109,7 @@
           placeholder="Seleccione la caja de compensación"
         >
           <el-option
-            v-for="familyCompensation in pensionFamilyCompensationFundOptions"
+            v-for="familyCompensation in familyCompensationFundList"
             :key="familyCompensation.id"
             :label="familyCompensation.compensationFundName"
             :value="familyCompensation.id"
@@ -122,7 +125,7 @@
           placeholder="Seleccione el fondo"
         >
           <el-option
-            v-for="severanceFund in severanceFundOptions"
+            v-for="severanceFund in severanceFundList"
             :key="severanceFund.id"
             :label="severanceFund.severanceFundName"
             :value="severanceFund.id"
@@ -134,61 +137,21 @@
 </template>
 
 <script lang="ts" setup>
-import { useEmployeeStore } from "@/presentation/stores/employee.store";
-import { useEpsStore } from "@/presentation/stores/eps.store";
-import { useArlStore } from "@/presentation/stores/arl.store";
-import { usePensionFund } from "@/presentation/stores/pensionFund.store";
-import { useFamilyCompensationFund } from "@/presentation/stores/familyCompensationFund.store";
-import { useSeveranceFundStore } from "@/presentation/stores/severanceFund.store";
-import { onMounted, ref } from "vue";
-import type { Eps } from "@/domain/Interfaces/Eps/eps.interface";
-import type { Arl } from "@/domain/Interfaces/Arl/Arl.interface";
-import type { PensionFunds } from "@/domain/Interfaces/PensionFunds/pensionFunds.interface";
-import type { FamilyCompesationFunds } from "@/domain/Interfaces/FamilyCompesationFunds/FamilyCompesationFunds.interface";
-import type { SeveranceFund } from "@/domain/Interfaces/severanceFund/severanceFund.interface";
+import { useArlViewModel } from "@/presentation/viewmodels/arlViewModel";
+import { useEpsViewModel } from "@/presentation/viewmodels/epsViewModel";
+import { usePensionFundViewModel } from "@/presentation/viewmodels/pensionFundViewModel";
+import { useSeveranceFundViewModel } from "@/presentation/viewmodels/severanceFundViewModel";
+import { useFamilyCompensationFundViewModel } from "@/presentation/viewmodels/familyCompensationFundViewModel";
 
-const { employeeRequestForm } = useEmployeeStore();
-const { fetchEps } = useEpsStore();
-const { fetchArl } = useArlStore();
-const { fetchPensionFunds } = usePensionFund();
-const { fetchFamilyCompensationFund } = useFamilyCompensationFund();
-const { fetchSeveranceFund } = useSeveranceFundStore();
+import type { EmployeeRequest } from "@/domain/Interfaces/Employee/EmployeeRequest.interface";
 
-const epsOptions = ref<Eps[]>([]);
-const arlOptions = ref<Arl[]>([]);
-const pensionFundOptions = ref<PensionFunds[]>([]);
-const pensionFamilyCompensationFundOptions = ref<FamilyCompesationFunds[]>([]);
-const severanceFundOptions = ref<SeveranceFund[]>([]);
+const props = defineProps<{
+  employeeRequestForm: EmployeeRequest;
+}>();
 
-const loading = ref(false);
-
-const loadData = async () => {
-  loading.value = true;
-
-  const [
-    { epsList },
-    { arlList },
-    { pensionFundList },
-    { familyCompensationFundList },
-    { severanceFundList },
-  ] = await Promise.all([
-    fetchEps(),
-    fetchArl(),
-    fetchPensionFunds(),
-    fetchFamilyCompensationFund(),
-    fetchSeveranceFund(),
-  ]);
-
-  epsOptions.value = epsList;
-  arlOptions.value = arlList;
-  pensionFundOptions.value = pensionFundList;
-  pensionFamilyCompensationFundOptions.value = familyCompensationFundList;
-  severanceFundOptions.value = severanceFundList;
-
-  loading.value = false;
-};
-
-onMounted(() => {
-  loadData();
-});
+const { arlList } = useArlViewModel();
+const { epsList } = useEpsViewModel();
+const { pensionFundList } = usePensionFundViewModel();
+const { severanceFundList } = useSeveranceFundViewModel();
+const { familyCompensationFundList } = useFamilyCompensationFundViewModel();
 </script>

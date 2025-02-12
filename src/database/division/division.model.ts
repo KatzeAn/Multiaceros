@@ -9,13 +9,13 @@ export class DivisionModel implements DivisionRepository {
         return apiRequest<Teammate[]>('get', `/Division/Division/Team/${userId}`);
     }
     getDivisions(): Promise<Division[]> {
-        return apiRequest<Division[]>('get', '/Division/GetAllDivisions');
+        return apiRequest<Division[]>('get', '/Division');
     }
     getOrganizationalChart(): Promise<DivisionWithEmployee[]> {
         return apiRequest<DivisionWithEmployee[]>('get', '/Division/GetOrganizationalChart');
     }
     createDivision(name: string, createdBy: string): Promise<Division> {
-        return apiRequest<Division>('post', '/Division/CreateDivision', { name, createdBy });
+        return apiRequest<Division>('post', '/Division', { name, createdBy });
     }
     updateDivision(id: number, newName: string, modifiedBy: string): Promise<Division> {
         return apiRequest<Division>('put', `/Division/${id}`, { divisionId: id, newName,modifiedBy });

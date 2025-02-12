@@ -1,25 +1,24 @@
 import { ref, computed, reactive, watch, onMounted } from "vue";
-import { useJobTitleStore } from "../stores/jobTitle.store";
+import { useFamilyCompensationFundStore } from "../stores/familyCompensationFund.store";
 import { ElNotification, type FormInstance } from "element-plus";
-import type { JobTitle } from "@/domain/Interfaces/JobTitle/JobTitle.interface";
+import type { FamilyCompesationFunds } from "@/domain/Interfaces/FamilyCompesationFunds/FamilyCompesationFunds.interface";
 
-export function useJobTitleViewModel() {
-  const jobTitleStore = useJobTitleStore();
-  const jobTitles = ref<JobTitle[]>([]);
-  const isLoading = computed(() => jobTitleStore.isLoading);
+export function useFamilyCompensationFundViewModel() {
+  const familyCompensationFundStore = useFamilyCompensationFundStore();
+  const familyCompensationFundList = ref<FamilyCompesationFunds[]>([]);
+  const isLoading = computed(() => familyCompensationFundStore.isLoading);
 
   const search = ref("");
   const currentPage = ref(1);
   const pageSize = ref(10);
   const ruleFormRef = ref<FormInstance>();
 
-  const jobTitleForm = reactive<JobTitle>({
-    id: 0,
-    name: "",
+  const familyCompensationFundForm = reactive<FamilyCompesationFunds>({
+    compensationFundName: "",
   });
 
   const rules = reactive({
-    name: [
+    compensationFundName: [
       { required: true, message: "El nombre es obligatorio", trigger: "blur" },
       {
         pattern: /^[a-zA-ZÁáÉéÍíÓóÚúÑñ\s]+$/,
@@ -30,10 +29,12 @@ export function useJobTitleViewModel() {
   });
 
   const filterTableData = computed(() =>
-    jobTitles.value.filter(
+    familyCompensationFundList.value.filter(
       (data) =>
         !search.value ||
-        data.name.toLowerCase().includes(search.value.toLowerCase())
+        data.compensationFundName
+          .toLowerCase()
+          .includes(search.value.toLowerCase())
     )
   );
 
@@ -51,25 +52,29 @@ export function useJobTitleViewModel() {
     currentPage.value = 1;
   };
 
-  const loadJobTitles = async () => {
-    jobTitles.value = (await jobTitleStore.fetchJobTitles()) || [];
+  const loadFamilyCompensationFund = async () => {
+    familyCompensationFundList.value =
+      (await familyCompensationFundStore.fetchFamilyCompensationFund()) || [];
   };
 
   const submitForm = async (formEl: FormInstance | undefined) => {
     if (!formEl) return;
     try {
       await formEl.validate();
-      jobTitleForm.createdBy = "Fe";
-      await jobTitleStore.createJobTitleRequest(jobTitleForm);
-      await loadJobTitles();
+
+      familyCompensationFundForm.createdBy = "Fe";
+      await familyCompensationFundStore.createFamilyCompensationFundRequest(
+        familyCompensationFundForm
+      );
+      await loadFamilyCompensationFund();
 
       ElNotification({
         title: "Éxito",
-        message: "Cargo creado correctamente",
+        message: "FamilyCompensationFund creado correctamente",
         type: "success",
       });
 
-      jobTitleForm.name = "";
+      familyCompensationFundForm.compensationFundName = "";
     } catch (error) {
       const errorMessage = error as string;
       ElNotification({
@@ -89,11 +94,11 @@ export function useJobTitleViewModel() {
   });
 
   onMounted(async () => {
-    await loadJobTitles();
-  })
+    await loadFamilyCompensationFund();
+  });
 
   return {
-    jobTitles,
+    familyCompensationFundList,
     isLoading,
     search,
     currentPage,
@@ -104,6 +109,6 @@ export function useJobTitleViewModel() {
     handlePageChange,
     handleSizeChange,
     submitForm,
-    jobTitleForm,
+    familyCompensationFundForm,
   };
 }

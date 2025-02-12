@@ -9,11 +9,11 @@
     <el-col :span="10">
       <el-form-item label="Beneficios" prop="benefits">
         <el-select
-          v-model="employeeRequestForm.newBenefit.id"
+          v-model="newBenefit.id"
           placeholder="Seleccione el beneficio"
         >
           <el-option
-            v-for="benefit in benefitsOptions"
+            v-for="benefit in benefitList"
             :key="benefit.id"
             :label="benefit.nameBenefit"
             :value="benefit.id"
@@ -24,20 +24,19 @@
 
     <el-col :span="10">
       <el-form-item label="Valor" prop="benefits">
-        <el-input-number
+        <el-input
+          type="number"
           style="width: 100%"
-          :min="0"
-          v-model="employeeRequestForm.newBenefit.valueBenefits"
-          :step="1"
+          v-model="newBenefit.valueBenefits"
         />
       </el-form-item>
     </el-col>
 
     <el-col :span="4">
       <div class="h-full flex items-center justify-start m-1">
-        <el-button type="primary" class="w-full" @click="addBenefit"
-          >Agregar</el-button
-        >
+        <el-button type="primary" class="w-full" @click="addBenefit">
+          Agregar
+        </el-button>
       </div>
     </el-col>
   </el-row>
@@ -46,13 +45,12 @@
     <el-col :span="24">
       <ul>
         <li
-          v-for="(benefit, index) in employeeRequestForm.benefits"
+          v-for="(benefit, index) in reactiveEmployeeRequest.benefits"
           :key="index"
           class="flex justify-between items-center py-2"
         >
           <span>
-            {{ benefitsOptions.find((b) => b.id === benefit.id)?.nameBenefit }}
-            -
+            {{ benefitList.find((b) => b.id === benefit.id)?.nameBenefit }} -
             {{ benefit.valueBenefit }}
           </span>
           <button
@@ -69,31 +67,38 @@
 </template>
 
 <script lang="ts" setup>
-import { useEmployeeStore } from "@/presentation/stores/employee.store";
-import { useBenefitStore } from "@/presentation/stores/benefit.store";
-import { onMounted, ref } from "vue";
-import type { Benefits } from "@/domain/Interfaces/Benefits/Benefits.interface";
+import { ref } from "vue";
+import { useBenefitViewModel } from "@/presentation/viewmodels/benefitViewModel";
 import { ElNotification } from "element-plus";
 
-const { fetchBenefit } = useBenefitStore();
-const { employeeRequestForm } = useEmployeeStore();
+import type { EmployeeRequest } from "@/domain/Interfaces/Employee/EmployeeRequest.interface";
 
-const benefitsOptions = ref<Benefits[]>([]);
-const isLoading = ref(false);
+const props = defineProps<{ employeeRequestForm: EmployeeRequest }>();
+
+const emit = defineEmits(["updateBenefits"]);
+
+const { benefitList } = useBenefitViewModel();
+
+const reactiveEmployeeRequest = ref<EmployeeRequest>({
+  ...props.employeeRequestForm,
+});
+
+const newBenefit = ref({
+  id: "",
+  valueBenefits: "",
+});
 
 const addBenefit = () => {
-  if (
-    employeeRequestForm.newBenefit.id &&
-    Number(employeeRequestForm.newBenefit.valueBenefits) > 0
-  ) {
-    employeeRequestForm.benefits.push({
-      id: Number(employeeRequestForm.newBenefit.id),
-      valueBenefit: Number(employeeRequestForm.newBenefit.valueBenefits),
+  if (newBenefit.value.id && Number(newBenefit.value.valueBenefits) > 0) {
+    reactiveEmployeeRequest.value.benefits.push({
+      id: Number(newBenefit.value.id),
+      valueBenefit: Number(newBenefit.value.valueBenefits),
     });
 
-    // Limpiar los valores después de agregar
-    employeeRequestForm.newBenefit.id = "";
-    employeeRequestForm.newBenefit.valueBenefits = "";
+    emit("updateBenefits", reactiveEmployeeRequest.value.benefits);
+
+    newBenefit.value.id = "";
+    newBenefit.value.valueBenefits = "";
   } else {
     ElNotification({
       title: "Advertencia",
@@ -104,17 +109,7 @@ const addBenefit = () => {
 };
 
 const removeBenefit = (index: number) => {
-  employeeRequestForm.benefits.splice(index, 1);
+  reactiveEmployeeRequest.value.benefits.splice(index, 1);
+  emit("updateBenefits", reactiveEmployeeRequest.value.benefits);
 };
-
-const loadData = async () => {
-  const { loading, benefitList } = await fetchBenefit();
-  isLoading.value = loading;
-  benefitsOptions.value = benefitList;
-};
-
-onMounted(() => {
-  removeBenefit(0);
-  loadData();
-});
 </script>
