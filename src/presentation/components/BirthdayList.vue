@@ -2,7 +2,7 @@
   <div v-loading="loading">
     <template v-if="userBirthdaysList.length > 0">
       <div>
-        <div v-for="user in userBirthdaysList" :key="user.id" class="flex flex-row gap-4">
+        <div v-for="user in userBirthdaysList" :key="user.id" class="flex flex-row gap-4 mb-4">
           <el-avatar shape="square" :size="50" :src="state.squareUrl" />
           <div class="flex flex-col">
             <span class="font-medium">{{ user.fullName }}</span>

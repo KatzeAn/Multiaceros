@@ -77,8 +77,14 @@
                   :key="subIndex"
                 >
                   <router-link
-                    :to="subItem.route"
-                    class="inline-block w-full px-4 py-2 hover:bg-gray-800 hover:text-white rounded"
+                    :to="subItem.route !== '#' ? subItem.route : '/'"
+                    class="inline-block w-full px-4 py-2 rounded"
+                    :class="{
+                      'hover:bg-gray-800 hover:text-white':
+                        subItem.route !== '#',
+                      'opacity-50 cursor-not-allowed pointer-events-none':
+                        subItem.route === '#',
+                    }"
                   >
                     {{ subItem.title }}
                   </router-link>
@@ -88,10 +94,17 @@
           </li>
           <!-- Bolsa de trabajo -->
           <li>
-            <div class="text-gray-500 hover:text-white">
+            <div
+              class="text-gray-500"
+              :class="{
+                'hover:text-white hover:bg-gray-800': false,
+                'opacity-50 cursor-not-allowed pointer-events-none': true,
+              }"
+            >
               <router-link
                 to="/"
-                class="flex item-center w-full pl-2 pr-4 py-2 hover:bg-gray-800 rounded"
+                class="flex item-center w-full pl-2 pr-4 py-2 rounded"
+                @click.prevent
               >
                 <span class="material-symbols-outlined pr-2">work_alert</span>
                 Bolsa de trabajo
@@ -100,10 +113,17 @@
           </li>
           <!-- Soporte -->
           <li>
-            <div class="text-gray-500 hover:text-white">
+            <div
+              class="text-gray-500"
+              :class="{
+                'hover:text-white hover:bg-gray-800': false,
+                'opacity-50 cursor-not-allowed pointer-events-none': true,
+              }"
+            >
               <router-link
                 to="/"
-                class="flex item-center w-full pl-2 pr-4 py-2 hover:bg-gray-800 rounded"
+                class="flex item-center w-full pl-2 pr-4 py-2 rounded"
+                @click.prevent
               >
                 <span class="material-symbols-outlined pr-2">support</span>
                 Soporte y ayuda
@@ -151,8 +171,14 @@
                   :key="subIndex"
                 >
                   <router-link
-                    :to="subItem.route"
-                    class="inline-block w-full px-4 py-2 hover:bg-gray-800 hover:text-white rounded"
+                    :to="subItem.route !== '#' ? subItem.route : '/'"
+                    class="inline-block w-full px-4 py-2 rounded"
+                    :class="{
+                      'hover:bg-gray-800 hover:text-white':
+                        subItem.route !== '#',
+                      'opacity-50 cursor-not-allowed pointer-events-none':
+                        subItem.route === '#',
+                    }"
                   >
                     {{ subItem.title }}
                   </router-link>
@@ -170,10 +196,17 @@
         <ul class="flex flex-col space-y-2">
           <!-- Configuraciones -->
           <li>
-            <div class="text-gray-500 hover:text-white">
+            <div
+              class="text-gray-500"
+              :class="{
+                'hover:text-white hover:bg-gray-800': false,
+                'opacity-50 cursor-not-allowed pointer-events-none': true,
+              }"
+            >
               <router-link
-                to="/"
-                class="flex item-center w-full pl-2 pr-4 py-2 hover:bg-gray-800 rounded"
+                to="#"
+                class="flex item-center w-full pl-2 pr-4 py-2 rounded"
+                @click.prevent
               >
                 <span class="material-symbols-outlined pr-2">settings</span>
                 Configuraciones
@@ -188,7 +221,11 @@
     >
       <div class="flex items-center">
         <div class="w-8 h-8 rounded-full">
-          <img :src="mujer" alt="Perfil" class="w-[2rem] h-[2rem] rounded-full object-cover" />
+          <img
+            :src="mujer"
+            alt="Perfil"
+            class="w-[2rem] h-[2rem] rounded-full object-cover"
+          />
         </div>
         <div class="flex flex-col pl-3">
           <div class="text-sm text-gray-50">{{ getUsername }}</div>
@@ -208,8 +245,8 @@
 
 <script setup lang="ts">
 import { ref } from "vue";
-import { useUserStore } from "@/presentation/stores/user.store"
-import mujer from '@/presentation/assets/mujer.jpg';
+import { useUserStore } from "@/presentation/stores/user.store";
+import mujer from "@/presentation/assets/mujer.jpg";
 
 const { getUsername, getUserEmail } = useUserStore();
 
@@ -228,15 +265,15 @@ const menuItems = ref([
       },
       {
         title: "Información profesional",
-        route: "/perfil/informacion-profesional",
+        route: "#",
       },
       {
         title: "Información salarial",
-        route: "/perfil/informacion-salarial",
+        route: "#",
       },
       {
         title: "Tiempo libre",
-        route: "/perfil/tiempo-libre",
+        route: "#",
       },
     ],
   },
@@ -244,13 +281,13 @@ const menuItems = ref([
     title: "Nómina",
     icon: "payments",
     subItems: [
-    {
-      title: "Comprobantes de pago",
-      route: "/nomina/comprobantes", 
-    },
+      {
+        title: "Comprobantes de pago",
+        route: "/nomina/comprobantes",
+      },
       {
         title: "Mis beneficios",
-        route: "/",
+        route: "#",
       },
     ],
   },
@@ -264,7 +301,7 @@ const menuItems = ref([
       },
       {
         title: "Mis ausencias",
-        route: "/ausencias/mis-ausencias",
+        route: "#",
       },
     ],
   },
@@ -274,15 +311,15 @@ const menuItems = ref([
     subItems: [
       {
         title: "Desempeño",
-        route: "/",
+        route: "#",
       },
       {
         title: "Retroalimentación",
-        route: "/",
+        route: "#",
       },
       {
         title: "Clima laboral",
-        route: "/",
+        route: "#",
       },
     ],
   },
@@ -292,15 +329,15 @@ const menuItems = ref([
     subItems: [
       {
         title: "Manual del empleado",
-        route: "/",
+        route: "#",
       },
       {
         title: "Reglamentos",
-        route: "/",
+        route: "#",
       },
       {
         title: "procedimientos",
-        route: "/",
+        route: "#",
       },
     ],
   },
@@ -310,11 +347,11 @@ const menuItems = ref([
     subItems: [
       {
         title: "Carta laboral",
-        route: "/",
+        route: "#",
       },
       {
         title: "Actualización de datos",
-        route: "/",
+        route: "#",
       },
     ],
   },
@@ -344,19 +381,19 @@ const recursosHumanosSubItems = ref([
   },
   {
     title: "Evaluaciones de desempeño",
-    route: "/portal-rrhh/evaluaciones",
+    route: "#",
   },
   {
     title: "Capacitaciones",
-    route: "/portal-rrhh/capacitaciones",
+    route: "#",
   },
   {
     title: "Reporte y análisis",
-    route: "/portal-rrhh/reportes",
+    route: "#",
   },
   {
     title: "Políticas y procedimientos",
-    route: "/portal-rrhh/gestionar-politicas",
+    route: "#",
   },
 ]);
 
