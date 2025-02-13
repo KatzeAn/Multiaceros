@@ -1,7 +1,16 @@
 <template>
+  <addEmployeePotential v-model:dialog="isAddModalOpen" />
+
   <el-card shadow="never">
     <template #header>
-      <h2 class="text-xl text-gray-700 font-semibold">Todos los candidatos</h2>
+      <div class="flex flex-row justify-between">
+        <h2 class="text-xl text-gray-700 font-semibold">
+          Todos los candidatos
+        </h2>
+        <el-button type="primary" icon="Plus" @click="openAddModal">
+          Referir candidato
+        </el-button>
+      </div>
     </template>
 
     <el-card shadow="never" class="mb-6"> </el-card>
@@ -51,9 +60,14 @@
 <script lang="ts" setup>
 import { EmployeePotentialStatusEnum } from "@/presentation/common/enum/employeePotentialStatus";
 import DetailPotentialEmployee from "@/presentation/components/employeePotential/detailPotentialEmployee.vue";
+import addEmployeePotential from "@/presentation/components/employeePotential/addEmployeePotential.vue";
 import { useEmployeePotentialViewModel } from "@/presentation/viewmodels/employeePotentialViewModel";
 import { ElMessageBox } from "element-plus";
 import { ref } from "vue";
+
+const openAddModal = () => {
+  isAddModalOpen.value = true;
+};
 
 const {
   employeePotentialList,
@@ -65,6 +79,7 @@ const {
 } = useEmployeePotentialViewModel();
 
 const drawer = ref(false);
+const isAddModalOpen = ref(false);
 const selectedDocumentNumber = ref<number | null>(null);
 
 const handleRowClick = (row: any) => {
