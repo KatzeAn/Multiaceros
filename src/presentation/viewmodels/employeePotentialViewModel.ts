@@ -15,7 +15,7 @@ export function useEmployeePotentialViewModel() {
   const ruleFormRef = ref<FormInstance>();
 
   const employeePotentialForm = reactive<EmployeePotential>({
-    documentType: 0,
+    documentType: 1,
     numberDocument: "",
     firstName: "",
     middleName: "",
@@ -27,11 +27,61 @@ export function useEmployeePotentialViewModel() {
 
   const rules = reactive({
     firstName: [
-      { required: true, message: "El nombre es obligatorio", trigger: "blur" },
+      {
+        required: true,
+        message: "El primer nombre es obligatorio",
+        trigger: "blur",
+      },
       {
         pattern: /^[a-zA-ZÁáÉéÍíÓóÚúÑñ\s]+$/,
-        message: "Solo letras y espacios",
+        message: "Solo se permiten letras y espacios",
         trigger: "blur",
+      },
+    ],
+    numberDocument: [
+      {
+        required: true,
+        message: "El número de documento es obligatorio",
+        trigger: "blur",
+      },
+      {
+        pattern: /^\d{4,11}$/,
+        message: "El documento debe tener entre 4 y 11 dígitos numéricos",
+        trigger: "blur",
+      },
+    ],
+    surName: [
+      {
+        required: true,
+        message: "El primer apellido es obligatorio",
+        trigger: "blur",
+      },
+    ],
+    dateOfBirth: [
+      {
+        required: true,
+        message: "La fecha de nacimiento es obligatoria",
+        trigger: "blur",
+      },
+    ],
+    email: [
+      { required: true, message: "El correo es obligatorio", trigger: "blur" },
+      { type: "email", message: "Formato de correo inválido", trigger: "blur" },
+    ],
+    cellPhone: [
+      { required: true, message: "El celular es obligatorio", trigger: "blur" },
+      {
+        pattern: /^\+?[0-9]{7,15}$/,
+        message:
+          "Número inválido. Debe contener entre 7 y 15 dígitos y puede empezar con '+'",
+        trigger: "blur",
+      },
+    ],
+    jobPostingId: [
+      {
+        required: true,
+        message: "Debe seleccionar un puesto",
+        trigger: "change",
       },
     ],
   });
@@ -123,6 +173,6 @@ export function useEmployeePotentialViewModel() {
     submitForm,
     employeePotentialForm,
     loadEmployeePotentialByDocument,
-    employeePotential
+    employeePotential,
   };
 }
