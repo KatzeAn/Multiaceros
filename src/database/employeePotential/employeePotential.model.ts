@@ -12,7 +12,7 @@ export class EmployeePotentialModel extends EmployeePotentialRepository {
   updateEmployeePotential(data: EmployeePotential): Promise<EmployeePotential> {
     return apiRequest<EmployeePotential>("put", "/api/EmployeePotential/UpdateEmployeePotenjal", { data });
   }
-  getEmployeePotentialByDocument(numberDocument: string): Promise<EmployeePotential> {
+  getEmployeePotentialByDocument(numberDocument: number): Promise<EmployeePotential> {
     return apiRequest<EmployeePotential>(
       "get",
       `/api/EmployeePotential/${numberDocument}`
