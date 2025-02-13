@@ -170,6 +170,7 @@ const router = createRouter({
               "../views/PortalRRHH/manageEmployee/manageBenefitView.vue"
             ),
         },
+        
       ],
     },
 
@@ -184,6 +185,14 @@ const router = createRouter({
           component: () =>
             import(
               "../views/PortalRRHH/manageApplications/manageApplicants.view.vue"
+            ),
+        },
+        {
+          path: "gestionar-vacantes",
+          name: "manageVacancies",
+          component: () =>
+            import(
+              "../views/VacancyManagementView.vue"
             ),
         },
       ],

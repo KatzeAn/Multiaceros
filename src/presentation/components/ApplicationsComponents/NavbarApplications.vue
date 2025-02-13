@@ -16,6 +16,7 @@
 </template>
 
 <script setup>
+import { ref } from 'vue'; 
 const activeIndex = ref("1");
 const emit = defineEmits(["navigate"]);
 
