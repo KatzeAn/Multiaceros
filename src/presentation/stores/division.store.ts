@@ -3,9 +3,13 @@ import { ElNotification } from "element-plus";
 import { ref } from "vue";
 import { DivisionModel } from "@/database/division/division.model";
 import type { Division } from "@/domain/Interfaces/Division/division.interface";
+import { stringToNumber } from "../common/helper/stringTonumber.helper";
+import { useUserStore } from "./user.store";
+import type { Teammate } from "@/domain/Interfaces/Division/teammate.interface";
 
 export const useDivisionStore = defineStore("division", () => {
   const isLoading = ref(false);
+  const userStore = useUserStore();
 
   const fetchDivision = async () => {
     try {
@@ -38,9 +42,37 @@ export const useDivisionStore = defineStore("division", () => {
     }
   };
 
+  const fetchMyTeammate = async () => {
+    const userId = stringToNumber(userStore.getUserId);
+
+    if (userId === null) {
+      throw new Error("An unexpected error");
+    }
+
+    const result = {
+      loading: true,
+      teammateList: [] as Teammate[],
+    };
+
+    try {
+      result.loading = true;
+      const divisionService = new DivisionModel();
+      const response: Teammate[] = await divisionService.getTeammates(userId);
+      result.teammateList = response;
+    } catch (error) {
+      console.error("Error fetching teammates:", error);
+      result.teammateList = [];
+    } finally {
+      result.loading = false;
+    }
+
+    return result;
+  };
+
   return {
     isLoading,
     fetchDivision,
     createDivisionRequest,
+    fetchMyTeammate,
   };
 });
