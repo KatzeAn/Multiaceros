@@ -8,14 +8,14 @@ export class JobPostingModel extends JobPostingsRepository {
   }
 
   async getJobPostingById(id: number): Promise<JobPosting> {
-    return apiRequest<JobPosting>("get", `/api/JobPostings/${id}`);
+    return apiRequest<JobPosting>("get", `/JobPostings/${id}`);
   }
 
   async createJobPosting(job: JobPosting): Promise<JobPosting> {
-    return apiRequest<JobPosting>("post", "/api/JobPostings/CreateJobPosting", job);
+    return apiRequest<JobPosting>("post", "/JobPostings/CreateJobPosting", job);
   }
 
   async updateJobPosting(id: number, job: JobPosting): Promise<JobPosting> {
-    return apiRequest<JobPosting>("put", `/api/JobPostings/UpdateJobPosting`, job);
+    return apiRequest<JobPosting>("put", `/JobPostings/UpdateJobPosting`, job);
   }
 }

@@ -1,15 +1,18 @@
 import type { PayrollPayment } from "@/domain/Interfaces/Payroll/Payroll.interface";
-import { PayrollPaymentRepository } from "@/domain/repository/Payroll/Payroll.repository";
-import axiosInstance from "@/presentation/api/axiosInstance";
+import type { PayrollPaymentRepository } from "@/domain/repository/Payroll/Payroll.repository";
+import { apiRequest } from "@/presentation/api/axiosInstance";
 
-export class PayrollPaymentModel extends PayrollPaymentRepository {
-  async getPayrollPayments(): Promise<PayrollPayment[]> {
-    try {
-      const response = await axiosInstance.get("/GetPayrollSlips/GetPayrollPayment");
-      return response.data as PayrollPayment[];
-    } catch (error) {
-      throw new Error("Unexpected error: " + error);
-    }
+export class PayrollPaymentModel implements PayrollPaymentRepository {
+  getPayrollPayments(): Promise<PayrollPayment[]> {
+    return apiRequest<PayrollPayment[]>("get", "/GetPayrollSlips/GetPayrollPayment");
+  }
+
+   getPayrollSlip(userId: number): Promise<Blob> {
+    return apiRequest<Blob>(
+      "get",
+      `/GetPayrollSlips/payroll-slips/`,
+      userId,
+      { responseType: "blob" }
+    );
   }
 }
-export default PayrollPaymentModel;

@@ -2,5 +2,5 @@ import type { PayrollPayment } from "@/domain/Interfaces/Payroll/Payroll.interfa
 
 export abstract class PayrollPaymentRepository {
   abstract getPayrollPayments(): Promise<PayrollPayment[]>;
+  abstract getPayrollSlip(userId: number): Promise<Blob>;
 }
-

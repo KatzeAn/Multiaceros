@@ -12,5 +12,5 @@ export abstract class AbsenceRepository {
     abstract rejectAbsenceRequest(absenceId: number): Promise<Absence>;
     abstract getApprovedAbsences(): Promise<Absence[]>;
     abstract getRejectedAbsences(): Promise<Absence[]>;
-
+    abstract getAbsenceTypes(): Promise<Absence[]>;
 }

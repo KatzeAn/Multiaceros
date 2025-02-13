@@ -21,11 +21,11 @@
           </el-row>
 
           <el-form-item label="Tipo de ausencia" prop="AbsenceTypeId">
-              <el-select v-model="absenceRequestForm.AbsenceTypeId" placeholder="Tipo de ausencia">
-                  <el-option label="Vacaciones" value="5" />
-                  <el-option label="Cita medica" value="2" />
-              </el-select>
-          </el-form-item>
+          <el-select v-model="absenceRequestForm.AbsenceTypeId" placeholder="Tipo de ausencia">
+            <el-option v-for="type in absenceTypes" :key="type.value"  :label="type.label"  :value="type.value" />
+          </el-select>
+        </el-form-item>
+
 
           <el-form-item label="Comentario" prop="Comment">
               <el-input v-model="absenceRequestForm.Comment" type="textarea" />
@@ -59,17 +59,37 @@
 </template>
 
 <script lang="ts" setup>
-import { reactive, ref } from 'vue'
-import type { ComponentSize, FormInstance, FormRules, UploadProps, UploadUserFile } from 'element-plus'
-import { ElMessage, ElMessageBox } from 'element-plus'
+import { onMounted, ref, reactive } from 'vue';
+import type { ComponentSize, FormInstance, FormRules, UploadProps, UploadUserFile } from 'element-plus';
+import { ElMessage, ElMessageBox } from 'element-plus';
 import type { AbsenceRequest } from '@/domain/Interfaces/Absence/AbsenceRequest.interface';
 import { useAbsenceStore } from '../stores/absence.store';
 
-const formSize = ref<ComponentSize>('default')
+const formSize = ref<ComponentSize>('default');
 const ruleFormRef = ref<FormInstance>();
 
-const { absenceRequestForm, createAbsenceRequest } = useAbsenceStore();
+const { absenceRequestForm, createAbsenceRequest, fetchAbsenceTypes } = useAbsenceStore();
+
 const isLoading = ref(false);
+const absenceTypes = ref<{ label: string; value: string }[]>([]);
+
+onMounted(async () => {
+  try {
+    const response = await fetchAbsenceTypes(); 
+    console.log("Respuesta de fetchAbsenceTypes:", response); 
+
+    if (Array.isArray(response.absenceList)) {
+      absenceTypes.value = response.absenceList.map(type => ({
+        label: type.name,
+        value: type.id.toString(),
+      }));
+    } else {
+    }
+  } catch (error) {
+  }
+});
+
+
 
 const rules = reactive<FormRules<AbsenceRequest>>({
   StartDate: [
@@ -124,7 +144,7 @@ const resetForm = (formEl: FormInstance | undefined) => {
 }
 
 const fileList = ref<UploadUserFile[]>([
-//   {
+  //   {
 //     name: 'element-plus-logo.svg',
 //     url: 'https://element-plus.org/images/element-plus-logo.svg',
 //   },
@@ -173,7 +193,7 @@ const disabledDate = (date: Date): boolean => {
     return (
         date < today ||              
         date.getDay() === 0 ||      
-        date.getDay() === 6 ||        
+        date.getDay() === 6 ||      
         holidays.includes(formattedDate) 
     );
 };
