@@ -77,7 +77,7 @@
         </el-form-item>
       </div>
 
-      <el-form-item class="mt-6">
+      <el-form-item class="mt-12">
         <el-button
           :loading="isLoading"
           type="success"
