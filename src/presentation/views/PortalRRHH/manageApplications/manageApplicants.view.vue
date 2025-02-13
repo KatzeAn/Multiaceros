@@ -11,17 +11,21 @@
       border
       class="w-full min-h-96 mb-4"
       stripe
-      @row-click="drawer = true"
+      @row-click="handleRowClick"
     >
       <el-table-column label="Nombre">
         <template #default="{ row }">
-          {{ row.email }}
+          {{ `${row.firstName} ${row.surName}` }}
         </template>
       </el-table-column>
       <el-table-column prop="nameArl" label="Cargo aplicado" />
-      <el-table-column prop="nameArl" label="Etapa" />
-      <el-table-column prop="nameArl" label="Correo eléctronico" />
-      <el-table-column prop="nameArl" label="Celular" />
+      <el-table-column label="Etapa">
+        <template #default="{ row }">
+          {{ EmployeePotentialStatusEnum[row.status] }}
+        </template>
+      </el-table-column>
+      <el-table-column prop="email" label="Correo electrónico" />
+      <el-table-column prop="cellPhone" label="Celular" />
     </el-table>
 
     <!-- Paginación -->
@@ -36,10 +40,16 @@
     />
   </el-card>
 
-  <DetailPotentialEmployee v-model:drawer="drawer" :handleClose="handleClose" />
+  <!-- Pasamos el número de documento como prop -->
+  <DetailPotentialEmployee
+    v-model:drawer="drawer"
+    :handleClose="handleClose"
+    :documentNumber="selectedDocumentNumber"
+  />
 </template>
 
 <script lang="ts" setup>
+import { EmployeePotentialStatusEnum } from "@/presentation/common/enum/employeePotentialStatus";
 import DetailPotentialEmployee from "@/presentation/components/employeePotential/detailPotentialEmployee.vue";
 import { useEmployeePotentialViewModel } from "@/presentation/viewmodels/employeePotentialViewModel";
 import { ElMessageBox } from "element-plus";
@@ -47,20 +57,20 @@ import { ref } from "vue";
 
 const {
   employeePotentialList,
-  isLoading,
-  search,
   currentPage,
   pageSize,
-  ruleFormRef,
-  rules,
   paginatedData,
   handlePageChange,
   handleSizeChange,
-  submitForm,
-  employeePotentialForm,
 } = useEmployeePotentialViewModel();
 
 const drawer = ref(false);
+const selectedDocumentNumber = ref<string | null>(null);
+
+const handleRowClick = (row: any) => {
+  selectedDocumentNumber.value = row.numberDocument;
+  drawer.value = true;
+};
 
 const handleClose = (done: () => void) => {
   ElMessageBox.confirm("¿Estás seguro de cerrar la ventana?")
@@ -72,9 +82,3 @@ const handleClose = (done: () => void) => {
     });
 };
 </script>
-
-<style scoped>
-.right-chevron {
-  clip-path: polygon(87% 2%, 100% 50%, 87% 97%, 0 100%, 13% 49%, 0 0);
-}
-</style>

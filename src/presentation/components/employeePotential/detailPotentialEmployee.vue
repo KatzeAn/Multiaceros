@@ -27,12 +27,7 @@
           </div>
         </div>
         <div class="self-center">
-          <el-button
-            icon="message"
-            type="info"
-            @click=""
-            size="large"
-            disabled
+          <el-button icon="message" type="info" @click="" size="large" disabled
             >Enviar Correo</el-button
           >
         </div>
@@ -129,10 +124,11 @@
 </template>
 
 <script lang="ts" setup>
-defineProps({
-  drawer: Boolean,
-  handleClose: Function,
-});
+defineProps<{
+  drawer: boolean;
+  handleClose: (done: () => void) => void;
+  documentNumber: string | null;
+}>();
 
 defineEmits(["update:drawer"]);
 </script>
