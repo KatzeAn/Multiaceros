@@ -4,18 +4,18 @@ import { apiRequest } from "@/presentation/api/axiosInstance";
 
 export class EmployeePotentialModel extends EmployeePotentialRepository {
   createEmployeePotential(data: EmployeePotential): Promise<EmployeePotential> {
-    return apiRequest<EmployeePotential>("post", "/api/EmployeePotential/Create", { data });
+    return apiRequest<EmployeePotential>("post", "/EmployeePotential/CreateEmployeePotential", { data });
   }
-  getAllEmployeesPotential(): Promise<EmployeePotential> {
-    return apiRequest<EmployeePotential>("get", "/api/EmployeePotential/GetAllEmployees");
+  getAllEmployeesPotential(): Promise<EmployeePotential[]> {
+    return apiRequest<EmployeePotential[]>("get", "/EmployeePotential/GetAllEmployeesPotential");
   }
   updateEmployeePotential(data: EmployeePotential): Promise<EmployeePotential> {
-    return apiRequest<EmployeePotential>("put", "/api/EmployeePotential/UpdateEmployeePotenjal", { data });
+    return apiRequest<EmployeePotential>("put", `/EmployeePotential/UpdateEmployeePotential/${data.numberDocument}`, { data });
   }
-  getEmployeePotentialByDocument(numberDocument: string): Promise<EmployeePotential> {
+  getEmployeePotentialByDocument(numberDocument: number): Promise<EmployeePotential> {
     return apiRequest<EmployeePotential>(
       "get",
-      `/api/EmployeePotential/${numberDocument}`
+      `/EmployeePotential/${numberDocument}`
     );
   }
 }

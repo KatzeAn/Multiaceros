@@ -91,7 +91,7 @@ export function useResetPasswordViewModel() {
       const errorMessage = error as string;
       ElNotification({
         title: "Error",
-        message: errorMessage,
+        message: "Ha sucedido un error al cambiar la contraseña",
         type: "error",
       });
     }
