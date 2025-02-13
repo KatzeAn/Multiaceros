@@ -96,6 +96,11 @@ const router = createRouter({
               "../components/ManageAbsenceComponents/StatisticsAbsencesCard.vue"
             ),
         },
+        {
+          path: '/portal-rrhh/gestionar-beneficios',
+          name: 'GestionBeneficios',
+          component: () => import("../views/VacancyManagementView.vue"),
+        }
       ],
     },
 
@@ -112,6 +117,7 @@ const router = createRouter({
               "../views/PortalRRHH/manageEmployee/manageEmployeesView.vue"
             ),
         },
+        
         {
           path: "gestionar-departamentos",
           component: () =>

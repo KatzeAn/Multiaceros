@@ -36,6 +36,7 @@ const getContractType = (type) => {
         <p><strong>Salario:</strong> {{ job.salaryRange }}</p>
         <p><strong>Tipo de contrato:</strong> {{ getContractType(job.contractType) }}</p>
         <p><strong>Descripción:</strong> {{ job.description }}</p>
+        <p><strong>Requerimientos:</strong> {{ job.requirements }}</p>
       </div>
       <template #footer>
         <el-button type="primary">Aplicar ahora</el-button>
