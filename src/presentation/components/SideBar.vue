@@ -171,8 +171,14 @@
                   :key="subIndex"
                 >
                   <router-link
-                    :to="subItem.route"
-                    class="inline-block w-full px-4 py-2 hover:bg-gray-800 hover:text-white rounded"
+                    :to="subItem.route !== '#' ? subItem.route : '/'"
+                    class="inline-block w-full px-4 py-2 rounded"
+                    :class="{
+                      'hover:bg-gray-800 hover:text-white':
+                        subItem.route !== '#',
+                      'opacity-50 cursor-not-allowed pointer-events-none':
+                        subItem.route === '#',
+                    }"
                   >
                     {{ subItem.title }}
                   </router-link>
@@ -367,23 +373,23 @@ const recursosHumanosSubItems = ref([
   },
   {
     title: "Nómina y compensaciones",
-    route: "/portal-rrhh/gestionar-nomina",
+    route: "#",
   },
   {
     title: "Evaluaciones de desempeño",
-    route: "/portal-rrhh/evaluaciones",
+    route: "#",
   },
   {
     title: "Capacitaciones",
-    route: "/portal-rrhh/capacitaciones",
+    route: "#",
   },
   {
     title: "Reporte y análisis",
-    route: "/portal-rrhh/reportes",
+    route: "#",
   },
   {
     title: "Políticas y procedimientos",
-    route: "/portal-rrhh/gestionar-politicas",
+    route: "#",
   },
 ]);
 
