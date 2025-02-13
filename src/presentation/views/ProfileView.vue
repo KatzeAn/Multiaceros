@@ -26,9 +26,9 @@
         <el-card body-style="background-color: var(--gray-color)">
           <el-tabs v-model="activeName">
             <el-tab-pane label="Información Personal" name="informacion-personal"></el-tab-pane>
-            <el-tab-pane label="Información Profesional" name="informacion-profesional"></el-tab-pane>
-            <el-tab-pane label="Información Salarial" name="informacion-salarial"></el-tab-pane>
-            <el-tab-pane label="Tiempo Libre" name="tiempo-libre"></el-tab-pane>
+            <el-tab-pane label="Información Profesional" name="informacion-profesional" disabled></el-tab-pane>
+            <el-tab-pane label="Información Salarial" name="informacion-salarial" disabled></el-tab-pane>
+            <el-tab-pane label="Tiempo Libre" name="tiempo-libre" disabled></el-tab-pane>
           </el-tabs>
           
           <router-view />

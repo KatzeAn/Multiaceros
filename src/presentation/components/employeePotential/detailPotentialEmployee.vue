@@ -17,7 +17,7 @@
           <div>
             <div class="flex flex-row gap-4">
               <span class="text-xl font-bold">Cody Fisher</span>
-              <el-tag type="success">Activo</el-tag>
+              <el-tag type="success">{{ documentNumber }}</el-tag>
             </div>
             <div class="flex flex-row gap-2">
               <span class="font-semibold text-gray-400">Design Team</span>
@@ -92,7 +92,7 @@
         </div>
       </el-card>
 
-      <el-card>
+      <el-card shadow="never">
         <template #header> Notas </template>
         <button class="flex font-bold text-blue-600" disabled></button>
         <el-button type="primary" text>
