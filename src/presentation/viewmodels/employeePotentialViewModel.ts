@@ -5,7 +5,7 @@ import type { EmployeePotential } from "@/domain/Interfaces/EmployeePotential/Em
 
 export function useEmployeePotentialViewModel() {
   const employeePotentialStore = useEmployeePotentialStore();
-  const EmployeePotentialList = ref<EmployeePotential[]>([]);
+  const employeePotentialList = ref<EmployeePotential[]>([]);
   const isLoading = computed(() => employeePotentialStore.isLoading);
 
   const search = ref("");
@@ -36,7 +36,7 @@ export function useEmployeePotentialViewModel() {
   });
 
   const filterTableData = computed(() =>
-    EmployeePotentialList.value.filter(
+    employeePotentialList.value.filter(
       (data) =>
         !search.value ||
         data.firstName
@@ -60,7 +60,7 @@ export function useEmployeePotentialViewModel() {
   };
 
   const loadEmployeePotential = async () => {
-    EmployeePotentialList.value =
+    employeePotentialList.value =
       (await employeePotentialStore.fetchEmployeePotential()) || [];
   };
 
@@ -104,7 +104,7 @@ export function useEmployeePotentialViewModel() {
   });
 
   return {
-    EmployeePotentialList,
+    employeePotentialList,
     isLoading,
     search,
     currentPage,

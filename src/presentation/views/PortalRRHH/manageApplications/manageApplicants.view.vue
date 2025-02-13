@@ -26,7 +26,7 @@
       :page-size="pageSize"
       :page-sizes="[10, 20, 50]"
       layout="total, sizes, prev, pager, next"
-      :total="arlList.length"
+      :total="employeePotentialList.length"
       @size-change="handleSizeChange"
       @current-change="handlePageChange"
     />
@@ -37,12 +37,12 @@
 
 <script lang="ts" setup>
 import DetailPotentialEmployee from "@/presentation/components/employeePotential/detailPotentialEmployee.vue";
-import { useArlViewModel } from "@/presentation/viewmodels/arlViewModel";
+import { useEmployeePotentialViewModel } from "@/presentation/viewmodels/employeePotentialViewModel";
 import { ElMessageBox } from "element-plus";
 import { ref } from "vue";
 
 const {
-  arlList,
+  employeePotentialList,
   isLoading,
   search,
   currentPage,
@@ -53,8 +53,8 @@ const {
   handlePageChange,
   handleSizeChange,
   submitForm,
-  arlForm,
-} = useArlViewModel();
+  employeePotentialForm,
+} = useEmployeePotentialViewModel();
 
 const drawer = ref(false);
 
