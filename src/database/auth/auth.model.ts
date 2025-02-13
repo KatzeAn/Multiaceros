@@ -20,7 +20,7 @@ export class AuthModel extends AuthRepository {
   private apiUrl = "https://localhost:53793/api/Auth/login";
 
   async signInWithEmailAndPassword(
-    email: string,
+    email: string, 
     password: string
   ): Promise<AuthResponse> {
     try {
@@ -29,19 +29,26 @@ export class AuthModel extends AuthRepository {
         { UserEmail: email, Password: password },
         { headers: { "Content-Type": "application/json" } }
       );
-
+  
       return response.data;
     } catch (error) {
       if (axios.isAxiosError(error)) {
-        const apiError = error.response?.data as ApiErrorResponse;
-
-        const errorMessage =
-          apiError?.error?.details || "Error en la autenticación";
-
+        console.error("Error capturado en Axios:", error.response?.data); 
+        const errorResponse = error.response?.data;
+  
+        let errorMessage = "Error en la autenticación"; 
+  
+        if (errorResponse) {
+          if (errorResponse.errors?.ValidationError?.length) {
+            errorMessage = errorResponse.errors.ValidationError[0]; 
+          } 
+        }
+  
         throw new Error(errorMessage);
       } else {
+        console.error("Unexpected error:", error);
         throw new Error("Error inesperado en la autenticación");
       }
     }
   }
-}
+}  
