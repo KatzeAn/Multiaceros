@@ -11,7 +11,6 @@
 <script lang="ts" setup>
 import { useEmployeePotentialViewModel } from "@/presentation/viewmodels/employeePotentialViewModel";
 
-// Definir las props
 const props = defineProps<{
   dialog: boolean;
 }>();
