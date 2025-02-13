@@ -13,7 +13,11 @@
       stripe
       @row-click="drawer = true"
     >
-      <el-table-column prop="id" label="Nombre" />
+      <el-table-column label="Nombre">
+        <template #default="{ row }">
+          {{ row.email }}
+        </template>
+      </el-table-column>
       <el-table-column prop="nameArl" label="Cargo aplicado" />
       <el-table-column prop="nameArl" label="Etapa" />
       <el-table-column prop="nameArl" label="Correo eléctronico" />
