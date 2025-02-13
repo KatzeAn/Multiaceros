@@ -5,7 +5,9 @@ import { useJobPostingStore } from "@/presentation/stores/jobPostings.store";
 const jobStore = useJobPostingStore();
 
 onMounted(() => {
-  jobStore.fetchJobPostings();
+  if (jobStore.jobPostings.length === 0) {
+    jobStore.fetchJobPostings();
+  }
 });
 
 const getContractType = (type) => {
@@ -43,3 +45,19 @@ const getContractType = (type) => {
     </el-card>
   </div>
 </template>
+<style>
+.job-list {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+  gap: 20px;
+  padding: 20px;
+}
+
+.job-card {
+  max-width: 100%;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+  border-radius: 10px;
+  overflow: hidden;
+}
+
+</style>
