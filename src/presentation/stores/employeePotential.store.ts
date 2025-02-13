@@ -27,6 +27,24 @@ export const useEmployeePotentialStore = defineStore(
       }
     };
 
+    const fetchEmployeePotentialByDocument = async (numberDocument: number) => {
+      try {
+        isLoading.value = true;
+        const employeePotentialModel = new EmployeePotentialModel();
+        const data = await employeePotentialModel.getEmployeePotentialByDocument(numberDocument);
+        return data;
+      } catch (error) {
+        ElNotification({
+          title: "Error",
+          message: "No se pudo cargar el candidato",
+          type: "error",
+        });
+        return null;
+      } finally {
+        isLoading.value = false;
+      }
+    };
+
     const createEmployeePotentialRequest = async (data: EmployeePotential) => {
       try {
         isLoading.value = true;
@@ -44,6 +62,7 @@ export const useEmployeePotentialStore = defineStore(
       isLoading,
       fetchEmployeePotential,
       createEmployeePotentialRequest,
+      fetchEmployeePotentialByDocument
     };
   }
 );
