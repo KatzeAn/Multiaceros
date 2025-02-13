@@ -16,8 +16,10 @@
           ></el-avatar>
           <div>
             <div class="flex flex-row gap-4">
-              <span class="text-xl font-bold">Cody Fisher</span>
-              <el-tag type="success">{{ documentNumber }}</el-tag>
+              <span class="text-xl font-bold">{{
+                `${employeePotential?.firstName} ${employeePotential?.surName}`
+              }}</span>
+              <el-tag type="success">Activo</el-tag>
             </div>
             <div class="flex flex-row gap-2">
               <span class="font-semibold text-gray-400">Design Team</span>
@@ -40,11 +42,12 @@
           <span>Fases de selección</span>
         </template>
 
-        <el-steps class="" :space="200" :active="0">
+        <el-steps class="" :space="200" :active="employeePotential?.status">
+          <el-step title="Postulado" />
           <el-step title="Preeseleción" />
           <el-step title="Entrevista" />
           <el-step title="Prueba técnica" />
-          <el-step title="Prueba psicológica" />
+          <el-step title="Psicología" />
           <el-step title="Examen médico" />
           <el-step title="Contratado" />
         </el-steps>
@@ -66,7 +69,7 @@
 
             <div class="flex flex-col">
               <span class="text-m text-gray-500">Fase</span>
-              <span class="text-sm">Preselección</span>
+              <span class="text-sm">{{ EmployeePotentialStatusEnum[1] }}</span>
             </div>
 
             <div class="flex flex-col">
@@ -81,7 +84,7 @@
                 :size="25"
                 src="https://cube.elemecdn.com/3/7c/3ea6beec64369c2642b92c6726f1epng.png"
               />
-              <span>Andri R. Herdiansyah</span>
+              <span>Hernando Hernandez Bermudez</span>
             </div>
           </div>
           <div class="flex items-end justify-center">
@@ -95,7 +98,7 @@
       <el-card shadow="never">
         <template #header> Notas </template>
         <button class="flex font-bold text-blue-600" disabled></button>
-        <el-button type="primary" text>
+        <el-button disabled type="primary" text>
           <span class="material-symbols-outlined mr-2"> add_circle </span>
           <span class="text-m">Agregar nota</span>
         </el-button>
@@ -111,12 +114,42 @@
                 <span class="font-bold mr-1">Bagus Friki</span>
                 <span>12 febrero 2024</span> <span>-</span> <span>4:23 PM</span>
               </div>
-              <span class="text-xs"
-                >Candidato correctamente entrevistado en esta etapa</span
-              >
+              <span v-if="employeePotential?.status == 0" class="text-xs">
+                El candidato ha sido postulado y está en espera de revisión.
+              </span>
+
+              <span v-if="employeePotential?.status == 1" class="text-xs">
+                El candidato se puede mover a la fase de preselección.
+              </span>
+
+              <span v-if="employeePotential?.status == 2" class="text-xs">
+                El candidato está en fase de preselección y su perfil está
+                siendo evaluado.
+              </span>
+
+              <span v-if="employeePotential?.status == 3" class="text-xs">
+                Candidato correctamente entrevistado en esta etapa.
+              </span>
+
+              <span v-if="employeePotential?.status == 4" class="text-xs">
+                El candidato está en fase de prueba técnica, evaluando
+                habilidades técnicas.
+              </span>
+
+              <span v-if="employeePotential?.status == 5" class="text-xs">
+                El candidato está en evaluación psicológica.
+              </span>
+
+              <span v-if="employeePotential?.status == 6" class="text-xs">
+                El candidato está realizando su examen médico.
+              </span>
+
+              <span v-if="employeePotential?.status == 7" class="text-xs">
+                ¡El candidato ha sido contratado exitosamente!
+              </span>
             </div>
           </div>
-          <span class="material-symbols-outlined"> chat </span>
+          <el-button icon="ChatDotRound" round type="primary" size="large" disabled></el-button>
         </div>
       </el-card>
     </div>
@@ -124,11 +157,35 @@
 </template>
 
 <script lang="ts" setup>
-defineProps<{
+import { EmployeePotentialStatusEnum } from "@/presentation/common/enum/employeePotentialStatus";
+import { useEmployeePotentialViewModel } from "@/presentation/viewmodels/employeePotentialViewModel";
+import { onMounted, watch } from "vue";
+
+// Definir las props
+const props = defineProps<{
   drawer: boolean;
   handleClose: (done: () => void) => void;
-  documentNumber: string | null;
+  documentNumber: number | null;
 }>();
 
 defineEmits(["update:drawer"]);
+
+const { loadEmployeePotentialByDocument, employeePotential } =
+  useEmployeePotentialViewModel();
+
+onMounted(async () => {
+  if (props.documentNumber != null) {
+    await loadEmployeePotentialByDocument(props.documentNumber);
+  }
+});
+
+watch(
+  () => props.documentNumber,
+  async (newValue) => {
+    if (newValue != null) {
+      await loadEmployeePotentialByDocument(newValue);
+    }
+  },
+  { immediate: true }
+);
 </script>

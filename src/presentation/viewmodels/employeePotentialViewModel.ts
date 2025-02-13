@@ -6,6 +6,7 @@ import type { EmployeePotential } from "@/domain/Interfaces/EmployeePotential/Em
 export function useEmployeePotentialViewModel() {
   const employeePotentialStore = useEmployeePotentialStore();
   const employeePotentialList = ref<EmployeePotential[]>([]);
+  const employeePotential = ref<EmployeePotential | null>();
   const isLoading = computed(() => employeePotentialStore.isLoading);
 
   const search = ref("");
@@ -39,9 +40,7 @@ export function useEmployeePotentialViewModel() {
     employeePotentialList.value.filter(
       (data) =>
         !search.value ||
-        data.firstName
-          .toLowerCase()
-          .includes(search.value.toLowerCase())
+        data.firstName.toLowerCase().includes(search.value.toLowerCase())
     )
   );
 
@@ -62,6 +61,13 @@ export function useEmployeePotentialViewModel() {
   const loadEmployeePotential = async () => {
     employeePotentialList.value =
       (await employeePotentialStore.fetchEmployeePotential()) || [];
+  };
+
+  const loadEmployeePotentialByDocument = async (numberDocument: number) => {
+    employeePotential.value =
+      await employeePotentialStore.fetchEmployeePotentialByDocument(
+        numberDocument
+      );
   };
 
   const submitForm = async (formEl: FormInstance | undefined) => {
@@ -116,5 +122,7 @@ export function useEmployeePotentialViewModel() {
     handleSizeChange,
     submitForm,
     employeePotentialForm,
+    loadEmployeePotentialByDocument,
+    employeePotential
   };
 }

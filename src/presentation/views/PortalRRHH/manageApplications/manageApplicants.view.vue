@@ -65,7 +65,7 @@ const {
 } = useEmployeePotentialViewModel();
 
 const drawer = ref(false);
-const selectedDocumentNumber = ref<string | null>(null);
+const selectedDocumentNumber = ref<number | null>(null);
 
 const handleRowClick = (row: any) => {
   selectedDocumentNumber.value = row.numberDocument;
