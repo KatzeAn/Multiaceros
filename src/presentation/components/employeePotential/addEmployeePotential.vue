@@ -72,7 +72,7 @@
             v-model="employeePotentialForm.jobPostingId"
             placeholder="Seleccione el puesto a referir"
           >
-            <el-option label="ola" :value="1"></el-option>
+            <el-option label="Programador" :value="1"></el-option>
           </el-select>
         </el-form-item>
       </div>
