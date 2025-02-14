@@ -125,9 +125,14 @@ export function useEmployeePotentialViewModel() {
     emit: (event: "employee-saved") => void
   ) => {
     if (!formEl) return;
-    try {
-      await formEl.validate();
 
+    const isValid = await formEl
+      .validate()
+      .then(() => true)
+      .catch(() => false);
+    if (!isValid) return;
+
+    try {
       await employeePotentialStore.createEmployeePotentialRequest(
         employeePotentialForm
       );
@@ -143,7 +148,7 @@ export function useEmployeePotentialViewModel() {
     } catch (error) {
       ElNotification({
         title: "Error",
-        message: "Hubo un problema al guardar el candidato",
+        message: (error as string) || "Error desconocido",
         type: "error",
       });
     }
