@@ -15,4 +15,14 @@ export class PayrollPaymentModel implements PayrollPaymentRepository {
       { responseType: "blob" }
     );
   }
+  downloadPayrollSlip(): Promise<Blob> {
+    return apiRequest<Blob>(
+      "get",
+      "/GetPayrollSlips/payroll-excel",
+      undefined,
+      { responseType: "blob" }
+    );
+  }
+  
+
 }
