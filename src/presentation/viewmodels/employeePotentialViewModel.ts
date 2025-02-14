@@ -134,7 +134,7 @@ export function useEmployeePotentialViewModel() {
 
       ElNotification({
         title: "Éxito",
-        message: "Candidato referido correctamente",
+        message: "Candidato creado correctamente",
         type: "success",
       });
 

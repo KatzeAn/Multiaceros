@@ -7,6 +7,10 @@ export class JobPostingModel extends JobPostingsRepository {
     return apiRequest<JobPosting[]>("get", "/JobPostings/GetAllJobPostings");
   }
 
+  async getAllJobPostingsCopy(): Promise<JobPosting[]> {
+    return apiRequest<JobPosting[]>("get", "/JobPostings/GetAllJobPostingsCopy");
+  }
+
   async getJobPostingById(id: number): Promise<JobPosting> {
     return apiRequest<JobPosting>("get", `/JobPostings/${id}`);
   }

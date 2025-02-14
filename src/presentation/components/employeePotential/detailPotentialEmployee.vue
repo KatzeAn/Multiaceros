@@ -22,9 +22,11 @@
               <el-tag type="success">Activo</el-tag>
             </div>
             <div class="flex flex-row gap-2">
-              <span class="font-semibold text-gray-400">Design Team</span>
-              <span class="font-semibold text-gray-400">-</span>
-              <span class="font-semibold text-gray-400">UI Designer</span>
+              <!-- <span class="font-semibold text-gray-400">Design Team</span>
+              <span class="font-semibold text-gray-400">-</span> -->
+              <span class="font-semibold text-gray-400">{{
+                employeePotential?.jobPostingTitle
+              }}</span>
             </div>
           </div>
         </div>
@@ -74,7 +76,15 @@
 
             <div class="flex flex-col">
               <span class="text-m text-gray-500">Fecha de inicio</span>
-              <span class="text-sm">8 de enero de 2024</span>
+              <span class="text-sm">
+                {{
+                  employeePotential?.jobPostingPublicationDate
+                    ? new Date(
+                        employeePotential.jobPostingPublicationDate
+                      ).toLocaleDateString("es-ES")
+                    : "Fecha no disponible"
+                }}
+              </span>
             </div>
           </div>
           <div>
@@ -88,8 +98,13 @@
             </div>
           </div>
           <div class="flex items-end justify-center">
-            <el-button type="primary" @click="" size="large" disabled
-              >Mover a la siguiente fase</el-button
+            <el-button
+              type="primary"
+              @click=""
+              size="large"
+              class="w-full"
+              disabled
+              >Mover de fase</el-button
             >
           </div>
         </div>
@@ -149,7 +164,13 @@
               </span>
             </div>
           </div>
-          <el-button icon="ChatDotRound" round type="primary" size="large" disabled></el-button>
+          <el-button
+            icon="ChatDotRound"
+            round
+            type="primary"
+            size="large"
+            disabled
+          ></el-button>
         </div>
       </el-card>
     </div>

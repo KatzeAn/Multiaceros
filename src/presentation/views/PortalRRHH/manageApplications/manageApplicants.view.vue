@@ -31,7 +31,7 @@
           {{ `${row.firstName} ${row.surName}` }}
         </template>
       </el-table-column>
-      <el-table-column prop="nameArl" label="Cargo aplicado" />
+      <el-table-column prop="jobPostingTitle" label="Cargo aplicado" />
       <el-table-column label="Etapa">
         <template #default="{ row }">
           {{ EmployeePotentialStatusEnum[row.status] }}
@@ -39,6 +39,14 @@
       </el-table-column>
       <el-table-column prop="email" label="Correo electrónico" />
       <el-table-column prop="cellPhone" label="Celular" />
+      <el-table-column label="Acciones">
+        <template #default="scope">
+          <el-button size="small" type="info" @click="handleRowClick"> Detalles </el-button>
+          <el-button disabled size="small" type="danger">
+            Desactivar
+          </el-button>
+        </template>
+      </el-table-column>
     </el-table>
 
     <!-- Paginación -->
