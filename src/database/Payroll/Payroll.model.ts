@@ -10,8 +10,8 @@ export class PayrollPaymentModel implements PayrollPaymentRepository {
    getPayrollSlip(userId: number): Promise<Blob> {
     return apiRequest<Blob>(
       "get",
-      `/GetPayrollSlips/payroll-slips/`,
-      userId,
+      `/GetPayrollSlips/${userId}/payroll-slips/`,
+      undefined,
       { responseType: "blob" }
     );
   }

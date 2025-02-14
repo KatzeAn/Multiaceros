@@ -1,4 +1,5 @@
 import { PayrollPaymentModel } from "@/database/Payroll/Payroll.model";
+import { ElNotification } from "element-plus";
 import { defineStore } from "pinia";
 
 export const usePayrollPaymentStore = defineStore("payrollPayment", () => {
@@ -13,23 +14,32 @@ export const usePayrollPaymentStore = defineStore("payrollPayment", () => {
   };
 
   const fetchPayrollSlip = async (userId: number) => {
-    const result = {
-      loading: true,
-      payrollSlip: null as Blob | null,
-    };
-
     try {
-      result.loading = true;
       const payrollService = new PayrollPaymentModel();
-      result.payrollSlip = await payrollService.getPayrollSlip(userId);
-    } catch (error) {
-      console.error("Error fetching payroll slip:", error);
-      result.payrollSlip = null;
-    } finally {
-      result.loading = false;
-    }
+      const response = await payrollService.getPayrollSlip(userId);
+      console.log("Respuesta completa de la API:", response);
 
-    return result;
+      const url = window.URL.createObjectURL(response);
+
+      const link = document.createElement("a");
+      link.href = url;
+
+      link.download = `payroll_slip_${userId}.pdf`;
+
+      document.body.appendChild(link);
+      link.click();
+      document.body.removeChild(link);
+      
+      window.URL.revokeObjectURL(url);
+    } catch (error) {
+      console.error("Error downloading payroll slip:", error);
+      ElNotification({
+        title: "Error",
+        message: "An error occurred while downloading the payroll slip",
+        type: "error",
+      });
+      throw error;
+    }
   };
   const fetchDownloadPayrollSlip = async () => {
     

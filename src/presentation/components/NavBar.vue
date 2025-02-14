@@ -1,11 +1,13 @@
 <script setup lang="ts">
 import { onMounted, onUnmounted, ref } from "vue";
-import mujer from '@/presentation/assets/mujer.jpg';
+import mujer from '@/presentation/assets/hombre2.jpg';
 import { useRouter } from "vue-router";
-
+import { useAuthStore } from "../stores/auth.store"; 
+const useAuth = useAuthStore();
 const router = useRouter();
 
 const cerrarSesion = () => {
+  useAuth.logout();
   router.push("/");
 }
 // Estado para los dropdowns
