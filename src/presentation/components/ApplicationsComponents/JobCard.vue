@@ -5,13 +5,17 @@ import {
   ContractTypeDescriptions,
   ContractTypeEnum,
 } from "@/presentation/common/enum/contractTypeEnum";
-import addEmployeePotential from "../employeePotential/addEmployeePotential.vue";
+import AddApplicancy from "../employeePotential/addApplicancy.vue";
 
 const jobStore = useJobPostingStore();
 const isAddModalOpen = ref(false);
+const jobPostingId = ref<number | null>(null);
 
-const openAddModal = () => {
-  isAddModalOpen.value = true;
+const openAddModal = (idJobPosting: number) => {
+  if (idJobPosting >= 0) {
+    jobPostingId.value = idJobPosting;
+    isAddModalOpen.value = true;
+  }
 };
 
 const handleEmployeeSaved = () => {
@@ -26,7 +30,11 @@ onMounted(() => {
 </script>
 
 <template>
-  <addEmployeePotential v-model:dialog="isAddModalOpen" @employee-saved="handleEmployeeSaved" />
+  <AddApplicancy
+    v-model:dialog="isAddModalOpen"
+    @employee-saved="handleEmployeeSaved"
+    :idJobPosting="jobPostingId"
+  />
   <div class="job-list">
     <el-card
       v-for="job in jobStore.jobPostings"
@@ -49,7 +57,7 @@ onMounted(() => {
         <p><strong>Descripción:</strong> {{ job.description }}</p>
       </div>
       <template #footer>
-        <el-button type="primary" @click="openAddModal">
+        <el-button type="primary" @click="openAddModal(job.id || 0)">
           Aplicar ahora
         </el-button>
       </template>
