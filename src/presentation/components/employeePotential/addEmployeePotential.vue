@@ -73,10 +73,10 @@
             placeholder="Seleccione el puesto a referir"
           >
             <el-option
-              v-for="bloodType in jobPostingList"
-              :key="bloodType.id"
-              :label="bloodType.title"
-              :value="bloodType.id"
+              v-for="jobPosting in jobPostingList"
+              :key="jobPosting.id"
+              :label="jobPosting.title"
+              :value="jobPosting.id"
             />
           </el-select>
         </el-form-item>
