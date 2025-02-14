@@ -67,7 +67,7 @@
 </template>
 
 <script lang="ts" setup>
-import { ref } from "vue";
+import { onMounted, ref } from "vue";
 import { useBenefitViewModel } from "@/presentation/viewmodels/benefitViewModel";
 import { ElNotification } from "element-plus";
 
@@ -112,4 +112,8 @@ const removeBenefit = (index: number) => {
   reactiveEmployeeRequest.value.benefits.splice(index, 1);
   emit("updateBenefits", reactiveEmployeeRequest.value.benefits);
 };
+
+onMounted(() => {
+  removeBenefit(0);
+})
 </script>
