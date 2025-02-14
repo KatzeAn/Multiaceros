@@ -4,9 +4,14 @@
       <template #header>
         <div class="flex justify-between items-center">
           <h2 class="text-4xl font-bold text-gray-600">Descarga de Nómina</h2>
-          <el-button type="primary" size="large" @click="descargarNomina" :disabled="loading">
-            Descargar Nómina
-          </el-button>
+          <div class="flex gap-2">
+            <el-button type="primary" size="large" @click="descargarNomina" :disabled="loading">
+              Descargar Nómina
+            </el-button>
+            <el-button type="primary" size="large" :loading="loading" @click="handleDownloadPayrollSlip">
+              Descargar Excel
+            </el-button>
+          </div>
         </div>
       </template>
 
@@ -17,7 +22,7 @@
       <div v-else-if="nomina && nomina.length" class="p-6 border border-gray-300 rounded-lg bg-gray-100 shadow-md">
         <h3 class="text-xl font-semibold text-gray-800 mb-2">Información de Nómina</h3>
 
-        <div v-for="empleado in nomina" :key="empleado.user" class="mb-6 p-4 bg-white shadow rounded-lg">
+        <div v-for="empleado in nomina" :key="empleado.user" class="mb-6 p-4 bg-white rounded-lg shadow-md blurred">
           <div class="grid grid-cols-2 gap-4 text-gray-700">
             <p><strong>Empleado:</strong> {{ empleado.fullName }}</p>
             <p><strong>Documento:</strong> {{ empleado.numberDocument }}</p>
@@ -60,7 +65,6 @@
   </div>
 </template>
 
-
 <script setup>
 import { ref, onMounted } from "vue";
 import { usePayrollPaymentStore } from "@/presentation/stores/Payroll.store";
@@ -69,6 +73,7 @@ import { useUserStore } from "@/presentation/stores/user.store";
 const payrollStore = usePayrollPaymentStore();
 const userStore = useUserStore();
 const loading = ref(false);
+const loadingExcel = ref(false);
 const nomina = ref(null);
 
 const fetchNomina = async () => {
@@ -90,12 +95,10 @@ const fetchNomina = async () => {
   }
 };
 
-
-
 const descargarNomina = async () => {
   try {
     const userId = parseInt(userStore.getUserId);
-    
+
     if (!userId) {
       return;
     }
@@ -106,7 +109,7 @@ const descargarNomina = async () => {
       return;
     }
 
-    const blob = response.payrollSlip; 
+    const blob = response.payrollSlip;
     const link = document.createElement("a");
     link.href = URL.createObjectURL(blob);
     link.download = "Nomina.pdf";
@@ -118,10 +121,48 @@ const descargarNomina = async () => {
     console.error("Error al descargar la nómina:", error);
   }
 };
-
+const handleDownloadPayrollSlip = async () => {
+  loading.value = true;
+  
+  try {
+    const result = await payrollStore.fetchDownloadPayrollSlip();
+    
+    if (!result.payrollSlip) {
+      console.error("No se recibió un archivo válido.");
+      return;
+    }
+    if (!(result.payrollSlip instanceof Blob)) {
+      console.error("La respuesta no es un Blob:", result.payrollSlip);
+      return;
+    }
+    const url = window.URL.createObjectURL(result.payrollSlip);
+    const a = document.createElement("a");
+    a.href = url;
+    a.download = "payroll.xlsx"; 
+    document.body.appendChild(a);
+    a.click();
+    document.body.removeChild(a);
+    window.URL.revokeObjectURL(url);
+  } catch (error) {
+    console.error("Error al descargar el archivo:", error);
+  } finally {
+    loading.value = false;
+  }
+};
 const formatCurrency = (value) => {
   return new Intl.NumberFormat("es-CO", { style: "currency", currency: "COP" }).format(value);
 };
 
 onMounted(fetchNomina);
 </script>
+
+<style>
+.blurred {
+  filter: blur(5px);
+  transition: filter 0.3s ease-in-out;
+}
+
+.blurred:hover {
+  filter: blur(0);
+}
+</style>

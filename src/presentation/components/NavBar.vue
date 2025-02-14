@@ -1,7 +1,13 @@
 <script setup lang="ts">
 import { onMounted, onUnmounted, ref } from "vue";
 import mujer from '@/presentation/assets/mujer.jpg';
+import { useRouter } from "vue-router";
 
+const router = useRouter();
+
+const cerrarSesion = () => {
+  router.push("/");
+}
 // Estado para los dropdowns
 const isProfileDropdownOpen = ref(false);
 const isNotificationsDropdownOpen = ref(false);
@@ -33,6 +39,7 @@ const closeDropdownsOnClickOutside = (event: MouseEvent) => {
     isNotificationsDropdownOpen.value = false;
   }
 };
+
 
 // Montar y desmontar eventos globales
 onMounted(() => {
@@ -115,11 +122,13 @@ onUnmounted(() => {
             >Configuraciones</a
           >
           <a
-            href="#"
-            class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100"
-            role="menuitem"
-            >Cerrar Sesión</a
-          >
+    href="#"
+    class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100"
+    role="menuitem"
+    @click="cerrarSesion"
+  >
+    Cerrar Sesión
+  </a>
         </div>
       </li>
     </ul>
