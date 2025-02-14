@@ -24,6 +24,7 @@
       class="w-full min-h-96 mb-4"
       stripe
       @row-click="handleRowClick"
+      row-class-name="cursor-pointer"
     >
       <el-table-column label="Nombre">
         <template #default="{ row }">
