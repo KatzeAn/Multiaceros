@@ -1,5 +1,8 @@
 <template>
-  <addEmployeePotential v-model:dialog="isAddModalOpen" />
+  <addEmployeePotential
+    v-model:dialog="isAddModalOpen"
+    @employee-saved="handleEmployeeSaved"
+  />
 
   <el-card shadow="never">
     <template #header>
@@ -21,6 +24,7 @@
       class="w-full min-h-96 mb-4"
       stripe
       @row-click="handleRowClick"
+      row-class-name="cursor-pointer"
     >
       <el-table-column label="Nombre">
         <template #default="{ row }">
@@ -63,7 +67,7 @@ import DetailPotentialEmployee from "@/presentation/components/employeePotential
 import addEmployeePotential from "@/presentation/components/employeePotential/addEmployeePotential.vue";
 import { useEmployeePotentialViewModel } from "@/presentation/viewmodels/employeePotentialViewModel";
 import { ElMessageBox } from "element-plus";
-import { ref } from "vue";
+import { onMounted, ref } from "vue";
 
 const openAddModal = () => {
   isAddModalOpen.value = true;
@@ -76,6 +80,7 @@ const {
   paginatedData,
   handlePageChange,
   handleSizeChange,
+  loadEmployeePotential,
 } = useEmployeePotentialViewModel();
 
 const drawer = ref(false);
@@ -96,4 +101,13 @@ const handleClose = (done: () => void) => {
       // catch error
     });
 };
+
+const handleEmployeeSaved = () => {
+  loadEmployeePotential();
+  isAddModalOpen.value = false;
+};
+
+onMounted(async () => {
+  await loadEmployeePotential();
+});
 </script>

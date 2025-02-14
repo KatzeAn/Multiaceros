@@ -346,19 +346,18 @@ export function useEmployeeViewModel() {
     employeeList.value = (await employeeStore.fetchEmployee()) || [];
   };
 
-  const submitForm = async (formEl: FormInstance | undefined) => {
+  const submitForm = async (formEl: FormInstance | undefined, emit: (event: "employee-saved") => void) => {
     if (!formEl) return;
     try {
       await formEl.validate();
       await employeeStore.createEmployeeRequest(employeeRequestForm.value);
-      await loadEmployee();
       resetForm(ruleFormRef.value);
       ElNotification({
         title: "Éxito",
         message: "Empleado creado correctamente",
         type: "success",
       });
-      await loadEmployee();
+      emit("employee-saved");
     } catch (error) {
       ElNotification({
         title: "Error",
@@ -399,5 +398,6 @@ export function useEmployeeViewModel() {
     handleSizeChange,
     submitForm,
     employeeRequestForm,
+    loadEmployee
   };
 }

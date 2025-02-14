@@ -67,7 +67,7 @@
   <el-row :gutter="30">
     <el-col :span="8">
       <el-upload v-model:file-list="fileList">
-        <el-button type="primary">Subir Foto del empleado</el-button>
+        <el-button disabled type="primary">Subir Foto del empleado</el-button>
       </el-upload>
     </el-col>
   </el-row>

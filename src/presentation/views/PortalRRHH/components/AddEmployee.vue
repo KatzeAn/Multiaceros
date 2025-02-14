@@ -31,11 +31,7 @@
     />
 
     <el-form-item class="mt-6">
-      <el-button
-        :loading="isLoading"
-        type="success"
-        @click="submitForm(ruleFormRef)"
-      >
+      <el-button :loading="isLoading" type="success" @click="handleSubmit">
         Enviar Solicitud
       </el-button>
     </el-form-item>
@@ -56,5 +52,11 @@ const { isLoading, ruleFormRef, rules, submitForm, employeeRequestForm } =
 
 const updateBenefits = (newBenefits: any) => {
   employeeRequestForm.value.benefits = newBenefits;
+};
+
+const emit = defineEmits(["employee-saved"]);
+
+const handleSubmit = () => {
+  submitForm(ruleFormRef.value, (event) => emit(event as "employee-saved"));
 };
 </script>
