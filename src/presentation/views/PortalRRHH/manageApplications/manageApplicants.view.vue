@@ -16,8 +16,6 @@
       </div>
     </template>
 
-    <el-card shadow="never" class="mb-6"> </el-card>
-
     <el-table
       :data="paginatedData"
       border
