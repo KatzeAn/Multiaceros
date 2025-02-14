@@ -72,7 +72,12 @@
             v-model="employeePotentialForm.jobPostingId"
             placeholder="Seleccione el puesto a referir"
           >
-            <el-option label="Programador" :value="1"></el-option>
+            <el-option
+              v-for="bloodType in jobPostingList"
+              :key="bloodType.id"
+              :label="bloodType.title"
+              :value="bloodType.id"
+            />
           </el-select>
         </el-form-item>
       </div>
@@ -88,10 +93,13 @@
 
 <script lang="ts" setup>
 import { useEmployeePotentialViewModel } from "@/presentation/viewmodels/employeePotentialViewModel";
+import { useJobPostingViewModel } from "@/presentation/viewmodels/jobPostingViewModel";
 
 const props = defineProps<{
   dialog: boolean;
 }>();
+
+const { jobPostingList } = useJobPostingViewModel();
 
 const emit = defineEmits(["update:dialog", "employee-saved"]);
 const handleSubmit = () => {
