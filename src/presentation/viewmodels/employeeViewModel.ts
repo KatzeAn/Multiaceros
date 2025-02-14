@@ -138,6 +138,31 @@ export function useEmployeeViewModel() {
         message: "La fecha de nacimiento es obligatoria",
         trigger: "blur",
       },
+      {
+        validator: (rule, value, callback) => {
+          if (!value) {
+            return callback(new Error("La fecha de nacimiento es obligatoria"));
+          }
+
+          const birthDate = new Date(value);
+          const today = new Date();
+          let age = today.getFullYear() - birthDate.getFullYear();
+          const monthDiff = today.getMonth() - birthDate.getMonth();
+          const dayDiff = today.getDate() - birthDate.getDate();
+
+          // Verificar si ya cumplió años este año
+          if (monthDiff < 0 || (monthDiff === 0 && dayDiff < 0)) {
+            age--;
+          }
+
+          if (age < 18) {
+            return callback(new Error("Debe ser mayor de edad"));
+          } else {
+            return callback();
+          }
+        },
+        trigger: "blur",
+      },
     ],
   };
 
