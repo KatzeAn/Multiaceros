@@ -71,6 +71,7 @@
           <el-select
             v-model="employeePotentialForm.jobPostingId"
             placeholder="Seleccione el puesto a referir"
+            disabled
           >
             <el-option
               v-for="jobPosting in jobPostingList"
@@ -94,9 +95,11 @@
 <script lang="ts" setup>
 import { useEmployeePotentialViewModel } from "@/presentation/viewmodels/employeePotentialViewModel";
 import { useJobPostingViewModel } from "@/presentation/viewmodels/jobPostingViewModel";
+import { watch } from "vue";
 
 const props = defineProps<{
   dialog: boolean;
+  idJobPosting: number | null;
 }>();
 
 const { jobPostingList } = useJobPostingViewModel();
@@ -108,4 +111,14 @@ const handleSubmit = () => {
 
 const { ruleFormRef, rules, submitForm, isLoading, employeePotentialForm } =
   useEmployeePotentialViewModel();
+
+watch(
+  () => props.idJobPosting,
+  async (newValue) => {
+    if (newValue != null) {
+      employeePotentialForm.jobPostingId = props.idJobPosting || 0;
+    }
+  },
+  { immediate: true }
+);
 </script>

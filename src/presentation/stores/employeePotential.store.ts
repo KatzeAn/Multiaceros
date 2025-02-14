@@ -50,7 +50,6 @@ export const useEmployeePotentialStore = defineStore(
         isLoading.value = true;
         const employeePotentialModel = new EmployeePotentialModel();
         await employeePotentialModel.createEmployeePotential(data);
-        await fetchEmployeePotential(); // Recargar lista después de crear
       } catch (error) {
         throw error;
       } finally {

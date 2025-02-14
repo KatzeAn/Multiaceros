@@ -11,4 +11,6 @@ export interface EmployeePotential {
   email: string;
   cellPhone: string;
   jobPostingId?: number;
+  jobPostingTitle?: string;
+  jobPostingPublicationDate?: string;
 }

@@ -2,8 +2,10 @@ import { defineStore } from "pinia";
 import { ref } from "vue";
 import type { JobPosting } from "@/domain/Interfaces/jobPostings/jobPostings.interface";
 import { JobPostingModel } from "@/database/jobPostings/jobPostings.model";
+import { ElNotification } from "element-plus";
 
 const jobPostingModel = new JobPostingModel();
+const isLoading = ref(false);
 
 export const useJobPostingStore = defineStore("jobPosting", () => {
   const jobPostings = ref<JobPosting[]>([]);
@@ -16,7 +18,23 @@ export const useJobPostingStore = defineStore("jobPosting", () => {
       console.error("Error fetching job postings:", error);
     }
   };
-  
+
+  const fetchJobPostingsCopy = async () => {
+      try {
+        isLoading.value = true;
+        const data = await jobPostingModel.getAllJobPostingsCopy();
+        return Array.isArray(data) ? data : [];
+      } catch (error) {
+        ElNotification({
+          title: "Error",
+          message: "No se pudieron cargar las vacantes",
+          type: "error",
+        });
+        return [];
+      } finally {
+        isLoading.value = false;
+      }
+    };
 
   const createJobPosting = async (job: JobPosting) => {
     try {
@@ -29,6 +47,6 @@ export const useJobPostingStore = defineStore("jobPosting", () => {
     }
   };
 
-  return { jobPostings, fetchJobPostings, createJobPosting };
+  return { jobPostings, fetchJobPostings, createJobPosting, fetchJobPostingsCopy };
 });
 
