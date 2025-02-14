@@ -96,6 +96,13 @@ const router = createRouter({
               "../components/ManageAbsenceComponents/StatisticsAbsencesCard.vue"
             ),
         },
+        {
+          path: "gestionar-nomina",
+          component: () =>
+            import(
+              "../views/ManagePayrollView.vue"
+            ),
+        },
         
       ],
     },

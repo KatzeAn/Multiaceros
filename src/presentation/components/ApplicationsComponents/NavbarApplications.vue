@@ -3,59 +3,69 @@
     :default-active="activeIndex"
     class="el-menu-demo"
     mode="horizontal"
+    background-color="white"
+    text-color="#2A3D66"
+    active-text-color="#2A3D66"
     @select="handleSelect"
   >
-    <el-menu-item index="1" @click="navigateTo('inicio')">Inicio</el-menu-item>
-    <el-menu-item index="2" @click="navigateTo('vacantes')"
-      >Vacantes</el-menu-item
-    >
-    <el-menu-item index="3" @click="navigateTo('sobreNosotros')"
-      >Sobre Nosotros</el-menu-item
-    >
+    <el-menu-item index="0" class="logo">
+      <img :src="logo" alt="Logo" class="logo-img" />
+        </el-menu-item>
+
+    <el-menu-item index="1" @click="navigateTo('inicio')">
+      <el-icon><House /></el-icon> Inicio
+    </el-menu-item>
+
+    <el-menu-item index="2" @click="navigateTo('vacantes')">
+      <el-icon><Briefcase /></el-icon> vacantes
+    </el-menu-item>
+
+
+    <el-menu-item index="3" @click="navigateTo('sobreNosotros')">
+      <el-icon><InfoFilled /></el-icon> Sobre Nosotros
+    </el-menu-item>
   </el-menu>
 </template>
 
 <script setup>
-import { ref } from 'vue'; 
+import { ref } from "vue";
+import { House, Briefcase, InfoFilled } from "@element-plus/icons-vue";
+import logo from "@/presentation/assets/vertical.png";
+
 const activeIndex = ref("1");
 const emit = defineEmits(["navigate"]);
 
 const navigateTo = (section) => {
   emit("navigate", section);
 };
+
+const handleSelect = (key) => {
+  activeIndex.value = key;
+};
 </script>
 
 <style scoped>
 .el-menu-demo {
-  background-color: #a7c7e7;
-  color: #4c6b8a;
-  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
-  font-family: "Arial", sans-serif;
-  padding: 0 20px;
-  justify-content: space-evenly;
-}
-
-.el-menu-item {
-  color: #4c6b8a;
-  font-size: 16px;
-}
-
-.el-menu-item:hover {
-  background-color: #bcd9f1;
-}
-
-.el-menu-item.is-active {
-  background-color: #a2c9e7;
-}
-
-.el-menu-demo {
   display: flex;
+  align-items: center;
   width: 100%;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+  padding: 0 20px;
 }
 
-@media (max-width: 768px) {
-  .el-menu-demo {
-    justify-content: space-between;
-  }
+.logo {
+  padding: 0 15px;
+  cursor: pointer;
+}
+.logo-img {
+  height: 40px;
+}
+
+.flex-spacer {
+  flex-grow: 1;
+}
+.el-menu-item:hover,
+.el-sub-menu__title:hover {
+  background-color: #3C4E80;
 }
 </style>

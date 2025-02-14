@@ -373,7 +373,7 @@ const recursosHumanosSubItems = ref([
   },
   {
     title: "Nómina y compensaciones",
-    route: "#",
+    route: "/portal-rrhh/gestionar-nomina",
   },
   {
     title: "Gestión de beneficios",
