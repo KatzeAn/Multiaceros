@@ -346,10 +346,20 @@ export function useEmployeeViewModel() {
     employeeList.value = (await employeeStore.fetchEmployee()) || [];
   };
 
-  const submitForm = async (formEl: FormInstance | undefined, emit: (event: "employee-saved") => void) => {
+  const submitForm = async (
+    formEl: FormInstance | undefined,
+    emit: (event: "employee-saved") => void
+  ) => {
     if (!formEl) return;
+
+    // Validar el formulario y detener la ejecución si hay errores
+    const isValid = await formEl
+      .validate()
+      .then(() => true)
+      .catch(() => false);
+    if (!isValid) return; // Si la validación falla, no continúa
+
     try {
-      await formEl.validate();
       await employeeStore.createEmployeeRequest(employeeRequestForm.value);
       resetForm(ruleFormRef.value);
       ElNotification({
@@ -361,10 +371,9 @@ export function useEmployeeViewModel() {
     } catch (error) {
       ElNotification({
         title: "Error",
-        message: "Error al crear el empleado",
+        message: (error as string) || "Error desconocido",
         type: "error",
       });
-      return false;
     }
   };
 
@@ -398,6 +407,6 @@ export function useEmployeeViewModel() {
     handleSizeChange,
     submitForm,
     employeeRequestForm,
-    loadEmployee
+    loadEmployee,
   };
 }
