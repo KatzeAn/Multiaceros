@@ -1,9 +1,22 @@
 <script lang="ts" setup>
-import { onMounted } from "vue";
+import { onMounted, ref } from "vue";
 import { useJobPostingStore } from "@/presentation/stores/jobPostings.store";
-import { ContractTypeDescriptions, ContractTypeEnum } from "@/presentation/common/enum/contractTypeEnum";
+import {
+  ContractTypeDescriptions,
+  ContractTypeEnum,
+} from "@/presentation/common/enum/contractTypeEnum";
+import addEmployeePotential from "../employeePotential/addEmployeePotential.vue";
 
 const jobStore = useJobPostingStore();
+const isAddModalOpen = ref(false);
+
+const openAddModal = () => {
+  isAddModalOpen.value = true;
+};
+
+const handleEmployeeSaved = () => {
+  isAddModalOpen.value = false;
+};
 
 onMounted(() => {
   if (jobStore.jobPostings.length === 0) {
@@ -13,6 +26,7 @@ onMounted(() => {
 </script>
 
 <template>
+  <addEmployeePotential v-model:dialog="isAddModalOpen" @employee-saved="handleEmployeeSaved" />
   <div class="job-list">
     <el-card
       v-for="job in jobStore.jobPostings"
@@ -28,11 +42,16 @@ onMounted(() => {
       <div class="card-content text-sm text-gray-600">
         <p><strong>Área:</strong> {{ job.area }}</p>
         <p><strong>Salario:</strong> {{ job.salaryRange }}</p>
-        <p><strong>Tipo de contrato:</strong> {{ ContractTypeDescriptions[job.contractType as ContractTypeEnum] }}</p>
+        <p>
+          <strong>Tipo de contrato:</strong>
+          {{ ContractTypeDescriptions[job.contractType as ContractTypeEnum] }}
+        </p>
         <p><strong>Descripción:</strong> {{ job.description }}</p>
       </div>
       <template #footer>
-        <el-button type="primary">Aplicar ahora</el-button>
+        <el-button type="primary" @click="openAddModal">
+          Aplicar ahora
+        </el-button>
       </template>
     </el-card>
   </div>

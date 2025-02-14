@@ -2,7 +2,7 @@
   <el-dialog
     :model-value="dialog"
     @update:model-value="$emit('update:dialog', $event)"
-    title="Referir un candidato"
+    title="Candidato"
     top="6vh"
   >
     <el-form
