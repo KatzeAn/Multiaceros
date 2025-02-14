@@ -120,7 +120,10 @@ export function useEmployeePotentialViewModel() {
       );
   };
 
-  const submitForm = async (formEl: FormInstance | undefined) => {
+  const submitForm = async (
+    formEl: FormInstance | undefined,
+    emit: (event: "employee-saved") => void
+  ) => {
     if (!formEl) return;
     try {
       await formEl.validate();
@@ -128,7 +131,6 @@ export function useEmployeePotentialViewModel() {
       await employeePotentialStore.createEmployeePotentialRequest(
         employeePotentialForm
       );
-      await loadEmployeePotential();
 
       ElNotification({
         title: "Éxito",
@@ -136,15 +138,28 @@ export function useEmployeePotentialViewModel() {
         type: "success",
       });
 
-      employeePotentialForm.firstName = "";
+      emit("employee-saved");
+      resetForm();
     } catch (error) {
-      const errorMessage = error as string;
       ElNotification({
         title: "Error",
-        message: errorMessage,
+        message: "Hubo un problema al guardar el candidato",
         type: "error",
       });
     }
+  };
+
+  const resetForm = () => {
+    employeePotentialForm.firstName = "";
+    employeePotentialForm.documentType = 1;
+    employeePotentialForm.numberDocument = "";
+    employeePotentialForm.firstName = "";
+    employeePotentialForm.middleName = "";
+    employeePotentialForm.surName = "";
+    employeePotentialForm.dateOfBirth = "";
+    employeePotentialForm.email = "";
+    employeePotentialForm.cellPhone = "";
+    employeePotentialForm.jobPostingId = undefined;
   };
 
   watch([search, currentPage, pageSize], () => {
@@ -153,10 +168,6 @@ export function useEmployeePotentialViewModel() {
       currentPage: currentPage.value,
       pageSize: pageSize.value,
     });
-  });
-
-  onMounted(async () => {
-    await loadEmployeePotential();
   });
 
   return {
@@ -174,5 +185,6 @@ export function useEmployeePotentialViewModel() {
     employeePotentialForm,
     loadEmployeePotentialByDocument,
     employeePotential,
+    loadEmployeePotential,
   };
 }

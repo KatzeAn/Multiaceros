@@ -78,11 +78,7 @@
       </div>
 
       <el-form-item class="mt-12">
-        <el-button
-          :loading="isLoading"
-          type="success"
-          @click="submitForm(ruleFormRef)"
-        >
+        <el-button :loading="isLoading" type="success" @click="handleSubmit">
           Enviar Solicitud
         </el-button>
       </el-form-item>
@@ -97,7 +93,10 @@ const props = defineProps<{
   dialog: boolean;
 }>();
 
-defineEmits(["update:dialog"]);
+const emit = defineEmits(["update:dialog", "employee-saved"]);
+const handleSubmit = () => {
+  submitForm(ruleFormRef.value, (event) => emit(event as "employee-saved"));
+};
 
 const { ruleFormRef, rules, submitForm, isLoading, employeePotentialForm } =
   useEmployeePotentialViewModel();
