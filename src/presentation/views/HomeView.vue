@@ -243,7 +243,7 @@ const download = async () => {
       </el-card>
 
       <!-- Card para enlaces -->
-      <el-card class="col-[1/-1] md:col-span-1 lg:col-span-1" shadow="hover">
+      <el-card class="col-[1/-1] md:col-span-2 lg:col-span-2" shadow="hover">
         <template #header>
           <div class="card-header">
             <span class="font-bold text-[var(--secondary-color)]"
@@ -272,38 +272,6 @@ const download = async () => {
           <el-scrollbar height="295px">
             <BirthdayList></BirthdayList>
           </el-scrollbar>
-        </div>
-      </el-card>
-
-      <!-- Card para bienvenidas -->
-      <el-card class="col-[1/-1] lg:col-span-1" shadow="hover">
-        <template #header>
-          <div class="card-header">
-            <span class="font-bold text-[var(--secondary-color)]">
-              <el-icon>
-                <Menu />
-              </el-icon>
-              Bienvenido a HiCody!
-            </span>
-          </div>
-        </template>
-        <div class="flex flex-col w-full gap-10">
-          <div class="self-center">
-            <span class="text-[90px] material-symbols-outlined">
-              waving_hand
-            </span>
-          </div>
-          <div class="self-center">
-            <div class="flex flex-col">
-              <span class="text-2xl"
-                >Bienvenido <span class="font-medium">Oscar Fuentes</span>, al
-                equipo HiCody!</span
-              >
-              <span class="text-lg text-center"
-                >Inició el lunes, 4 de Diciembre</span
-              >
-            </div>
-          </div>
         </div>
       </el-card>
     </div>
