@@ -5,7 +5,7 @@
         <div class="flex justify-between items-center">
           <h2 class="text-4xl font-bold text-gray-600">Descarga de Nómina</h2>
           <div class="flex gap-2">
-            <el-button type="primary" size="large" @click="descargarNomina" :disabled="loading">
+            <el-button type="primary" size="large" @click="downloadPayrollSlip" :disabled="loading">
               Descargar Nómina
             </el-button>
             <el-button type="primary" size="large" :loading="loading" @click="handleDownloadPayrollSlip">
@@ -73,7 +73,6 @@ import { useUserStore } from "@/presentation/stores/user.store";
 const payrollStore = usePayrollPaymentStore();
 const userStore = useUserStore();
 const loading = ref(false);
-const loadingExcel = ref(false);
 const nomina = ref(null);
 
 const fetchNomina = async () => {
@@ -95,38 +94,23 @@ const fetchNomina = async () => {
   }
 };
 
-const descargarNomina = async () => {
+const downloadPayrollSlip = async () => {
+  loading.value = true;
   try {
     const userId = parseInt(userStore.getUserId);
-
-    if (!userId) {
-      return;
-    }
-
-    const response = await payrollStore.fetchPayrollSlip(userId);
-
-    if (!response || !response.payrollSlip) {
-      return;
-    }
-
-    const blob = response.payrollSlip;
-    const link = document.createElement("a");
-    link.href = URL.createObjectURL(blob);
-    link.download = "Nomina.pdf";
-
-    document.body.appendChild(link);
-    link.click();
-    document.body.removeChild(link);
+    if (!userId) return;
+    await payrollStore.fetchPayrollSlip(userId);
   } catch (error) {
     console.error("Error al descargar la nómina:", error);
+  } finally {
+    loading.value = false;
   }
 };
+
 const handleDownloadPayrollSlip = async () => {
   loading.value = true;
-  
   try {
     const result = await payrollStore.fetchDownloadPayrollSlip();
-    
     if (!result.payrollSlip) {
       console.error("No se recibió un archivo válido.");
       return;
@@ -138,7 +122,7 @@ const handleDownloadPayrollSlip = async () => {
     const url = window.URL.createObjectURL(result.payrollSlip);
     const a = document.createElement("a");
     a.href = url;
-    a.download = "payroll.xlsx"; 
+    a.download = "payroll.xlsx";
     document.body.appendChild(a);
     a.click();
     document.body.removeChild(a);
@@ -149,6 +133,7 @@ const handleDownloadPayrollSlip = async () => {
     loading.value = false;
   }
 };
+
 const formatCurrency = (value) => {
   return new Intl.NumberFormat("es-CO", { style: "currency", currency: "COP" }).format(value);
 };

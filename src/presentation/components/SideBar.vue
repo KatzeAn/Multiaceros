@@ -246,7 +246,7 @@
 <script setup lang="ts">
 import { ref } from "vue";
 import { useUserStore } from "@/presentation/stores/user.store";
-import mujer from "@/presentation/assets/mujer.jpg";
+import mujer from "@/presentation/assets/hombre2.jpg";
 
 const { getUsername, getUserEmail } = useUserStore();
 

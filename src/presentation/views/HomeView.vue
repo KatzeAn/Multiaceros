@@ -4,7 +4,7 @@ import { useCertifiedStore } from "../stores/certified.store";
 
 import Card from "../components/Card.vue";
 import BirthdayList from "../components/BirthdayList.vue";
-import mujer from '@/presentation/assets/mujer.jpg';
+import mujer from '@/presentation/assets/hombre2.jpg';
 const { getUsername, getUserId } = useUserStore();
 
 const certifiedStore = useCertifiedStore();
