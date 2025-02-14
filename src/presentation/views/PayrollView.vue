@@ -15,9 +15,9 @@
       </div>
 
       <div v-else-if="nomina && nomina.length" class="p-6 border border-gray-300 rounded-lg bg-gray-100 shadow-md">
-        <h3 class="text-xl font-semibold text-gray-800 mb-2">Información de Nómina</h3>
+        <h3 class="text-xl font-semibold text-gray-800 mb-2 ">Información de Nómina</h3>
 
-        <div v-for="empleado in nomina" :key="empleado.user" class="mb-6 p-4 bg-white shadow rounded-lg">
+        <div v-for="empleado in nomina" :key="empleado.user" class="mb-6 p-4 bg-white  rounded-lg shadow-md blurred">
           <div class="grid grid-cols-2 gap-4 text-gray-700">
             <p><strong>Empleado:</strong> {{ empleado.fullName }}</p>
             <p><strong>Documento:</strong> {{ empleado.numberDocument }}</p>
@@ -125,3 +125,13 @@ const formatCurrency = (value) => {
 
 onMounted(fetchNomina);
 </script>
+<style>
+.blurred {
+  filter: blur(5px);  
+  transition: filter 0.3s ease-in-out;  
+}
+
+.blurred:hover {
+  filter: blur(0); 
+}
+</style>
