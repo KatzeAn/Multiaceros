@@ -8,9 +8,6 @@
             <el-button type="primary" size="large" @click="downloadPayrollSlip" :disabled="loading">
               Descargar Nómina
             </el-button>
-            <el-button type="primary" size="large" :loading="loading" @click="handleDownloadPayrollSlip">
-              Descargar Excel
-            </el-button>
           </div>
         </div>
       </template>
@@ -102,33 +99,6 @@ const downloadPayrollSlip = async () => {
     await payrollStore.fetchPayrollSlip(userId);
   } catch (error) {
     console.error("Error al descargar la nómina:", error);
-  } finally {
-    loading.value = false;
-  }
-};
-
-const handleDownloadPayrollSlip = async () => {
-  loading.value = true;
-  try {
-    const result = await payrollStore.fetchDownloadPayrollSlip();
-    if (!result.payrollSlip) {
-      console.error("No se recibió un archivo válido.");
-      return;
-    }
-    if (!(result.payrollSlip instanceof Blob)) {
-      console.error("La respuesta no es un Blob:", result.payrollSlip);
-      return;
-    }
-    const url = window.URL.createObjectURL(result.payrollSlip);
-    const a = document.createElement("a");
-    a.href = url;
-    a.download = "payroll.xlsx";
-    document.body.appendChild(a);
-    a.click();
-    document.body.removeChild(a);
-    window.URL.revokeObjectURL(url);
-  } catch (error) {
-    console.error("Error al descargar el archivo:", error);
   } finally {
     loading.value = false;
   }

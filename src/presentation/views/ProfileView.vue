@@ -42,7 +42,7 @@
   import { computed, reactive } from 'vue';
   import { useRoute, useRouter } from 'vue-router';
   import { useUserStore } from "../stores/user.store";
-  import mujer from '@/presentation/assets/mujer.jpg';
+  import mujer from '@/presentation/assets/hombre2.jpg';
   
   const route = useRoute();
   const router = useRouter();
