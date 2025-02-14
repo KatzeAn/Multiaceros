@@ -10,9 +10,9 @@
       <el-form-item label="Salario" prop="salary">
         <el-input-number
           style="width: 100%"
-          :min="0"
+          :min="1300000"
           v-model="employeeRequestForm.salary"
-          :step="1"
+          :step="100000"
         ></el-input-number>
       </el-form-item>
     </el-col>
