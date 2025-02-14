@@ -1,7 +1,10 @@
 <template>
   <!-- MODAL PARA AÑADIR EMPLEADO -->
   <el-dialog v-model="isAddModalOpen" title="Añadir Nuevo Empleado" top="6vh">
-    <AddEmployee @close-form="closeForm" />
+    <AddEmployee
+      @close-form="closeForm"
+      @employee-saved="handleEmployeeSaved"
+    />
   </el-dialog>
 
   <el-card shadow="never">
@@ -64,6 +67,11 @@ const closeForm = () => {
   isAddModalOpen.value = false;
 };
 
+const handleEmployeeSaved = () => {
+  loadEmployee();
+  isAddModalOpen.value = false;
+};
+
 const {
   employeeList,
   isLoading,
@@ -73,5 +81,6 @@ const {
   paginatedData,
   handlePageChange,
   handleSizeChange,
+  loadEmployee,
 } = useEmployeeViewModel();
 </script>
