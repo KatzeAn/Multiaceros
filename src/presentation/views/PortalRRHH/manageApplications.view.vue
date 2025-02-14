@@ -4,7 +4,11 @@
       <el-tab-pane label="Candidatos" name="gestionar-candidatos">
         <router-view v-if="activeName === 'gestionar-candidatos'" />
       </el-tab-pane>
+      <el-tab-pane label="Vacantes" name="gestionar-vacantes">
+        <router-view v-if="activeName === 'gestionar-vacantes'" />
+      </el-tab-pane>
     </el-tabs>
+    
   </main>
 </template>
 

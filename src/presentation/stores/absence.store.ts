@@ -13,6 +13,7 @@ export const useAbsenceStore = defineStore("absence", () => {
     Comment: "",
     EvidenceFilePath: "c://file.pdf",
     UserId: "",
+    name: "",
   });
 
   const fetchAbsences = async (type: keyof AbsenceModel) => {
@@ -47,8 +48,7 @@ export const useAbsenceStore = defineStore("absence", () => {
   const fetchAllAbsences = () => fetchAbsences("getAbsences");
   const fetchApprovedAbsences = () => fetchAbsences("getApprovedAbsences");
   const fetchRejectedAbsences = () => fetchAbsences("getRejectedAbsences");
-
-
+  const fetchAbsenceTypes = async () => fetchAbsences("getAbsenceTypes");
 
   const approveAbsence = async (absenceId: number) => {
     try {
@@ -180,5 +180,6 @@ export const useAbsenceStore = defineStore("absence", () => {
     fetchAllAbsences,
     fetchApprovedAbsences,
     fetchRejectedAbsences,
+    fetchAbsenceTypes,
     };
 });

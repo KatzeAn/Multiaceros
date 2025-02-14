@@ -1,0 +1,144 @@
+<template>
+    <el-button type="primary" icon="Plus" @click="isAddModalOpen = true">
+      Agregar Puesto de Trabajo
+    </el-button>
+  
+    <el-dialog v-model="isAddModalOpen" title="Añadir Nuevo Puesto de Trabajo">
+      <el-form ref="formRef" :model="jobPosting">
+        <el-form-item label="Título" prop="title">
+          <el-input v-model="jobPosting.title" />
+        </el-form-item>
+  
+        <el-form-item label="Descripción" prop="description">
+          <el-input v-model="jobPosting.description" type="textarea" />
+        </el-form-item>
+  
+        <el-form-item label="Rango Salarial" prop="salaryRange">
+          <el-input v-model="jobPosting.salaryRange" />
+        </el-form-item>
+  
+        <el-form-item label="Nivel de Experiencia" prop="experienceLevel">
+          <el-input-number v-model="jobPosting.experienceLevel" :min="1" />
+        </el-form-item>
+  
+        <el-form-item label="Área" prop="area">
+          <el-input v-model="jobPosting.area" />
+        </el-form-item>
+  
+  
+        <el-form-item label="Modalidad" prop="modality">
+          <el-select v-model="jobPosting.modality">
+            <el-option label="Presencial" :value="1" />
+            <el-option label="Remoto" :value="2" />
+            <el-option label="Híbrido" :value="3" />
+          </el-select>
+        </el-form-item>
+  
+        <el-form-item label="Tipo de Contrato" prop="contractType">
+          <el-select v-model="jobPosting.contractType">
+            <el-option label="Indefinido" :value="1" />
+            <el-option label="Término fijo" :value="2" />
+            <el-option label="Freelance" :value="3" />
+          </el-select>
+        </el-form-item>
+  
+  
+        <el-form-item>
+          <el-button type="primary" @click="submitJobPosting">Confirmar</el-button>
+        </el-form-item>
+      </el-form>
+    </el-dialog>
+  
+    <!-- Tabla de Puestos de Trabajo -->
+    <el-table :data="paginatedData" border class="w-full min-h-96 mb-4" stripe>
+      <el-table-column label="Nombre del Puesto" prop="title" />
+      <el-table-column label="Área" prop="area" />
+      <el-table-column label="Salario" prop="salaryRange" />
+      <el-table-column label="Tipo de Contrato">
+        <template #default="{ row }">
+          {{ getContractType(row.contractType) }}
+        </template>
+      </el-table-column>
+  
+      <el-table-column label="Acciones">
+        <template #default="scope">
+          <el-button size="small" disabled> Editar </el-button>
+          <el-button :loading="isLoading" size="small" type="danger" disabled>
+            Desactivar
+          </el-button>
+        </template>
+      </el-table-column>
+    </el-table>
+  
+    <!-- Paginación -->
+    <el-pagination
+      v-model:current-page="currentPage"
+      :page-size="pageSize"
+      :page-sizes="[10, 20, 50]"
+      layout="total, sizes, prev, pager, next"
+      :total="jobPostingStore.jobPostings.length"
+      @size-change="handleSizeChange"
+      @current-change="handlePageChange"
+    />
+  </template>
+  
+  <script lang="ts" setup>
+  import { ref, computed, onMounted } from "vue";
+  import type { JobPosting } from "@/domain/Interfaces/jobPostings/jobPostings.interface"; 
+  import { useJobPostingStore } from "@/presentation/stores/jobPostings.store"; 
+  
+  const isAddModalOpen = ref(false);
+  const jobPostingStore = useJobPostingStore();
+  const currentPage = ref(1);
+  const pageSize = ref(10);
+  
+  const jobPosting = ref<JobPosting>({
+    title: "",
+    description: "",
+    salaryRange: "",
+    experienceLevel: 1,
+    area: "",
+    requirements: [],
+    modality: 1,
+    contractType: 1,
+    contractDuration: "",
+    publicationDate: new Date().toISOString(),
+    closingDate: new Date().toISOString(),
+  });
+  
+  const submitJobPosting = async () => {
+  try {
+    await jobPostingStore.createJobPosting(jobPosting.value);
+    await jobPostingStore.fetchJobPostings();
+  } catch (error) {
+    console.error("Error al crear el puesto de trabajo:", error);
+  }
+};
+
+  
+  onMounted(() => {
+    jobPostingStore.fetchJobPostings();
+  });
+  
+  const getContractType = (contractType: number) => {
+    const contractTypes: Record<number, string> = {
+      1: "Indefinido",
+      2: "Término fijo",
+      3: "Freelance",
+    };
+    return contractTypes[contractType] || "Desconocido";
+  };
+  
+  const paginatedData = computed(() => {
+    const start = (currentPage.value - 1) * pageSize.value;
+    return jobPostingStore.jobPostings.slice(start, start + pageSize.value);
+  });
+  
+  const handleSizeChange = (size: number) => {
+    pageSize.value = size;
+  };
+  const handlePageChange = (page: number) => {
+    currentPage.value = page;
+  };
+  </script>
+  

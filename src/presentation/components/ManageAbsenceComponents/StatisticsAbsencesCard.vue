@@ -99,9 +99,9 @@
             <span>{{ getTotalDays(scope.row.startDate, scope.row.endDate) }}</span>
           </template>
         </el-table-column>
-        <el-table-column label="Tipo" width="150">
-          <template #default="scope">
-            <span>{{ getAbsenceType(scope.row.absenceTypeId) }}</span>
+        <el-table-column label="Tipo de Ausencia" width="200">
+          <template #default="{ row }">
+            {{ getAbsenceTypeName(row.absenceTypeId) }}
           </template>
         </el-table-column>
         <el-table-column prop="comment" label="Comentario" width="200" />
@@ -142,9 +142,9 @@
             <span>{{ getTotalDays(scope.row.startDate, scope.row.endDate) }}</span>
           </template>
         </el-table-column>
-        <el-table-column label="Tipo" width="150">
-          <template #default="scope">
-            <span>{{ getAbsenceType(scope.row.absenceTypeId) }}</span>
+        <el-table-column label="Tipo de Ausencia" width="200">
+          <template #default="{ row }">
+            {{ getAbsenceTypeName(row.absenceTypeId) }}
           </template>
         </el-table-column>
         <el-table-column prop="comment" label="Comentario" width="200" />
@@ -176,9 +176,9 @@
             <span>{{ getTotalDays(scope.row.startDate, scope.row.endDate) }}</span>
           </template>
         </el-table-column>
-        <el-table-column label="Tipo" width="150">
-          <template #default="scope">
-            <span>{{ getAbsenceType(scope.row.absenceTypeId) }}</span>
+        <el-table-column label="Tipo de Ausencia" width="200">
+          <template #default="{ row }">
+            {{ getAbsenceTypeName(row.absenceTypeId) }}
           </template>
         </el-table-column>
         <el-table-column prop="comment" label="Comentario" width="200" />
@@ -211,9 +211,9 @@
             <span>{{ getTotalDays(scope.row.startDate, scope.row.endDate) }}</span>
           </template>
         </el-table-column>
-        <el-table-column label="Tipo" width="150">
-          <template #default="scope">
-            <span>{{ getAbsenceType(scope.row.absenceTypeId) }}</span>
+        <el-table-column label="Tipo de Ausencia" width="200">
+          <template #default="{ row }">
+            {{ getAbsenceTypeName(row.absenceTypeId) }}
           </template>
         </el-table-column>
         <el-table-column prop="comment" label="Comentario" width="200" />
@@ -235,10 +235,10 @@ import { useAbsenceStore } from '@/presentation/stores/absence.store';
 
 const activeTab = ref('pending'); 
 const allAbsences = ref<Absence[]>([]); 
-const tableData = ref<Absence[]>([]);
 const pendingAbsences = ref<Absence[]>([]);
 const approvedAbsences = ref<Absence[]>([]);
 const rejectedAbsences = ref<Absence[]>([]);
+const absenceTypes = ref<{ [key: number]: string }>({});
 
 const absenceStore = useAbsenceStore();
 
@@ -260,15 +260,8 @@ const getStatusName = (status: number) => {
   }
 };
 
-const getAbsenceType = (type: string | number) => {
-  const typeNumber = Number(type);
-  switch (typeNumber) {
-    case 4: return 'Vacaciones';
-    case 5: return 'Cita Médica';
-    case 6: return 'Vacaciones';
-    case 7: return 'Cita Médica';
-    default: return 'Desconocido';
-  }
+const getAbsenceTypeName = (typeId: number) => {
+  return absenceTypes.value[typeId] || 'Desconocido';
 };
 
 const fetchAbsences = async () => {
@@ -281,8 +274,22 @@ const fetchAllAbsences = async () => {
   allAbsences.value = result.absenceList;
 };
 
+const fetchAbsenceTypes = async () => {
+  const result = await absenceStore.fetchAbsenceTypes();
+  if (result && Array.isArray(result.absenceList)) {
+    absenceTypes.value = result.absenceList.reduce((acc, type) => {
+      acc[type.id] = type.name;
+      return acc;
+    }, {} as Record<number, string>);
+  } else {
+  }
+};
+
+
+
 onMounted(() => {
   fetchAbsences();
+  fetchAbsenceTypes();
 });
 
 watch(activeTab, async (newTab) => {
@@ -298,7 +305,6 @@ watch(activeTab, async (newTab) => {
     await fetchAbsences();
   }
 });
-
 
 const approveAbsence = async (absenceId: number) => {
   await absenceStore.approveAbsence(absenceId);

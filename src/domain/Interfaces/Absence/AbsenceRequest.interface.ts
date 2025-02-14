@@ -1,5 +1,6 @@
 export interface AbsenceRequest {
     id?: number | string;
+    name: string;
     StartDate: string;
     EndDate: string;
     AbsenceTypeId: string;
