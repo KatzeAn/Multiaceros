@@ -6,7 +6,7 @@ export function useJobPostingViewModel() {
   const jobPostingStore = useJobPostingStore();
   const jobPostingList = ref<JobPosting[]>([]);
   const isLoading = computed(() => jobPostingStore);
-
+  
   const loadJobPosting = async () => {
     jobPostingList.value = (await jobPostingStore.fetchJobPostingsCopy()) || [];
   };
