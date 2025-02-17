@@ -17,7 +17,7 @@ export class AuthModel extends AuthRepository {
   resetPassword(email: string): Promise<string> {
     return apiRequest("post", "/Auth/forgot-password", { UserEmail: email });
   }
-  private apiUrl = "https://localhost:53793/api/Auth/login";
+  private apiUrl = import.meta.env.VITE_API_URL + "/Auth/login";
 
   async signInWithEmailAndPassword(
     email: string, 
