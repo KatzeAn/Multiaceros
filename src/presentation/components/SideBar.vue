@@ -29,7 +29,7 @@
 
     <div class="px-6 pt-4"><hr class="border-gray-700" /></div>
 
-    <el-scrollbar height="350px">
+    <el-scrollbar height="calc(100vh - 250px)">
       <div class="px-6 pt-4">
         <ul class="flex flex-col space-y-2">
           <!-- Inicio -->

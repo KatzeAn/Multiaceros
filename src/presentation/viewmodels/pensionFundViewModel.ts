@@ -56,9 +56,13 @@ export function usePensionFundViewModel() {
 
   const submitForm = async (formEl: FormInstance | undefined) => {
     if (!formEl) return;
-    try {
-      await formEl.validate();
+    const isValid = await formEl
+      .validate()
+      .then(() => true)
+      .catch(() => false);
+    if (!isValid) return;
 
+    try {
       pensionFundForm.createdBy = "Fe";
       await pensionFundStore.createPensionFundRequest(pensionFundForm);
       await loadPensionFund();

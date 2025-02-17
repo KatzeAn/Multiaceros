@@ -57,8 +57,14 @@ export function useJobTitleViewModel() {
 
   const submitForm = async (formEl: FormInstance | undefined) => {
     if (!formEl) return;
+
+    const isValid = await formEl
+      .validate()
+      .then(() => true)
+      .catch(() => false);
+    if (!isValid) return;
+
     try {
-      await formEl.validate();
       jobTitleForm.createdBy = "Fe";
       await jobTitleStore.createJobTitleRequest(jobTitleForm);
       await loadJobTitles();
@@ -90,7 +96,7 @@ export function useJobTitleViewModel() {
 
   onMounted(async () => {
     await loadJobTitles();
-  })
+  });
 
   return {
     jobTitles,
