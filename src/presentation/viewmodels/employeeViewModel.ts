@@ -377,12 +377,11 @@ export function useEmployeeViewModel() {
   ) => {
     if (!formEl) return;
 
-    // Validar el formulario y detener la ejecución si hay errores
     const isValid = await formEl
       .validate()
       .then(() => true)
       .catch(() => false);
-    if (!isValid) return; // Si la validación falla, no continúa
+    if (!isValid) return;
 
     try {
       await employeeStore.createEmployeeRequest(employeeRequestForm.value);

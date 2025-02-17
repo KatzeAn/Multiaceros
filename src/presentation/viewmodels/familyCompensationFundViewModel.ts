@@ -59,9 +59,14 @@ export function useFamilyCompensationFundViewModel() {
 
   const submitForm = async (formEl: FormInstance | undefined) => {
     if (!formEl) return;
-    try {
-      await formEl.validate();
 
+    const isValid = await formEl
+      .validate()
+      .then(() => true)
+      .catch(() => false);
+    if (!isValid) return;
+    
+    try {
       familyCompensationFundForm.createdBy = "Fe";
       await familyCompensationFundStore.createFamilyCompensationFundRequest(
         familyCompensationFundForm

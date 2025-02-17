@@ -8,7 +8,7 @@
 
     <el-card shadow="never" class="mb-6">
       <el-form inline ref="ruleFormRef" :rules="rules" :model="divisionForm">
-        <el-form-item prop="epsName" label="Nombre">
+        <el-form-item prop="name" label="Nombre">
           <el-input
             v-model="divisionForm.name"
             placeholder="Nombre"

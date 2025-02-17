@@ -56,9 +56,14 @@ export function useDepartmentViewModel() {
 
   const submitForm = async (formEl: FormInstance | undefined) => {
     if (!formEl) return;
-    try {
-      await formEl.validate();
 
+    const isValid = await formEl
+      .validate()
+      .then(() => true)
+      .catch(() => false);
+    if (!isValid) return;
+
+    try {
       await divisionStore.createDivisionRequest(divisionForm);
       await loadDivision();
 
