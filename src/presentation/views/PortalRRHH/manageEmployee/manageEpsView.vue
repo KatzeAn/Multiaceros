@@ -34,7 +34,13 @@
       <el-table-column label="Acciones">
         <template #default="scope">
           <el-button size="small" disabled> Editar </el-button>
-          <el-button :loading="isLoading" size="small" type="danger" disabled>
+          <el-button
+            :loading="isLoading"
+            size="small"
+            type="danger"
+            :disabled="!scope.row.isActive"
+            @click="deleteEps(scope.row.id)"
+          >
             Desactivar
           </el-button>
         </template>
@@ -55,8 +61,10 @@
 </template>
 
 <script lang="ts" setup>
+import { useEpsStore } from "@/presentation/stores/eps.store";
 import { useEpsViewModel } from "@/presentation/viewmodels/epsViewModel";
 
+const epsStore = useEpsStore();
 const {
   epsList,
   isLoading,
@@ -71,4 +79,18 @@ const {
   submitForm,
   epsForm,
 } = useEpsViewModel();
+
+const deleteEps = async (id: number) => {
+  try {
+    await epsStore.deleteEpsRequest(id); 
+    loadEps(); 
+  } catch (error) {
+    console.error("Error al eliminar EPS:", error);
+  }
+};
+
+const loadEps = async () => {
+  const data = await epsStore.fetchEps();
+  epsList.value = data;
+};
 </script>

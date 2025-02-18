@@ -15,7 +15,8 @@ export class EpsModel implements EpsRepository {
     updateEps(id: number, data: Eps): Promise<Eps> {
         return apiRequest<Eps>("put", `/EPS${id}`, data);
     }
-    deleteEps(id: number): Promise<Eps> {
-        return apiRequest<Eps>("delete", `/EPS${id}`);
+    deleteEps(id: number, modifiedBy: string): Promise<Eps> {
+        return apiRequest<Eps>('delete', `/EPS/${id}?modifiedBy=${modifiedBy}`);
     }
+    
 }

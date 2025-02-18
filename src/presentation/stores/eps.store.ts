@@ -3,6 +3,7 @@ import { ElNotification } from "element-plus";
 import { EpsModel } from "@/database/eps/eps.model";
 import type { Eps } from "@/domain/Interfaces/Eps/eps.interface";
 import { ref } from "vue";
+import { useUserStore } from "./user.store";
 
 export const useEpsStore = defineStore("eps", () => {
   const isLoading = ref(false);
@@ -37,10 +38,38 @@ export const useEpsStore = defineStore("eps", () => {
       isLoading.value = false;
     }
   };
+  const deleteEpsRequest = async (id: number) => {
+    try {
+        isLoading.value = true;
+        const epsModel = new EpsModel();
+
+        const userStore = useUserStore();
+        const userId = userStore.getUserId; 
+        await epsModel.deleteEps(id, userId);
+
+        ElNotification({
+            title: "Éxito",
+            message: "EPS eliminada con éxito.",
+            type: "success",
+        });
+
+        await fetchEps();
+    } catch (error) {
+        ElNotification({
+            title: "Error",
+            message: "No se pudo eliminar la EPS.",
+            type: "error",
+        });
+    } finally {
+        isLoading.value = false;
+    }
+};
+
 
   return {
     isLoading,
     fetchEps,
     createEpsRequest,
+    deleteEpsRequest,
   };
 });
