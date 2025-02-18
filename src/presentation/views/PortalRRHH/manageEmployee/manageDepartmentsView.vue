@@ -89,9 +89,12 @@ const {
 const deactivateDivision = async (id: number) => {
   try {
     await divisionStore.deleteDivisionRequest(id); 
+    loadDivisions();
   } catch (error) {
-    console.error("Error al desactivar la división", error);
   }
 };
+const loadDivisions = async () => {
+  const data = await divisionStore.fetchDivision(); 
+  divisionList.value = data; 
+};
 </script>
-
