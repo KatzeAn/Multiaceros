@@ -32,7 +32,13 @@
       <el-table-column label="Acciones">
         <template #default="scope">
           <el-button size="small" disabled> Editar </el-button>
-          <el-button :loading="isLoading" size="small" type="danger" disabled>
+          <el-button 
+            :loading="isLoading"
+            size="small" 
+            type="danger" 
+            @click="deactivateEmployee(scope.row.id)"
+            :disabled="!scope.row.isActive" 
+          >
             Desactivar
           </el-button>
         </template>
@@ -52,12 +58,15 @@
   </el-card>
 </template>
 
+
 <script lang="ts" setup>
 import { useEmployeeViewModel } from "@/presentation/viewmodels/employeeViewModel";
 import AddEmployee from "../components/AddEmployee.vue";
 import { ref } from "vue";
+import { useEmployeeStore } from "@/presentation/stores/employee.store";  
 
 const isAddModalOpen = ref(false);
+const employeeStore = useEmployeeStore();
 
 const openAddModal = () => {
   isAddModalOpen.value = true;
@@ -83,4 +92,13 @@ const {
   handleSizeChange,
   loadEmployee,
 } = useEmployeeViewModel();
+
+const deactivateEmployee = async (id: number) => {
+  try {
+    await employeeStore.deactivateEmployee(id); 
+    loadEmployee(); 
+  } catch (error) {
+    console.error("Error al desactivar el empleado:", error);
+  }
+};
 </script>

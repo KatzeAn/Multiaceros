@@ -8,6 +8,6 @@ export abstract class EmployeeRepository {
   abstract getEmployees(): Promise<BasicEmployee[]>;
   abstract createEmployee(employee: EmployeeRequest): Promise<EmployeeRequest>;
   abstract updateEmployee(employee: Employee): Promise<Employee>;
-  abstract deleteEmployee(id: number): Promise<Employee>;
+  abstract deleteEmployee(id: number, modifiedBy: string): Promise<Employee>;
   abstract SearchEmployeeByDocument(numberDocument: number): Promise<Employee[]>;
 }

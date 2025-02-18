@@ -72,8 +72,8 @@ export class EmployeeModel implements EmployeeRepository {
   updateEmployee(employee: Employee): Promise<Employee> {
     return apiRequest<Employee>("put", "Employee/updateemployees", employee);
   }
-  deleteEmployee(id: number): Promise<Employee> {
-    return apiRequest<Employee>("patch", `Employee/${id}/deactivate`);
+  deleteEmployee(id: number, modifiedBy: string): Promise<Employee> {
+    return apiRequest<Employee>("patch", `Employee/${id}/deactivate?modifiedBy=${modifiedBy}`);
   }
   SearchEmployeeByDocument(numberDocument: number): Promise<Employee[]> {
     return apiRequest<Employee[]>("get", `Employee/search/${numberDocument}`);
