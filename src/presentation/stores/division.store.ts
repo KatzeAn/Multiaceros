@@ -69,10 +69,37 @@ export const useDivisionStore = defineStore("division", () => {
     return result;
   };
 
+  const deleteDivisionRequest = async (id: number) => {
+    try {
+      isLoading.value = true;
+      const divisionModel = new DivisionModel();
+
+      const userStore = useUserStore();
+      const userId = userStore.getUserId;
+      await divisionModel.deleteDivision(id, userId);
+      
+      ElNotification({
+        title: "Éxito",
+        message: "Departamento desactivado con éxito.",
+        type: "success",
+      });
+      await fetchDivision();
+    } catch (error) {
+      ElNotification({
+        title: "Error",
+        message: "No se pudo desactivar el departamento.",
+        type: "error",
+      });
+    } finally {
+      isLoading.value = false;
+    }
+  };
+
   return {
     isLoading,
     fetchDivision,
     createDivisionRequest,
     fetchMyTeammate,
+    deleteDivisionRequest,
   };
 });

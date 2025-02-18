@@ -40,7 +40,13 @@
       <el-table-column label="Acciones">
         <template #default="scope">
           <el-button size="small" disabled> Editar </el-button>
-          <el-button :loading="isLoading" size="small" type="danger" disabled>
+          <el-button
+            :loading="isLoading"
+            size="small"
+            type="danger"
+            :disabled="!scope.row.isActive"
+            @click="deactivateDivision(scope.row.id)"
+          >
             Desactivar
           </el-button>
         </template>
@@ -61,8 +67,10 @@
 </template>
 
 <script lang="ts" setup>
+import { useDivisionStore } from "@/presentation/stores/division.store";
 import { useDepartmentViewModel } from "@/presentation/viewmodels/departmentViewModel";
 
+const divisionStore = useDivisionStore();
 const {
   divisionList,
   isLoading,
@@ -77,4 +85,13 @@ const {
   submitForm,
   divisionForm,
 } = useDepartmentViewModel();
+
+const deactivateDivision = async (id: number) => {
+  try {
+    await divisionStore.deleteDivisionRequest(id); 
+  } catch (error) {
+    console.error("Error al desactivar la división", error);
+  }
+};
 </script>
+

@@ -21,6 +21,6 @@ export class DivisionModel implements DivisionRepository {
         return apiRequest<Division>('put', `/Division/${id}`, { divisionId: id, newName,modifiedBy });
     }
     deleteDivision(id: number, modifiedBy: string): Promise<Division> {
-        return apiRequest<Division>('patch', `/Division/${id}/DivisionDelete`, { divisionId: id, modifiedBy });
+        return apiRequest<Division>('patch', `/Division/${id}/DivisionDelete?modifiedBy=${modifiedBy}`);
     }
 }
