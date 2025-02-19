@@ -23,15 +23,9 @@ export class FamilyCompesationFundsModel
       }
     );
   }
-  updateFamilyCompesationFunds(
-    data: FamilyCompesationFunds
-  ): Promise<FamilyCompesationFunds> {
-    return apiRequest<FamilyCompesationFunds>(
-      "put",
-      "FamilyCompesationFunds/UpdateFamilyCompesationFunds",
-      { data }
-    );
-  }
+  updateFamilyCompensationFunds(id: number,compensationFundName: string, modifiedBy: string): Promise<FamilyCompesationFunds> {
+    return apiRequest<FamilyCompesationFunds>("put", "/FamilyCompesationFunds/UpdateFamilyCompesationFunds",{id, compensationFundName, modifiedBy});
+}
   deleteFamilyCompesationFunds(compesationfundsID: number, modifiedBy: string): Promise<FamilyCompesationFunds> {
     return apiRequest<FamilyCompesationFunds>(
         "patch",

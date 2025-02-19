@@ -66,10 +66,39 @@ export const useSeveranceFundStore = defineStore("severanceFund", () => {
               }
           
           }
+
+          const updateSeveranceFundRequest = async (id: number, severanceFundName: string) => {
+            try {
+              isLoading.value = true;
+              const severanceFundModel = new SeveranceFundModel();
+              const userStore = useUserStore(); 
+              const userId = userStore.getUserId;
+        
+              await severanceFundModel.updateSeveranceFund(id, severanceFundName, userId);
+
+              ElNotification({
+                title: "Exito",
+                message: "Fondo de cesantias actualizado con éxito",
+                type: "success",
+                });
+
+                await fetchSeveranceFund();
+                } catch (error) {
+                  ElNotification({
+                    title: "Error",
+                    message: "No se pudo actualizar el fondo de compensación familiar",
+                    type: "error",
+              });
+          } finally {
+            isLoading.value = false;
+          }
+        };
+
   return {
     isLoading,
     fetchSeveranceFund,
     createSeveranceFundRequest,
     deleteSeveranceFundsRequest,
+    updateSeveranceFundRequest,
   };
 });

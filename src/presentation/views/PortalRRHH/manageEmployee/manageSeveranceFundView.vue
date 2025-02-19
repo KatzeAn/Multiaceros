@@ -44,7 +44,9 @@
       </el-table-column>
       <el-table-column label="Acciones">
         <template #default="scope">
-          <el-button size="small" disabled> Editar </el-button>
+          <el-button size="small"  @click="openEditModal(scope.row)">
+            Editar
+          </el-button>
           <el-button
             :loading="isLoading"
             size="small"
@@ -57,6 +59,18 @@
         </template>
       </el-table-column>
     </el-table>
+
+    <el-dialog v-model="isEditModalVisible" title="Editar Fondo de cesantías">
+      <el-form>
+        <el-form-item label="Nuevo Nombre">
+          <el-input v-model="editForm.name" />
+        </el-form-item>
+      </el-form>
+      <template #footer>
+        <el-button @click="isEditModalVisible = false">Cancelar</el-button>
+        <el-button type="primary" @click="editSeveranceFund">Guardar Cambios</el-button>
+      </template>
+    </el-dialog>
 
     <!-- Paginación -->
     <el-pagination
@@ -72,6 +86,7 @@
 </template>
 
 <script lang="ts" setup>
+import { ref } from "vue";
 import { useSeveranceFundViewModel } from "@/presentation/viewmodels/severanceFundViewModel";
 import {useSeveranceFundStore} from "@/presentation/stores/severanceFund.store"
 
@@ -90,6 +105,28 @@ const {
   submitForm,
   severanceFundForm,
 } = useSeveranceFundViewModel();
+
+const isEditModalVisible = ref(false);
+const editForm = ref({ id: null, name: "" });
+
+const openEditModal = (SeveranceFund) => {
+  editForm.value.id = SeveranceFund.id;
+  editForm.value.name = SeveranceFund.severanceFundName;
+  isEditModalVisible.value = true;
+};
+
+const editSeveranceFund = async () => {
+  if (!editForm.value.id || !editForm.value.name.trim()) {
+    return;
+  }
+  try {
+    await severanceStore.updateSeveranceFundRequest(editForm.value.id, editForm.value.name);
+    isEditModalVisible.value = false;
+    fetchSeveranceFund();
+  } catch (error) {
+    console.error(error);
+  }
+};
 
 const deleteSeveranceFund =  async (id: number) => {
   try{

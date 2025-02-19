@@ -71,6 +71,33 @@ export const useFamilyCompensationFundStore = defineStore(
             }
         
         }
+        const updateFamilyCompensationFundsRequest = async (id: number, compensationFundName: string) => {
+          try {
+            isLoading.value = true;
+            const familyCompensationModel = new FamilyCompesationFundsModel();
+            const userStore = useUserStore();
+            const userId = userStore.getUserId;
+        
+            await familyCompensationModel.updateFamilyCompensationFunds(id, compensationFundName, userId);
+        
+            ElNotification({
+              title: "Éxito",
+              message: "Fondo de compensación actualizado con éxito.",
+              type: "success",
+            });
+        
+            await fetchFamilyCompensationFund();
+          } catch (error) {
+            ElNotification({
+              title: "Error",
+              message: "No se pudo actualizar el fondo de compensación.",
+              type: "error",
+            });
+          } finally {
+            isLoading.value = false;
+          }
+        };
+        
 
 
 
@@ -80,6 +107,7 @@ export const useFamilyCompensationFundStore = defineStore(
       fetchFamilyCompensationFund,
       createFamilyCompensationFundRequest,
       deleteFamilyCompesationRequest,
+      updateFamilyCompensationFundsRequest,
     };
   }
 );

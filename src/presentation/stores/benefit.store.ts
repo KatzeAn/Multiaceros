@@ -66,10 +66,39 @@ export const useBenefitStore = defineStore("Benefit", () => {
               
   }
 
+  const updateBenefitRequest = async (id: number, nameBenefit: string) => {
+    try {
+      isLoading.value = true;
+      const benefitModel = new BenefitModel();
+      const userStore = useUserStore();
+      const userId = userStore.getUserId;
+  
+      await benefitModel.updateBenefit(id, nameBenefit, userId);
+  
+      ElNotification({
+        title: "Éxito",
+        message: "Beneficio actualizado con éxito.",
+        type: "success",
+      });
+  
+      await fetchBenefit();
+    } catch (error) {
+      ElNotification({
+        title: "Error",
+        message: "No se pudo actualizar el beneficio.",
+        type: "error",
+      });
+    } finally {
+      isLoading.value = false;
+    }
+  };
+  
+
   return {
     isLoading,
     fetchBenefit,
     createBenefitRequest,
     deleteBenefitRequest,
+    updateBenefitRequest,
   };
 });
