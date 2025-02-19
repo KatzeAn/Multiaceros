@@ -32,13 +32,11 @@ export class FamilyCompesationFundsModel
       { data }
     );
   }
-  deleteFamilyCompesationFunds(
-    data: FamilyCompesationFunds
-  ): Promise<FamilyCompesationFunds> {
+  deleteFamilyCompesationFunds(compesationfundsID: number, modifiedBy: string): Promise<FamilyCompesationFunds> {
     return apiRequest<FamilyCompesationFunds>(
-      "patch",
-      "FamilyCompesationFunds/DeleteFamilyCompesationFunds",
-      { data }
+        "patch",
+        `/FamilyCompesationFunds/DeleteFamilyCompesationFunds?compesationfundsID=${compesationfundsID}&modifiedBy=${modifiedBy}`
     );
-  }
+}
+
 }

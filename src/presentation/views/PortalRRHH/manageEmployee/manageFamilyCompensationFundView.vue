@@ -45,7 +45,13 @@
       <el-table-column label="Acciones">
         <template #default="scope">
           <el-button size="small" disabled> Editar </el-button>
-          <el-button :loading="isLoading" size="small" type="danger" disabled>
+          <el-button
+            :loading="isLoading"
+            size="small"
+            type="danger"
+            :disabled="!scope.row.isActive"
+            @click="deleteFamilyFund(scope.row.id)"
+          >
             Desactivar
           </el-button>
         </template>
@@ -67,7 +73,9 @@
 
 <script lang="ts" setup>
 import { useFamilyCompensationFundViewModel } from "@/presentation/viewmodels/familyCompensationFundViewModel";
+import { useFamilyCompensationFundStore } from "@/presentation/stores/familyCompensationFund.store";
 
+const familyCompensationFundStore = useFamilyCompensationFundStore();
 const {
   familyCompensationFundList,
   isLoading,
@@ -82,4 +90,18 @@ const {
   submitForm,
   familyCompensationFundForm,
 } = useFamilyCompensationFundViewModel();
+
+const deleteFamilyFund = async (id: number) => {
+  try {
+    await familyCompensationFundStore.deleteFamilyCompesationRequest(id);
+    await fetchFamilyCompensationFund();
+    } catch (error) {
+      console.error(error);
+      }
+}
+
+const fetchFamilyCompensationFund = async () => {
+  const data = await familyCompensationFundStore.fetchFamilyCompensationFund();
+  familyCompensationFundList.value = data;
+};
 </script>

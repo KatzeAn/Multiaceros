@@ -45,7 +45,13 @@
       <el-table-column label="Acciones">
         <template #default="scope">
           <el-button size="small" disabled> Editar </el-button>
-          <el-button :loading="isLoading" size="small" type="danger" disabled>
+          <el-button
+            :loading="isLoading"
+            size="small"
+            type="danger"
+            :disabled="!scope.row.isActive"
+            @click="deleteSeveranceFund(scope.row.id)"
+          >
             Desactivar
           </el-button>
         </template>
@@ -67,7 +73,9 @@
 
 <script lang="ts" setup>
 import { useSeveranceFundViewModel } from "@/presentation/viewmodels/severanceFundViewModel";
+import {useSeveranceFundStore} from "@/presentation/stores/severanceFund.store"
 
+const  severanceStore = useSeveranceFundStore()
 const {
   severanceFundList,
   isLoading,
@@ -82,4 +90,18 @@ const {
   submitForm,
   severanceFundForm,
 } = useSeveranceFundViewModel();
+
+const deleteSeveranceFund =  async (id: number) => {
+  try{
+    await severanceStore.deleteSeveranceFundsRequest(id);
+    await fetchSeveranceFund();
+    }catch(error){
+      console.error(error);
+      }
+  }
+
+  const fetchSeveranceFund = async () => {
+    const date = await severanceStore.fetchSeveranceFund();
+    severanceFundList.value = date;
+  }
 </script>

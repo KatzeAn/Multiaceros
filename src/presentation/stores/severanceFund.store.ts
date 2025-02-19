@@ -3,6 +3,7 @@ import { ElNotification } from "element-plus";
 import { ref } from "vue";
 import { SeveranceFundModel } from "@/database/severanceFund/severanceFund.model";
 import type { SeveranceFund } from "@/domain/Interfaces/severanceFund/severanceFund.interface";
+import { useUserStore } from "./user.store";
 
 export const useSeveranceFundStore = defineStore("severanceFund", () => {
   const isLoading = ref(false);
@@ -38,9 +39,38 @@ export const useSeveranceFundStore = defineStore("severanceFund", () => {
     }
   };
 
+  const deleteSeveranceFundsRequest = async (severanceFundId: number) => {
+        try {
+          isLoading.value = true;
+          const severanceFundModel = new SeveranceFundModel();
+
+          const userStore = useUserStore();
+          const userId = userStore.getUserId;
+          await severanceFundModel.deleteSeveranceFund(severanceFundId, userId);
+
+          ElNotification ({
+            title: "Exito",
+            message: "Fondo de cesantias eliminado con éxito",
+            type: "success",
+            });
+
+            await fetchSeveranceFund();
+            } catch (error) {
+              ElNotification ({
+                title: "Error",
+                message: "No se pudo eliminar el fondo de compensación familiar",
+                type: "error",
+                });
+              }finally {
+                isLoading.value = false;
+              }
+          
+          }
+
   return {
     isLoading,
     fetchSeveranceFund,
     createSeveranceFundRequest,
+    deleteSeveranceFundsRequest,
   };
 });

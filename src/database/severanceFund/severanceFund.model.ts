@@ -12,7 +12,11 @@ export class SeveranceFundModel implements SeveranceFundRepository {
     updateSeveranceFund(data: SeveranceFund): Promise<SeveranceFund> {
         return apiRequest<SeveranceFund>("put", "/SeveranceFund/UpdateSeveranceFund", { data });
     }
-    deleteSeveranceFund(data: Partial<SeveranceFund>): Promise<SeveranceFund> {
-        return apiRequest<SeveranceFund>("delete", "/SeveranceFund/DeleteSeveranceFund", { data });
+    deleteSeveranceFund(severanceFundId: number, modifiedBy: string): Promise<SeveranceFund> {
+        return apiRequest<SeveranceFund>(
+            "patch",
+            `/SeveranceFund/DeleteSeveranceFund?SeveranceFundId=${severanceFundId}&modifiedBy=${modifiedBy}`
+        );
     }
+    
 }

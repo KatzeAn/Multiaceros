@@ -4,5 +4,5 @@ export abstract class FamilyCompesationFundsRepository {
     abstract getFamilyCompesationFunds(): Promise<FamilyCompesationFunds[]>;
     abstract createFamilyCompesationFunds(data: FamilyCompesationFunds): Promise<FamilyCompesationFunds>;
     abstract updateFamilyCompesationFunds(data: FamilyCompesationFunds): Promise<FamilyCompesationFunds>;
-    abstract deleteFamilyCompesationFunds(data: FamilyCompesationFunds): Promise<FamilyCompesationFunds>;
+    abstract deleteFamilyCompesationFunds(compesationfundsID: number, modifiedBy: string): Promise<FamilyCompesationFunds>;
 }
