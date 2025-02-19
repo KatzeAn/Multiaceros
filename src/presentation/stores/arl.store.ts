@@ -64,10 +64,39 @@ export const useArlStore = defineStore("arl", () => {
   }
 };
 
+const updateArlRequest = async (id: number, nameArl: string) => {
+  try {
+    isLoading.value = true;
+    const arlModel = new ArlModel();
+    const userStore = useUserStore(); 
+    const userId = userStore.getUserId;
+
+    await arlModel.update(id, nameArl, userId);
+
+    ElNotification({
+      title: "Éxito",
+      message: "ARL actualizada con éxito.",
+      type: "success",
+      });
+    
+      await fetchArl();
+      } catch (error) {
+        ElNotification({
+          title: "Error",
+          message: "No se pudo actualizar la ARL.",
+          type: "error",
+          });
+          } finally {
+            isLoading.value = false;
+            }
+            };
+
+
   return {
     isLoading,
     fetchArl,
     createArlRequest,
     deleteArlRequest,
+    updateArlRequest,
   };
 });

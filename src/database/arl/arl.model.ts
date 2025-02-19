@@ -9,8 +9,8 @@ export class ArlModel extends ArlRepository {
   create(nameArl: string): Promise<Arl> {
     return apiRequest<Arl>("post", "/Arl", { nameArl });
   }
-  update(arl: Arl): Promise<Arl> {
-    return apiRequest<Arl>("put", "/Arl", arl);
+  update(id: number, nameArl: string, modifiedBy: string): Promise<Arl> {
+    return apiRequest<Arl>("put", `/Arl/${id}`, { arlID: id, nameArl, modifiedBy });
   }
   delete(arlID: number, modifiedBy: string): Promise<Arl> {
     return apiRequest<Arl>("delete", `/Arl/${arlID}?modifiedBy=${modifiedBy}`);

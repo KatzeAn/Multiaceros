@@ -9,9 +9,11 @@ export class PensionFundsModel implements PensionFundsRepository {
     createPensionFund(data: PensionFunds): Promise<PensionFunds> {
         return apiRequest<PensionFunds>("post", "/PensionFunds/CreatePensionFunds", data);
     }
-    updatePensionFund(data: PensionFunds): Promise<PensionFunds> {
-        return apiRequest<PensionFunds>("put", "/PensionFunds/UpdatePensionFunds", data);
+    updatePensionFund(id: number, pensionFundName: string, modifiedBy: string): Promise<PensionFunds> {
+        return apiRequest<PensionFunds>("put", "/PensionFunds/UpdatePensionFunds", {  pensionFundId: id, pensionFundName, modifiedBy 
+        });
     }
+    
     deletePensionFund(pensionFundId: number, modifiedBy: string): Promise<PensionFunds> {
         return apiRequest<PensionFunds>(
             "patch",

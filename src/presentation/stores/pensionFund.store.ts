@@ -67,10 +67,37 @@ export const usePensionFundStore = defineStore("pensionFund", () => {
     }
   };
 
+  const updatePensionFundRequest = async (id: number, pensionFundName: string) => {
+    try{
+      isLoading.value = true;
+      const pensionFundModel = new PensionFundsModel();
+      const userStore = useUserStore(); 
+      const userId = userStore.getUserId;
+
+      await pensionFundModel.updatePensionFund(id, pensionFundName, userId);
+
+      ElNotification({
+        title: "Éxito",
+        message: "Fondo de pensión actualizado correctamente",
+        type: "success",
+        });
+
+        await fetchPensionFund();
+        } catch (error) {
+          ElNotification({
+            title: "Error",
+            message: "No se pudo actualizar el fondo de pensión",
+            type: "error",
+      });
+    } finally {
+      isLoading.value = false;
+      }
+  }
   return {
     isLoading,
     fetchPensionFund,
     createPensionFundRequest,
     deletePensionFundRequest,
+    updatePensionFundRequest,
   };
 });

@@ -64,6 +64,28 @@ export const useEpsStore = defineStore("eps", () => {
         isLoading.value = false;
     }
 };
+ const updateEpsRequest = async (id: number, epsName: string) => {
+  try {
+    isLoading.value = true;
+    const epsModel = new EpsModel();
+    await epsModel.updateEps(id, epsName);
+
+    ElNotification({
+      title: "Éxito",
+      message: "EPS actualizada con éxito.",
+      type: "success",
+    });
+    await fetchEps();
+    } catch (error) {
+      ElNotification({
+        title: "Error",
+        message: "No se pudo actualizar la EPS.",
+        type: "error",
+        });
+        } finally {
+          isLoading.value = false;
+          }
+          };
 
 
   return {
@@ -71,5 +93,6 @@ export const useEpsStore = defineStore("eps", () => {
     fetchEps,
     createEpsRequest,
     deleteEpsRequest,
+    updateEpsRequest,
   };
 });
