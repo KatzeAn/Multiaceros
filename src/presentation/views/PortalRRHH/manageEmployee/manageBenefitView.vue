@@ -38,7 +38,13 @@
       <el-table-column label="Acciones">
         <template #default="scope">
           <el-button size="small" disabled> Editar </el-button>
-          <el-button :loading="isLoading" size="small" type="danger" disabled>
+          <el-button
+            :loading="isLoading"
+            size="small"
+            type="danger"
+            :disabled="!scope.row.isActive"
+            @click="deleteBenefit(scope.row.id)"
+          >
             Desactivar
           </el-button>
         </template>
@@ -60,7 +66,9 @@
 
 <script lang="ts" setup>
 import { useBenefitViewModel } from "@/presentation/viewmodels/benefitViewModel";
+import {useBenefitStore} from "@/presentation/stores/benefit.store";
 
+const benefitStore = useBenefitStore();
 const {
   benefitList,
   isLoading,
@@ -75,4 +83,18 @@ const {
   submitForm,
   benefitForm,
 } = useBenefitViewModel();
+
+const deleteBenefit = async (id: number) => {
+  try {
+    await benefitStore.deleteBenefitRequest(id);
+    await fetchBenefit();
+    } catch (error) {
+      console.error(error);
+      }
+      };
+      const fetchBenefit = async () => {
+        const date =  await benefitStore.fetchBenefit();
+        benefitList.value = date;
+        };
+
 </script>

@@ -66,7 +66,6 @@ export const useSeveranceFundStore = defineStore("severanceFund", () => {
               }
           
           }
-
   return {
     isLoading,
     fetchSeveranceFund,

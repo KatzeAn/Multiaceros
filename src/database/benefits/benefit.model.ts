@@ -12,9 +12,9 @@ export class BenefitModel implements BenefitRepository {
   updateBenefit(data: Benefits): Promise<Benefits> {
     return apiRequest<Benefits>("put", "/Benefits/UpdateBenefits", { data });
   }
-  deleteBenefit(id: number, modifiedBy: string): Promise<Benefits> {
-    return apiRequest<Benefits>("delete", `/Benefits/DeleteBenefits/${id}`, {
-      data: { id, modifiedBy },
-    });
-  }
+  deleteBenefit(benefitID: number, modifiedBy: string): Promise<Benefits> {
+    return apiRequest<Benefits>("patch", `/Benefits/BenefitsDelete?benefitID=${benefitID}&modifiedBy=${modifiedBy}`
+    );
+}
+
 }
