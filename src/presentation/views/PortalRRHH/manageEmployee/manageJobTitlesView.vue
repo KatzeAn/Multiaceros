@@ -38,7 +38,13 @@
       <el-table-column label="Acciones">
         <template #default="scope">
           <el-button size="small" disabled> Editar </el-button>
-          <el-button :loading="isLoading" size="small" type="danger" disabled>
+          <el-button
+            :loading="isLoading"
+            size="small"
+            type="danger"
+            :disabled="!scope.row.isActive"
+            @click="deleteJob(scope.row.id)"
+          >
             Desactivar
           </el-button>
         </template>
@@ -60,7 +66,9 @@
 
 <script lang="ts" setup>
 import { useJobTitleViewModel } from "@/presentation/viewmodels/jobTitleViewModel";
+import {useJobTitleStore} from "@/presentation/stores/jobTitle.store";
 
+const jobTitleStore = useJobTitleStore();
 const {
   jobTitles,
   isLoading,
@@ -75,4 +83,17 @@ const {
   submitForm,
   jobTitleForm,
 } = useJobTitleViewModel();
+
+const deleteJob = async (id: number) => {
+  try {
+    await jobTitleStore.deleteJobTitleRequest(id);
+    await fetchJobTitles();
+    } catch (error) {
+      console.error(error);
+      }
+      };
+      const fetchJobTitles = async () => {
+        const date = await jobTitleStore.fetchJobTitles();
+        jobTitles.value = date;
+      }
 </script>

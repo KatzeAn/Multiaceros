@@ -12,8 +12,9 @@ export class JobTitleModel implements JobTitleRepository {
     updateJobTitle(jobTitleId: number, jobTitle: JobTitle): Promise<JobTitle> {
         return apiRequest<JobTitle>("put", `/JobTitle/${jobTitleId}`, jobTitle);
     }
-    softDeleteJobTitle(jobTitleId: number): Promise<boolean> {
-        return apiRequest<boolean>("patch", `/JobTitle/${jobTitleId}/JobTitleDelete`);
+    deleteJobTitle(jobTitleId: number, modifiedBy: string): Promise<JobTitle> {
+        return apiRequest<JobTitle>("patch",`/JobTitle/${jobTitleId}/JobTitleDelete?modifiedBy=${modifiedBy}`);
     }
+    
     
 }

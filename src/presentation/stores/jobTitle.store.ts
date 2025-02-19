@@ -3,6 +3,7 @@ import { reactive, ref } from "vue";
 import { JobTitleModel } from "@/database/jobTitle/jobTitle.model";
 import type { JobTitle } from "@/domain/Interfaces/JobTitle/JobTitle.interface";
 import { ElNotification } from "element-plus";
+import { useUserStore } from "./user.store";
 
 export const useJobTitleStore = defineStore("jobTitle", () => {
   const isLoading = ref(false);
@@ -36,9 +37,36 @@ export const useJobTitleStore = defineStore("jobTitle", () => {
     }
   };
 
+  const deleteJobTitleRequest = async (jobTitleId: number) => {
+    try {
+      isLoading.value = true;
+      const jobTitleModel = new JobTitleModel();
+
+      const userStore = useUserStore();
+      const userId = userStore.getUserId;
+      await jobTitleModel.deleteJobTitle(jobTitleId, userId);
+
+      ElNotification ({
+        title: "Exito",
+        message: "Cargo eliminado con exito",
+        type: "success",
+        });
+        await fetchJobTitles();
+        } catch (error) {
+          ElNotification({
+            title: "Error",
+            message: "No se pudo eliminar el cargo",
+            type: "error",
+            });
+            } finally {
+
+            }
+          }
+
   return {
     isLoading,
     fetchJobTitles,
     createJobTitleRequest,
+    deleteJobTitleRequest
   };
 });
