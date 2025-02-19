@@ -3,6 +3,7 @@ import { ElNotification } from "element-plus";
 import { ref } from "vue";
 import { ArlModel } from "@/database/arl/arl.model";
 import type { Arl } from "@/domain/Interfaces/Arl/Arl.interface";
+import { useUserStore } from "./user.store";
 
 export const useArlStore = defineStore("arl", () => {
   const isLoading = ref(false);
@@ -37,10 +38,36 @@ export const useArlStore = defineStore("arl", () => {
       isLoading.value = false;
     }
   };
+  const deleteArlRequest = async (id: number) => {
+    try {
+      isLoading.value = true;
+      const arlModel = new ArlModel();
+
+      const userStore = useUserStore();
+      const userId = userStore.getUserId; 
+      await arlModel.delete(id, userId);
+
+      ElNotification({
+        title: "Éxito",
+        message: "ARL eliminada con éxito.",
+        type: "success",
+    });
+      await fetchArl(); 
+    } catch (error) {
+      ElNotification({
+          title: "Error",
+          message: "No se pudo eliminar la ARL.",
+          type: "error",
+      });
+  } finally {
+      isLoading.value = false;
+  }
+};
 
   return {
     isLoading,
     fetchArl,
     createArlRequest,
+    deleteArlRequest,
   };
 });

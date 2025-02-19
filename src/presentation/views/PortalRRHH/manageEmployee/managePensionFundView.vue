@@ -38,7 +38,13 @@
       <el-table-column label="Acciones">
         <template #default="scope">
           <el-button size="small" disabled> Editar </el-button>
-          <el-button :loading="isLoading" size="small" type="danger" disabled>
+          <el-button
+            :loading="isLoading"
+            size="small"
+            type="danger"
+            :disabled="!scope.row.isActive"
+            @click="deleteFund(scope.row.id)"
+          >
             Desactivar
           </el-button>
         </template>
@@ -60,7 +66,9 @@
 
 <script lang="ts" setup>
 import { usePensionFundViewModel } from "@/presentation/viewmodels/pensionFundViewModel";
+import {usePensionFundStore} from "@/presentation/stores/pensionFund.store";
 
+const pensionFundStore = usePensionFundStore();
 const {
   pensionFundList,
   isLoading,
@@ -75,4 +83,19 @@ const {
   submitForm,
   pensionFundForm,
 } = usePensionFundViewModel();
+
+const deleteFund = async (id: number) => {
+  try {
+    await pensionFundStore.deletePensionFundRequest(id);
+    await loadFund();
+  } catch (error) {
+    console.error("Error al eliminar el fondo de pensión", error);
+  }
+};
+
+
+const loadFund = async () => {
+  const data = await pensionFundStore.fetchPensionFund();
+  pensionFundList.value = data;
+};
 </script>

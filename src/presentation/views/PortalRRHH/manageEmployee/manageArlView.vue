@@ -34,7 +34,13 @@
       <el-table-column label="Acciones">
         <template #default="scope">
           <el-button size="small" disabled> Editar </el-button>
-          <el-button :loading="isLoading" disabled size="small" type="danger">
+          <el-button
+            :loading="isLoading"
+            size="small"
+            type="danger"
+            :disabled="!scope.row.isActive"
+            @click="deleteARL(scope.row.id)"
+          >
             Desactivar
           </el-button>
         </template>
@@ -56,7 +62,9 @@
 
 <script lang="ts" setup>
 import { useArlViewModel } from "@/presentation/viewmodels/arlViewModel";
+import {useArlStore} from "@/presentation/stores/arl.store";
 
+const arlStore = useArlStore();
 const {
   arlList,
   isLoading,
@@ -71,4 +79,18 @@ const {
   submitForm,
   arlForm,
 } = useArlViewModel();
+
+const deleteARL = async (id: number) => {
+  try {
+    await arlStore.deleteArlRequest(id);
+    loadArl();
+    } catch (error) {
+      console.error(error);
+}
+}
+
+const loadArl = async () => {
+  const data = await arlStore.fetchArl();
+  arlList.value = data;
+}
 </script>

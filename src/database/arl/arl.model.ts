@@ -12,7 +12,7 @@ export class ArlModel extends ArlRepository {
   update(arl: Arl): Promise<Arl> {
     return apiRequest<Arl>("put", "/Arl", arl);
   }
-  delete(arlID: number): Promise<Arl> {
-    return apiRequest<Arl>("delete", `/Arl/${arlID}`);
+  delete(arlID: number, modifiedBy: string): Promise<Arl> {
+    return apiRequest<Arl>("delete", `/Arl/${arlID}?modifiedBy=${modifiedBy}`);
   }
 }

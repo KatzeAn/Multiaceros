@@ -13,6 +13,9 @@ export class PensionFundsModel implements PensionFundsRepository {
         return apiRequest<PensionFunds>("put", "/PensionFunds/UpdatePensionFunds", data);
     }
     deletePensionFund(pensionFundId: number, modifiedBy: string): Promise<PensionFunds> {
-        return apiRequest<PensionFunds>("delete", `/PensionFunds/DeletePensionFunds`, { pensionFundId, modifiedBy });
+        return apiRequest<PensionFunds>(
+            "patch",
+            `/PensionFunds/pensionfundsdelete?pensionfundsId=${pensionFundId}&modifiedBy=${modifiedBy}`
+        );
     }
 }
