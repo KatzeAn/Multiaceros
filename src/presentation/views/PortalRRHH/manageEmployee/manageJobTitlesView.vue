@@ -37,7 +37,9 @@
       </el-table-column>
       <el-table-column label="Acciones">
         <template #default="scope">
-          <el-button size="small" disabled> Editar </el-button>
+          <el-button size="small" @click="openEditModal(scope.row)">
+            Editar
+          </el-button>
           <el-button
             :loading="isLoading"
             size="small"
@@ -50,6 +52,18 @@
         </template>
       </el-table-column>
     </el-table>
+
+    <el-dialog v-model="isEditModalVisible" title="Editar Cargo">
+      <el-form>
+        <el-form-item label="Nuevo Nombre">
+          <el-input v-model="editForm.name" />
+        </el-form-item>
+      </el-form>
+      <template #footer>
+        <el-button @click="isEditModalVisible = false">Cancelar</el-button>
+        <el-button type="primary" @click="editjobTitle">Guardar Cambios</el-button>
+      </template>
+    </el-dialog>
 
     <!-- Paginación -->
     <el-pagination
@@ -65,6 +79,7 @@
 </template>
 
 <script lang="ts" setup>
+import { ref } from "vue";
 import { useJobTitleViewModel } from "@/presentation/viewmodels/jobTitleViewModel";
 import {useJobTitleStore} from "@/presentation/stores/jobTitle.store";
 
@@ -83,6 +98,29 @@ const {
   submitForm,
   jobTitleForm,
 } = useJobTitleViewModel();
+
+const isEditModalVisible = ref(false);
+const editForm = ref({ id: null, name: "" });
+
+const openEditModal = (jobtitle) => {
+  editForm.value.id = jobtitle.id;
+  editForm.value.name = jobtitle.name;
+  isEditModalVisible.value = true;
+};
+
+const editjobTitle = async () => {
+  if (!editForm.value.id || !editForm.value.name.trim()) {
+    return;
+  }
+  try {
+    await jobTitleStore.updateJobTitleRequest(editForm.value.id, editForm.value.name);
+    isEditModalVisible.value = false;
+    fetchJobTitles();
+  } catch (error) {
+    console.error(error);
+  }
+};
+
 
 const deleteJob = async (id: number) => {
   try {

@@ -63,10 +63,37 @@ export const useJobTitleStore = defineStore("jobTitle", () => {
             }
           }
 
+          const updateJobTitleRequest = async (id: number, newName: string) => {
+            try {
+              isLoading.value = true;
+              const jobTitleModel = new JobTitleModel();
+              const userStore = useUserStore(); 
+              const userId = userStore.getUserId;
+          
+              await jobTitleModel.updateJobTitle(id, newName, userId);
+          
+              ElNotification({
+                title: "Éxito",
+                message: "Cargo actualizado con éxito",
+                type: "success",
+              });
+          
+              await fetchJobTitles(); 
+            } catch (error) {
+              ElNotification({
+                title: "Error",
+                message: "No se pudo actualizar el cargo",
+                type: "error",
+              });
+            } finally {
+              isLoading.value = false;
+            }
+          }; 
   return {
     isLoading,
     fetchJobTitles,
     createJobTitleRequest,
-    deleteJobTitleRequest
+    deleteJobTitleRequest,
+    updateJobTitleRequest,
   };
 });

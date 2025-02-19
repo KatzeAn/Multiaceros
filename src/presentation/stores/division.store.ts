@@ -73,8 +73,6 @@ export const useDivisionStore = defineStore("division", () => {
     try {
       isLoading.value = true;
       const divisionModel = new DivisionModel();
-
-      const userStore = useUserStore();
       const userId = userStore.getUserId;
       await divisionModel.deleteDivision(id, userId);
       
@@ -95,11 +93,39 @@ export const useDivisionStore = defineStore("division", () => {
     }
   };
 
+  const updateDivisionRequest = async (id: number, newName: string) => {
+    try {
+      isLoading.value = true;
+      const divisionModel = new DivisionModel();
+      const userStore = useUserStore(); 
+      const userId = userStore.getUserId;
+
+      await divisionModel.updateDivision(id, newName, userId);
+
+      ElNotification({
+        title: "Éxito",
+        message: "Departamento actualizado con éxito.",
+        type: "success",
+      });
+
+      await fetchDivision();
+    } catch (error) {
+      ElNotification({
+        title: "Error",
+        message: "No se pudo actualizar el departamento.",
+        type: "error",
+      });
+    } finally {
+      isLoading.value = false;
+    }
+  };
+
   return {
     isLoading,
     fetchDivision,
     createDivisionRequest,
     fetchMyTeammate,
     deleteDivisionRequest,
+    updateDivisionRequest, 
   };
 });
