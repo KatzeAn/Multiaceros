@@ -12,10 +12,11 @@ export class EpsModel implements EpsRepository {
     createEps(data: Eps): Promise<Eps> {
         return apiRequest<Eps>("post", "/EPS", data);
     }
-    updateEps(id: number, data: Eps): Promise<Eps> {
-        return apiRequest<Eps>("put", `/EPS${id}`, data);
+    updateEps(id: number, epsName: string): Promise<Eps> {
+        return apiRequest<Eps>('put', `/EPS/${id}`, { epsId: id, epsName });
+    }    
+    deleteEps(id: number, modifiedBy: string): Promise<Eps> {
+        return apiRequest<Eps>('delete', `/EPS/${id}?modifiedBy=${modifiedBy}`);
     }
-    deleteEps(id: number): Promise<Eps> {
-        return apiRequest<Eps>("delete", `/EPS${id}`);
-    }
+    
 }

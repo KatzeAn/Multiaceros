@@ -19,7 +19,11 @@ export class JobPostingModel extends JobPostingsRepository {
     return apiRequest<JobPosting>("post", "/JobPostings/CreateJobPosting", job);
   }
 
-  async updateJobPosting(id: number, job: JobPosting): Promise<JobPosting> {
-    return apiRequest<JobPosting>("put", `/JobPostings/UpdateJobPosting`, job);
+  updateJobPosting(id: number, job: JobPosting): Promise<JobPosting> {
+    return apiRequest<JobPosting>("put", `/JobPostings/UpdateJobPosting?id=${id}`, job);
+}
+
+  deleteJobPosting(id: number, modifiedBy: string): Promise<JobPosting> {
+    return apiRequest<JobPosting>("patch", `/JobPostings/SoftDeleteJobPosting?id=${id}&modifiedBy=${modifiedBy}`);
   }
 }

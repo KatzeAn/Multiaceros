@@ -3,6 +3,7 @@ import { ElNotification } from "element-plus";
 import { ref } from "vue";
 import { FamilyCompesationFundsModel } from "@/database/familyCompesationFunds/familyCompesationFunds.model";
 import type { FamilyCompesationFunds } from "@/domain/Interfaces/FamilyCompesationFunds/FamilyCompesationFunds.interface";
+import { useUserStore } from "./user.store";
 
 export const useFamilyCompensationFundStore = defineStore(
   "familyCompensationFund",
@@ -43,10 +44,70 @@ export const useFamilyCompensationFundStore = defineStore(
       }
     };
 
+    const deleteFamilyCompesationRequest = async (compesationfundsID: number) => {
+      try {
+        isLoading.value = true;
+        const familyCompensationFundModel = new FamilyCompesationFundsModel();
+
+        const userStore = useUserStore();
+        const userId = userStore.getUserId;
+        await familyCompensationFundModel.deleteFamilyCompesationFunds(compesationfundsID, userId );
+        
+        ElNotification ({
+          title: "Exito",
+          message: "Fondo de compensación familiar eliminado con éxito",
+          type: "success",
+          });
+
+          await fetchFamilyCompensationFund();
+          } catch (error) {
+            ElNotification ({
+              title: "Error",
+              message: "No se pudo eliminar el fondo de compensación familiar",
+              type: "error",
+              });
+            }finally {
+              isLoading.value = false;
+            }
+        
+        }
+        const updateFamilyCompensationFundsRequest = async (id: number, compensationFundName: string) => {
+          try {
+            isLoading.value = true;
+            const familyCompensationModel = new FamilyCompesationFundsModel();
+            const userStore = useUserStore();
+            const userId = userStore.getUserId;
+        
+            await familyCompensationModel.updateFamilyCompensationFunds(id, compensationFundName, userId);
+        
+            ElNotification({
+              title: "Éxito",
+              message: "Fondo de compensación actualizado con éxito.",
+              type: "success",
+            });
+        
+            await fetchFamilyCompensationFund();
+          } catch (error) {
+            ElNotification({
+              title: "Error",
+              message: "No se pudo actualizar el fondo de compensación.",
+              type: "error",
+            });
+          } finally {
+            isLoading.value = false;
+          }
+        };
+        
+
+
+
+
     return {
       isLoading,
       fetchFamilyCompensationFund,
       createFamilyCompensationFundRequest,
+      deleteFamilyCompesationRequest,
+      updateFamilyCompensationFundsRequest,
     };
   }
 );

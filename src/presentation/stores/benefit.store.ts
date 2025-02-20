@@ -3,6 +3,7 @@ import { ElNotification } from "element-plus";
 import { ref } from "vue";
 import { BenefitModel } from "@/database/benefits/benefit.model";
 import type { Benefits } from "@/domain/Interfaces/Benefits/Benefits.interface";
+import { useUserStore } from "./user.store";
 
 export const useBenefitStore = defineStore("Benefit", () => {
   const isLoading = ref(false);
@@ -38,9 +39,66 @@ export const useBenefitStore = defineStore("Benefit", () => {
     }
   };
 
+  const deleteBenefitRequest = async (benefitID: number) => {
+    try {
+      isLoading.value = true;
+      const benefitModel = new BenefitModel();
+
+      const userStore = useUserStore();
+      const userId = userStore.getUserId;
+      await benefitModel.deleteBenefit(benefitID, userId);
+
+      ElNotification ({
+        title: "Exito",
+        message: "Beneficio eliminado con exito",
+        type: "success",
+        });
+        await fetchBenefit();
+        } catch (error) {
+          ElNotification({
+            title: "Error",
+            message: "No se pudo eliminar el beneficio",
+            type: "error",
+            });
+            } finally {
+              isLoading.value = false;
+              }
+              
+  }
+
+  const updateBenefitRequest = async (id: number, nameBenefit: string) => {
+    try {
+      isLoading.value = true;
+      const benefitModel = new BenefitModel();
+      const userStore = useUserStore();
+      const userId = userStore.getUserId;
+  
+      await benefitModel.updateBenefit(id, nameBenefit, userId);
+  
+      ElNotification({
+        title: "Éxito",
+        message: "Beneficio actualizado con éxito.",
+        type: "success",
+      });
+  
+      await fetchBenefit();
+    } catch (error) {
+      ElNotification({
+        title: "Error",
+        message: "No se pudo actualizar el beneficio.",
+        type: "error",
+      });
+    } finally {
+      isLoading.value = false;
+    }
+  };
+  
+
   return {
     isLoading,
     fetchBenefit,
     createBenefitRequest,
+    deleteBenefitRequest,
+    updateBenefitRequest,
   };
 });

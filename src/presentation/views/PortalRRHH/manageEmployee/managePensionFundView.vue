@@ -37,13 +37,33 @@
       </el-table-column>
       <el-table-column label="Acciones">
         <template #default="scope">
-          <el-button size="small" disabled> Editar </el-button>
-          <el-button :loading="isLoading" size="small" type="danger" disabled>
+          <el-button size="small"  @click="openEditModal(scope.row)">
+            Editar
+          </el-button>
+          <el-button
+            :loading="isLoading"
+            size="small"
+            type="danger"
+            :disabled="!scope.row.isActive"
+            @click="deleteFund(scope.row.id)"
+          >
             Desactivar
           </el-button>
         </template>
       </el-table-column>
     </el-table>
+
+    <el-dialog v-model="isEditModalVisible" title="Editar Fondo de Pension">
+      <el-form>
+        <el-form-item label="Nuevo Nombre">
+          <el-input v-model="editForm.name" />
+        </el-form-item>
+      </el-form>
+      <template #footer>
+        <el-button @click="isEditModalVisible = false">Cancelar</el-button>
+        <el-button type="primary" @click="editPensionFund">Guardar Cambios</el-button>
+      </template>
+    </el-dialog>
 
     <!-- Paginación -->
     <el-pagination
@@ -59,8 +79,11 @@
 </template>
 
 <script lang="ts" setup>
+import { ref } from "vue";
 import { usePensionFundViewModel } from "@/presentation/viewmodels/pensionFundViewModel";
+import {usePensionFundStore} from "@/presentation/stores/pensionFund.store";
 
+const pensionFundStore = usePensionFundStore();
 const {
   pensionFundList,
   isLoading,
@@ -75,4 +98,41 @@ const {
   submitForm,
   pensionFundForm,
 } = usePensionFundViewModel();
+
+const isEditModalVisible = ref(false);
+const editForm = ref({ id: null, name: "" });
+
+const openEditModal = (pensionFund) => {
+  editForm.value.id = pensionFund.id;
+  editForm.value.name = pensionFund.pensionFundName;
+  isEditModalVisible.value = true;
+};
+
+const editPensionFund = async () => {
+  if (!editForm.value.id || !editForm.value.name.trim()) {
+    return;
+  }
+  try {
+    await pensionFundStore.updatePensionFundRequest(editForm.value.id, editForm.value.name);
+    isEditModalVisible.value = false;
+    loadFund();
+  } catch (error) {
+    console.error(error);
+  }
+};
+
+const deleteFund = async (id: number) => {
+  try {
+    await pensionFundStore.deletePensionFundRequest(id);
+    await loadFund();
+  } catch (error) {
+    console.error("Error al eliminar el fondo de pensión", error);
+  }
+};
+
+
+const loadFund = async () => {
+  const data = await pensionFundStore.fetchPensionFund();
+  pensionFundList.value = data;
+};
 </script>

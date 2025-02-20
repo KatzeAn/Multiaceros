@@ -3,6 +3,8 @@ import { ElNotification } from "element-plus";
 import { ref } from "vue";
 import { EmployeeModel } from "@/database/employee/employee.model";
 import type { EmployeeRequest } from "@/domain/Interfaces/Employee/EmployeeRequest.interface";
+import { useUserStore  } from "@/presentation/stores/user.store"
+
 
 export const useEmployeeStore = defineStore("employee", () => {
   const isLoading = ref(false);
@@ -38,9 +40,41 @@ export const useEmployeeStore = defineStore("employee", () => {
     }
   };
 
+
+  const deactivateEmployee = async (id: number) => {
+    try {
+      isLoading.value = true;
+      const employeeModel = new EmployeeModel();
+      
+      const userStore = useUserStore();
+      const userId = userStore.getUserId;
+      await employeeModel.deleteEmployee(id, userId);
+      
+      ElNotification({
+        title: "Éxito",
+        message: "Empleado desactivado correctamente",
+        type: "success",
+      });
+      await fetchEmployee(); 
+    } catch (error) {
+      ElNotification({
+        title: "Error",
+        message: "No se pudo desactivar al empleado. Verifique los datos.",
+        type: "error",
+      });
+    } finally {
+      isLoading.value = false;
+    }
+  };
+
+  
+
+  
+
   return {
     isLoading,
     fetchEmployee,
     createEmployeeRequest,
+    deactivateEmployee,
   };
 });

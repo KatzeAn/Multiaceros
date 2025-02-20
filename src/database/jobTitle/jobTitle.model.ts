@@ -9,11 +9,12 @@ export class JobTitleModel implements JobTitleRepository {
     createJobTitle(jobTitle: JobTitle): Promise<JobTitle> {
         return apiRequest<JobTitle>("post", "/JobTitle/CreateJobTitle", jobTitle);
     }
-    updateJobTitle(jobTitleId: number, jobTitle: JobTitle): Promise<JobTitle> {
-        return apiRequest<JobTitle>("put", `/JobTitle/${jobTitleId}`, jobTitle);
+    updateJobTitle(id: number, newName: string, modifiedBy: string): Promise<JobTitle> {
+        return apiRequest<JobTitle>("put", `/JobTitle/${id}?modifiedBy=${modifiedBy}`, {jobTitleId: id, newName, modifiedBy});
     }
-    softDeleteJobTitle(jobTitleId: number): Promise<boolean> {
-        return apiRequest<boolean>("patch", `/JobTitle/${jobTitleId}/JobTitleDelete`);
+    deleteJobTitle(jobTitleId: number, modifiedBy: string): Promise<JobTitle> {
+        return apiRequest<JobTitle>("patch",`/JobTitle/${jobTitleId}/JobTitleDelete?modifiedBy=${modifiedBy}`);
     }
+    
     
 }
