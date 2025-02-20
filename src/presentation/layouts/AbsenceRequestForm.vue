@@ -1,4 +1,21 @@
 <template>
+  <el-col class="mb-4">
+  <div class="bg-[var(--secondary-color)] p-6 rounded-lg shadow-lg flex justify-between">
+    <el-statistic 
+      :value="15"
+      :value-style="{ color: 'white'}">
+      <template #title>
+        <div class="flex items-center gap-2 text-lg font-semibold text-white">
+          Días de vacaciones disponibles 
+          <el-icon :size="18">
+            <Warning />
+          </el-icon>
+        </div>
+      </template>
+    </el-statistic>
+  </div>
+</el-col>
+
   <el-card>
       <span class="text-2xl font-bold text-[var(--secondary-color)]">Solicitar Ausencia</span>
 
