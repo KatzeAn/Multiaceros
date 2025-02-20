@@ -60,16 +60,72 @@
         {{ getContractType(row.contractType) }}
       </template>
     </el-table-column>
+    <el-table-column prop="isActive" label="Estado">
+      <template #default="{ row }">
+        <el-tag :type="row.isActive ? 'success' : 'success'">
+          {{ row.isActive ? "Activo" : "Activo" }}
+        </el-tag>
+      </template>
+    </el-table-column>
 
     <el-table-column label="Acciones">
       <template #default="scope">
-        <el-button size="small" disabled> Editar </el-button>
-        <el-button :loading="isLoading" size="small" type="danger" disabled>
+        <el-button size="small"  @click="openEditModal(scope.row)">Editar</el-button>
+        <el-button :loading="isLoading" size="small" type="danger" :disabled="!scope.row.isActive" @click="deleteJobTitle(scope.row.id)">
           Desactivar
         </el-button>
       </template>
     </el-table-column>
   </el-table>
+
+  <!-- Modal para editar puesto -->
+  <el-dialog v-model="isEditModalOpen" title="Editar Puesto de Trabajo">
+  <el-form ref="editFormRef" :model="selectedJobPosting">
+    <el-form-item label="Título" prop="title">
+      <el-input v-model="selectedJobPosting.title" />
+    </el-form-item>
+
+    <el-form-item label="Descripción" prop="description">
+      <el-input v-model="selectedJobPosting.description" type="textarea" />
+    </el-form-item>
+
+    <el-form-item label="Rango Salarial" prop="salaryRange">
+      <el-input v-model="selectedJobPosting.salaryRange" />
+    </el-form-item>
+
+    <el-form-item label="Nivel de Experiencia" prop="experienceLevel">
+      <el-input-number v-model="selectedJobPosting.experienceLevel" :min="1" />
+    </el-form-item>
+
+    <el-form-item label="Área" prop="area">
+      <el-input v-model="selectedJobPosting.area" />
+    </el-form-item>
+
+    <el-form-item label="Modalidad" prop="modality">
+      <el-select v-model="selectedJobPosting.modality">
+        <el-option label="Presencial" :value="1" />
+        <el-option label="Remoto" :value="2" />
+        <el-option label="Híbrido" :value="3" />
+      </el-select>
+    </el-form-item>
+
+    <el-form-item label="Tipo de Contrato" prop="contractType">
+      <el-select v-model="selectedJobPosting.contractType">
+        <el-option
+          v-for="contractType in contractTypeList"
+          :key="contractType.id"
+          :label="contractType.typeOfContract"
+          :value="contractType.id"
+        />
+      </el-select>
+    </el-form-item>
+
+    <el-form-item>
+      <el-button type="primary" @click="updateJobPosting">Guardar Cambios</el-button>
+    </el-form-item>
+  </el-form>
+</el-dialog>
+
 
   <!-- Paginación -->
   <el-pagination
@@ -85,18 +141,33 @@
 
 <script lang="ts" setup>
 import { ref, computed, onMounted } from "vue";
-import type { JobPosting } from "@/domain/Interfaces/jobPostings/jobPostings.interface"; 
+import type { JobPosting } from "@/domain/Interfaces/jobPostings/jobPostings.interface";
 import { useJobPostingStore } from "@/presentation/stores/jobPostings.store";
 import { useContracTypeStore } from "@/presentation/stores/contractType.store";
 import type { ContractType } from "@/domain/Interfaces/Contract/contractType.interface";
 
 const isAddModalOpen = ref(false);
+const isEditModalOpen = ref(false);
 const jobPostingStore = useJobPostingStore();
 const currentPage = ref(1);
 const pageSize = ref(10);
-const contractTypeList = ref<ContractType[]>([]); 
+const contractTypeList = ref<ContractType[]>([]);
 
 const jobPosting = ref<JobPosting>({
+  title: "",
+  description: "",
+  salaryRange: "",
+  experienceLevel: 1,
+  area: "",
+  requirements: [],
+  modality: 1,
+  contractType: 1,
+  contractDuration: "",
+  publicationDate: new Date().toISOString(),
+  closingDate: new Date().toISOString(),
+});
+
+const selectedJobPosting = ref<JobPosting>({
   title: "",
   description: "",
   salaryRange: "",
@@ -121,20 +192,19 @@ const submitJobPosting = async () => {
 };
 
 const loadData = async () => {
-  const result = await useContracTypeStore().fetchContractType();
-  contractTypeList.value = result.contractTypeList;
+    const result = await useContracTypeStore().fetchContractType();
+    contractTypeList.value = result.contractTypeList;
 };
 
 onMounted(() => {
   jobPostingStore.fetchJobPostings();
-  loadData();  
+  loadData();
 });
 
 const getContractType = (contractTypeId: number) => {
   const contractType = contractTypeList.value.find((type) => type.id === contractTypeId);
   return contractType ? contractType.typeOfContract : "Desconocido";
 };
-
 
 const paginatedData = computed(() => {
   const start = (currentPage.value - 1) * pageSize.value;
@@ -149,4 +219,28 @@ const handlePageChange = (page: number) => {
   currentPage.value = page;
 };
 
+const openEditModal = (job: JobPosting) => {
+  selectedJobPosting.value = { ...job };
+  isEditModalOpen.value = true;
+};
+
+const updateJobPosting = async () => {
+  if (!selectedJobPosting.value) return;
+  try {
+    await jobPostingStore.updateJobPosting(selectedJobPosting.value.id, selectedJobPosting.value);
+    await jobPostingStore.fetchJobPostings();
+    isEditModalOpen.value = false;
+  } catch (error) {
+    console.error("Error al actualizar el puesto de trabajo:", error);
+  }
+};
+
+const deleteJobTitle = async (id: number) => {
+  try {
+    await jobPostingStore.deleteJobPosting(id);
+    await jobPostingStore.fetchJobPostings();
+  } catch (error) {
+    console.error("Error al eliminar el puesto de trabajo:", error);
+  }
+};
 </script>
