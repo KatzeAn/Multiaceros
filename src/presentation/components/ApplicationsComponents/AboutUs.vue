@@ -47,25 +47,6 @@
             >
               <i class="fab fa-instagram"></i>
             </a>
-            <a
-              href="https://www.twitter.com/tuempresa"
-              target="_blank"
-            >
-              <i class="fab fa-twitter"></i>
-            </a>
-             <a
-                href="contact@redhatsolutions.com"
-                target="_blank"
-              >
-                <i class="fas fa-envelope"></i>
-              </a>
-  
-            <a
-              href="https://www.youtube.com/tuempresa"
-              target="_blank"
-            >
-              <i class="fab fa-youtube"></i>
-            </a>
           </div>
         </div>
       </footer>

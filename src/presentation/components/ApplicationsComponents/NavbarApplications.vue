@@ -12,16 +12,12 @@
       <img :src="logo" alt="Logo" class="logo-img" />
         </el-menu-item>
 
-    <el-menu-item index="1" @click="navigateTo('inicio')">
-      <el-icon><House /></el-icon> Inicio
-    </el-menu-item>
-
-    <el-menu-item index="2" @click="navigateTo('vacantes')">
+    <el-menu-item index="1" @click="navigateTo('vacantes')">
       <el-icon><Briefcase /></el-icon> vacantes
     </el-menu-item>
 
 
-    <el-menu-item index="3" @click="navigateTo('sobreNosotros')">
+    <el-menu-item index="2" @click="navigateTo('sobreNosotros')">
       <el-icon><InfoFilled /></el-icon> Sobre Nosotros
     </el-menu-item>
   </el-menu>
@@ -29,7 +25,7 @@
 
 <script setup>
 import { ref } from "vue";
-import { House, Briefcase, InfoFilled } from "@element-plus/icons-vue";
+import { Briefcase, InfoFilled } from "@element-plus/icons-vue";
 import logo from "@/presentation/assets/vertical.png";
 
 const activeIndex = ref("1");
