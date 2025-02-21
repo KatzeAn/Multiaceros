@@ -109,7 +109,7 @@ const login = async () => {
   try {
     const user = await loginWithEmailAndPassword();
     if (user) {
-      router.replace({ name: "home" });
+      window.location.href = "/home";
     }
   } catch (error) {
     const errorMessage = error as string;
