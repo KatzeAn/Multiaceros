@@ -26,7 +26,9 @@ export const useAuthStore = defineStore("auth", () => {
   const resetPassword = async (email: string) => {
     try {
       const authService = new AuthModel();
-      return await authService.resetPassword(email);
+      const response = await authService.resetPassword(email);
+      
+      return response;
     } catch (error) {
       errorMessage.value = error as string;
       throw errorMessage;
