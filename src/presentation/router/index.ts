@@ -221,11 +221,14 @@ router.beforeEach((to, from, next) => {
   // Si la ruta requiere autenticación y el usuario no está autenticado, redirigir al login
   if (to.meta.requiresAuth && !userStore.isAuthenticated) {
     next({ name: "login" });
-  }
+  } 
+  // Si el usuario ya está autenticado e intenta ir a login, redirigirlo al home
+  else if (to.name === "login" && userStore.isAuthenticated) {
+    next({ name: "home" }); // Asegúrate de que el nombre de la ruta "home" sea correcto
+  } 
   // En cualquier otro caso, permitir la navegación
   else {
     next();
   }
 });
-
 export default router;
