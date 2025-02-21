@@ -7,14 +7,18 @@ export class PayrollPaymentModel implements PayrollPaymentRepository {
     return apiRequest<PayrollPayment[]>("get", "/GetPayrollSlips/GetPayrollPayment");
   }
 
-   getPayrollSlip(userId: number): Promise<Blob> {
+  getPayrollSlip(userId: number, year: number, month: number): Promise<Blob> {
     return apiRequest<Blob>(
       "get",
-      `/GetPayrollSlips/${userId}/payroll-slips/`,
+      `/GetPayrollSlips/${userId}/GetPayrollStubHistory-Pdf`,
       undefined,
-      { responseType: "blob" }
+      {
+        params: { year, month },
+        responseType: "blob",
+      }
     );
   }
+  
   downloadPayrollSlip(): Promise<Blob> {
     return apiRequest<Blob>(
       "get",
@@ -23,6 +27,13 @@ export class PayrollPaymentModel implements PayrollPaymentRepository {
       { responseType: "blob" }
     );
   }
-  
-
+  getSeverancePayAndInterest(): Promise<Blob> {
+    return apiRequest<Blob>(
+      "get",
+      "/GetPayrollSlips/SeverancePayAndSeveranceInterest",
+      undefined,
+      { responseType: "blob" }
+    );
+  }
 }
+
