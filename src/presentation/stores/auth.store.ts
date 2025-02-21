@@ -85,6 +85,7 @@ export const useAuthStore = defineStore("auth", () => {
     user.value = null;
     localStorage.removeItem("user");
     if (inactivityTimeout) clearTimeout(inactivityTimeout);
+    window.location.replace("/");
   };
 
   const startInactivityTimer = () => {

@@ -8,7 +8,6 @@ const router = useRouter();
 
 const cerrarSesion = () => {
   useAuth.logout();
-  router.push("/");
 }
 // Estado para los dropdowns
 const isProfileDropdownOpen = ref(false);
