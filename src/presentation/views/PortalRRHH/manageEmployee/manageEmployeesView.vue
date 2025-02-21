@@ -6,6 +6,15 @@
       @employee-saved="handleEmployeeSaved"
     />
   </el-dialog>
+  <!-- MODAL PARA EDITAR EMPLEADO -->
+<el-dialog v-model="isEditModalOpen" title="Editar Empleado" top="6vh">
+  <EditEmployee
+    v-if="selectedEmployee"
+    :employee="selectedEmployee"
+    @close-form="closeEditForm"
+    @employee-updated="handleEmployeeUpdated"
+  />
+</el-dialog>
 
   <el-card shadow="never">
     <template #header>
@@ -31,10 +40,24 @@
       </el-table-column>
       <el-table-column label="Acciones">
         <template #default="scope">
-          <el-button size="small" disabled> Editar </el-button>
-          <el-button :loading="isLoading" size="small" type="danger" disabled>
+<el-table-column label="Acciones">
+  
+  <template #default="scope">
+    <el-button size="small"  @click="openEditModal(scope.row)">
+          Editar
+        </el-button>
+          <el-button 
+            :loading="isLoading"
+            size="small" 
+            type="danger" 
+            @click="deactivateEmployee(scope.row.id)"
+            :disabled="!scope.row.isActive" 
+          >
             Desactivar
           </el-button>
+        </template>
+      </el-table-column>
+
         </template>
       </el-table-column>
     </el-table>
@@ -52,30 +75,49 @@
   </el-card>
 </template>
 
+
 <script lang="ts" setup>
-import { useEmployeeViewModel } from "@/presentation/viewmodels/employeeViewModel";
-import AddEmployee from "../components/AddEmployee.vue";
 import { ref } from "vue";
+import AddEmployee from "../components/AddEmployee.vue";
+import EditEmployee from "../components/EditEmployee.vue";
+import { useEmployeeViewModel } from "@/presentation/viewmodels/employeeViewModel";
+import { useEmployeeStore } from "@/presentation/stores/employee.store";  
 
 const isAddModalOpen = ref(false);
+const isEditModalOpen = ref(false);
+const selectedEmployee = ref<any>(null);
+const employeeStore = useEmployeeStore();
 
 const openAddModal = () => {
   isAddModalOpen.value = true;
+};
+
+const openEditModal = (employee: any) => {
+  selectedEmployee.value = { ...employee };
+  isEditModalOpen.value = true;
 };
 
 const closeForm = () => {
   isAddModalOpen.value = false;
 };
 
+const closeEditForm = () => {
+  isEditModalOpen.value = false;
+};
+
 const handleEmployeeSaved = () => {
   loadEmployee();
-  isAddModalOpen.value = false;
+  closeForm();
+};
+
+const handleEmployeeUpdated = () => {
+  loadEmployee();
+  closeEditForm();
 };
 
 const {
   employeeList,
   isLoading,
-  search,
   currentPage,
   pageSize,
   paginatedData,
@@ -83,4 +125,14 @@ const {
   handleSizeChange,
   loadEmployee,
 } = useEmployeeViewModel();
+
+const deactivateEmployee = async (id: number) => {
+  try {
+    await employeeStore.deactivateEmployee(id);
+    loadEmployee();
+  } catch (error) {
+    console.error("Error al desactivar el empleado:", error);
+  }
+};
+
 </script>

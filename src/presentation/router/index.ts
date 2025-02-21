@@ -74,9 +74,14 @@ const router = createRouter({
       ],
     },
     {
-      path: '/nomina/comprobantes',
-      name: 'ComprobantesPago',
+      path: '/nomina/comprobante',
+      name: 'ComprobantesVista',
       component: () => import("../views/PayrollView.vue"),
+    },
+    {
+      path: '/nomina/historial',
+      name: 'ComprobantesPago',
+      component: () => import("../views/PayrollHistory.vue"),
     },
 
     {

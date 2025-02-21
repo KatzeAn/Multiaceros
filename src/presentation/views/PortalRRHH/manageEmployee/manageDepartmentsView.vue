@@ -9,17 +9,17 @@
     <el-card shadow="never" class="mb-6">
       <el-form inline ref="ruleFormRef" :rules="rules" :model="divisionForm">
         <el-form-item prop="name" label="Nombre">
-          <el-input
-            v-model="divisionForm.name"
-            placeholder="Nombre"
-            clearable
+          <el-input 
+          v-model="divisionForm.name" 
+          placeholder="Nombre" 
+          clearable 
           />
         </el-form-item>
         <el-form-item>
-          <el-button
-            :loading="isLoading"
-            type="primary"
-            @click="submitForm(ruleFormRef)"
+          <el-button 
+          :loading="isLoading" 
+          type="primary" 
+          @click="submitForm(ruleFormRef)"
           >
             Crear Departamento
           </el-button>
@@ -39,13 +39,33 @@
       </el-table-column>
       <el-table-column label="Acciones">
         <template #default="scope">
-          <el-button size="small" disabled> Editar </el-button>
-          <el-button :loading="isLoading" size="small" type="danger" disabled>
+          <el-button size="small"  @click="openEditModal(scope.row)">
+            Editar
+          </el-button>
+          <el-button
+            :loading="isLoading"
+            size="small"
+            type="danger"
+            :disabled="!scope.row.isActive"
+            @click="deactivateDivision(scope.row.id)"
+          >
             Desactivar
           </el-button>
         </template>
       </el-table-column>
     </el-table>
+
+    <el-dialog v-model="isEditModalVisible" title="Editar Departamento">
+      <el-form>
+        <el-form-item label="Nuevo Nombre">
+          <el-input v-model="editForm.name" />
+        </el-form-item>
+      </el-form>
+      <template #footer>
+        <el-button @click="isEditModalVisible = false">Cancelar</el-button>
+        <el-button type="primary" @click="editDivision">Guardar Cambios</el-button>
+      </template>
+    </el-dialog>
 
     <!-- Paginación -->
     <el-pagination
@@ -61,8 +81,11 @@
 </template>
 
 <script lang="ts" setup>
+import { ref } from "vue";
+import { useDivisionStore } from "@/presentation/stores/division.store";
 import { useDepartmentViewModel } from "@/presentation/viewmodels/departmentViewModel";
 
+const divisionStore = useDivisionStore();
 const {
   divisionList,
   isLoading,
@@ -77,4 +100,38 @@ const {
   submitForm,
   divisionForm,
 } = useDepartmentViewModel();
+
+const isEditModalVisible = ref(false);
+const editForm = ref({ id: null, name: "" });
+
+const openEditModal = (division) => {
+  editForm.value.id = division.id;
+  editForm.value.name = division.name;
+  isEditModalVisible.value = true;
+};
+
+const editDivision = async () => {
+  if (!editForm.value.id || !editForm.value.name.trim()) {
+    return;
+  }
+  try {
+    await divisionStore.updateDivisionRequest(editForm.value.id, editForm.value.name);
+    isEditModalVisible.value = false;
+    loadDivisions();
+  } catch (error) {
+    console.error(error);
+  }
+};
+
+const deactivateDivision = async (id: number) => {
+  try {
+    await divisionStore.deleteDivisionRequest(id);
+    loadDivisions();
+  } catch (error) {
+  }
+};
+const loadDivisions = async () => {
+  const data = await divisionStore.fetchDivision();
+  divisionList.value = data;
+};
 </script>

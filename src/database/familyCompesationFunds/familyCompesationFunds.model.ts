@@ -23,22 +23,14 @@ export class FamilyCompesationFundsModel
       }
     );
   }
-  updateFamilyCompesationFunds(
-    data: FamilyCompesationFunds
-  ): Promise<FamilyCompesationFunds> {
+  updateFamilyCompensationFunds(id: number,compensationFundName: string, modifiedBy: string): Promise<FamilyCompesationFunds> {
+    return apiRequest<FamilyCompesationFunds>("put", "/FamilyCompesationFunds/UpdateFamilyCompesationFunds",{id, compensationFundName, modifiedBy});
+}
+  deleteFamilyCompesationFunds(compesationfundsID: number, modifiedBy: string): Promise<FamilyCompesationFunds> {
     return apiRequest<FamilyCompesationFunds>(
-      "put",
-      "FamilyCompesationFunds/UpdateFamilyCompesationFunds",
-      { data }
+        "patch",
+        `/FamilyCompesationFunds/DeleteFamilyCompesationFunds?compesationfundsID=${compesationfundsID}&modifiedBy=${modifiedBy}`
     );
-  }
-  deleteFamilyCompesationFunds(
-    data: FamilyCompesationFunds
-  ): Promise<FamilyCompesationFunds> {
-    return apiRequest<FamilyCompesationFunds>(
-      "patch",
-      "FamilyCompesationFunds/DeleteFamilyCompesationFunds",
-      { data }
-    );
-  }
+}
+
 }

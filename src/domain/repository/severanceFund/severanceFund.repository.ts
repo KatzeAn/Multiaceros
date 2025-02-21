@@ -3,6 +3,6 @@ import type { SeveranceFund } from "@/domain/Interfaces/severanceFund/severanceF
 export abstract class  SeveranceFundRepository {
     abstract getSeveranceFund(): Promise<SeveranceFund[]>;
     abstract createSeveranceFund(data: SeveranceFund): Promise<SeveranceFund>;
-    abstract updateSeveranceFund(data: SeveranceFund): Promise<SeveranceFund>;
-    abstract deleteSeveranceFund(data: Partial<SeveranceFund>): Promise<SeveranceFund>;
+    abstract updateSeveranceFund(id: number, severanceFundName: string, modifiedBy: string): Promise<SeveranceFund>;
+    abstract deleteSeveranceFund(severanceFundId: number, modifiedBy: string): Promise<SeveranceFund>;
 }

@@ -2,7 +2,7 @@
   <el-card shadow="never">
     <template #header>
       <h2 class="text-xl text-gray-700 font-semibold">
-        Gestionar Fondos de compensación familiar
+        Gestionar Fondos de Compensación Familiar
       </h2>
     </template>
 
@@ -44,13 +44,36 @@
       </el-table-column>
       <el-table-column label="Acciones">
         <template #default="scope">
-          <el-button size="small" disabled> Editar </el-button>
-          <el-button :loading="isLoading" size="small" type="danger" disabled>
+          <el-button size="small" @click="openEditModal(scope.row)">
+            Editar
+          </el-button>
+          <el-button
+            :loading="isLoading"
+            size="small"
+            type="danger"
+            :disabled="!scope.row.isActive"
+            @click="deleteFamilyFund(scope.row.id)"
+          >
             Desactivar
           </el-button>
         </template>
       </el-table-column>
     </el-table>
+
+    <!-- Modal para editar fondo de compensación -->
+    <el-dialog v-model="isEditModalVisible" title="Editar Fondo de Compensación">
+      <el-form>
+        <el-form-item label="Nuevo Nombre">
+          <el-input v-model="editForm.name" />
+        </el-form-item>
+      </el-form>
+      <template #footer>
+        <el-button @click="isEditModalVisible = false">Cancelar</el-button>
+        <el-button type="primary" @click="editFamilyCompensationFund">
+          Guardar Cambios
+        </el-button>
+      </template>
+    </el-dialog>
 
     <!-- Paginación -->
     <el-pagination
@@ -66,8 +89,11 @@
 </template>
 
 <script lang="ts" setup>
+import { ref } from "vue";
 import { useFamilyCompensationFundViewModel } from "@/presentation/viewmodels/familyCompensationFundViewModel";
+import { useFamilyCompensationFundStore } from "@/presentation/stores/familyCompensationFund.store";
 
+const familyCompensationFundStore = useFamilyCompensationFundStore();
 const {
   familyCompensationFundList,
   isLoading,
@@ -82,4 +108,43 @@ const {
   submitForm,
   familyCompensationFundForm,
 } = useFamilyCompensationFundViewModel();
+
+const isEditModalVisible = ref(false);
+const editForm = ref({ id: null, name: "" });
+
+const openEditModal = (fund) => {
+  editForm.value.id = fund.id;
+  editForm.value.name = fund.compensationFundName;
+  isEditModalVisible.value = true;
+};
+
+const editFamilyCompensationFund = async () => {
+  if (!editForm.value.id || !editForm.value.name.trim()) {
+    return;
+  }
+  try {
+    await familyCompensationFundStore.updateFamilyCompensationFundsRequest(
+      editForm.value.id,
+      editForm.value.name
+    );
+    isEditModalVisible.value = false;
+    fetchFamilyCompensationFund();
+  } catch (error) {
+    console.error(error);
+  }
+};
+
+const deleteFamilyFund = async (id: number) => {
+  try {
+    await familyCompensationFundStore.deleteFamilyCompesationRequest(id);
+    fetchFamilyCompensationFund();
+  } catch (error) {
+    console.error(error);
+  }
+};
+
+const fetchFamilyCompensationFund = async () => {
+  const data = await familyCompensationFundStore.fetchFamilyCompensationFund();
+  familyCompensationFundList.value = data;
+};
 </script>
