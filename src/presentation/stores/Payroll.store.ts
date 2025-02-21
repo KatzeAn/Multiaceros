@@ -13,23 +13,21 @@ export const usePayrollPaymentStore = defineStore("payrollPayment", () => {
     }
   };
 
-  const fetchPayrollSlip = async (userId: number) => {
+  const fetchPayrollSlip = async (userId: number, year: number, month: number) => {
     try {
       const payrollService = new PayrollPaymentModel();
-      const response = await payrollService.getPayrollSlip(userId);
-      console.log("Respuesta completa de la API:", response);
-
+      const response = await payrollService.getPayrollSlip(userId, year, month);
+  
       const url = window.URL.createObjectURL(response);
-
+  
       const link = document.createElement("a");
       link.href = url;
-
-      link.download = `payroll_slip_${userId}.pdf`;
-
+      link.download = `payroll_slip_${year}_${month}.pdf`;
+  
       document.body.appendChild(link);
       link.click();
       document.body.removeChild(link);
-      
+  
       window.URL.revokeObjectURL(url);
     } catch (error) {
       console.error("Error downloading payroll slip:", error);
@@ -41,8 +39,8 @@ export const usePayrollPaymentStore = defineStore("payrollPayment", () => {
       throw error;
     }
   };
+  
   const fetchDownloadPayrollSlip = async () => {
-    
     const result = {
       loading: true,
       payrollSlip: null as Blob | null,
@@ -61,9 +59,33 @@ export const usePayrollPaymentStore = defineStore("payrollPayment", () => {
 
     return result;
   };
+
+  const fetchSeverancePayAndInterest = async () => {
+    const result = {
+      loading: true,
+      severancePayFile: null as Blob | null,
+    };
+  
+    try {
+      result.loading = true;
+      const payrollService = new PayrollPaymentModel();
+      result.severancePayFile = await payrollService.getSeverancePayAndInterest();
+    } catch (error) {
+      console.error("Error fetching severance pay and interest:", error);
+      result.severancePayFile = null;
+    } finally {
+      result.loading = false;
+    }
+  
+    return result;
+  };
+  
+  
+
   return {
     fetchPayrollPayments,
     fetchPayrollSlip,
-    fetchDownloadPayrollSlip
+    fetchDownloadPayrollSlip,
+    fetchSeverancePayAndInterest,
   };
 });

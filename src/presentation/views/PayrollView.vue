@@ -3,11 +3,8 @@
     <el-card class="shadow-xl w-full max-w-2xl bg-white rounded-lg border border-gray-200">
       <template #header>
         <div class="flex justify-between items-center">
-          <h2 class="text-4xl font-bold text-gray-600">Descarga de Nómina</h2>
+          <h2 class="text-4xl font-bold text-gray-600">Vista Previa de Nómina</h2>
           <div class="flex gap-2">
-            <el-button type="primary" size="large" @click="downloadPayrollSlip" :disabled="loading">
-              Descargar Nómina
-            </el-button>
           </div>
         </div>
       </template>
@@ -86,19 +83,6 @@ const fetchNomina = async () => {
     nomina.value = response.filter(n => n.user === userId) || [];
   } catch (error) {
     console.error("Error al cargar la nómina:", error);
-  } finally {
-    loading.value = false;
-  }
-};
-
-const downloadPayrollSlip = async () => {
-  loading.value = true;
-  try {
-    const userId = parseInt(userStore.getUserId);
-    if (!userId) return;
-    await payrollStore.fetchPayrollSlip(userId);
-  } catch (error) {
-    console.error("Error al descargar la nómina:", error);
   } finally {
     loading.value = false;
   }

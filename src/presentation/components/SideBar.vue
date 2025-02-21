@@ -283,11 +283,11 @@ const menuItems = ref([
     subItems: [
       {
         title: "Comprobantes de pago",
-        route: "/nomina/comprobantes",
+        route: "/nomina/comprobante",
       },
       {
-        title: "Mis beneficios",
-        route: "#",
+        title: "Mi Historial de pago",
+        route: "/nomina/historial",
       },
     ],
   },
