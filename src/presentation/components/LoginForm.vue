@@ -32,13 +32,7 @@
           required
         />
       </div>
-      <div class="mt-8 flex justify-between items-center">
-        <div>
-          <input type="checkbox" id="remember" />
-          <label class="ml-2 font-medium text-base" for="remember"
-            >Recuerdame por 30 dias</label
-          >
-        </div>
+      <div class="mt-8 items-center">
         <a
           class="font-medium text-base text-secondary cursor-pointer"
           @click="dialogFormVisible = true"
