@@ -2,9 +2,30 @@
 import { RouterLink, RouterView } from "vue-router";
 import NavBar from "./presentation/components/NavBar.vue";
 import SideBar from "./presentation/components/SideBar.vue";
-import { ref } from "vue";
+import { onMounted, onUnmounted, ref } from "vue";
 
 const asideWidth = ref("258px"); // Valor inicial
+
+import { useAuthStore } from "./presentation/stores/auth.store";
+
+const authStore = useAuthStore();
+
+const resetTimer = () => {
+  authStore.resetInactivityTimer();
+};
+
+onMounted(() => {
+  window.addEventListener("mousemove", resetTimer);
+  window.addEventListener("keydown", resetTimer);
+  window.addEventListener("click", resetTimer);
+});
+
+onUnmounted(() => {
+  window.removeEventListener("mousemove", resetTimer);
+  window.removeEventListener("keydown", resetTimer);
+  window.removeEventListener("click", resetTimer);
+});
+
 </script>
 
 <template>

@@ -1,8 +1,9 @@
 import { AuthModel } from "@/database/auth/auth.model";
 import { User } from "@/domain/entities/user";
 import type { AuthResponse } from "@/domain/repository/auth/auth.repository";
+import { ElNotification } from "element-plus";
 import { defineStore } from "pinia";
-import { reactive, ref, watch } from "vue";
+import { reactive, ref, watch, onMounted, onUnmounted } from "vue";
 
 const loginFormInitialState = {
   email: "",
@@ -15,6 +16,9 @@ export const useAuthStore = defineStore("auth", () => {
   const errorMessage = ref<string | null | undefined>(null);
   const loginForm = reactive({ ...loginFormInitialState });
 
+  let inactivityTimeout: ReturnType<typeof setTimeout> | null = null;
+
+  // Resetear formulario de login
   const resetLoginForm = () => {
     Object.assign(loginForm, loginFormInitialState);
   };
@@ -22,9 +26,7 @@ export const useAuthStore = defineStore("auth", () => {
   const resetPassword = async (email: string) => {
     try {
       const authService = new AuthModel();
-      const response = await authService.resetPassword(email);
-
-      return response;
+      return await authService.resetPassword(email);
     } catch (error) {
       errorMessage.value = error as string;
       throw errorMessage;
@@ -34,11 +36,7 @@ export const useAuthStore = defineStore("auth", () => {
   const confirmResetPassword = async (token: string, newPassword: string) => {
     try {
       const authService = new AuthModel();
-      const response = await authService.confirmPasswordReset(
-        token,
-        newPassword
-      );
-      return response;
+      return await authService.confirmPasswordReset(token, newPassword);
     } catch (error) {
       errorMessage.value = error as string;
       throw errorMessage;
@@ -73,6 +71,8 @@ export const useAuthStore = defineStore("auth", () => {
         authResponse.userInfo.role.roleName
       );
 
+      startInactivityTimer();
+
       return user.value;
     } catch (error) {
       errorMessage.value = error as string;
@@ -81,11 +81,41 @@ export const useAuthStore = defineStore("auth", () => {
     }
   };
 
-  // Logout
   const logout = () => {
     user.value = null;
     localStorage.removeItem("user");
+    if (inactivityTimeout) clearTimeout(inactivityTimeout);
   };
+
+  const startInactivityTimer = () => {
+    if (inactivityTimeout) clearTimeout(inactivityTimeout);
+    
+    inactivityTimeout = setTimeout(() => {
+      ElNotification({
+        title: "Warning",
+        message: "You have been inactive for 5 minutes. Please log in again.",
+        type: "warning",
+      });
+      logout();
+      window.location.replace("/");
+    }, 5 * 60 * 1000); // 5 minutes
+  };
+
+  const resetInactivityTimer = () => {
+    startInactivityTimer();
+  };
+
+  onMounted(() => {
+    window.addEventListener("mousemove", resetInactivityTimer);
+    window.addEventListener("keydown", resetInactivityTimer);
+    window.addEventListener("click", resetInactivityTimer);
+  });
+
+  onUnmounted(() => {
+    window.removeEventListener("mousemove", resetInactivityTimer);
+    window.removeEventListener("keydown", resetInactivityTimer);
+    window.removeEventListener("click", resetInactivityTimer);
+  });
 
   // Sincronizar usuario con localStorage automáticamente
   watch(
@@ -93,6 +123,7 @@ export const useAuthStore = defineStore("auth", () => {
     (newUser) => {
       if (newUser) {
         localStorage.setItem("user", JSON.stringify(newUser));
+        startInactivityTimer();
       } else {
         localStorage.removeItem("user");
       }
@@ -109,6 +140,7 @@ export const useAuthStore = defineStore("auth", () => {
     logout,
     resetLoginForm,
     resetPassword,
-    confirmResetPassword
+    confirmResetPassword,
+    resetInactivityTimer
   };
 });
