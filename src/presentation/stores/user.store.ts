@@ -54,7 +54,6 @@ export const useUserStore = defineStore('user', () => {
             const usersResponse: User[] = await userService.getUsers();
             result.users = usersResponse;
         } catch (error) {
-            console.error('Error al obtener usuarios:', error);
             result.users = [];
         } finally {
             result.loading = false;

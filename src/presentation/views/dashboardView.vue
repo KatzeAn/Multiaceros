@@ -24,7 +24,7 @@
         <el-input v-model="searchQuery" placeholder="Buscar usuario" clearable class="mb-4" />
   
         <el-table :data="filteredUsers" style="width: 100%">
-          <el-table-column prop="userId" label="ID" width="50" />
+          <el-table-column prop="id" label="ID" width="50" />
           <el-table-column prop="userFirstName" label="Nombre" />
           <el-table-column prop="userEmail" label="Correo Electrónico" />
           <el-table-column label="Rol">
@@ -94,8 +94,19 @@
         selectedRoleId.value = user.roleId;
         isDialogVisible.value = true;
       };
-  
-     
+      
+      const confirmRoleChange = async () => {
+  if (!selectedUser.value || !selectedRoleId.value) return;
+  try {
+    await roleStore.assignUserRole(selectedUser.value.id, { 
+      roleId: selectedRoleId.value,
+      modifiedBy: "Admin" 
+    });
+    selectedUser.value.roleId = selectedRoleId.value;
+    isDialogVisible.value = false;
+  } catch (error) {
+  }
+};
   
       return {
         searchQuery,
