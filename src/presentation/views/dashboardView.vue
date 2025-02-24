@@ -24,14 +24,9 @@
         <el-input v-model="searchQuery" placeholder="Buscar usuario" clearable class="mb-4" />
   
         <el-table :data="filteredUsers" style="width: 100%">
-          <el-table-column prop="id" label="ID" width="50" />
           <el-table-column prop="userFirstName" label="Nombre" />
+          <el-table-column prop="surName" label="Apellido" />
           <el-table-column prop="userEmail" label="Correo Electrónico" />
-          <el-table-column label="Rol">
-            <template v-slot="scope">
-              {{ getRoleName(scope.row.roleId) }}
-            </template>
-          </el-table-column>
           <el-table-column label="Acciones">
             <template v-slot="scope">
               <el-button size="small" @click="openRoleChangeDialog(scope.row)">Cambiar Rol</el-button>
