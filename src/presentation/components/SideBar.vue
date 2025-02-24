@@ -376,8 +376,8 @@ const recursosHumanosSubItems = ref([
     route: "/portal-rrhh/gestionar-nomina",
   },
   {
-    title: "Gestión de beneficios",
-    route: "#"
+    title: "Gestión administrativa",
+    route: "/portal-rrhh/gestion-administrativa"
   },
   {
     title: "Evaluaciones de desempeño",

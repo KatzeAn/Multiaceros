@@ -8,6 +8,6 @@ export class RoleModel implements RoleRepository {
         return apiRequest<Role[]>("get", "/Role");
     }
     assignRole(id: number, role: RoleRequest): Promise<RoleRequest> {
-        return apiRequest<RoleRequest>("post", `/Role/${id}/assign-role`, role);
+        return apiRequest<RoleRequest>("patch", `/Role/${id}/assign-role`, role);
     }
 }

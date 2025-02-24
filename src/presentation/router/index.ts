@@ -108,6 +108,13 @@ const router = createRouter({
               "../views/ManagePayrollView.vue"
             ),
         },
+        {
+          path: "gestion-administrativa",
+          component: () =>
+            import(
+              "../views/dashboardView.vue"
+            ),
+        },
         
       ],
     },
