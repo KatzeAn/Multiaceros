@@ -345,14 +345,14 @@ export function useEmployeeViewModel() {
     pensionFundInfoData: pensionFundInfoRules,
   });
 
-  const filterTableData = computed(() =>
-    employeeList.value.filter(
-      (data) =>
-        !search.value ||
-        data.fullName.toLowerCase().includes(search.value.toLowerCase())
-    )
-  );
-
+const showInactive = ref(false);
+const filterTableData = computed(() =>
+  employeeList.value.filter(
+    (data) =>
+      (!search.value || data.fullName.toLowerCase().includes(search.value.toLowerCase())) &&
+      (showInactive.value || data.isActive) 
+  )
+);
   const paginatedData = computed(() => {
     const start = (currentPage.value - 1) * pageSize.value;
     return filterTableData.value.slice(start, start + pageSize.value);
@@ -432,5 +432,6 @@ export function useEmployeeViewModel() {
     submitForm,
     employeeRequestForm,
     loadEmployee,
+    showInactive,
   };
 }

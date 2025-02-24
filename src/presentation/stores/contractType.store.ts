@@ -1,30 +1,30 @@
 import { ContractModel } from "@/database/contract/contract.model";
 import type { ContractType } from "@/domain/Interfaces/Contract/contractType.interface";
 import { defineStore } from "pinia";
+import { ref } from "vue";
 
 export const useContracTypeStore = defineStore("contractType", () => {
+  const contractTypeList = ref<ContractType[]>([]);
+  const loading = ref(false);
+
   const fetchContractType = async () => {
-    const result = {
-      loading: true,
-      contractTypeList: [] as ContractType[],
-    };
+    loading.value = true;
 
     try {
-      result.loading = true;
       const contractTypeModel = new ContractModel();
       const response: ContractType[] = await contractTypeModel.getContracts();
-      result.contractTypeList = response;
+      contractTypeList.value = response;
     } catch (error) {
       console.error("Error fetching contract types:", error);
-      result.contractTypeList = [];
+      contractTypeList.value = [];
     } finally {
-      result.loading = false;
+      loading.value = false;
     }
-
-    return result;
   };
 
   return {
+    contractTypeList,
+    loading,
     fetchContractType,
   };
 });

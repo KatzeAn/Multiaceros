@@ -27,13 +27,14 @@ export function useBenefitViewModel() {
       },
     ],
   });
-
+  const showInactive = ref(false);
   const filterTableData = computed(() =>
     benefitList.value.filter(
       (data) =>
-        !search.value ||
-        data.nameBenefit.toLowerCase().includes(search.value.toLowerCase())
-    )
+        (!search.value ||
+        data.nameBenefit.toLowerCase().includes(search.value.toLowerCase()))&&
+        (showInactive.value || data.isActive) 
+    )      
   );
 
   const paginatedData = computed(() => {
@@ -110,5 +111,6 @@ export function useBenefitViewModel() {
     handleSizeChange,
     submitForm,
     benefitForm,
+    showInactive,
   };
 }

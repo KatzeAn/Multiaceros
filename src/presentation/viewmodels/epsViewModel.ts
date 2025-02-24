@@ -28,12 +28,13 @@ export function useEpsViewModel() {
       },
     ],
   });
-
+  const showInactive = ref(false);
   const filterTableData = computed(() =>
     epsList.value.filter(
       (data) =>
-        !search.value ||
-        data.epsName.toLowerCase().includes(search.value.toLowerCase())
+        (!search.value ||
+        data.epsName.toLowerCase().includes(search.value.toLowerCase()))&&
+        (showInactive.value || data.isActive)
     )
   );
 
@@ -110,5 +111,6 @@ export function useEpsViewModel() {
     handleSizeChange,
     submitForm,
     epsForm,
+    showInactive,
   };
 }

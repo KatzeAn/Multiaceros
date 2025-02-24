@@ -42,6 +42,10 @@
             :value="contractType.id"
           />
         </el-select>
+        <el-form-item label="Nivel de Prioridad" prop="priority">
+  <el-input-number v-model="jobPosting.priority" :min="1" />
+</el-form-item>
+
       </el-form-item>
 
       <el-form-item>
@@ -51,32 +55,34 @@
   </el-dialog>
 
   <!-- Tabla de Puestos de Trabajo -->
-  <el-table :data="paginatedData" border class="w-full min-h-96 mb-4" stripe>
-    <el-table-column label="Nombre del Puesto" prop="title" />
-    <el-table-column label="Área" prop="area" />
-    <el-table-column label="Salario" prop="salaryRange" />
-    <el-table-column label="Tipo de Contrato">
-      <template #default="{ row }">
-        {{ getContractType(row.contractType) }}
-      </template>
-    </el-table-column>
-    <el-table-column prop="isActive" label="Estado">
-      <template #default="{ row }">
-        <el-tag :type="row.isActive ? 'success' : 'success'">
-          {{ row.isActive ? "Activo" : "Activo" }}
-        </el-tag>
-      </template>
-    </el-table-column>
+  <el-checkbox v-model="showInactive" class="ml-4">Mostrar Inactivos</el-checkbox>
+<el-table :data="paginatedData" border class="w-full min-h-96 mb-4" stripe>
+  <el-table-column label="Nombre del Puesto" prop="title" />
+  <el-table-column label="Área" prop="area" />
+  <el-table-column label="Salario" prop="salaryRange" />
+  <el-table-column label="Tipo de Contrato">
+    <template #default="{ row }">
+      {{ getContractType(row.contractType) }}
+    </template>
+  </el-table-column>
+  <el-table-column label="Nivel de Prioridad" prop="priority" />
+  <el-table-column prop="isActive" label="Estado">
+    <template #default="{ row }">
+      <el-tag :type="row.isActive ? 'success' : 'danger'">
+        {{ row.isActive ? "Activo" : "Inactivo" }}
+      </el-tag>
+    </template>
+  </el-table-column>
+  <el-table-column label="Acciones">
+    <template #default="scope">
+      <el-button size="small" @click="openEditModal(scope.row)">Editar</el-button>
+      <el-button :loading="isLoading" size="small" type="danger" :disabled="!scope.row.isActive" @click="deleteJobTitle(scope.row.id)">
+        Desactivar
+      </el-button>
+    </template>
+  </el-table-column>
+</el-table>
 
-    <el-table-column label="Acciones">
-      <template #default="scope">
-        <el-button size="small"  @click="openEditModal(scope.row)">Editar</el-button>
-        <el-button :loading="isLoading" size="small" type="danger" :disabled="!scope.row.isActive" @click="deleteJobTitle(scope.row.id)">
-          Desactivar
-        </el-button>
-      </template>
-    </el-table-column>
-  </el-table>
 
   <!-- Modal para editar puesto -->
   <el-dialog v-model="isEditModalOpen" title="Editar Puesto de Trabajo">
@@ -119,7 +125,9 @@
         />
       </el-select>
     </el-form-item>
-
+<el-form-item label="Nivel de Prioridad" prop="priority">
+  <el-input-number v-model="selectedJobPosting.priority" :min="1" />
+</el-form-item>
     <el-form-item>
       <el-button type="primary" @click="updateJobPosting">Guardar Cambios</el-button>
     </el-form-item>
@@ -165,6 +173,7 @@ const jobPosting = ref<JobPosting>({
   contractDuration: "",
   publicationDate: new Date().toISOString(),
   closingDate: new Date().toISOString(),
+  priority: 1,
 });
 
 const selectedJobPosting = ref<JobPosting>({
@@ -179,6 +188,7 @@ const selectedJobPosting = ref<JobPosting>({
   contractDuration: "",
   publicationDate: new Date().toISOString(),
   closingDate: new Date().toISOString(),
+  priority: 1,
 });
 
 const submitJobPosting = async () => {
@@ -192,9 +202,16 @@ const submitJobPosting = async () => {
 };
 
 const loadData = async () => {
-    const result = await useContracTypeStore().fetchContractType();
-    contractTypeList.value = result.contractTypeList;
+  try {
+    const store = useContracTypeStore();
+    await store.fetchContractType();
+    console.log("Datos de contrato recibidos:", store.contractTypeList);
+    contractTypeList.value = store.contractTypeList;
+  } catch (error) {
+    console.error("Error cargando los tipos de contrato:", error);
+  }
 };
+
 
 onMounted(() => {
   jobPostingStore.fetchJobPostings();
@@ -207,9 +224,16 @@ const getContractType = (contractTypeId: number) => {
 };
 
 const paginatedData = computed(() => {
+  const filteredJobs = showInactive.value
+    ? jobPostingStore.jobPostings
+    : jobPostingStore.jobPostings.filter(job => job.isActive);
+
   const start = (currentPage.value - 1) * pageSize.value;
-  return jobPostingStore.jobPostings.slice(start, start + pageSize.value);
+  return filteredJobs.slice(start, start + pageSize.value);
 });
+
+const showInactive = ref(false);
+
 
 const handleSizeChange = (size: number) => {
   pageSize.value = size;

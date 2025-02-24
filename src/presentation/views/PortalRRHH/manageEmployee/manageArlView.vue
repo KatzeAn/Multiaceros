@@ -14,9 +14,11 @@
             :loading="isLoading"
             type="primary"
             @click="submitForm(ruleFormRef)"
+            class="mr-20"
           >
             Crear ARL
           </el-button>
+          <el-checkbox v-model="showInactive">Mostrar Inactivos</el-checkbox>
         </el-form-item>
       </el-form>
     </el-card>
@@ -93,6 +95,7 @@ const {
   handleSizeChange,
   submitForm,
   arlForm,
+  showInactive,
 } = useArlViewModel();
 
 const isEditModalVisible = ref(false);

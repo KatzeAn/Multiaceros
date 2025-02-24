@@ -27,12 +27,13 @@ export function useArlViewModel() {
       },
     ],
   });
-
+  const showInactive = ref(false);
   const filterTableData = computed(() =>
     arlList.value.filter(
       (data) =>
-        !search.value ||
-        data.nameArl.toLowerCase().includes(search.value.toLowerCase())
+        (!search.value ||
+        data.nameArl.toLowerCase().includes(search.value.toLowerCase()))&&
+        (showInactive.value || data.isActive) 
     )
   );
 
@@ -109,5 +110,6 @@ export function useArlViewModel() {
     handleSizeChange,
     submitForm,
     arlForm,
+    showInactive,
   };
 }

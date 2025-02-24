@@ -27,14 +27,15 @@ export function useSeveranceFundViewModel() {
       },
     ],
   });
-
+  const showInactive = ref(false);
   const filterTableData = computed(() =>
     severanceFundList.value.filter(
       (data) =>
-        !search.value ||
+        (!search.value ||
         data.severanceFundName
           .toLowerCase()
-          .includes(search.value.toLowerCase())
+          .includes(search.value.toLowerCase()))&&
+          (showInactive.value || data.isActive) 
     )
   );
 
@@ -113,5 +114,6 @@ export function useSeveranceFundViewModel() {
     handleSizeChange,
     submitForm,
     severanceFundForm,
+    showInactive,
   };
 }
