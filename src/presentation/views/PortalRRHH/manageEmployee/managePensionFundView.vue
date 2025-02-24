@@ -18,9 +18,11 @@
             :loading="isLoading"
             type="primary"
             @click="submitForm(ruleFormRef)"
+            class="mr-20"
           >
             Crear fondo
           </el-button>
+          <el-checkbox v-model="showInactive">Mostrar Inactivos</el-checkbox>
         </el-form-item>
       </el-form>
     </el-card>
@@ -97,6 +99,7 @@ const {
   handleSizeChange,
   submitForm,
   pensionFundForm,
+  showInactive,
 } = usePensionFundViewModel();
 
 const isEditModalVisible = ref(false);

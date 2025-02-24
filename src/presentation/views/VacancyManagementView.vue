@@ -55,34 +55,34 @@
   </el-dialog>
 
   <!-- Tabla de Puestos de Trabajo -->
-  <el-table :data="paginatedData" border class="w-full min-h-96 mb-4" stripe>
-    <el-table-column label="Nombre del Puesto" prop="title" />
-    <el-table-column label="Área" prop="area" />
-    <el-table-column label="Salario" prop="salaryRange" />
-    <el-table-column label="Tipo de Contrato">
-      <template #default="{ row }">
-        {{ getContractType(row.contractType) }}
-      </template>
-    </el-table-column>
-    <el-table-column label="Nivel de Prioridad" prop="priority" />
-    <el-table-column prop="isActive" label="Estado">
-  <template #default="{ row }">
-    <el-tag :type="row.isActive ? 'success' : 'danger'">
-      {{ row.isActive ? "Activo" : "Inactivo" }}
-    </el-tag>
-  </template>
-</el-table-column>
+  <el-checkbox v-model="showInactive" class="ml-4">Mostrar Inactivos</el-checkbox>
+<el-table :data="paginatedData" border class="w-full min-h-96 mb-4" stripe>
+  <el-table-column label="Nombre del Puesto" prop="title" />
+  <el-table-column label="Área" prop="area" />
+  <el-table-column label="Salario" prop="salaryRange" />
+  <el-table-column label="Tipo de Contrato">
+    <template #default="{ row }">
+      {{ getContractType(row.contractType) }}
+    </template>
+  </el-table-column>
+  <el-table-column label="Nivel de Prioridad" prop="priority" />
+  <el-table-column prop="isActive" label="Estado">
+    <template #default="{ row }">
+      <el-tag :type="row.isActive ? 'success' : 'danger'">
+        {{ row.isActive ? "Activo" : "Inactivo" }}
+      </el-tag>
+    </template>
+  </el-table-column>
+  <el-table-column label="Acciones">
+    <template #default="scope">
+      <el-button size="small" @click="openEditModal(scope.row)">Editar</el-button>
+      <el-button :loading="isLoading" size="small" type="danger" :disabled="!scope.row.isActive" @click="deleteJobTitle(scope.row.id)">
+        Desactivar
+      </el-button>
+    </template>
+  </el-table-column>
+</el-table>
 
-
-    <el-table-column label="Acciones">
-      <template #default="scope">
-        <el-button size="small"  @click="openEditModal(scope.row)">Editar</el-button>
-        <el-button :loading="isLoading" size="small" type="danger" :disabled="!scope.row.isActive" @click="deleteJobTitle(scope.row.id)">
-          Desactivar
-        </el-button>
-      </template>
-    </el-table-column>
-  </el-table>
 
   <!-- Modal para editar puesto -->
   <el-dialog v-model="isEditModalOpen" title="Editar Puesto de Trabajo">
@@ -224,10 +224,15 @@ const getContractType = (contractTypeId: number) => {
 };
 
 const paginatedData = computed(() => {
-  const activeJobs = jobPostingStore.jobPostings.filter(job => job.isActive);
+  const filteredJobs = showInactive.value
+    ? jobPostingStore.jobPostings
+    : jobPostingStore.jobPostings.filter(job => job.isActive);
+
   const start = (currentPage.value - 1) * pageSize.value;
-  return activeJobs.slice(start, start + pageSize.value);
+  return filteredJobs.slice(start, start + pageSize.value);
 });
+
+const showInactive = ref(false);
 
 
 const handleSizeChange = (size: number) => {

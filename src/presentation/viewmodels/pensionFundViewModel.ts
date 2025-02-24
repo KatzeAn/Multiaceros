@@ -27,13 +27,14 @@ export function usePensionFundViewModel() {
       },
     ],
   });
-
+  const showInactive = ref(false);
   const filterTableData = computed(() =>
     pensionFundList.value.filter(
       (data) =>
-        !search.value ||
-        data.pensionFundName.toLowerCase().includes(search.value.toLowerCase())
-    )
+        (!search.value ||
+        data.pensionFundName.toLowerCase().includes(search.value.toLowerCase()))&&
+        (showInactive.value || data.isActive)
+      )
   );
 
   const paginatedData = computed(() => {
@@ -109,5 +110,6 @@ export function usePensionFundViewModel() {
     handleSizeChange,
     submitForm,
     pensionFundForm,
+    showInactive,
   };
 }

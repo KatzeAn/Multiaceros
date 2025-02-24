@@ -27,14 +27,16 @@ export function useDepartmentViewModel() {
       },
     ],
   });
+  const showInactive = ref(false);
 
-  const filterTableData = computed(() =>
-    divisionList.value.filter(
-      (data) =>
-        !search.value ||
-        data.name.toLowerCase().includes(search.value.toLowerCase())
-    )
-  );
+const filterTableData = computed(() =>
+  divisionList.value.filter(
+    (data) =>
+      (!search.value || data.name.toLowerCase().includes(search.value.toLowerCase())) &&
+      (showInactive.value || data.isActive) 
+  )
+);
+
 
   const paginatedData = computed(() => {
     const start = (currentPage.value - 1) * pageSize.value;
@@ -109,5 +111,6 @@ export function useDepartmentViewModel() {
     handleSizeChange,
     submitForm,
     divisionForm,
+    showInactive,
   };
 }

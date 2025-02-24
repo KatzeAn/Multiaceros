@@ -18,13 +18,16 @@
 
   <el-card shadow="never">
     <template #header>
-      <div class="flex flex-row justify-between">
-        <h2 class="text-xl text-gray-700 font-semibold">Gestionar Empleados</h2>
-        <el-button type="primary" icon="Plus" @click="openAddModal">
-          Agregar Empleado
-        </el-button>
-      </div>
-    </template>
+  <div class="flex flex-col sm:flex-row sm:justify-between sm:items-center">
+    <h2 class="text-xl text-gray-700 font-semibold">Gestionar Empleados</h2>
+    <div class="flex flex-col sm:flex-row sm:items-center">
+      <el-button type="primary" icon="Plus" @click="openAddModal" class="mb-2 sm:mb-0 sm:mr-4">
+        Agregar Empleado
+      </el-button>
+      <el-checkbox v-model="showInactive">Mostrar Inactivos</el-checkbox>
+    </div>
+  </div>
+</template>
 
     <el-table :data="paginatedData" border class="w-full min-h-96 mb-4" stripe>
       <el-table-column label="Nombre" prop="fullName" />
@@ -124,6 +127,7 @@ const {
   handlePageChange,
   handleSizeChange,
   loadEmployee,
+  showInactive,
 } = useEmployeeViewModel();
 
 const deactivateEmployee = async (id: number) => {

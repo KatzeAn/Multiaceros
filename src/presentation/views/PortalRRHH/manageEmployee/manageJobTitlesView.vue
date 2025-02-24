@@ -18,9 +18,11 @@
             :loading="isLoading"
             type="primary"
             @click="submitForm(ruleFormRef)"
+            class="mr-20"
           >
             Crear cargo
           </el-button>
+          <el-checkbox v-model="showInactive">Mostrar Inactivos</el-checkbox>
         </el-form-item>
       </el-form>
     </el-card>
@@ -97,6 +99,7 @@ const {
   handleSizeChange,
   submitForm,
   jobTitleForm,
+  showInactive,
 } = useJobTitleViewModel();
 
 const isEditModalVisible = ref(false);

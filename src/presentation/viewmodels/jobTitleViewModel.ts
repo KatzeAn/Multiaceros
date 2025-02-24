@@ -28,13 +28,14 @@ export function useJobTitleViewModel() {
       },
     ],
   });
-
+  const showInactive = ref(false);
   const filterTableData = computed(() =>
     jobTitles.value.filter(
       (data) =>
-        !search.value ||
-        data.name.toLowerCase().includes(search.value.toLowerCase())
-    )
+        (!search.value ||
+        data.name.toLowerCase().includes(search.value.toLowerCase()))&&
+        (showInactive.value || data.isActive)
+      )
   );
 
   const paginatedData = computed(() => {
@@ -111,5 +112,6 @@ export function useJobTitleViewModel() {
     handleSizeChange,
     submitForm,
     jobTitleForm,
+    showInactive,
   };
 }

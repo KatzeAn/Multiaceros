@@ -27,14 +27,15 @@ export function useFamilyCompensationFundViewModel() {
       },
     ],
   });
-
+  const showInactive = ref(false);
   const filterTableData = computed(() =>
     familyCompensationFundList.value.filter(
       (data) =>
-        !search.value ||
+        (!search.value ||
         data.compensationFundName
           .toLowerCase()
-          .includes(search.value.toLowerCase())
+          .includes(search.value.toLowerCase()))&&
+          (showInactive.value || data.isActive) 
     )
   );
 
@@ -115,5 +116,6 @@ export function useFamilyCompensationFundViewModel() {
     handleSizeChange,
     submitForm,
     familyCompensationFundForm,
+    showInactive,
   };
 }
