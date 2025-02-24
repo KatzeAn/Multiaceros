@@ -24,7 +24,6 @@
 import SidebarApplications from "../components/ApplicationsComponents/SidebarApplications.vue";
 import NavbarApplications from '../components/ApplicationsComponents/NavbarApplications.vue';
 import JobCard from '../components/ApplicationsComponents/JobCard.vue';
-import WhatsappIcon from '../components/ApplicationsComponents/WhatsappIcon.vue';
 import { ref } from 'vue';
 import AboutUs from '../components/ApplicationsComponents/AboutUs.vue';
 

@@ -42,6 +42,10 @@
             :value="contractType.id"
           />
         </el-select>
+        <el-form-item label="Nivel de Prioridad" prop="priority">
+  <el-input-number v-model="jobPosting.priority" :min="1" />
+</el-form-item>
+
       </el-form-item>
 
       <el-form-item>
@@ -60,13 +64,15 @@
         {{ getContractType(row.contractType) }}
       </template>
     </el-table-column>
+    <el-table-column label="Nivel de Prioridad" prop="priority" />
     <el-table-column prop="isActive" label="Estado">
-      <template #default="{ row }">
-        <el-tag :type="row.isActive ? 'success' : 'success'">
-          {{ row.isActive ? "Activo" : "Activo" }}
-        </el-tag>
-      </template>
-    </el-table-column>
+  <template #default="{ row }">
+    <el-tag :type="row.isActive ? 'success' : 'danger'">
+      {{ row.isActive ? "Activo" : "Inactivo" }}
+    </el-tag>
+  </template>
+</el-table-column>
+
 
     <el-table-column label="Acciones">
       <template #default="scope">
@@ -119,7 +125,9 @@
         />
       </el-select>
     </el-form-item>
-
+<el-form-item label="Nivel de Prioridad" prop="priority">
+  <el-input-number v-model="selectedJobPosting.priority" :min="1" />
+</el-form-item>
     <el-form-item>
       <el-button type="primary" @click="updateJobPosting">Guardar Cambios</el-button>
     </el-form-item>
@@ -165,6 +173,7 @@ const jobPosting = ref<JobPosting>({
   contractDuration: "",
   publicationDate: new Date().toISOString(),
   closingDate: new Date().toISOString(),
+  priority: 1,
 });
 
 const selectedJobPosting = ref<JobPosting>({
@@ -179,6 +188,7 @@ const selectedJobPosting = ref<JobPosting>({
   contractDuration: "",
   publicationDate: new Date().toISOString(),
   closingDate: new Date().toISOString(),
+  priority: 1,
 });
 
 const submitJobPosting = async () => {
@@ -192,9 +202,16 @@ const submitJobPosting = async () => {
 };
 
 const loadData = async () => {
-    const result = await useContracTypeStore().fetchContractType();
-    contractTypeList.value = result.contractTypeList;
+  try {
+    const store = useContracTypeStore();
+    await store.fetchContractType();
+    console.log("Datos de contrato recibidos:", store.contractTypeList);
+    contractTypeList.value = store.contractTypeList;
+  } catch (error) {
+    console.error("Error cargando los tipos de contrato:", error);
+  }
 };
+
 
 onMounted(() => {
   jobPostingStore.fetchJobPostings();
@@ -207,9 +224,11 @@ const getContractType = (contractTypeId: number) => {
 };
 
 const paginatedData = computed(() => {
+  const activeJobs = jobPostingStore.jobPostings.filter(job => job.isActive);
   const start = (currentPage.value - 1) * pageSize.value;
-  return jobPostingStore.jobPostings.slice(start, start + pageSize.value);
+  return activeJobs.slice(start, start + pageSize.value);
 });
+
 
 const handleSizeChange = (size: number) => {
   pageSize.value = size;

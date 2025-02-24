@@ -11,4 +11,5 @@ export interface JobPosting {
   contractDuration: string;
   publicationDate: string;
   closingDate: string;
+  priority: number;
 }
