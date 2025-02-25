@@ -1,5 +1,5 @@
 import { ref, computed, reactive, watch, onMounted } from "vue";
-import { ElNotification, type FormInstance } from "element-plus";
+import { type FormInstance } from "element-plus";
 import { useEmployeePotentialStore } from "../stores/employeePotential.store";
 import type { EmployeePotential } from "@/domain/Interfaces/EmployeePotential/EmployeePotential.interface";
 
@@ -13,6 +13,7 @@ export function useEmployeePotentialViewModel() {
   const currentPage = ref(1);
   const pageSize = ref(10);
   const ruleFormRef = ref<FormInstance>();
+  const uploadedFile = ref<File | null>(null);
 
   const employeePotentialForm = reactive<EmployeePotential>({
     documentType: 1,
@@ -125,37 +126,32 @@ export function useEmployeePotentialViewModel() {
     emit: (event: "employee-saved") => void
   ) => {
     if (!formEl) return;
-
+  
     const isValid = await formEl
       .validate()
       .then(() => true)
       .catch(() => false);
     if (!isValid) return;
-
     try {
+      const formattedDate = employeePotentialForm.dateOfBirth
+        ? new Date(employeePotentialForm.dateOfBirth).toISOString().split("T")[0]
+        : null;
+      const employeeData = {
+        ...employeePotentialForm,
+        dateOfBirth: formattedDate,
+      };
       await employeePotentialStore.createEmployeePotentialRequest(
-        employeePotentialForm
+        employeeData,
+        uploadedFile.value
       );
-
-      ElNotification({
-        title: "Éxito",
-        message: "Candidato creado correctamente",
-        type: "success",
-      });
-
       emit("employee-saved");
       resetForm();
     } catch (error) {
-      ElNotification({
-        title: "Error",
-        message: (error as string) || "Error desconocido",
-        type: "error",
-      });
     }
   };
+  
 
   const resetForm = () => {
-    employeePotentialForm.firstName = "";
     employeePotentialForm.documentType = 1;
     employeePotentialForm.numberDocument = "";
     employeePotentialForm.firstName = "";
@@ -165,6 +161,7 @@ export function useEmployeePotentialViewModel() {
     employeePotentialForm.email = "";
     employeePotentialForm.cellPhone = "";
     employeePotentialForm.jobPostingId = undefined;
+    uploadedFile.value = null;
   };
 
   watch([search, currentPage, pageSize], () => {
@@ -188,6 +185,7 @@ export function useEmployeePotentialViewModel() {
     handleSizeChange,
     submitForm,
     employeePotentialForm,
+    uploadedFile,
     loadEmployeePotentialByDocument,
     employeePotential,
     loadEmployeePotential,

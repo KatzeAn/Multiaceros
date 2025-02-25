@@ -5,6 +5,8 @@ import { computed, ref } from "vue";
 
 export const useUserStore = defineStore('user', () => {
     const user = ref<User | null>(null);
+    const users = ref<User[]>([]);
+    const loadingUsers = ref(false);
 
     const loadFromLocalStorage = () => {
         const storedUser = localStorage.getItem('user');
@@ -41,6 +43,25 @@ export const useUserStore = defineStore('user', () => {
         return user.value ? `${user.value.userId }`: '';
     });
 
+    const fetchUsers = async () => {
+        const result = {
+            loading: true,
+            users: [] as User[],
+        };
+        try {
+            result.loading = true;
+            const userService = new UserModel();
+            const usersResponse: User[] = await userService.getUsers();
+            result.users = usersResponse;
+        } catch (error) {
+            result.users = [];
+        } finally {
+            result.loading = false;
+        }
+    
+        return result;
+    };
+    
     const fetchBirthdaysOfMonth = async () => {
         const result = {
             loading: true,
@@ -67,6 +88,9 @@ export const useUserStore = defineStore('user', () => {
         getUsername,
         getUserEmail,
         getUserId,
+        fetchUsers,
+        users,
+        loadingUsers,
         fetchBirthdaysOfMonth,
     }
 });

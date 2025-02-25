@@ -3,23 +3,29 @@ import { EmployeePotentialRepository } from "@/domain/repository/employeePotenti
 import { apiRequest } from "@/presentation/api/axiosInstance";
 
 export class EmployeePotentialModel extends EmployeePotentialRepository {
-  createEmployeePotential(data: EmployeePotential): Promise<EmployeePotential> {
+  createEmployeePotential(data: EmployeePotential, file: File): Promise<EmployeePotential> {
+    const formData = new FormData();
+    formData.append("DocumentType", data.documentType.toString());
+    formData.append("NumberDocument", data.numberDocument.toString());
+    formData.append("FirstName", data.firstName);
+    if (data.middleName) formData.append("MiddleName", data.middleName);
+    formData.append("SurName", data.surName);
+    formData.append("DateOfBirth", data.dateOfBirth);
+    formData.append("Email", data.email);
+    formData.append("CellPhone", data.cellPhone);
+    if (data.jobPostingId) formData.append("JobPostingId", data.jobPostingId.toString());
+    formData.append("File", file);
+  
     return apiRequest<EmployeePotential>(
       "post",
       "/EmployeePotential/CreateEmployeePotential",
+      formData,
       {
-        documentType: data.documentType,
-        numberDocument: data.numberDocument,
-        firstName: data.firstName,
-        middleName: data.middleName,
-        surName: data.surName,
-        dateOfBirth: data.dateOfBirth,
-        email: data.email,
-        cellPhone: data.cellPhone,
-        jobPostingId: data.jobPostingId,
+        headers: { "Content-Type": "multipart/form-data" }
       }
     );
   }
+  
   getAllEmployeesPotential(): Promise<EmployeePotential[]> {
     return apiRequest<EmployeePotential[]>(
       "get",

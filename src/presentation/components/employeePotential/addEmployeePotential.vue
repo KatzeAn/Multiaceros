@@ -66,6 +66,18 @@
             v-model="employeePotentialForm.cellPhone"
           />
         </el-form-item>
+        <el-form-item label="Adjuntar archivo">
+        <el-upload
+          action=""
+          :auto-upload="false"
+          :file-list="fileList"
+          :limit="1"
+          accept=".pdf,.doc,.docx"
+          @change="handleFileChange"
+        >
+          <el-button type="primary">Seleccionar archivo</el-button>
+        </el-upload>
+      </el-form-item>
 
         <el-form-item prop="jobPostingId" label="Puesto a referir">
           <el-select
@@ -94,6 +106,8 @@
 <script lang="ts" setup>
 import { useEmployeePotentialViewModel } from "@/presentation/viewmodels/employeePotentialViewModel";
 import { useJobPostingViewModel } from "@/presentation/viewmodels/jobPostingViewModel";
+import { ElNotification } from "element-plus";
+import { ref } from "vue";
 
 const props = defineProps<{
   dialog: boolean;
@@ -103,9 +117,22 @@ const { jobPostingList } = useJobPostingViewModel();
 
 const emit = defineEmits(["update:dialog", "employee-saved"]);
 const handleSubmit = () => {
+  if (!uploadedFile.value) {
+    ElNotification({
+      title: "Error",
+      message: "Debe adjuntar un archivo antes de enviar el formulario.",
+      type: "error",
+    });
+    return;
+  }
   submitForm(ruleFormRef.value, (event) => emit(event as "employee-saved"));
 };
 
-const { ruleFormRef, rules, submitForm, isLoading, employeePotentialForm } =
+const { ruleFormRef, rules, submitForm, isLoading, employeePotentialForm, uploadedFile} =
   useEmployeePotentialViewModel();
+  const fileList = ref([]);
+const handleFileChange = (file) => {
+  fileList.value = [file];
+  uploadedFile.value = file.raw;
+};
 </script>
