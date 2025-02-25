@@ -22,36 +22,40 @@
     <el-tabs v-model="activeTab">
       <el-tab-pane label="Lista de Usuarios" name="users">
         <div class="mt-6 bg-white p-6 rounded-xl shadow-lg">
-          <h2 class="text-lg font-semibold mb-4">Lista de Usuarios</h2>
+        <h2 class="text-lg font-semibold mb-4">Lista de Usuarios</h2>
           <el-input v-model="searchQuery" placeholder="Buscar usuario..." clearable class="mb-4 w-1/3"/>
-          <el-table :data="filteredUsers" style="width: 100%" border stripe>
-            <el-table-column label="Nombre" prop="userFirstName" />
-            <el-table-column label="Apellido" prop="surName" />
-            <el-table-column label="Estado">
-              <template #default="{ row }">
-                <el-tag :type="row.isActive ? 'success' : 'danger'">
-                  {{ row.isActive ? "Activo" : "Inactivo" }}
-                </el-tag>
-              </template>
-            </el-table-column>
-            <el-table-column label="Correo Electrónico" prop="userEmail" />
-            <el-table-column label="Acciones" align="center">
-              <template #default="scope">
-                <el-button size="small" @click="openRoleChangeDialog(scope.row)">
-                  Cambiar Rol
-                </el-button>
-              </template>
-            </el-table-column>
-          </el-table>
+        <el-table :data="filteredUsers" style="width: 100%" border stripe>
+          <el-table-column label="Nombre" prop="userFirstName" />
+          <el-table-column label="Apellido" prop="surName" />
+          <el-table-column label="Estado">
+            <template #default="{ row }">
+              <el-tag :type="row.isActive ? 'success' : 'danger'">
+                {{ row.isActive ? "Activo" : "Inactivo" }}
+              </el-tag>
+            </template>
+          </el-table-column>
+          <el-table-column label="Correo Electrónico" prop="userEmail" />
+          <el-table-column label="Acciones" align="center">
+            <template #default="scope">
+              <el-button size="small" @click="openRoleChangeDialog(scope.row)">
+                Cambiar Rol
+              </el-button>
+            </template>
+          </el-table-column>
+        </el-table>
         </div>
       </el-tab-pane>
-
+      
       <el-tab-pane label="Usuarios Conectados" name="connectedUsers">
         <loggedUsers :connectedUsers="users" />
       </el-tab-pane>
 
       <el-tab-pane label="Gestión de Notificaciones" name="notifications">
         <ManageNotificacions :notifications="notifications" />
+      </el-tab-pane>
+      
+      <el-tab-pane label="Gestión de Contratos" name="contracts">
+        <ManageContracts />
       </el-tab-pane>
     </el-tabs>
 
@@ -72,13 +76,13 @@ import { ref, computed, onMounted } from "vue";
 import { useUserStore } from "@/presentation/stores/user.store";
 import { useRoleStore } from "@/presentation/stores/role.store";
 import loggedUsers from "@/presentation/components/loggedUsers.vue";
-import { Avatar } from '@element-plus/icons-vue'
+import { Avatar } from '@element-plus/icons-vue';
 import ManageNotificacions from "@/presentation/components/ManageNotifications.vue";
+import ManageContracts from "@/presentation/components/ManageContracts.vue";
 
 const userStore = useUserStore();
 const roleStore = useRoleStore();
 
-const activeTab = ref("users");
 const searchQuery = ref("");
 const users = ref([]);
 const roles = ref([]);
@@ -86,6 +90,7 @@ const isDialogVisible = ref(false);
 const selectedRoleId = ref(null);
 const selectedUser = ref(null);
 const notifications = ref([]);
+const activeTab = ref("users");
 
 onMounted(async () => {
   const result = await userStore.fetchUsers();
@@ -127,4 +132,3 @@ const confirmRoleChange = async () => {
   background-color: #fff;
 }
 </style>
-  
