@@ -3,13 +3,14 @@
       <h1 class="text-2xl font-bold mb-4">Panel de Gestión Administrativa</h1>
   
       <div class="grid grid-cols-2 gap-4">
-        <div class="bg-white p-4 rounded-lg shadow-md flex items-center">
-          <i class="el-icon-user text-3xl text-blue-500 mr-4"></i>
-          <div>
-            <p class="text-lg font-semibold">Usuarios Conectados</p>
-            <p class="text-xl">150</p>
-          </div>
-        </div>
+        <div class="bg-white p-6 rounded-xl shadow-lg flex items-center border border-gray-200 w-60">
+    <el-icon :size="50" class="text-3xl"><Avatar /></el-icon>
+    <div class="ml-4">
+      <p class="text-gray-500 text-sm uppercase font-medium">Usuarios Conectados</p>
+      <p class="text-2xl font-semibold text-gray-900">150</p>
+    </div>
+  </div>
+
         <div class="bg-white p-4 rounded-lg shadow-md">
           <h2 class="text-lg font-semibold mb-2">Conexiones por Hora</h2>
           <el-progress :percentage="60" status="success"></el-progress>
@@ -33,6 +34,13 @@
     <el-table :data="filteredUsers" style="width: 100%" border stripe>
       <el-table-column label="Nombre" prop="userFirstName" />
       <el-table-column label="Apellido" prop="surName" />
+      <el-table-column label="Estado">
+        <template #default="{ row }">
+          <el-tag :type="row.isActive ? 'success' : 'danger'">
+            {{ row.isActive ? "Activo" : "Inactivo" }}
+          </el-tag>
+        </template>
+  </el-table-column>
       <el-table-column label="Correo Electrónico" prop="userEmail" />
       <el-table-column label="Acciones" align="center">
         <template #default="scope">
@@ -62,6 +70,7 @@
   import { useUserStore } from "@/presentation/stores/user.store";
   import { useRoleStore } from "@/presentation/stores/role.store";
   import loggedUsers from "@/presentation/components/loggedUsers.vue";
+  import { Avatar  } from '@element-plus/icons-vue';
   
   const userStore = useUserStore();
   const roleStore = useRoleStore();

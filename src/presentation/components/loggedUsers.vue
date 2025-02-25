@@ -28,7 +28,6 @@ setup() {
   const connectedUsers = ref([]);
 
   onMounted(() => {
-    // Simulación de datos de usuarios conectados
     connectedUsers.value = [
       { userFirstName: "Juan", surName: "Pérez", userEmail: "juan@example.com", status: "En sesión" },
       { userFirstName: "María", surName: "Gómez", userEmail: "maria@example.com", status: "En sesión" },
