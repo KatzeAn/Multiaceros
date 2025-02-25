@@ -1,57 +1,76 @@
 <template>
-    <el-dialog v-model="isOpen" title="Gestionar Notificaciones" width="40%" @close="closeModal">
-      <div class="space-y-4">
-        <el-input v-model="newNotification" placeholder="Escribe una nueva notificación..." clearable />
-        <el-button type="primary" @click="addNotification">Agregar Notificación</el-button>
-        <el-divider />
-        <el-list>
-          <el-list-item v-for="(notification, index) in notifications" :key="index">
-            <div class="flex justify-between items-center w-full">
-              <span>{{ notification }}</span>
-              <el-button type="danger" size="small" @click="removeNotification(index)">Eliminar</el-button>
-            </div>
-          </el-list-item>
-        </el-list>
+    <div class="p-6">
+      <el-table :data="birthdayUsers" style="width: 100%">
+        <el-table-column prop="userFirstName" label="Nombre" />
+        <el-table-column prop="surName" label="Apellido" />
+        <el-table-column prop="birthday" label="Cumpleaños" />
+        <el-table-column label="Recordatorio">
+          <template v-slot="scope">
+            <el-select v-model="scope.row.reminder" placeholder="Selecciona una opción">
+              <el-option label="No recordar" value="never" />
+              <el-option label="30 días antes" value="30days" />
+              <el-option label="15 días antes" value="15days" />
+              <el-option label="7 días antes" value="7days" />
+              <el-option label="1 día antes" value="1day" />
+            </el-select>
+          </template>
+        </el-table-column>
+        <el-table-column label="Acciones">
+          <template v-slot="scope">
+            <el-button size="small" type="danger" @click="removeNotification(scope.row)">
+              Deshacer
+            </el-button>
+          </template>
+        </el-table-column>
+      </el-table>
+  
+      <div class="footer">
+        <el-button type="primary" @click="saveNotifications">Guardar Cambios</el-button>
       </div>
-      <template #footer>
-        <el-button @click="closeModal">Cerrar</el-button>
-      </template>
-    </el-dialog>
+    </div>
   </template>
   
-  <script setup>
-  import { ref } from "vue";
+  <script>
+  import { ref, onMounted } from "vue";
   
-  const isOpen = ref(false);
-  const newNotification = ref("");
-  const notifications = ref([]);
+  export default {
+    setup() {
+      const birthdayUsers = ref([]);
   
-  const openModal = () => {
-    isOpen.value = true;
-  };
+      onMounted(() => {
+        birthdayUsers.value = [
+          { userFirstName: "Juan", surName: "Pérez", userEmail: "juan@example.com", birthday: "10/03/1995", reminder: "never" },
+          { userFirstName: "María", surName: "Gómez", userEmail: "maria@example.com", birthday: "22/06/1990", reminder: "15days" },
+          { userFirstName: "Carlos", surName: "Rodríguez", userEmail: "carlos@example.com", birthday: "05/09/1987", reminder: "30days" },
+          { userFirstName: "Ana", surName: "Fernández", userEmail: "ana@example.com", birthday: "17/12/1998", reminder: "7days" },
+          { userFirstName: "Luis", surName: "Martínez", userEmail: "luis@example.com", birthday: "01/04/2000", reminder: "1day" },
+        ];
+      });
   
-  const closeModal = () => {
-    isOpen.value = false;
-  };
+      const removeNotification = (user) => {
+        user.reminder = "never";
+      };
   
-  const addNotification = () => {
-    if (newNotification.value.trim() !== "") {
-      notifications.value.push(newNotification.value);
-      newNotification.value = "";
+      const saveNotifications = () => {
+        console.log("Notificaciones guardadas:", birthdayUsers.value);
+      };
+  
+      return {
+        birthdayUsers,
+        removeNotification,
+        saveNotifications,
+      };
     }
   };
-  
-  const removeNotification = (index) => {
-    notifications.value.splice(index, 1);
-  };
-  
-  defineExpose({ openModal });
   </script>
   
   <style scoped>
-  .el-list {
-    max-height: 200px;
-    overflow-y: auto;
+  .p-6 {
+    background-color: #fff;
+  }
+  .footer {
+    margin-top: 20px;
+    text-align: right;
   }
   </style>
   
