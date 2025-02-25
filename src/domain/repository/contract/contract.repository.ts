@@ -4,4 +4,5 @@ import type { ContractType } from "@/domain/Interfaces/Contract/contractType.int
 export abstract class ContractRepository {
   abstract getContracts(): Promise<ContractType[]>;
   abstract createContract(contract: Contract): Promise<Contract>;
+  abstract getContractsByDaysRemaining(daysRemaining: number): Promise<ContractType[]>;
 }

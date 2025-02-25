@@ -121,11 +121,12 @@ const loading = ref(false);
 const loadData = async () => {
   loading.value = true;
 
-  const [{ contractTypeList }] = await Promise.all([fetchContractType()]);
-
-  contractTypeOptions.value = contractTypeList;
+  const contractTypeStore = useContracTypeStore(); 
+  await contractTypeStore.fetchContractType(); 
+  contractTypeOptions.value = contractTypeStore.contractTypeList;
   loading.value = false;
 };
+
 
 onMounted(() => {
   loadData();
