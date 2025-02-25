@@ -45,12 +45,22 @@ export const useEmployeePotentialStore = defineStore(
       }
     };
 
-    const createEmployeePotentialRequest = async (data: EmployeePotential) => {
+    const createEmployeePotentialRequest = async (data: EmployeePotential, file: File) => {
       try {
         isLoading.value = true;
         const employeePotentialModel = new EmployeePotentialModel();
-        await employeePotentialModel.createEmployeePotential(data);
+        await employeePotentialModel.createEmployeePotential(data, file);
+        ElNotification({
+          title: "Éxito",
+          message: "Empleado potencial creado correctamente",
+          type: "success",
+        });
       } catch (error) {
+        ElNotification({
+          title: "Error",
+          message: "No se pudo crear el empleado potencial",
+          type: "error",
+        });
         throw error;
       } finally {
         isLoading.value = false;
