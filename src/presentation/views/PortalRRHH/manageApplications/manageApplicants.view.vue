@@ -38,13 +38,16 @@
       <el-table-column prop="email" label="Correo electrónico" />
       <el-table-column prop="cellPhone" label="Celular" />
       <el-table-column label="Acciones">
-        <template #default="scope">
-          <el-button size="small" type="info" @click="handleRowClick"> Detalles </el-button>
-          <el-button disabled size="small" type="danger">
-            Desactivar
-          </el-button>
-        </template>
-      </el-table-column>
+  <template #default="scope">
+    <div class="flex gap-2">
+      <el-button size="small"  @click="handleRowClick"> Detalles </el-button>
+      <el-button disabled size="small" type="danger">
+        Desactivar
+      </el-button>
+    </div>
+  </template>
+</el-table-column>
+
     </el-table>
 
     <!-- Paginación -->

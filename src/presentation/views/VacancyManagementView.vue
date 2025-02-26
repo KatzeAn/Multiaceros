@@ -74,13 +74,16 @@
     </template>
   </el-table-column>
   <el-table-column label="Acciones">
-    <template #default="scope">
+  <template #default="scope">
+    <div class="flex space-x-2">
       <el-button size="small" @click="openEditModal(scope.row)">Editar</el-button>
       <el-button :loading="isLoading" size="small" type="danger" :disabled="!scope.row.isActive" @click="deleteJobTitle(scope.row.id)">
         Desactivar
       </el-button>
-    </template>
-  </el-table-column>
+    </div>
+  </template>
+</el-table-column>
+
 </el-table>
 
 
