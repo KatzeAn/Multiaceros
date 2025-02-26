@@ -25,24 +25,24 @@ export const useUserProfileStore = defineStore('userProfile', () => {
         return result;
     };
 
-const updateUserProfile = async (userProfile: UserProfile) => {
-    try {
-        const userServices = new UserProfileModel();
-        await userServices.updateUserProfile(userProfile);
-        
-        ElNotification({
-            title: 'Éxito',
-            message: 'Perfil actualizado correctamente',
-            type: 'success',
-        });
-    } catch (error) {
-        ElNotification({
-            title: 'Error',
-            message: 'No se pudo actualizar el perfil. Inténtalo de nuevo.',
-            type: 'error',
-        });
-    }
-};
+    const updateUserProfile = async (userProfile: UserProfile) => {
+        try {
+            const userServices = new UserProfileModel();
+            await userServices.updateUserProfile(userProfile);
+            localStorage.setItem('userProfile', JSON.stringify(userProfile));
+            ElNotification({
+                title: 'Éxito',
+                message: 'Perfil actualizado correctamente',
+                type: 'success',
+            });
+        } catch (error) {
+            ElNotification({
+                title: 'Error',
+                message: 'No se pudo actualizar el perfil. Inténtalo de nuevo.',
+                type: 'error',
+            });
+        }
+    };
     return {
         fetchUserProfile,
         updateUserProfile,
