@@ -29,41 +29,36 @@
   </div>
 </template>
 
-    <el-table :data="paginatedData" border class="w-full min-h-96 mb-4" stripe>
-      <el-table-column label="Nombre" prop="fullName" />
-      <el-table-column label="Correo Electrónico" prop="email" />
-      <el-table-column label="Cargo" prop="jobTitle" />
-      <el-table-column label="Departamento" prop="division" />
-      <el-table-column prop="isActive" label="Estado">
-        <template #default="{ row }">
-          <el-tag :type="row.isActive ? 'success' : 'danger'">
-            {{ row.isActive ? "Activo" : "Inactivo" }}
-          </el-tag>
-        </template>
-      </el-table-column>
-      <el-table-column label="Acciones">
-        <template #default="scope">
-<el-table-column label="Acciones">
-  
-  <template #default="scope">
-    <el-button size="small"  @click="openEditModal(scope.row)">
-          Editar
-        </el-button>
-          <el-button 
-            :loading="isLoading"
-            size="small" 
-            type="danger" 
-            @click="deactivateEmployee(scope.row.id)"
-            :disabled="!scope.row.isActive" 
-          >
-            Desactivar
-          </el-button>
-        </template>
-      </el-table-column>
+<el-table :data="paginatedData" border class="w-full min-h-96 mb-4" stripe>
+  <el-table-column label="Nombre" prop="fullName" />
+  <el-table-column label="Correo Electrónico" prop="email" />
+  <el-table-column label="Cargo" prop="jobTitle" />
+  <el-table-column label="Departamento" prop="division" />
+  <el-table-column prop="isActive" label="Estado">
+    <template #default="{ row }">
+      <el-tag :type="row.isActive ? 'success' : 'danger'">
+        {{ row.isActive ? "Activo" : "Inactivo" }}
+      </el-tag>
+    </template>
+  </el-table-column>
+  <el-table-column label="Acciones">
+    <template #default="scope">
+      <el-button size="small" @click="openEditModal(scope.row)">
+        Editar
+      </el-button>
+      <el-button 
+        :loading="isLoading"
+        size="small" 
+        type="danger" 
+        @click="deactivateEmployee(scope.row.id)"
+        :disabled="!scope.row.isActive"
+        >
+        Desactivar
+      </el-button>
+    </template>
+  </el-table-column>
 
-        </template>
-      </el-table-column>
-    </el-table>
+</el-table>
 
     <!-- Paginación -->
     <el-pagination
