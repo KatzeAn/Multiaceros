@@ -1,7 +1,9 @@
 import { UserProfileModel } from "@/database/user/UserProfile/UserProfile.model";
+import { User } from "@/domain/entities/user";
 import type { UserProfile } from "@/domain/Interfaces/user/UserProfile.interface";
 import { ElNotification } from "element-plus";
 import { defineStore } from "pinia";
+import { ref } from "vue";
 
 export const useUserProfileStore = defineStore('userProfile', () => {
     const fetchUserProfile = async (userId: string) => {
@@ -29,12 +31,33 @@ export const useUserProfileStore = defineStore('userProfile', () => {
         try {
             const userServices = new UserProfileModel();
             await userServices.updateUserProfile(userProfile);
-            localStorage.setItem('userProfile', JSON.stringify(userProfile));
-            ElNotification({
-                title: 'Éxito',
-                message: 'Perfil actualizado correctamente',
-                type: 'success',
-            });
+            const storedUser = localStorage.getItem('user');
+            const user = ref<User | null>(null);
+
+            if (storedUser) {
+              const userData : User = JSON.parse(storedUser);
+
+              user.value = new User(
+                userData.userId,
+                userData.userFirstName,
+                userData.SurName,
+                userData.UserEmail,
+                userData.token,
+                userData.role
+              );
+
+              user.value.userFirstName = userProfile.userFirstName;
+              user.value.SurName = userProfile.surName;
+              user.value.UserEmail = userProfile.userEmail;
+
+              localStorage.removeItem('user');
+              localStorage.setItem('user', JSON.stringify(user.value));
+              ElNotification({
+                  title: 'Éxito',
+                  message: 'Perfil actualizado correctamente',
+                  type: 'success',
+              });
+            }
         } catch (error) {
             ElNotification({
                 title: 'Error',
