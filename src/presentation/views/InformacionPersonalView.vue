@@ -28,7 +28,6 @@
                   <el-input
                     v-model="basicInformationForm.firstName"
                     placeholder="Enter first name"
-                    disabled
                   />
                 </el-form-item>
               </el-col>
@@ -38,7 +37,6 @@
                   <el-input
                     v-model="basicInformationForm.middleName"
                     placeholder="Enter last name"
-                    disabled
                   />
                 </el-form-item>
               </el-col>
@@ -48,7 +46,6 @@
                   <el-input
                     v-model="basicInformationForm.lastName"
                     placeholder="Enter last name"
-                    disabled
                   />
                 </el-form-item>
               </el-col>
@@ -62,7 +59,6 @@
                     v-model="basicInformationForm.birthDate"
                     type="date"
                     placeholder="Pick a date"
-                    disabled
                   />
                 </el-form-item>
                 <span v-if="basicInformationForm.age" style="margin-left: 120px"
@@ -71,28 +67,12 @@
               </el-col>
             </el-row>
 
-            <el-row>
-              <el-col :span="6">
-                <!-- Estado civil -->
-                <el-form-item label="Estado Civil" prop="maritalStatus">
-                  <el-select
-                    v-model="basicInformationForm.maritalStatus"
-                    placeholder="Select marital status"
-                  >
-                    <el-option label="Soltero" value="Single" />
-                    <el-option label="Casado" value="Married" />
-                    <el-option label="Divorciado" value="Divorced" />
-                  </el-select>
-                </el-form-item>
-              </el-col>
-            </el-row>
-
             <!-- Botones -->
             <el-form-item>
-              <el-button type="primary" @click="submitForm" disabled
+              <el-button type="primary" @click="submitForm"
                 >Actualizar</el-button
               >
-              <el-button @click="resetForm" disabled>Cancelar</el-button>
+              <el-button @click="resetForm" >Cancelar</el-button>
             </el-form-item>
           </el-form>
         </el-card>
@@ -135,6 +115,7 @@
                   <el-input
                     v-model="addressInformationForm.city"
                     placeholder="Enter a city"
+                    disabled
                   />
                 </el-form-item>
               </el-col>
@@ -144,6 +125,7 @@
                   <el-input
                     v-model="addressInformationForm.state"
                     placeholder="Enter a state"
+                    disabled
                   />
                 </el-form-item>
               </el-col>
@@ -153,6 +135,7 @@
                   <el-input
                     v-model="addressInformationForm.country"
                     placeholder="Enter a country"
+                    disabled
                   />
                 </el-form-item>
               </el-col>
@@ -160,10 +143,10 @@
 
             <!-- Botones -->
             <el-form-item>
-              <el-button type="primary" @click="submitForm" disabled
+              <el-button type="primary" @click="submitForm"
                 >Actualizar</el-button
               >
-              <el-button @click="resetForm" disabled>Cancelar</el-button>
+              <el-button @click="resetForm">Cancelar</el-button>
             </el-form-item>
           </el-form>
         </el-card>
@@ -193,7 +176,7 @@
                 <el-form-item label="Celular" prop="firstName">
                   <el-input
                     v-model="contactInformationForm.phone"
-                    placeholder="Enter a adress"
+                    placeholder="Enter a cellphone"
                   />
                 </el-form-item>
               </el-col>
@@ -205,7 +188,8 @@
                 <el-form-item label="Correo eléctronico" prop="firstName">
                   <el-input
                     v-model="contactInformationForm.email"
-                    placeholder="Enter a adress"
+                    placeholder="Enter a email"
+                    disabled
                   />
                 </el-form-item>
               </el-col>
@@ -213,26 +197,12 @@
 
             <!-- Botones -->
             <el-form-item>
-              <el-button type="primary" @click="submitForm" disabled
+              <el-button type="primary" @click="submitForm"
                 >Actualizar</el-button
               >
-              <el-button @click="resetForm" disabled>Cancelar</el-button>
+              <el-button @click="resetForm">Cancelar</el-button>
             </el-form-item>
           </el-form>
-        </el-card>
-
-        <el-card>
-          <template #header>
-            <div class="card-header">
-              <span class="font-bold text-[var(--secondary-color)]"
-                ><el-icon>
-                  <Calendar />
-                </el-icon>
-                Información Educacional
-              </span>
-            </div>
-          </template>
-          <el-empty :image-size="200" />
         </el-card>
       </div>
     </el-col>
@@ -241,10 +211,11 @@
 
 <script lang="ts" setup>
 import { ref, reactive, onMounted } from "vue";
-import type { FormInstance, FormRules } from "element-plus";
+import type { FormInstance } from "element-plus";
 import { useUserProfileStore } from "../stores/UserProfile.store";
 import { useUserStore } from "../stores/user.store";
 import type { UserProfile } from "@/domain/Interfaces/user/UserProfile.interface";
+
 // Interfaz para el formulario
 interface BasicInformationForm {
   firstName: string | null | undefined;
@@ -273,7 +244,7 @@ interface AddressInformationForm {
 }
 
 const addressInformationForm = reactive<AddressInformationForm>({
-  address: "Mz 4 Cs 36 B/El Refugio",
+  address: "",
   city: "Ibague",
   state: "Tolima",
   country: "Colombia",
@@ -285,24 +256,51 @@ interface ContactInformationForm {
 }
 
 const contactInformationForm = reactive<ContactInformationForm>({
-  phone: "3133651018",
-  email: "harol.stiven147@gmail.com",
+  phone: "",
+  email: "",
 });
 
 // Referencia al formulario
 const formRef = ref<FormInstance | null>(null);
+const userStore = useUserStore();
+const loading = ref<boolean>(false);
+
+const updateUserProfile = async (userid: number) => {
+  try {
+    const userProfileStore = useUserProfileStore();
+    const userProfile: UserProfile = {
+      userId: userid,
+      userFirstName: basicInformationForm.firstName,
+      userMiddleName: basicInformationForm.middleName,
+      surName: basicInformationForm.lastName,
+      birthday: basicInformationForm.birthDate?.toISOString(),
+      address: addressInformationForm.address,
+      cellPhone: contactInformationForm.phone,
+      userEmail: contactInformationForm.email,
+    };
+    await userProfileStore.updateUserProfile(userProfile);
+    console.log("User profile updated successfully");
+  } catch (error) {
+    console.error("Error updating user profile:", error);
+  }
+};
 
 // Función para enviar el formulario
-const submitForm = () => {
-  if (formRef.value) {
-    formRef.value.validate((valid) => {
-      if (valid) {
-        console.log("Form submitted:", basicInformationForm);
-      } else {
-        console.error("Validation failed");
+const submitForm = async () => {
+  if (!formRef.value) return;
+
+  formRef.value.validate(async (valid) => {
+    if (valid) {
+      const userId = Number(userStore.getUserId);
+      if (!userId || userId <= 0) {
+        console.error("Invalid UserId:", userId);
+        return;
       }
-    });
-  }
+      await updateUserProfile(userId);
+    } else {
+      console.error("Validation failed");
+    }
+  });
 };
 
 // Función para resetear el formulario
@@ -310,33 +308,31 @@ const resetForm = () => {
   if (formRef.value) {
     formRef.value.resetFields();
   }
+};
+
+const loadData = async () => {
+  const userId = Number(userStore.getUserId);
+  if (!userId || userId <= 0) {
+    console.error("Invalid UserId:", userId);
+    return;
+  }
+
+  const { loading: isLoading, userProfile: UserProfile } =
+    await useUserProfileStore().fetchUserProfile(userId);
+  loading.value = isLoading;
   
-  };
-  const loading = ref<boolean>(false);
-   const loadData = async () => {
-    const userid = await useUserStore().getUserId;
-    const { loading: isLoading, userProfile: UserProfile } =
-      await useUserProfileStore().fetchUserProfile(userid);
-    loading.value = isLoading;
-    const Userdata = ref<UserProfile | null>(null);
-    Userdata.value = UserProfile
-    let birthDate = new Date();
-    if (Userdata.value?.birthday != null) { 
-      birthDate = new Date(Userdata.value.birthday);
-    }
+  if (!UserProfile) return;
 
-    basicInformationForm.firstName = Userdata.value?.userFirstName;
-    basicInformationForm.middleName = Userdata.value?.userMiddleName;
-    basicInformationForm.lastName = Userdata.value?.surName;
-    basicInformationForm.birthDate = birthDate;
-    addressInformationForm.address = Userdata.value?.address;
-    addressInformationForm.city = "";
-    addressInformationForm.state = "";
-    contactInformationForm.email = Userdata.value?.userEmail;
-    contactInformationForm.phone = Userdata.value?.cellphone;
+  basicInformationForm.firstName = UserProfile.userFirstName;
+  basicInformationForm.middleName = UserProfile.userMiddleName;
+  basicInformationForm.lastName = UserProfile.surName;
+  basicInformationForm.birthDate = UserProfile.birthday ? new Date(UserProfile.birthday) : new Date();
+  addressInformationForm.address = UserProfile.address || "";
+  contactInformationForm.email = UserProfile.userEmail;
+  contactInformationForm.phone = UserProfile.cellPhone;
 
-  };
-   onMounted(() => {
+};
+onMounted(() => {
     loadData()
 });
 </script>

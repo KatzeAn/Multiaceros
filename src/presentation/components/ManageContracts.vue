@@ -12,7 +12,7 @@
       <el-table-column label="Apellido" prop="userSurName" />
       <el-table-column label="Correo Electrónico" prop="userEmail" />
       <el-table-column label="Tipo de contrato" prop="contractType" />
-      <el-table-column label="Fecha de inicio del contrato" prop="contractEndDate" />
+      <el-table-column label="Fecha de finalizacion del contrato" prop="contractEndDate" />
       <el-table-column label="Días para vencer" prop="daysRemaining" />
     </el-table>
   </div>
