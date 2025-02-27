@@ -5,6 +5,12 @@ import { useRouter } from "vue-router";
 import { useAuthStore } from "../stores/auth.store"; 
 const useAuth = useAuthStore();
 const router = useRouter();
+const navigateAndReload = () => {
+  router.push("/home").then(() => {
+    window.location.reload();
+  });
+};
+
 
 const cerrarSesion = () => {
   useAuth.logout();
@@ -61,7 +67,7 @@ onUnmounted(() => {
     <ul class="flex items-center text-sm ml-4">
       <li class="mr-2">
         <a href="#" class="text-gray-600 hover:text-gray-600 font-medium">
-          <router-link to="/home">Inicio</router-link>
+          <router-link to="/home" @click.prevent="navigateAndReload">Inicio</router-link>
         </a>
       </li>
     </ul>
