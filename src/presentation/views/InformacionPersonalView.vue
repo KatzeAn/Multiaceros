@@ -263,7 +263,6 @@ const contactInformationForm = reactive<ContactInformationForm>({
 // Referencia al formulario
 const formRef = ref<FormInstance | null>(null);
 const userStore = useUserStore();
-const loading = ref<boolean>(false);
 
 const updateUserProfile = async (userid: number) => {
   try {
@@ -285,7 +284,6 @@ const updateUserProfile = async (userid: number) => {
   }
 };
 
-// Función para enviar el formulario
 const submitForm = async () => {
   if (!formRef.value) return;
 
@@ -303,7 +301,6 @@ const submitForm = async () => {
   });
 };
 
-// Función para resetear el formulario
 const resetForm = () => {
   if (formRef.value) {
     formRef.value.resetFields();
@@ -317,9 +314,10 @@ const loadData = async () => {
     return;
   }
 
-  const { loading: isLoading, userProfile: UserProfile } =
-    await useUserProfileStore().fetchUserProfile(userId);
-  loading.value = isLoading;
+const userProfileStore = useUserProfileStore();
+await userProfileStore.fetchUserProfile(userId);
+const UserProfile = userProfileStore.userProfile;
+
   
   if (!UserProfile) return;
 

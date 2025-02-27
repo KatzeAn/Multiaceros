@@ -40,7 +40,7 @@
 </template>
 
 <script lang="ts" setup>
-import { computed, onMounted, ref, reactive } from 'vue';
+import { computed, onMounted, reactive, watchEffect } from 'vue';
 import { useRoute, useRouter } from 'vue-router';
 import { useUserProfileStore } from "../stores/UserProfile.store";
 import { useUserStore } from "../stores/user.store";
@@ -50,7 +50,6 @@ const route = useRoute();
 const router = useRouter();
 const userStore = useUserStore();
 const userProfileStore = useUserProfileStore();
-const userProfile = ref<{ userFirstName: string; surName: string } | null>(null);
 
 const state = reactive({
   squareUrl: mujer,
@@ -59,19 +58,17 @@ const state = reactive({
 onMounted(async () => {
   const userId = userStore.getUserId; 
   if (userId) {
-    const result = await userProfileStore.fetchUserProfile(userId);
-    if (result.userProfile) {
-      userProfile.value = {
-        userFirstName: result.userProfile.userFirstName,
-        surName: result.userProfile.surName.split(' ')[0], // Toma solo el primer apellido
-      };
-    }
+    await userProfileStore.fetchUserProfile(userId);
   }
 });
+
 const userFullName = computed(() => {
-  return userProfile.value
-    ? `${userProfile.value.userFirstName} ${userProfile.value.surName}`
-    : 'Cargando...';
+  if (!userProfileStore.userProfile) return 'Cargando...';
+
+  return `${userProfileStore.userProfile.userFirstName} ${userProfileStore.userProfile.surName.split(' ')[0]}`;
+});
+
+watchEffect(() => {
 });
 
 // Sincroniza `activeName` con la ruta actual.
