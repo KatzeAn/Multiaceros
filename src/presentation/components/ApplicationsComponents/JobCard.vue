@@ -1,5 +1,5 @@
 <script lang="ts" setup>
-import { onMounted, ref } from "vue";
+import { onMounted, ref, computed } from "vue";
 import { useJobPostingStore } from "@/presentation/stores/jobPostings.store";
 import {
   ContractTypeDescriptions,
@@ -22,6 +22,12 @@ const handleEmployeeSaved = () => {
   isAddModalOpen.value = false;
 };
 
+// Filtrar solo los trabajos activos
+const activeJobPostings = computed(() =>
+  jobStore.jobPostings.filter((job) => job.isActive === true)
+);
+
+
 onMounted(() => {
   if (jobStore.jobPostings.length === 0) {
     jobStore.fetchJobPostings();
@@ -37,7 +43,7 @@ onMounted(() => {
   />
   <div class="job-list">
     <el-card
-      v-for="job in jobStore.jobPostings"
+      v-for="job in activeJobPostings"
       :key="job.id"
       class="job-card"
       style="max-width: 480px; margin: 20px"

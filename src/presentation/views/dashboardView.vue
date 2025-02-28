@@ -3,9 +3,9 @@
     <h1 class="text-2xl font-bold mb-4">Panel de Gestión Administrativa</h1>
 
     <div class="grid grid-cols-2 gap-4">
-      <div class="bg-white p-6 rounded-xl shadow-lg flex items-center border border-gray-200 w-60">
-        <el-icon :size="50" class="text-3xl"><Avatar /></el-icon>
-        <div class="ml-4">
+      <div class="bg-white h-40 rounded-xl shadow-lg flex items-center border border-gray-200 w-96">
+        <el-icon :size="50" class="text-3xl ml-3"><Avatar /></el-icon>
+        <div class="ml-6">
           <p class="text-gray-500 text-sm uppercase font-medium">Usuarios Conectados</p>
           <p class="text-2xl font-semibold text-gray-900">150</p>
         </div>
@@ -13,9 +13,7 @@
 
       <div class="bg-white p-4 rounded-lg shadow-md">
         <h2 class="text-lg font-semibold mb-2">Conexiones por Hora</h2>
-        <el-progress :percentage="60" status="success"></el-progress>
-        <el-progress :percentage="30" status="warning"></el-progress>
-        <el-progress :percentage="10" status="exception"></el-progress>
+        <graficConnection />
       </div>
     </div>
 
@@ -79,6 +77,7 @@ import loggedUsers from "@/presentation/components/loggedUsers.vue";
 import { Avatar } from '@element-plus/icons-vue';
 import ManageNotificacions from "@/presentation/components/ManageNotifications.vue";
 import ManageContracts from "@/presentation/components/ManageContracts.vue";
+import graficConnection from "@/presentation/components/graficConnection.vue";
 
 const userStore = useUserStore();
 const roleStore = useRoleStore();

@@ -208,7 +208,8 @@ const download = async () => {
 
 
       <!-- Card para equipo -->
-      <el-card class="col-[1/-1]" style="min-height: 300px" shadow="hover">
+      <Organigrama />
+            <el-card class="col-[1/-1]" style="min-height: 300px" shadow="hover">
         <template #header>
           <div class="card-header">
             <span class="font-bold text-[var(--secondary-color)]">
@@ -282,6 +283,7 @@ const download = async () => {
 import { reactive, ref } from "vue";
 import MyTeam from "../components/MyTeam.vue";
 import { stringToNumber } from "../common/helper/stringTonumber.helper";
+import  Organigrama from "@/presentation/components/organigrama.vue";
 
 const state = reactive({
   avatars: [

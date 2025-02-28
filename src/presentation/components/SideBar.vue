@@ -380,8 +380,8 @@ const recursosHumanosSubItems = ref([
     route: "/portal-rrhh/gestion-administrativa"
   },
   {
-    title: "Evaluaciones de desempeño",
-    route: "#",
+    title: "Pausas activas",
+    route: "/portal-rrhh/gestion-pausas",
   },
   {
     title: "Capacitaciones",

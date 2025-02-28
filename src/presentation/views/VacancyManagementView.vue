@@ -65,7 +65,7 @@
       {{ getContractType(row.contractType) }}
     </template>
   </el-table-column>
-  <el-table-column label="Nivel de Prioridad" prop="priority" />
+  <el-table-column label="Nivel de Prioridad" prop="priorityText" />
   <el-table-column prop="isActive" label="Estado">
     <template #default="{ row }">
       <el-tag :type="row.isActive ? 'success' : 'danger'">
@@ -74,13 +74,16 @@
     </template>
   </el-table-column>
   <el-table-column label="Acciones">
-    <template #default="scope">
+  <template #default="scope">
+    <div class="flex space-x-2">
       <el-button size="small" @click="openEditModal(scope.row)">Editar</el-button>
       <el-button :loading="isLoading" size="small" type="danger" :disabled="!scope.row.isActive" @click="deleteJobTitle(scope.row.id)">
         Desactivar
       </el-button>
-    </template>
-  </el-table-column>
+    </div>
+  </template>
+</el-table-column>
+
 </el-table>
 
 
@@ -126,7 +129,7 @@
       </el-select>
     </el-form-item>
 <el-form-item label="Nivel de Prioridad" prop="priority">
-  <el-input-number v-model="selectedJobPosting.priority" :min="1" />
+  <el-input-number v-model="selectedJobPosting.priorityText" />
 </el-form-item>
     <el-form-item>
       <el-button type="primary" @click="updateJobPosting">Guardar Cambios</el-button>
@@ -174,6 +177,7 @@ const jobPosting = ref<JobPosting>({
   publicationDate: new Date().toISOString(),
   closingDate: new Date().toISOString(),
   priority: 1,
+  priorityText: ""
 });
 
 const selectedJobPosting = ref<JobPosting>({
@@ -189,6 +193,7 @@ const selectedJobPosting = ref<JobPosting>({
   publicationDate: new Date().toISOString(),
   closingDate: new Date().toISOString(),
   priority: 1,
+  priorityText: ""
 });
 
 const submitJobPosting = async () => {

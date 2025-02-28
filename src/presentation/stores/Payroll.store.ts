@@ -1,5 +1,4 @@
 import { PayrollPaymentModel } from "@/database/Payroll/Payroll.model";
-import { ElNotification } from "element-plus";
 import { defineStore } from "pinia";
 
 export const usePayrollPaymentStore = defineStore("payrollPayment", () => {
@@ -30,12 +29,6 @@ export const usePayrollPaymentStore = defineStore("payrollPayment", () => {
   
       window.URL.revokeObjectURL(url);
     } catch (error) {
-      console.error("Error downloading payroll slip:", error);
-      ElNotification({
-        title: "Error",
-        message: "An error occurred while downloading the payroll slip",
-        type: "error",
-      });
       throw error;
     }
   };

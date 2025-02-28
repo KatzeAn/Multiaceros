@@ -1,48 +1,61 @@
 <template>
-  <div class="flex flex-col items-center gap-6 p-6">
-    <div class="card flex flex-col items-center justify-center max-w-[600px] w-full p-6 bg-gray-50 rounded-lg shadow-md border border-gray-200">
-      <h2 class="text-2xl font-bold text-gray-700 mb-4">Descarga de Nómina</h2>
-      <p class="text-gray-600 mb-6 text-center">Descarga el archivo Excel con la información de la nómina de manera rápida y sencilla.</p>
-      
-      <el-skeleton :loading="loading" animated>
-        <template #template>
-          <el-skeleton-item variant="text" style="width: 80%" />
-          <el-skeleton-item variant="text" style="width: 60%" />
-        </template>
-        <template #default>
-          <el-button type="primary" size="large" :loading="loading" @click="handleDownloadPayrollSlip">
-            <el-icon class="mr-2"><Download /></el-icon> Descargar Excel
-          </el-button>
-        </template>
-      </el-skeleton>
-      <p v-if="loading" class="text-sm text-gray-500 mt-4">Generando archivo, por favor espera...</p>
-    </div>
+  <div class="grid grid-cols-2 gap-6 p-6 justify-center">
+    <!-- Sección izquierda (Descargas) -->
+    <div class="flex flex-col gap-6">
+      <!-- Descarga de Nómina -->
+      <div class="card flex flex-col items-center justify-center max-w-[600px] w-full p-6 bg-gray-50 rounded-lg shadow-md border border-gray-200">
+        <h2 class="text-2xl font-bold text-gray-700 mb-4">Descarga de Nómina</h2>
+        <p class="text-gray-600 mb-6 text-center">Descarga el archivo Excel con la información de la nómina de manera rápida y sencilla.</p>
 
-    <div class="card flex flex-col items-center justify-center max-w-[600px] w-full p-6 bg-gray-50 rounded-lg shadow-md border border-gray-200">
-      <h2 class="text-2xl font-bold text-gray-700 mb-4">Descarga de Cesantías e Intereses</h2>
-      <p class="text-gray-600 mb-6 text-center">Descarga el archivo Excel con la información de cesantías e intereses fácilmente.</p>
-      
-      <el-skeleton :loading="loadingSeverance" animated>
-        <template #template>
-          <el-skeleton-item variant="text" style="width: 80%" />
-          <el-skeleton-item variant="text" style="width: 60%" />
-        </template>
-        <template #default>
-          <el-button type="primary" size="large" :loading="loadingSeverance" @click="handleDownloadSeverancePay">
-            <el-icon class="mr-2"><Download /></el-icon> Descargar Excel
-          </el-button>
-        </template>
-      </el-skeleton>
-      <p v-if="loadingSeverance" class="text-sm text-gray-500 mt-4">Generando archivo, por favor espera...</p>
+        <el-skeleton :loading="loading" animated>
+          <template #template>
+            <el-skeleton-item variant="text" style="width: 80%" />
+            <el-skeleton-item variant="text" style="width: 60%" />
+          </template>
+          <template #default>
+            <el-button type="primary" size="large" :loading="loading" @click="handleDownloadPayrollSlip">
+              <el-icon class="mr-2"><Download /></el-icon> Descargar Excel
+            </el-button>
+          </template>
+        </el-skeleton>
+        <p v-if="loading" class="text-sm text-gray-500 mt-4">Generando archivo, por favor espera...</p>
+      </div>
+
+      <!-- Descarga de Cesantías e Intereses -->
+      <div class="card flex flex-col items-center justify-center max-w-[600px] w-full p-6 bg-gray-50 rounded-lg shadow-md border border-gray-200">
+        <h2 class="text-2xl font-bold text-gray-700 mb-4">Descarga de Cesantías e Intereses</h2>
+        <p class="text-gray-600 mb-6 text-center">Descarga el archivo Excel con la información de cesantías e intereses fácilmente.</p>
+
+        <el-skeleton :loading="loadingSeverance" animated>
+          <template #template>
+            <el-skeleton-item variant="text" style="width: 80%" />
+            <el-skeleton-item variant="text" style="width: 60%" />
+          </template>
+          <template #default>
+            <el-button type="primary" size="large" :loading="loadingSeverance" @click="handleDownloadSeverancePay">
+              <el-icon class="mr-2"><Download /></el-icon> Descargar Excel
+            </el-button>
+          </template>
+        </el-skeleton>
+        <p v-if="loadingSeverance" class="text-sm text-gray-500 mt-4">Generando archivo, por favor espera...</p>
+      </div>
+    </div>
+    <div class="flex items-center justify-center">
+      <div class="card flex flex-col items-center justify-center max-w-[600px] w-full p-6 bg-gray-50 rounded-lg shadow-md border border-gray-200">
+        <h2 class="text-2xl font-bold text-gray-700 mb-4">Distribución de Salarios</h2>
+        <GraficSalary />
+      </div>
     </div>
   </div>
 </template>
+
 
 <script setup>
 import { ref } from "vue";
 import { usePayrollPaymentStore } from "@/presentation/stores/Payroll.store";
 import { ElNotification } from "element-plus";
 import { Download } from "@element-plus/icons-vue";
+import GraficSalary from "@/presentation/components/graficSalary.vue";
 
 const payrollStore = usePayrollPaymentStore();
 const loading = ref(false);

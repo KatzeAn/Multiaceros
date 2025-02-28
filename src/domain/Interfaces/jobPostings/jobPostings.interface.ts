@@ -12,4 +12,6 @@ export interface JobPosting {
   publicationDate: string;
   closingDate: string;
   priority: number;
+  priorityText: string;
+  isActive: boolean;
 }

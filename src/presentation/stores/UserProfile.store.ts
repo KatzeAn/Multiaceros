@@ -6,57 +6,43 @@ import { defineStore } from "pinia";
 import { ref } from "vue";
 
 export const useUserProfileStore = defineStore('userProfile', () => {
-    const fetchUserProfile = async (userId: string) => {
-        const result = {
-            loading: true,
-            userProfile: null as UserProfile | null,
-        };
+    const userProfile = ref<UserProfile | null>(null);
+    const loading = ref<boolean>(false);
 
+    const fetchUserProfile = async (userId: string) => {
+        loading.value = true;
         try {
-            result.loading = true;
             const userServices = new UserProfileModel();
             const userProfileResponse: UserProfile = await userServices.getUserProfile(userId);
-            result.userProfile = userProfileResponse; 
+            userProfile.value = userProfileResponse; 
         } catch (error) {
             console.error('Error fetching user profile:', error);
-            result.userProfile = null;  
+            userProfile.value = null;
         } finally {
-            result.loading = false;
+            loading.value = false;
         }
-
-        return result;
     };
 
-    const updateUserProfile = async (userProfile: UserProfile) => {
+    const updateUserProfile = async (updatedProfile: UserProfile) => {
         try {
             const userServices = new UserProfileModel();
-            await userServices.updateUserProfile(userProfile);
+            await userServices.updateUserProfile(updatedProfile);
+
+            userProfile.value = updatedProfile;
+
             const storedUser = localStorage.getItem('user');
-            const user = ref<User | null>(null);
-
             if (storedUser) {
-              const userData : User = JSON.parse(storedUser);
+                const userData: User = JSON.parse(storedUser);
+                userData.userFirstName = updatedProfile.userFirstName;
+                userData.SurName = updatedProfile.surName;
+                userData.UserEmail = updatedProfile.userEmail;
 
-              user.value = new User(
-                userData.userId,
-                userData.userFirstName,
-                userData.SurName,
-                userData.UserEmail,
-                userData.token,
-                userData.role
-              );
-
-              user.value.userFirstName = userProfile.userFirstName;
-              user.value.SurName = userProfile.surName;
-              user.value.UserEmail = userProfile.userEmail;
-
-              localStorage.removeItem('user');
-              localStorage.setItem('user', JSON.stringify(user.value));
-              ElNotification({
-                  title: 'Éxito',
-                  message: 'Perfil actualizado correctamente',
-                  type: 'success',
-              });
+                localStorage.setItem('user', JSON.stringify(userData));
+                ElNotification({
+                    title: 'Éxito',
+                    message: 'Perfil actualizado correctamente',
+                    type: 'success',
+                });
             }
         } catch (error) {
             ElNotification({
@@ -66,7 +52,10 @@ export const useUserProfileStore = defineStore('userProfile', () => {
             });
         }
     };
+
     return {
+        userProfile,
+        loading,
         fetchUserProfile,
         updateUserProfile,
     };
