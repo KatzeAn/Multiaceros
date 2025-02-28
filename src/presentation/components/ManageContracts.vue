@@ -8,14 +8,20 @@
     </div>
     
     <el-table :data="contracts" style="width: 100%" border stripe>
-      <el-table-column label="Nombre" prop="userFirstName" />
-      <el-table-column label="Apellido" prop="userSurName" />
-      <el-table-column label="Correo Electrónico" prop="userEmail" />
-      <el-table-column label="Tipo de contrato" prop="contractType" />
-      <el-table-column label="Fecha de finalización del contrato">
-        <template #default="{ row }">{{ new Date(row.contractEndDate).toISOString().split('T')[0] }}</template></el-table-column>
-      <el-table-column label="Días para vencer" prop="daysRemaining" />
-    </el-table>
+  <el-table-column label="Nombre" prop="userFirstName" />
+  <el-table-column label="Apellido" prop="userSurName" />
+  <el-table-column label="Correo Electrónico" prop="userEmail" />
+  <el-table-column label="Tipo de contrato" prop="contractType" />
+  <el-table-column label="Fecha de finalización del contrato">
+    <template #default="{ row }">{{ new Date(row.contractEndDate).toISOString().split('T')[0] }}</template></el-table-column>
+  <el-table-column label="Días para vencer" prop="daysRemaining" />
+  <el-table-column label="Acciones" align="center">
+    <template #default="{ row }">
+      <el-button size="small" disabled >Renovar</el-button>
+    </template>
+  </el-table-column>
+</el-table>
+
   </div>
 </template>
 

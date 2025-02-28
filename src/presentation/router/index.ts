@@ -115,6 +115,13 @@ const router = createRouter({
               "../views/dashboardView.vue"
             ),
         },
+        {
+          path: "gestion-pausas",
+          component: () =>
+            import(
+              "../views/PortalRRHH/manageActiveBreak.vue"
+            ),
+        },
         
       ],
     },
