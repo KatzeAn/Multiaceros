@@ -6,7 +6,14 @@
   <el-dialog v-model="isAddModalOpen" title="Añadir Nuevo Puesto de Trabajo">
     <el-form ref="formRef" :model="jobPosting">
       <el-form-item label="Título" prop="title">
-        <el-input v-model="jobPosting.title" />
+        <el-select v-model="jobPosting.jobTitleId">
+          <el-option
+            v-for="jobTitle in jobTitleList"
+            :key="jobTitle.id"
+            :label="jobTitle.name"
+            :value="jobTitle.id"
+          />
+        </el-select>
       </el-form-item>
 
       <el-form-item label="Descripción" prop="description">
@@ -17,12 +24,19 @@
         <el-input v-model="jobPosting.salaryRange" />
       </el-form-item>
 
-      <el-form-item label="Nivel de Experiencia" prop="experienceLevel">
+      <el-form-item label="Años de Experiencia" prop="experienceLevel">
         <el-input-number v-model="jobPosting.experienceLevel" :min="1" />
       </el-form-item>
 
       <el-form-item label="Área" prop="area">
-        <el-input v-model="jobPosting.area" />
+        <el-select v-model="jobPosting.divisionId">
+          <el-option
+            v-for="division in divisionList"
+            :key="division.id"
+            :label="division.name"
+            :value="division.id"
+          />
+        </el-select>
       </el-form-item>
 
       <el-form-item label="Modalidad" prop="modality">
@@ -45,8 +59,7 @@
         <el-form-item label="Nivel de Prioridad" prop="priority">
   <el-input-number v-model="jobPosting.priority" :min="1" />
 </el-form-item>
-
-      </el-form-item>
+</el-form-item>
 
       <el-form-item>
         <el-button type="primary" @click="submitJobPosting">Confirmar</el-button>
@@ -55,17 +68,31 @@
   </el-dialog>
 
   <!-- Tabla de Puestos de Trabajo -->
+
   <el-checkbox v-model="showInactive" class="ml-4">Mostrar Inactivos</el-checkbox>
 <el-table :data="paginatedData" border class="w-full min-h-96 mb-4" stripe>
-  <el-table-column label="Nombre del Puesto" prop="title" />
-  <el-table-column label="Área" prop="area" />
+  <el-table-column prop="title" label="Título">
+    <template #default="{ row }">
+      {{ getJobTitle(row.jobTitleId) }}
+    </template>
+  </el-table-column>
+
+    <el-table-column prop="area" label="Área">
+    <template #default="{ row }">
+      {{ getDivision(row.divisionId) }}
+    </template>
+  </el-table-column>
+
   <el-table-column label="Salario" prop="salaryRange" />
+
   <el-table-column label="Tipo de Contrato">
     <template #default="{ row }">
       {{ getContractType(row.contractType) }}
     </template>
   </el-table-column>
+
   <el-table-column label="Nivel de Prioridad" prop="priorityText" />
+
   <el-table-column prop="isActive" label="Estado">
     <template #default="{ row }">
       <el-tag :type="row.isActive ? 'success' : 'danger'">
@@ -73,6 +100,7 @@
       </el-tag>
     </template>
   </el-table-column>
+
   <el-table-column label="Acciones">
   <template #default="scope">
     <div class="flex space-x-2">
@@ -91,8 +119,15 @@
   <el-dialog v-model="isEditModalOpen" title="Editar Puesto de Trabajo">
   <el-form ref="editFormRef" :model="selectedJobPosting">
     <el-form-item label="Título" prop="title">
-      <el-input v-model="selectedJobPosting.title" />
-    </el-form-item>
+        <el-select v-model="jobPosting.jobTitleId">
+          <el-option
+            v-for="jobTitle in jobTitleList"
+            :key="jobTitle.id"
+            :label="jobTitle.name"
+            :value="jobTitle.id"
+          />
+        </el-select>
+      </el-form-item>
 
     <el-form-item label="Descripción" prop="description">
       <el-input v-model="selectedJobPosting.description" type="textarea" />
@@ -107,8 +142,16 @@
     </el-form-item>
 
     <el-form-item label="Área" prop="area">
-      <el-input v-model="selectedJobPosting.area" />
-    </el-form-item>
+        <el-select v-model="jobPosting.divisionId">
+          <el-option
+            v-for="division in divisionList"
+            :key="division.id"
+            :label="division.name"
+            :value="division.id"
+          />
+        </el-select>
+      </el-form-item>
+
 
     <el-form-item label="Modalidad" prop="modality">
       <el-select v-model="selectedJobPosting.modality">
@@ -156,6 +199,8 @@ import type { JobPosting } from "@/domain/Interfaces/jobPostings/jobPostings.int
 import { useJobPostingStore } from "@/presentation/stores/jobPostings.store";
 import { useContracTypeStore } from "@/presentation/stores/contractType.store";
 import type { ContractType } from "@/domain/Interfaces/Contract/contractType.interface";
+import { useJobTitleStore } from "@/presentation/stores/jobTitle.store";
+import { useDivisionStore } from "@/presentation/stores/division.store";
 
 const isAddModalOpen = ref(false);
 const isEditModalOpen = ref(false);
@@ -164,12 +209,20 @@ const currentPage = ref(1);
 const pageSize = ref(10);
 const contractTypeList = ref<ContractType[]>([]);
 
+const jobTitleStore = useJobTitleStore();
+const jobTitleList = ref<{ id: number; name: string }[]>([]);
+const isLoadingJobTitles = ref(false);
+
+const divisionStore = useDivisionStore();
+const divisionList = ref<{ id: number; name: string }[]>([]);
+const isLoadingDivisions = ref(false);
+
 const jobPosting = ref<JobPosting>({
-  title: "",
+  jobTitleId: "",
   description: "",
   salaryRange: "",
   experienceLevel: 1,
-  area: "",
+  divisionId: "",
   requirements: [],
   modality: 1,
   contractType: 1,
@@ -181,11 +234,11 @@ const jobPosting = ref<JobPosting>({
 });
 
 const selectedJobPosting = ref<JobPosting>({
-  title: "",
+  jobTitleId: "",
   description: "",
   salaryRange: "",
   experienceLevel: 1,
-  area: "",
+  divisionId: "",
   requirements: [],
   modality: 1,
   contractType: 1,
@@ -210,13 +263,19 @@ const loadData = async () => {
   try {
     const store = useContracTypeStore();
     await store.fetchContractType();
-    console.log("Datos de contrato recibidos:", store.contractTypeList);
     contractTypeList.value = store.contractTypeList;
+
+    isLoadingJobTitles.value = true;
+    jobTitleList.value = await jobTitleStore.fetchJobTitles();
+    isLoadingJobTitles.value = false;
+
+    isLoadingDivisions.value = true;
+    divisionList.value = await divisionStore.fetchDivision();
+    isLoadingDivisions.value = false;
   } catch (error) {
-    console.error("Error cargando los tipos de contrato:", error);
+    console.error("Error cargando datos:", error);
   }
 };
-
 
 onMounted(() => {
   jobPostingStore.fetchJobPostings();
@@ -226,6 +285,16 @@ onMounted(() => {
 const getContractType = (contractTypeId: number) => {
   const contractType = contractTypeList.value.find((type) => type.id === contractTypeId);
   return contractType ? contractType.typeOfContract : "Desconocido";
+};
+
+const getJobTitle = (jobTitleId: number) => {
+  const jobTitle = jobTitleList.value.find((title) => title.id === jobTitleId);
+  return jobTitle ? jobTitle.name : "Desconocido";
+};
+
+const getDivision = (divisionId: number) => {
+  const division = divisionList.value.find((div) => div.id === divisionId);
+  return division ? division.name : "Desconocido";
 };
 
 const paginatedData = computed(() => {
@@ -238,7 +307,6 @@ const paginatedData = computed(() => {
 });
 
 const showInactive = ref(false);
-
 
 const handleSizeChange = (size: number) => {
   pageSize.value = size;

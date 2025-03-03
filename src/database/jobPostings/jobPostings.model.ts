@@ -3,12 +3,9 @@ import { apiRequest } from "@/presentation/api/axiosInstance";
 import type { JobPosting } from "@/domain/Interfaces/jobPostings/jobPostings.interface";
 
 export class JobPostingModel extends JobPostingsRepository {
-  async getAllJobPostings(): Promise<JobPosting[]> {
-    return apiRequest<JobPosting[]>("get", "/JobPostings/GetAllJobPostings");
-  }
 
   async getAllJobPostingsCopy(): Promise<JobPosting[]> {
-    return apiRequest<JobPosting[]>("get", "/JobPostings/GetAllJobPostingsCopy");
+    return apiRequest<JobPosting[]>("get", "/JobPosting");
   }
 
   async getJobPostingById(id: number): Promise<JobPosting> {
@@ -16,7 +13,7 @@ export class JobPostingModel extends JobPostingsRepository {
   }
 
   async createJobPosting(job: JobPosting): Promise<JobPosting> {
-    return apiRequest<JobPosting>("post", "/JobPostings/CreateJobPosting", job);
+    return apiRequest<JobPosting>("post", "/JobPosting", job);
   }
 
   updateJobPosting(id: number, job: JobPosting): Promise<JobPosting> {
