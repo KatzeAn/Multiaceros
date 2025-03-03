@@ -24,6 +24,35 @@
         <el-input v-model="jobPosting.salaryRange" />
       </el-form-item>
 
+      <div class="flex items-center my-6">
+    <div class="flex-grow border-t border-gray-300"></div>
+    <span class="mx-4 font-bold">Requerimientos</span>
+    <div class="flex-grow border-t border-gray-300"></div>
+  </div>
+  <el-row :gutter="30">
+    <el-col :span="20">
+      <el-form-item label="Nuevo Requerimiento">
+        <el-input v-model="newRequirement" placeholder="Ingrese un requerimiento" />
+      </el-form-item>
+    </el-col>
+    <el-col :span="4">
+      <div class="h-full flex items-center justify-start m-1">
+        <el-button type="primary" class="w-full" @click="addRequirement"> Agregar </el-button>
+      </div>
+    </el-col>
+  </el-row>
+
+  <el-row :gutter="30">
+    <el-col :span="24">
+      <ul>
+        <li v-for="(requirement, index) in jobPosting.requirements" :key="index" class="flex justify-between items-center py-2 border-b" >
+          <span>{{ requirement }}</span>
+          <button type="button" @click="removeRequirement(index)" class="text-red-500"> Eliminar</button>
+        </li>
+      </ul>
+    </el-col>
+  </el-row>
+
       <el-form-item label="Años de Experiencia" prop="experienceLevel">
         <el-input-number v-model="jobPosting.experienceLevel" :min="1" />
       </el-form-item>
@@ -136,6 +165,36 @@
       <el-input v-model="selectedJobPosting.salaryRange" />
     </el-form-item>
 
+    <div class="flex items-center my-6">
+    <div class="flex-grow border-t border-gray-300"></div>
+    <span class="mx-4 font-bold">Requerimientos</span>
+    <div class="flex-grow border-t border-gray-300"></div>
+  </div>
+  <el-row :gutter="30">
+    <el-col :span="20">
+      <el-form-item label="Nuevo Requerimiento">
+        <el-input v-model="newRequirement" placeholder="Ingrese un requerimiento" />
+      </el-form-item>
+    </el-col>
+    <el-col :span="4">
+      <div class="h-full flex items-center justify-start m-1">
+        <el-button type="primary" class="w-full" @click="addRequirement"> Agregar </el-button>
+      </div>
+    </el-col>
+  </el-row>
+
+  <el-row :gutter="30">
+    <el-col :span="24">
+      <ul>
+        <li v-for="(requirement, index) in selectedJobPosting.requirements" :key="index" class="flex justify-between items-center py-2 border-b" >
+          <span>{{ requirement }}</span>
+          <button type="button" @click="removeRequirement(index)" class="text-red-500"> Eliminar</button>
+        </li>
+      </ul>
+    </el-col>
+  </el-row>
+
+
     <el-form-item label="Años de Experiencia" prop="experienceLevel">
       <el-input-number v-model="selectedJobPosting.experienceLevel" :min="1" />
     </el-form-item>
@@ -222,7 +281,7 @@ const jobPosting = ref<JobPosting>({
   salaryRange: "",
   experienceLevel: 1,
   divisionId: 1,
-  requirements: [],
+  requirements: [] as string[],
   modality: 1,
   contractType: 1,
   contractDuration: "",
@@ -238,8 +297,8 @@ const selectedJobPosting = ref<JobPosting>({
   salaryRange: "",
   experienceLevel: 1,
   divisionId: 1,
-  requirements: [],
-  modality: 1,
+  requirements: [] as string[],
+   modality: 1,
   contractType: 1,
   contractDuration: "",
   publicationDate: new Date().toISOString(),
@@ -257,6 +316,29 @@ const submitJobPosting = async () => {
     isAddModalOpen.value = false;
   } catch (error) {
     console.error("Error al crear el puesto de trabajo:", error);
+  }
+};
+
+const newRequirement = ref("");
+const addRequirement = () => {
+  if (newRequirement.value.trim() !== "") {
+    const requirementText = newRequirement.value.trim();
+    if (selectedJobPosting.value.requirements) {
+      selectedJobPosting.value.requirements.push(requirementText);
+    }
+    if (jobPosting.value.requirements) {
+      jobPosting.value.requirements.push(requirementText);
+    }
+    newRequirement.value = "";
+  }
+};
+
+const removeRequirement = (index: number) => {
+  if (selectedJobPosting.value.requirements && selectedJobPosting.value.requirements.length > index) {
+    selectedJobPosting.value.requirements.splice(index, 1);
+  }
+  if (jobPosting.value.requirements && jobPosting.value.requirements.length > index) {
+    jobPosting.value.requirements.splice(index, 1);
   }
 };
 
