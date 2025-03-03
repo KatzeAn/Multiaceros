@@ -111,7 +111,6 @@
     </div>
   </template>
 </el-table-column>
-
 </el-table>
 
 
@@ -119,8 +118,8 @@
   <el-dialog v-model="isEditModalOpen" title="Editar Puesto de Trabajo">
   <el-form ref="editFormRef" :model="selectedJobPosting">
     <el-form-item label="Título" prop="title">
-        <el-select v-model="jobPosting.jobTitleId">
-          <el-option
+      <el-select v-model="selectedJobPosting.jobTitleId">
+        <el-option
             v-for="jobTitle in jobTitleList"
             :key="jobTitle.id"
             :label="jobTitle.name"
@@ -137,12 +136,12 @@
       <el-input v-model="selectedJobPosting.salaryRange" />
     </el-form-item>
 
-    <el-form-item label="Nivel de Experiencia" prop="experienceLevel">
+    <el-form-item label="Años de Experiencia" prop="experienceLevel">
       <el-input-number v-model="selectedJobPosting.experienceLevel" :min="1" />
     </el-form-item>
 
     <el-form-item label="Área" prop="area">
-        <el-select v-model="jobPosting.divisionId">
+        <el-select v-model="selectedJobPosting.divisionId">
           <el-option
             v-for="division in divisionList"
             :key="division.id"
@@ -172,7 +171,7 @@
       </el-select>
     </el-form-item>
 <el-form-item label="Nivel de Prioridad" prop="priority">
-  <el-input-number v-model="selectedJobPosting.priorityText" />
+  <el-input-number v-model="selectedJobPosting.priority" />
 </el-form-item>
     <el-form-item>
       <el-button type="primary" @click="updateJobPosting">Guardar Cambios</el-button>
@@ -218,11 +217,11 @@ const divisionList = ref<{ id: number; name: string }[]>([]);
 const isLoadingDivisions = ref(false);
 
 const jobPosting = ref<JobPosting>({
-  jobTitleId: "",
+  jobTitleId: 1,
   description: "",
   salaryRange: "",
   experienceLevel: 1,
-  divisionId: "",
+  divisionId: 1,
   requirements: [],
   modality: 1,
   contractType: 1,
@@ -234,11 +233,11 @@ const jobPosting = ref<JobPosting>({
 });
 
 const selectedJobPosting = ref<JobPosting>({
-  jobTitleId: "",
+  jobTitleId: 1,
   description: "",
   salaryRange: "",
   experienceLevel: 1,
-  divisionId: "",
+  divisionId: 1,
   requirements: [],
   modality: 1,
   contractType: 1,

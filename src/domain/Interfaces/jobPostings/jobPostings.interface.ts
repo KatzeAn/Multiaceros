@@ -1,10 +1,10 @@
 export interface JobPosting {
   id?: number;
-  jobTitleId: string; 
+  jobTitleId: number; 
   description: string;
   salaryRange: string;
   experienceLevel: number;
-  divisionId: string;
+  divisionId: number;
   requirements: string[];
   modality: number;
   contractType: number;
