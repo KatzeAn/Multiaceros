@@ -194,7 +194,7 @@
 </template>
 
 <script lang="ts" setup>
-import { ref, computed, onMounted } from "vue";
+import { ref, computed, onMounted, watch } from "vue";
 import type { JobPosting } from "@/domain/Interfaces/jobPostings/jobPostings.interface";
 import { useJobPostingStore } from "@/presentation/stores/jobPostings.store";
 import { useContracTypeStore } from "@/presentation/stores/contractType.store";
@@ -249,10 +249,12 @@ const selectedJobPosting = ref<JobPosting>({
   priorityText: ""
 });
 
+const showInactive = ref(false);
+
 const submitJobPosting = async () => {
   try {
     await jobPostingStore.createJobPosting(jobPosting.value);
-    await jobPostingStore.fetchJobPostings();
+    await jobPostingStore.fetchJobPostingsCopy();
     isAddModalOpen.value = false;
   } catch (error) {
     console.error("Error al crear el puesto de trabajo:", error);
@@ -278,7 +280,7 @@ const loadData = async () => {
 };
 
 onMounted(() => {
-  jobPostingStore.fetchJobPostings();
+  jobPostingStore.fetchJobPostingsCopy();
   loadData();
 });
 
@@ -306,7 +308,12 @@ const paginatedData = computed(() => {
   return filteredJobs.slice(start, start + pageSize.value);
 });
 
-const showInactive = ref(false);
+watch(showInactive, async () => {
+  await jobPostingStore.fetchJobPostingsCopy(showInactive.value);
+  console.log("Datos en jobPostingStore después del fetch:", jobPostingStore.jobPostings);
+});
+
+
 
 const handleSizeChange = (size: number) => {
   pageSize.value = size;
@@ -325,7 +332,7 @@ const updateJobPosting = async () => {
   if (!selectedJobPosting.value) return;
   try {
     await jobPostingStore.updateJobPosting(selectedJobPosting.value.id, selectedJobPosting.value);
-    await jobPostingStore.fetchJobPostings();
+    await jobPostingStore.fetchJobPostingsCopy();
     isEditModalOpen.value = false;
   } catch (error) {
     console.error("Error al actualizar el puesto de trabajo:", error);
@@ -335,7 +342,7 @@ const updateJobPosting = async () => {
 const deleteJobTitle = async (id: number) => {
   try {
     await jobPostingStore.deleteJobPosting(id);
-    await jobPostingStore.fetchJobPostings();
+    await jobPostingStore.fetchJobPostingsCopy();
   } catch (error) {
     console.error("Error al eliminar el puesto de trabajo:", error);
   }

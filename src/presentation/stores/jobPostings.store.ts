@@ -10,33 +10,19 @@ const isLoading = ref(false);
 
 export const useJobPostingStore = defineStore("jobPosting", () => {
   const jobPostings = ref<JobPosting[]>([]);
-
-  const fetchJobPostings = async () => {
-    try {
-      const response = await jobPostingModel.getAllJobPostings();
-      jobPostings.value = response.data;
-    } catch (error) {
-      console.error("Error fetching job postings:", error);
-    }
-  };
-
-  const fetchJobPostingsCopy = async () => {
+  
+  const fetchJobPostingsCopy = async (deactivate: boolean = false) => {
     try {
       isLoading.value = true;
-      const data = await jobPostingModel.getAllJobPostingsCopy();
-      return Array.isArray(data) ? data : [];
+      const data = await jobPostingModel.getAllJobPostingsCopy(deactivate);
+      jobPostings.value = Array.isArray(data) ? [...data] : [];
     } catch (error) {
-      ElNotification({
-        title: "Error",
-        message: "No se pudieron cargar las vacantes",
-        type: "error",
-      });
-      return [];
+      jobPostings.value = []; 
     } finally {
       isLoading.value = false;
     }
   };
-
+  
   const createJobPosting = async (job: JobPosting) => {
     try {
       const newJob = await jobPostingModel.createJobPosting(job);
@@ -84,7 +70,7 @@ export const useJobPostingStore = defineStore("jobPosting", () => {
         type: "success",
       });
 
-      await fetchJobPostings();
+      await fetchJobPostingsCopy();
     } catch (error) {
       ElNotification({
         title: "Error",
@@ -98,10 +84,9 @@ export const useJobPostingStore = defineStore("jobPosting", () => {
 
   return {
     jobPostings,
-    fetchJobPostings,
     createJobPosting,
     fetchJobPostingsCopy,
-    updateJobPosting, // ← Método agregado sin modificar la lista local
+    updateJobPosting,
     deleteJobPosting
   };
 });

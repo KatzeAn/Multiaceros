@@ -4,9 +4,9 @@ import type { JobPosting } from "@/domain/Interfaces/jobPostings/jobPostings.int
 
 export class JobPostingModel extends JobPostingsRepository {
 
-  async getAllJobPostingsCopy(): Promise<JobPosting[]> {
-    return apiRequest<JobPosting[]>("get", "/JobPosting");
-  }
+  async getAllJobPostingsCopy(deactivate: boolean): Promise<JobPosting[]> {
+    return apiRequest<JobPosting[]>("get", `/JobPosting?deactivate=${deactivate}`);
+}
 
   async getJobPostingById(id: number): Promise<JobPosting> {
     return apiRequest<JobPosting>("get", `/JobPostings/${id}`);
@@ -17,10 +17,10 @@ export class JobPostingModel extends JobPostingsRepository {
   }
 
   updateJobPosting(id: number, job: JobPosting): Promise<JobPosting> {
-    return apiRequest<JobPosting>("put", `/JobPostings/UpdateJobPosting?id=${id}`, job);
+    return apiRequest<JobPosting>("put", `/JobPosting/${id}`, job);
 }
 
-  deleteJobPosting(id: number, modifiedBy: string): Promise<JobPosting> {
-    return apiRequest<JobPosting>("patch", `/JobPostings/SoftDeleteJobPosting?id=${id}&modifiedBy=${modifiedBy}`);
+deleteJobPosting(id: number, modifiedBy: string): Promise<JobPosting> {
+  return apiRequest<JobPosting>("patch",`/JobPosting/${id}/delete?modifiedBy=${modifiedBy}`);
   }
 }
