@@ -6,7 +6,14 @@
   <el-dialog v-model="isAddModalOpen" title="Añadir Nuevo Puesto de Trabajo">
     <el-form ref="formRef" :model="jobPosting">
       <el-form-item label="Título" prop="title">
-        <el-input v-model="jobPosting.title" />
+        <el-select v-model="jobPosting.jobTitleId">
+          <el-option
+            v-for="jobTitle in jobTitleList"
+            :key="jobTitle.id"
+            :label="jobTitle.name"
+            :value="jobTitle.id"
+          />
+        </el-select>
       </el-form-item>
 
       <el-form-item label="Descripción" prop="description">
@@ -17,12 +24,48 @@
         <el-input v-model="jobPosting.salaryRange" />
       </el-form-item>
 
-      <el-form-item label="Nivel de Experiencia" prop="experienceLevel">
+      <div class="flex items-center my-6">
+    <div class="flex-grow border-t border-gray-300"></div>
+    <span class="mx-4 font-bold">Requerimientos</span>
+    <div class="flex-grow border-t border-gray-300"></div>
+  </div>
+  <el-row :gutter="30">
+    <el-col :span="20">
+      <el-form-item label="Nuevo Requerimiento">
+        <el-input v-model="newRequirement" placeholder="Ingrese un requerimiento" />
+      </el-form-item>
+    </el-col>
+    <el-col :span="4">
+      <div class="h-full flex items-center justify-start m-1">
+        <el-button type="primary" class="w-full" @click="addRequirement"> Agregar </el-button>
+      </div>
+    </el-col>
+  </el-row>
+
+  <el-row :gutter="30">
+    <el-col :span="24">
+      <ul>
+        <li v-for="(requirement, index) in jobPosting.requirements" :key="index" class="flex justify-between items-center py-2 border-b" >
+          <span>{{ requirement }}</span>
+          <button type="button" @click="removeRequirement(index)" class="text-red-500"> Eliminar</button>
+        </li>
+      </ul>
+    </el-col>
+  </el-row>
+
+      <el-form-item label="Años de Experiencia" prop="experienceLevel">
         <el-input-number v-model="jobPosting.experienceLevel" :min="1" />
       </el-form-item>
 
       <el-form-item label="Área" prop="area">
-        <el-input v-model="jobPosting.area" />
+        <el-select v-model="jobPosting.divisionId">
+          <el-option
+            v-for="division in divisionList"
+            :key="division.id"
+            :label="division.name"
+            :value="division.id"
+          />
+        </el-select>
       </el-form-item>
 
       <el-form-item label="Modalidad" prop="modality">
@@ -45,8 +88,7 @@
         <el-form-item label="Nivel de Prioridad" prop="priority">
   <el-input-number v-model="jobPosting.priority" :min="1" />
 </el-form-item>
-
-      </el-form-item>
+</el-form-item>
 
       <el-form-item>
         <el-button type="primary" @click="submitJobPosting">Confirmar</el-button>
@@ -55,17 +97,31 @@
   </el-dialog>
 
   <!-- Tabla de Puestos de Trabajo -->
+
   <el-checkbox v-model="showInactive" class="ml-4">Mostrar Inactivos</el-checkbox>
 <el-table :data="paginatedData" border class="w-full min-h-96 mb-4" stripe>
-  <el-table-column label="Nombre del Puesto" prop="title" />
-  <el-table-column label="Área" prop="area" />
+  <el-table-column prop="title" label="Título">
+    <template #default="{ row }">
+      {{ getJobTitle(row.jobTitleId) }}
+    </template>
+  </el-table-column>
+
+    <el-table-column prop="area" label="Área">
+    <template #default="{ row }">
+      {{ getDivision(row.divisionId) }}
+    </template>
+  </el-table-column>
+
   <el-table-column label="Salario" prop="salaryRange" />
+
   <el-table-column label="Tipo de Contrato">
     <template #default="{ row }">
       {{ getContractType(row.contractType) }}
     </template>
   </el-table-column>
+
   <el-table-column label="Nivel de Prioridad" prop="priorityText" />
+
   <el-table-column prop="isActive" label="Estado">
     <template #default="{ row }">
       <el-tag :type="row.isActive ? 'success' : 'danger'">
@@ -73,6 +129,7 @@
       </el-tag>
     </template>
   </el-table-column>
+
   <el-table-column label="Acciones">
   <template #default="scope">
     <div class="flex space-x-2">
@@ -83,7 +140,6 @@
     </div>
   </template>
 </el-table-column>
-
 </el-table>
 
 
@@ -91,8 +147,15 @@
   <el-dialog v-model="isEditModalOpen" title="Editar Puesto de Trabajo">
   <el-form ref="editFormRef" :model="selectedJobPosting">
     <el-form-item label="Título" prop="title">
-      <el-input v-model="selectedJobPosting.title" />
-    </el-form-item>
+      <el-select v-model="selectedJobPosting.jobTitleId">
+        <el-option
+            v-for="jobTitle in jobTitleList"
+            :key="jobTitle.id"
+            :label="jobTitle.name"
+            :value="jobTitle.id"
+          />
+        </el-select>
+      </el-form-item>
 
     <el-form-item label="Descripción" prop="description">
       <el-input v-model="selectedJobPosting.description" type="textarea" />
@@ -102,13 +165,51 @@
       <el-input v-model="selectedJobPosting.salaryRange" />
     </el-form-item>
 
-    <el-form-item label="Nivel de Experiencia" prop="experienceLevel">
+    <div class="flex items-center my-6">
+    <div class="flex-grow border-t border-gray-300"></div>
+    <span class="mx-4 font-bold">Requerimientos</span>
+    <div class="flex-grow border-t border-gray-300"></div>
+  </div>
+  <el-row :gutter="30">
+    <el-col :span="20">
+      <el-form-item label="Nuevo Requerimiento">
+        <el-input v-model="newRequirement" placeholder="Ingrese un requerimiento" />
+      </el-form-item>
+    </el-col>
+    <el-col :span="4">
+      <div class="h-full flex items-center justify-start m-1">
+        <el-button type="primary" class="w-full" @click="addRequirement"> Agregar </el-button>
+      </div>
+    </el-col>
+  </el-row>
+
+  <el-row :gutter="30">
+    <el-col :span="24">
+      <ul>
+        <li v-for="(requirement, index) in selectedJobPosting.requirements" :key="index" class="flex justify-between items-center py-2 border-b" >
+          <span>{{ requirement }}</span>
+          <button type="button" @click="removeRequirement(index)" class="text-red-500"> Eliminar</button>
+        </li>
+      </ul>
+    </el-col>
+  </el-row>
+
+
+    <el-form-item label="Años de Experiencia" prop="experienceLevel">
       <el-input-number v-model="selectedJobPosting.experienceLevel" :min="1" />
     </el-form-item>
 
     <el-form-item label="Área" prop="area">
-      <el-input v-model="selectedJobPosting.area" />
-    </el-form-item>
+        <el-select v-model="selectedJobPosting.divisionId">
+          <el-option
+            v-for="division in divisionList"
+            :key="division.id"
+            :label="division.name"
+            :value="division.id"
+          />
+        </el-select>
+      </el-form-item>
+
 
     <el-form-item label="Modalidad" prop="modality">
       <el-select v-model="selectedJobPosting.modality">
@@ -129,7 +230,7 @@
       </el-select>
     </el-form-item>
 <el-form-item label="Nivel de Prioridad" prop="priority">
-  <el-input-number v-model="selectedJobPosting.priorityText" />
+  <el-input-number v-model="selectedJobPosting.priority" />
 </el-form-item>
     <el-form-item>
       <el-button type="primary" @click="updateJobPosting">Guardar Cambios</el-button>
@@ -151,11 +252,13 @@
 </template>
 
 <script lang="ts" setup>
-import { ref, computed, onMounted } from "vue";
+import { ref, computed, onMounted, watch } from "vue";
 import type { JobPosting } from "@/domain/Interfaces/jobPostings/jobPostings.interface";
 import { useJobPostingStore } from "@/presentation/stores/jobPostings.store";
 import { useContracTypeStore } from "@/presentation/stores/contractType.store";
 import type { ContractType } from "@/domain/Interfaces/Contract/contractType.interface";
+import { useJobTitleStore } from "@/presentation/stores/jobTitle.store";
+import { useDivisionStore } from "@/presentation/stores/division.store";
 
 const isAddModalOpen = ref(false);
 const isEditModalOpen = ref(false);
@@ -164,13 +267,21 @@ const currentPage = ref(1);
 const pageSize = ref(10);
 const contractTypeList = ref<ContractType[]>([]);
 
+const jobTitleStore = useJobTitleStore();
+const jobTitleList = ref<{ id: number; name: string }[]>([]);
+const isLoadingJobTitles = ref(false);
+
+const divisionStore = useDivisionStore();
+const divisionList = ref<{ id: number; name: string }[]>([]);
+const isLoadingDivisions = ref(false);
+
 const jobPosting = ref<JobPosting>({
-  title: "",
+  jobTitleId: 1,
   description: "",
   salaryRange: "",
   experienceLevel: 1,
-  area: "",
-  requirements: [],
+  divisionId: 1,
+  requirements: [] as string[],
   modality: 1,
   contractType: 1,
   contractDuration: "",
@@ -181,13 +292,13 @@ const jobPosting = ref<JobPosting>({
 });
 
 const selectedJobPosting = ref<JobPosting>({
-  title: "",
+  jobTitleId: 1,
   description: "",
   salaryRange: "",
   experienceLevel: 1,
-  area: "",
-  requirements: [],
-  modality: 1,
+  divisionId: 1,
+  requirements: [] as string[],
+   modality: 1,
   contractType: 1,
   contractDuration: "",
   publicationDate: new Date().toISOString(),
@@ -196,13 +307,38 @@ const selectedJobPosting = ref<JobPosting>({
   priorityText: ""
 });
 
+const showInactive = ref(false);
+
 const submitJobPosting = async () => {
   try {
     await jobPostingStore.createJobPosting(jobPosting.value);
-    await jobPostingStore.fetchJobPostings();
+    await jobPostingStore.fetchJobPostingsCopy();
     isAddModalOpen.value = false;
   } catch (error) {
     console.error("Error al crear el puesto de trabajo:", error);
+  }
+};
+
+const newRequirement = ref("");
+const addRequirement = () => {
+  if (newRequirement.value.trim() !== "") {
+    const requirementText = newRequirement.value.trim();
+    if (selectedJobPosting.value.requirements) {
+      selectedJobPosting.value.requirements.push(requirementText);
+    }
+    if (jobPosting.value.requirements) {
+      jobPosting.value.requirements.push(requirementText);
+    }
+    newRequirement.value = "";
+  }
+};
+
+const removeRequirement = (index: number) => {
+  if (selectedJobPosting.value.requirements && selectedJobPosting.value.requirements.length > index) {
+    selectedJobPosting.value.requirements.splice(index, 1);
+  }
+  if (jobPosting.value.requirements && jobPosting.value.requirements.length > index) {
+    jobPosting.value.requirements.splice(index, 1);
   }
 };
 
@@ -210,22 +346,38 @@ const loadData = async () => {
   try {
     const store = useContracTypeStore();
     await store.fetchContractType();
-    console.log("Datos de contrato recibidos:", store.contractTypeList);
     contractTypeList.value = store.contractTypeList;
+
+    isLoadingJobTitles.value = true;
+    jobTitleList.value = await jobTitleStore.fetchJobTitles();
+    isLoadingJobTitles.value = false;
+
+    isLoadingDivisions.value = true;
+    divisionList.value = await divisionStore.fetchDivision();
+    isLoadingDivisions.value = false;
   } catch (error) {
-    console.error("Error cargando los tipos de contrato:", error);
+    console.error("Error cargando datos:", error);
   }
 };
 
-
 onMounted(() => {
-  jobPostingStore.fetchJobPostings();
+  jobPostingStore.fetchJobPostingsCopy();
   loadData();
 });
 
 const getContractType = (contractTypeId: number) => {
   const contractType = contractTypeList.value.find((type) => type.id === contractTypeId);
   return contractType ? contractType.typeOfContract : "Desconocido";
+};
+
+const getJobTitle = (jobTitleId: number) => {
+  const jobTitle = jobTitleList.value.find((title) => title.id === jobTitleId);
+  return jobTitle ? jobTitle.name : "Desconocido";
+};
+
+const getDivision = (divisionId: number) => {
+  const division = divisionList.value.find((div) => div.id === divisionId);
+  return division ? division.name : "Desconocido";
 };
 
 const paginatedData = computed(() => {
@@ -237,7 +389,11 @@ const paginatedData = computed(() => {
   return filteredJobs.slice(start, start + pageSize.value);
 });
 
-const showInactive = ref(false);
+watch(showInactive, async () => {
+  await jobPostingStore.fetchJobPostingsCopy(showInactive.value);
+  console.log("Datos en jobPostingStore después del fetch:", jobPostingStore.jobPostings);
+});
+
 
 
 const handleSizeChange = (size: number) => {
@@ -257,7 +413,7 @@ const updateJobPosting = async () => {
   if (!selectedJobPosting.value) return;
   try {
     await jobPostingStore.updateJobPosting(selectedJobPosting.value.id, selectedJobPosting.value);
-    await jobPostingStore.fetchJobPostings();
+    await jobPostingStore.fetchJobPostingsCopy();
     isEditModalOpen.value = false;
   } catch (error) {
     console.error("Error al actualizar el puesto de trabajo:", error);
@@ -267,7 +423,7 @@ const updateJobPosting = async () => {
 const deleteJobTitle = async (id: number) => {
   try {
     await jobPostingStore.deleteJobPosting(id);
-    await jobPostingStore.fetchJobPostings();
+    await jobPostingStore.fetchJobPostingsCopy();
   } catch (error) {
     console.error("Error al eliminar el puesto de trabajo:", error);
   }
