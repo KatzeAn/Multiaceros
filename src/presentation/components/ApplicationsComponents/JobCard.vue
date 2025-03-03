@@ -1,3 +1,43 @@
+
+<template>
+  <AddApplicancy
+    v-model:dialog="isAddModalOpen"
+    @employee-saved="handleEmployeeSaved"
+    :idJobPosting="jobPostingId"
+  />
+  <div class="job-list">
+    <el-card
+      v-for="job in jobStore.jobPostings"
+      :key="job.id"
+      class="job-card"
+      style="max-width: 480px; margin: 20px"
+    >
+      <template #header>
+        <div class="card-header flex justify-between">
+          <span class="font-semibold">{{ getJobTitle(job.jobTitleId) }}</span>
+        </div>
+      </template>
+      <div class="card-content text-sm text-gray-600">
+        <p><strong>Área:</strong> {{ getDivision(job.divisionId) }}</p>
+        <p><strong>Salario:</strong> {{ job.salaryRange }}</p>
+        <p>
+          <strong>Tipo de contrato:</strong>
+          {{ getContractType(job.contractType) }}
+        </p>
+        <p><strong>Descripción:</strong> {{ job.description }}</p>
+        <p><strong>Requerimientos:</strong></p>
+          <ul>
+            <li v-for="(requirement, index) in job.requirements" :key="index">- {{ requirement }}</li>
+          </ul>
+      </div>
+      <template #footer>
+        <el-button type="primary" @click="openAddModal(job.id || 0)">
+          Aplicar ahora
+        </el-button>
+      </template>
+    </el-card>
+  </div>
+</template>
 <script lang="ts" setup>
 import { onMounted, ref } from "vue";
 import { useJobPostingStore } from "@/presentation/stores/jobPostings.store";
@@ -63,49 +103,14 @@ const getDivision = (divisionId: number) => {
 };
 
 
-onMounted(() => {
+onMounted(async () => {
   if (jobStore.jobPostings.length === 0) {
-    jobStore.fetchJobPostingsCopy();
+    await jobStore.fetchJobPostingsCopy();
   }
-  loadData();
+  await loadData();
 });
 </script>
 
-<template>
-  <AddApplicancy
-    v-model:dialog="isAddModalOpen"
-    @employee-saved="handleEmployeeSaved"
-    :idJobPosting="jobPostingId"
-  />
-  <div class="job-list">
-    <el-card
-      v-for="job in jobStore.jobPostings"
-      :key="job.id"
-      class="job-card"
-      style="max-width: 480px; margin: 20px"
-    >
-      <template #header>
-        <div class="card-header flex justify-between">
-          <span class="font-semibold">{{ getJobTitle(job.jobTitleId) }}</span>
-        </div>
-      </template>
-      <div class="card-content text-sm text-gray-600">
-        <p><strong>Área:</strong> {{ getDivision(job.divisionId) }}</p>
-        <p><strong>Salario:</strong> {{ job.salaryRange }}</p>
-        <p>
-          <strong>Tipo de contrato:</strong>
-          {{ getContractType(job.contractType) }}
-        </p>
-        <p><strong>Descripción:</strong> {{ job.description }}</p>
-      </div>
-      <template #footer>
-        <el-button type="primary" @click="openAddModal(job.id || 0)">
-          Aplicar ahora
-        </el-button>
-      </template>
-    </el-card>
-  </div>
-</template>
 
 <style>
 .job-list {
