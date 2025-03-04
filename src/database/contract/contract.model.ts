@@ -13,4 +13,7 @@ export class ContractModel implements ContractRepository {
     getContractsByDaysRemaining(daysRemaining: number): Promise<ContractType[]> {
         return apiRequest<ContractType[]>("get", `/Contract/GetByDaysRemaining/${daysRemaining}`);
     }
+    updateContract(id: number, contract: Contract): Promise<Contract> {
+        return apiRequest<Contract>("put", `/Contract/${id}`, contract);
+    }
 }
