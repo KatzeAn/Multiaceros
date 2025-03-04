@@ -5,8 +5,8 @@
         <el-card>
           <template #header>
             <div class="card-header">
-              <span class="font-bold text-[var(--secondary-color)]"
-                ><el-icon>
+              <span class="font-bold text-[var(--secondary-color)]">
+                <el-icon>
                   <Calendar />
                 </el-icon>
                 Información básica
@@ -14,74 +14,32 @@
             </div>
           </template>
 
-          <el-form
-            :model="basicInformationForm"
-            ref="formRef"
-            label-width="120px"
-            size="default"
-            label-position="top"
-          >
+          <el-form :model="basicInformationForm" ref="formRef" label-width="120px" size="default" label-position="top">
             <el-row :gutter="30">
               <el-col :span="6">
-                <!-- Nombre -->
                 <el-form-item label="Primer nombre" prop="firstName">
-                  <el-input
-                    v-model="basicInformationForm.firstName"
-                    placeholder="Enter first name"
-                  />
+                  <el-input v-model="basicInformationForm.firstName" placeholder="Enter first name" />
                 </el-form-item>
               </el-col>
               <el-col :span="6">
-                <!-- Segundo Nombre -->
-                <el-form-item label="Segundo nombre" prop="lastName">
-                  <el-input
-                    v-model="basicInformationForm.middleName"
-                    placeholder="Enter last name"
-                  />
+                <el-form-item label="Segundo nombre" prop="middleName">
+                  <el-input v-model="basicInformationForm.middleName" placeholder="Enter middle name" />
                 </el-form-item>
               </el-col>
               <el-col :span="6">
-                <!-- Primer Apellido -->
                 <el-form-item label="Primer apellido" prop="lastName">
-                  <el-input
-                    v-model="basicInformationForm.lastName"
-                    placeholder="Enter last name"
-                  />
+                  <el-input v-model="basicInformationForm.lastName" placeholder="Enter last name" />
                 </el-form-item>
               </el-col>
             </el-row>
-
-            <el-row>
-              <el-col :span="6">
-                <!-- Fecha de nacimiento -->
-                <el-form-item label="Fecha de nacimiento" prop="birthDate">
-                  <el-date-picker
-                    v-model="basicInformationForm.birthDate"
-                    type="date"
-                    placeholder="Pick a date"
-                  />
-                </el-form-item>
-                <span v-if="basicInformationForm.age" style="margin-left: 120px"
-                  >Age: {{ basicInformationForm.age }}</span
-                >
-              </el-col>
-            </el-row>
-
-            <!-- Botones -->
-            <el-form-item>
-              <el-button type="primary" @click="submitForm"
-                >Actualizar</el-button
-              >
-              <el-button @click="resetForm" >Cancelar</el-button>
-            </el-form-item>
           </el-form>
         </el-card>
 
         <el-card>
           <template #header>
             <div class="card-header">
-              <span class="font-bold text-[var(--secondary-color)]"
-                ><el-icon>
+              <span class="font-bold text-[var(--secondary-color)]">
+                <el-icon>
                   <Calendar />
                 </el-icon>
                 Información de Residencia
@@ -89,73 +47,22 @@
             </div>
           </template>
 
-          <el-form
-            :model="addressInformationForm"
-            ref="formRef"
-            label-width="120px"
-            size="default"
-            label-position="top"
-          >
+          <el-form :model="addressInformationForm" ref="formRef" label-width="120px" size="default" label-position="top">
             <el-row>
               <el-col :span="6">
-                <!-- Direccion -->
-                <el-form-item label="Direccion" prop="firstName">
-                  <el-input
-                    v-model="addressInformationForm.address"
-                    placeholder="Enter a adress"
-                  />
+                <el-form-item label="Direccion" prop="address">
+                  <el-input v-model="addressInformationForm.address" placeholder="Enter an address" />
                 </el-form-item>
               </el-col>
             </el-row>
-
-            <el-row :gutter="30">
-              <el-col :span="6">
-                <!-- Nombre -->
-                <el-form-item label="Ciudad" prop="firstName">
-                  <el-input
-                    v-model="addressInformationForm.city"
-                    placeholder="Enter a city"
-                    disabled
-                  />
-                </el-form-item>
-              </el-col>
-              <el-col :span="6">
-                <!-- Segundo Nombre -->
-                <el-form-item label="Departamento/Estado" prop="lastName">
-                  <el-input
-                    v-model="addressInformationForm.state"
-                    placeholder="Enter a state"
-                    disabled
-                  />
-                </el-form-item>
-              </el-col>
-              <el-col :span="6">
-                <!-- Primer Apellido -->
-                <el-form-item label="Pais" prop="lastName">
-                  <el-input
-                    v-model="addressInformationForm.country"
-                    placeholder="Enter a country"
-                    disabled
-                  />
-                </el-form-item>
-              </el-col>
-            </el-row>
-
-            <!-- Botones -->
-            <el-form-item>
-              <el-button type="primary" @click="submitForm"
-                >Actualizar</el-button
-              >
-              <el-button @click="resetForm">Cancelar</el-button>
-            </el-form-item>
           </el-form>
         </el-card>
 
         <el-card>
           <template #header>
             <div class="card-header">
-              <span class="font-bold text-[var(--secondary-color)]"
-                ><el-icon>
+              <span class="font-bold text-[var(--secondary-color)]">
+                <el-icon>
                   <Calendar />
                 </el-icon>
                 Información de Contacto
@@ -163,51 +70,32 @@
             </div>
           </template>
 
-          <el-form
-            :model="contactInformationForm"
-            ref="formRef"
-            label-width="120px"
-            size="default"
-            label-position="top"
-          >
+          <el-form :model="contactInformationForm" ref="formRef" label-width="120px" size="default" label-position="top">
             <el-row>
               <el-col :span="6">
-                <!-- Direccion -->
-                <el-form-item label="Celular" prop="firstName">
-                  <el-input
-                    v-model="contactInformationForm.phone"
-                    placeholder="Enter a cellphone"
-                  />
+                <el-form-item label="Celular" prop="phone">
+                  <el-input v-model="contactInformationForm.phone" placeholder="Enter a cellphone" />
                 </el-form-item>
               </el-col>
             </el-row>
-
-            <el-row>
-              <el-col :span="6">
-                <!-- Direccion -->
-                <el-form-item label="Correo eléctronico" prop="firstName">
-                  <el-input
-                    v-model="contactInformationForm.email"
-                    placeholder="Enter a email"
-                    disabled
-                  />
-                </el-form-item>
-              </el-col>
-            </el-row>
-
-            <!-- Botones -->
-            <el-form-item>
-              <el-button type="primary" @click="submitForm"
-                >Actualizar</el-button
-              >
-              <el-button @click="resetForm">Cancelar</el-button>
-            </el-form-item>
           </el-form>
         </el-card>
       </div>
     </el-col>
   </el-row>
+
+  <el-button class="floating-button" type="primary" @click="submitForm">Actualizar</el-button>
 </template>
+
+<style>
+.floating-button {
+  position: fixed;
+  bottom: 20px;
+  right: 20px;
+  z-index: 1000;
+}
+</style>
+
 
 <script lang="ts" setup>
 import { ref, reactive, onMounted } from "vue";
