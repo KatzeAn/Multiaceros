@@ -6,15 +6,19 @@ import type { Benefits } from "@/domain/Interfaces/Benefits/Benefits.interface";
 import { useUserStore } from "./user.store";
 
 export const useBenefitStore = defineStore("Benefit", () => {
+  const benefits = ref<Benefits[]>([]);
   const isLoading = ref(false);
 
-  const fetchBenefit = async () => {
+  const fetchBenefit = async (isActive: boolean = false) => {
     try {
       isLoading.value = true;
       const benefitModel = new BenefitModel();
-      const data = await benefitModel.getBenefits();
-      return Array.isArray(data) ? data : [];
+      const data = await benefitModel.getBenefits(isActive);
+      benefits.value = Array.isArray(data) ? [...data] : [];
+      return benefits.value; 
     } catch (error) {
+      console.error("Error al obtener los beneficios:", error);
+      benefits.value = [];
       ElNotification({
         title: "Error",
         message: "No se pudieron cargar los beneficios",
@@ -25,13 +29,13 @@ export const useBenefitStore = defineStore("Benefit", () => {
       isLoading.value = false;
     }
   };
-
+  
   const createBenefitRequest = async (data: Benefits) => {
     try {
       isLoading.value = true;
       const benefitModel = new BenefitModel();
       await benefitModel.createBenefit(data);
-      await fetchBenefit(); // Recargar lista después de crear
+      await fetchBenefit();
     } catch (error) {
       throw error;
     } finally {

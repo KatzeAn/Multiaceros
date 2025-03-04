@@ -3,8 +3,8 @@ import type { BenefitRepository } from "@/domain/repository/benefits/benefit.rep
 import { apiRequest } from "@/presentation/api/axiosInstance";
 
 export class BenefitModel implements BenefitRepository {
-  getBenefits(): Promise<Benefits[]> {
-    return apiRequest<Benefits[]>("get", "/Benefits/GetBenefits");
+  getBenefits(isActive: boolean): Promise<Benefits[]> {
+    return apiRequest<Benefits[]>("get", `/Benefits?isActive=${isActive}`);
   }
   createBenefit(data: Benefits): Promise<Benefits> {
     return apiRequest<Benefits>("post", "/Benefits/CreateBenefits", { NameBenefit: data.nameBenefit, CreatedBy: data.createdBy });
