@@ -73,22 +73,31 @@
             >
               <ul class="flex flex-col">
                 <li
-                  v-for="(subItem, subIndex) in item.subItems"
-                  :key="subIndex"
+                v-for="(subItem, subIndex) in item.subItems"
+                :key="subIndex"
+              >
+                <button
+                  v-if="subItem.action"
+                  @click="subItem.action"
+                  class="inline-block w-full px-4 py-2 rounded text-left hover:bg-gray-800 hover:text-white"
                 >
-                  <router-link
-                    :to="subItem.route !== '#' ? subItem.route : '/'"
-                    class="inline-block w-full px-4 py-2 rounded"
-                    :class="{
-                      'hover:bg-gray-800 hover:text-white':
-                        subItem.route !== '#',
-                      'opacity-50 cursor-not-allowed pointer-events-none':
-                        subItem.route === '#',
-                    }"
-                  >
-                    {{ subItem.title }}
-                  </router-link>
-                </li>
+                  {{ subItem.title }}
+                </button>
+
+                <router-link
+                  v-else
+                  :to="subItem.route !== '#' ? subItem.route : '/'"
+                  class="inline-block w-full px-4 py-2 rounded"
+                  :class="{
+                    'hover:bg-gray-800 hover:text-white': 
+                    subItem.route !== '#',
+                    'opacity-50 cursor-not-allowed pointer-events-none': 
+                    subItem.route === '#',
+                  }"
+                >
+                  {{ subItem.title }}
+                </router-link>
+              </li>
               </ul>
             </div>
           </li>
@@ -254,7 +263,26 @@
 import { ref } from "vue";
 import { useUserStore } from "@/presentation/stores/user.store";
 import mujer from "@/presentation/assets/hombre2.jpg";
+import { useCertifiedStore } from "../stores/certified.store";
 
+const certifiedStore = useCertifiedStore();
+const { downloadCertificate } = certifiedStore;
+const userStore = useUserStore();
+const isLoadingLetterCertfied = ref(false);
+
+const downloadLetter = async () => {
+  isLoadingLetterCertfied.value = true;
+  try {
+    const userId = Number(userStore.getUserId);
+    if (!isNaN(userId)) {  
+        await downloadCertificate(userId);
+    }  
+  } catch (error) {
+    console.error("Error al descargar la carta laboral:", error);
+  } finally {
+    isLoadingLetterCertfied.value = false;
+  }
+};
 
 const { getUsername, getUserEmail } = useUserStore();
 
@@ -355,7 +383,8 @@ const menuItems = ref([
     subItems: [
       {
         title: "Carta laboral",
-        route: "#",
+        route: "",
+        action: downloadLetter,
       },
       {
         title: "Actualización de datos",
