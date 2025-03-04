@@ -22,7 +22,7 @@
           >
             Crear beneficio
           </el-button>
-          <el-checkbox v-model="showInactive">Mostrar Inactivos</el-checkbox>
+          <el-checkbox v-model="showInactive" @change="fetchBenefit"> Mostrar Inactivos  </el-checkbox>
         </el-form-item>
       </el-form>
     </el-card>
@@ -32,22 +32,22 @@
       <el-table-column prop="nameBenefit" label="Nombre" />
       <el-table-column prop="isActive" label="Estado">
         <template #default="{ row }">
-          <el-tag :type="row.isActive ? 'success' : 'success'">
-            {{ row.isActive ? "Activo" : "Activo" }}
+          <el-tag :type="row.isActive ? 'success' : 'danger'">
+            {{ row.isActive ? "Activo" : "Inactivo" }}
           </el-tag>
         </template>
       </el-table-column>
       <el-table-column label="Acciones">
-        <template #default="scope">
-          <el-button size="small"  @click="openEditModal(scope.row)">
+        <template #default="{ row }">
+          <el-button size="small" @click="openEditModal(row)">
             Editar
           </el-button>
           <el-button
             :loading="isLoading"
             size="small"
             type="danger"
-            :disabled="!scope.row.isActive"
-            @click="deleteBenefit(scope.row.id)"
+            :disabled="!row.isActive"
+            @click="deleteBenefit(row.id)"
           >
             Desactivar
           </el-button>
@@ -81,15 +81,14 @@
 </template>
 
 <script lang="ts" setup>
-import { ref } from "vue";
+import { ref, onMounted } from "vue";
 import { useBenefitViewModel } from "@/presentation/viewmodels/benefitViewModel";
-import {useBenefitStore} from "@/presentation/stores/benefit.store";
+import { useBenefitStore } from "@/presentation/stores/benefit.store";
 
 const benefitStore = useBenefitStore();
 const {
   benefitList,
   isLoading,
-  search,
   currentPage,
   pageSize,
   ruleFormRef,
@@ -105,9 +104,9 @@ const {
 const isEditModalVisible = ref(false);
 const editForm = ref({ id: null, name: "" });
 
-const openEditModal = (Benefit) => {
-  editForm.value.id = Benefit.id;
-  editForm.value.name = Benefit.nameBenefit;
+const openEditModal = (row) => {
+  editForm.value.id = row.id;
+  editForm.value.name = row.nameBenefit;
   isEditModalVisible.value = true;
 };
 
@@ -128,13 +127,19 @@ const deleteBenefit = async (id: number) => {
   try {
     await benefitStore.deleteBenefitRequest(id);
     await fetchBenefit();
-    } catch (error) {
-      console.error(error);
-      }
-      };
-      const fetchBenefit = async () => {
-        const date =  await benefitStore.fetchBenefit();
-        benefitList.value = date;
-        };
+  } catch (error) {
+    console.error(error);
+  }
+};
+const fetchBenefit = async () => {
+  try {
+    const data = await benefitStore.fetchBenefit(!showInactive.value); 
+    if (data) {
+      benefitList.value = data;
+    }
+  } catch (error) {
+  }
+};
 
+onMounted(fetchBenefit);
 </script>

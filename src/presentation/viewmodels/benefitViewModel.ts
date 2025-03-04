@@ -52,9 +52,9 @@ export function useBenefitViewModel() {
   };
 
   const loadBenefit = async () => {
-    benefitList.value = (await benefitStore.fetchBenefit()) || [];
+    benefitList.value = (await benefitStore.fetchBenefit(!showInactive.value)) || [];
   };
-
+  
   const submitForm = async (formEl: FormInstance | undefined) => {
     if (!formEl) return;
 
