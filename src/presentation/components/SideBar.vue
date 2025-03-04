@@ -138,59 +138,66 @@
 
       <!-- Recursos humanos -->
       <div class="px-6 pt-4">
-        <ul class="flex flex-col space-y-2">
-          <li>
-            <div class="text-gray-500 hover:text-white">
-              <div
-                class="flex justify-between w-full pl-2 pr-4 py-2 hover:bg-gray-800 rounded cursor-pointer"
-                @click="toggleMenu(menuItems.length)"
-              >
-                <div class="flex">
+  <ul class="flex flex-col space-y-2">
+    <li>
+      <div class="text-gray-500 hover:text-white">
+        <div
+          class="flex justify-between w-full pl-2 pr-4 py-2 hover:bg-gray-800 rounded cursor-pointer"
+          @click="toggleMenu(menuItems.length)"
+        >
+          <div class="flex">
                   <span class="material-symbols-outlined pr-2"
                     >admin_panel_settings</span
                   >
                   Recursos humanos
                   <!-- Título fijo -->
-                </div>
-                <span
-                  class="material-symbols-outlined"
-                  :class="{ 'rotate-180': openMenus[menuItems.length] }"
-                >
-                  keyboard_arrow_down
-                </span>
-              </div>
-            </div>
+          </div>
+          <span
+            class="material-symbols-outlined"
+            :class="{ 'rotate-180': openMenus[menuItems.length] }"
+          >
+            keyboard_arrow_down
+          </span>
+        </div>
+      </div>
 
-            <div
-              v-show="openMenus[menuItems.length]"
-              class="ml-4 pl-2 text-gray-500 border-l border-gray-700"
+      <div
+        v-show="openMenus[menuItems.length]"
+        class="ml-4 pl-2 text-gray-500 border-l border-gray-700"
+      >
+        <ul class="flex flex-col">
+          <li
+            v-for="(subItem, subIndex) in recursosHumanosSubItems"
+            :key="subIndex"
+          >
+            <router-link
+              :to="subItem.route !== '#' ? subItem.route : '/'"
+              class="inline-block w-full px-4 py-2 rounded"
+              :class="{
+                'hover:bg-gray-800 hover:text-white': subItem.route !== '#',
+                'opacity-50 cursor-not-allowed pointer-events-none': subItem.route === '#',
+              }"
             >
-              <ul class="flex flex-col">
-                <li
-                  v-for="(subItem, subIndex) in recursosHumanosSubItems"
-                  :key="subIndex"
-                >
-                  <router-link
-                    :to="subItem.route !== '#' ? subItem.route : '/'"
-                    class="inline-block w-full px-4 py-2 rounded"
-                    :class="{
-                      'hover:bg-gray-800 hover:text-white':
-                        subItem.route !== '#',
-                      'opacity-50 cursor-not-allowed pointer-events-none':
-                        subItem.route === '#',
-                    }"
-                  >
-                    {{ subItem.title }}
-                  </router-link>
-                </li>
-              </ul>
-            </div>
+              {{ subItem.title }}
+            </router-link>
           </li>
         </ul>
       </div>
+    </li>
+  </ul>
+</div>
 
-      <div class="px-6 pt-4"></div>
-      <div class="px-6 pt-4"><hr class="border-gray-700" /></div>
+<div class="px-6 pt-4"><hr class="border-gray-700" /></div>
+<div class="px-6 pt-4">
+  <ul class="flex flex-col space-y-2">
+    <li>
+      <router-link to="/portal-rrhh/gestion-administrativa" class="text-gray-500 hover:text-white flex items-center pl-2 pr-4 py-2 hover:bg-gray-800 rounded">
+        <span class="material-symbols-outlined pr-2">bar_chart</span>
+        Gestión Administrativa
+      </router-link>
+    </li>
+  </ul>
+</div>
 
       <div class="px-6 pt-4">
         <ul class="flex flex-col space-y-2">
@@ -247,6 +254,7 @@
 import { ref } from "vue";
 import { useUserStore } from "@/presentation/stores/user.store";
 import mujer from "@/presentation/assets/hombre2.jpg";
+
 
 const { getUsername, getUserEmail } = useUserStore();
 
@@ -374,10 +382,6 @@ const recursosHumanosSubItems = ref([
   {
     title: "Nómina y compensaciones",
     route: "/portal-rrhh/gestionar-nomina",
-  },
-  {
-    title: "Gestión administrativa",
-    route: "/portal-rrhh/gestion-administrativa"
   },
   {
     title: "Pausas activas",
