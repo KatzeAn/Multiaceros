@@ -128,6 +128,13 @@ const router = createRouter({
               "../views/PortalRRHH/manageActiveBreak.vue"
             ),
         },
+        {
+          path: "trámites",
+          component: () =>
+            import(
+              "../views/PortalRRHH/UserRequestsReview.vue"
+            ),
+        },
         
       ],
     },

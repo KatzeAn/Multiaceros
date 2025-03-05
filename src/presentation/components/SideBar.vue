@@ -417,8 +417,8 @@ const recursosHumanosSubItems = ref([
     route: "/portal-rrhh/gestion-pausas",
   },
   {
-    title: "Capacitaciones",
-    route: "#",
+    title: "Trámites",
+    route: "/portal-rrhh/trámites",
   },
   {
     title: "Reporte y análisis",
