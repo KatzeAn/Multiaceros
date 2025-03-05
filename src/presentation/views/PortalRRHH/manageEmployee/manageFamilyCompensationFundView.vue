@@ -12,41 +12,37 @@
         ref="ruleFormRef"
         :rules="rules"
         :model="familyCompensationFundForm"
+        class="flex items-center justify-between"
       >
-        <el-form-item prop="compensationFundName" label="Nombre">
-          <el-input
-            v-model="familyCompensationFundForm.compensationFundName"
-            placeholder="Nombre"
-            clearable
-          />
-        </el-form-item>
-        <el-form-item>
-  <el-button
-    :loading="isLoading"
-    type="primary"
-    @click="submitForm(ruleFormRef)"
-    class="mr-20"
-  >
-    Crear fondo
-  </el-button>
-  <el-checkbox v-model="showInactive">Mostrar Inactivos</el-checkbox>
-</el-form-item>
-
-
+        <div class="flex items-center gap-4">
+          <el-form-item prop="compensationFundName" label="Nombre">
+            <el-input
+              v-model="familyCompensationFundForm.compensationFundName"
+              placeholder="Nombre"
+              clearable
+            />
+          </el-form-item>
+          <el-form-item>
+            <el-button :loading="isLoading" type="primary" @click="submitForm(ruleFormRef)">
+              Crear fondo
+            </el-button>
+          </el-form-item>
+        </div>
+        <el-checkbox v-model="showInactive">Mostrar Inactivos</el-checkbox>
       </el-form>
     </el-card>
 
     <el-table :data="paginatedData" border class="w-full min-h-96 mb-4" stripe>
       <el-table-column prop="id" label="ID" />
       <el-table-column prop="compensationFundName" label="Nombre" />
-      <el-table-column prop="isActive" label="Estado">
+      <el-table-column prop="isActive" label="Estado" align="center">
         <template #default="{ row }">
           <el-tag :type="row.isActive ? 'success' : 'danger'">
             {{ row.isActive ? "Activo" : "Inactivo" }}
           </el-tag>
         </template>
       </el-table-column>
-      <el-table-column label="Acciones">
+      <el-table-column label="Acciones" align="center">
         <template #default="scope">
           <el-button size="small" @click="openEditModal(scope.row)">
             Editar
@@ -101,7 +97,6 @@ const familyCompensationFundStore = useFamilyCompensationFundStore();
 const {
   familyCompensationFundList,
   isLoading,
-  search,
   currentPage,
   pageSize,
   ruleFormRef,
@@ -116,26 +111,29 @@ const {
 
 const isEditModalVisible = ref(false);
 const editForm = ref({ id: null, name: "" });
+const originalEditForm = ref({ id: null, name: "" });
 
 const openEditModal = (fund) => {
   editForm.value.id = fund.id;
   editForm.value.name = fund.compensationFundName;
+  originalEditForm.value = JSON.parse(JSON.stringify(editForm.value)); // Copia profunda
   isEditModalVisible.value = true;
 };
 
 const editFamilyCompensationFund = async () => {
-  if (!editForm.value.id || !editForm.value.name.trim()) {
-    return;
-  }
-  try {
-    await familyCompensationFundStore.updateFamilyCompensationFundsRequest(
-      editForm.value.id,
-      editForm.value.name
-    );
-    isEditModalVisible.value = false;
-    fetchFamilyCompensationFund();
-  } catch (error) {
-    console.error(error);
+  if (!editForm.value.id || !editForm.value.name.trim()) return;
+
+  if (JSON.stringify(editForm.value) !== JSON.stringify(originalEditForm.value)) {
+    try {
+      await familyCompensationFundStore.updateFamilyCompensationFundsRequest(
+        editForm.value.id,
+        editForm.value.name
+      );
+      isEditModalVisible.value = false;
+      fetchFamilyCompensationFund();
+    } catch (error) {
+      console.error(error);
+    }
   }
 };
 

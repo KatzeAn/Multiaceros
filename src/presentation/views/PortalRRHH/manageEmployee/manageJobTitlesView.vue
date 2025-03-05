@@ -5,39 +5,40 @@
     </template>
 
     <el-card shadow="never" class="mb-6">
-      <el-form inline ref="ruleFormRef" :rules="rules" :model="jobTitleForm">
-        <el-form-item prop="name" label="Nombre">
+      <el-form inline ref="ruleFormRef" :rules="rules" :model="jobTitleForm" class="flex items-center justify-between">
+        <div class="flex items-center gap-4">
+          <el-form-item prop="name" label="Nombre">
           <el-input
             v-model="jobTitleForm.name"
             placeholder="Nombre"
             clearable
           />
-        </el-form-item>
-        <el-form-item>
+          </el-form-item>
+          <el-form-item>
           <el-button
             :loading="isLoading"
             type="primary"
             @click="submitForm(ruleFormRef)"
-            class="mr-20"
           >
             Crear cargo
-          </el-button>
-          <el-checkbox v-model="showInactive">Mostrar Inactivos</el-checkbox>
-        </el-form-item>
+            </el-button>
+          </el-form-item>
+        </div>
+        <el-checkbox v-model="showInactive">Mostrar Inactivos</el-checkbox>
       </el-form>
     </el-card>
 
     <el-table :data="paginatedData" border class="w-full min-h-96 mb-4" stripe>
       <el-table-column prop="id" label="ID" />
-      <el-table-column prop="name" label="Nombre" />
-      <el-table-column prop="isActive" label="Estado">
+      <el-table-column prop="name" label="Nombre" align="center" />
+      <el-table-column prop="isActive" label="Estado" align="center">
         <template #default="{ row }">
           <el-tag :type="row.isActive ? 'success' : 'danger'">
             {{ row.isActive ? "Activo" : "Inactivo" }}
           </el-tag>
         </template>
       </el-table-column>
-      <el-table-column label="Acciones">
+      <el-table-column label="Acciones" align="center">
         <template #default="scope">
           <el-button size="small" @click="openEditModal(scope.row)">
             Editar
@@ -89,7 +90,6 @@ const jobTitleStore = useJobTitleStore();
 const {
   jobTitles,
   isLoading,
-  search,
   currentPage,
   pageSize,
   ruleFormRef,
@@ -104,36 +104,37 @@ const {
 
 const isEditModalVisible = ref(false);
 const editForm = ref({ id: null, name: "" });
+const originalEditForm = ref({ id: null, name: "" });
 
 const openEditModal = (jobtitle) => {
   editForm.value.id = jobtitle.id;
   editForm.value.name = jobtitle.name;
+  originalEditForm.value = JSON.parse(JSON.stringify(jobtitle)); // Copia profunda
   isEditModalVisible.value = true;
 };
 
 const editjobTitle = async () => {
-  if (!editForm.value.id || !editForm.value.name.trim()) {
-    return;
-  }
-  try {
-    await jobTitleStore.updateJobTitleRequest(editForm.value.id, editForm.value.name);
-    isEditModalVisible.value = false;
-    fetchJobTitles();
-  } catch (error) {
-    console.error(error);
+  if (!editForm.value.id || !editForm.value.name.trim()) return;
+  if (JSON.stringify(editForm.value) !== JSON.stringify(originalEditForm.value)) {
+    try {
+      await jobTitleStore.updateJobTitleRequest(editForm.value.id, editForm.value.name);
+      isEditModalVisible.value = false;
+      fetchJobTitles();
+    } catch (error) {
+      console.error(error);
   }
 };
-
+}
 
 const deleteJob = async (id: number) => {
   try {
     await jobTitleStore.deleteJobTitleRequest(id);
     await fetchJobTitles();
-    } catch (error) {
+  } catch (error) {
       console.error(error);
-      }
-      };
-      const fetchJobTitles = async () => {
+  }
+};
+const fetchJobTitles = async () => {
         const date = await jobTitleStore.fetchJobTitles();
         jobTitles.value = date;
       }

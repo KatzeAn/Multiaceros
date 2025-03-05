@@ -5,41 +5,34 @@
     </template>
 
     <el-card shadow="never" class="mb-6">
-      <el-form inline ref="ruleFormRef" :rules="rules" :model="pensionFundForm">
-        <el-form-item prop="pensionFundName" label="Nombre">
-          <el-input
-            v-model="pensionFundForm.pensionFundName"
-            placeholder="Nombre"
-            clearable
-          />
-        </el-form-item>
-        <el-form-item>
-          <el-button
-            :loading="isLoading"
-            type="primary"
-            @click="submitForm(ruleFormRef)"
-            class="mr-20"
-          >
-            Crear fondo
-          </el-button>
-          <el-checkbox v-model="showInactive">Mostrar Inactivos</el-checkbox>
-        </el-form-item>
+      <el-form inline ref="ruleFormRef" :rules="rules" :model="pensionFundForm" class="flex items-center justify-between">
+        <div class="flex items-center gap-4">
+          <el-form-item prop="pensionFundName" label="Nombre">
+            <el-input v-model="pensionFundForm.pensionFundName" placeholder="Nombre" clearable />
+          </el-form-item>
+          <el-form-item>
+            <el-button :loading="isLoading" type="primary" @click="submitForm(ruleFormRef)">
+              Crear fondo
+            </el-button>
+          </el-form-item>
+        </div>
+        <el-checkbox v-model="showInactive">Mostrar Inactivos</el-checkbox>
       </el-form>
     </el-card>
 
     <el-table :data="paginatedData" border class="w-full min-h-96 mb-4" stripe>
       <el-table-column prop="id" label="ID" />
-      <el-table-column prop="pensionFundName" label="Nombre" />
-      <el-table-column prop="isActive" label="Estado">
+      <el-table-column prop="pensionFundName" label="Nombre" align="center" />
+      <el-table-column prop="isActive" label="Estado" align="center">
         <template #default="{ row }">
           <el-tag :type="row.isActive ? 'success' : 'danger'">
             {{ row.isActive ? "Activo" : "Inactivo" }}
           </el-tag>
         </template>
       </el-table-column>
-      <el-table-column label="Acciones">
+      <el-table-column label="Acciones" align="center">
         <template #default="scope">
-          <el-button size="small"  @click="openEditModal(scope.row)">
+          <el-button size="small" @click="openEditModal(scope.row)">
             Editar
           </el-button>
           <el-button
@@ -80,16 +73,16 @@
   </el-card>
 </template>
 
+
 <script lang="ts" setup>
 import { ref } from "vue";
 import { usePensionFundViewModel } from "@/presentation/viewmodels/pensionFundViewModel";
-import {usePensionFundStore} from "@/presentation/stores/pensionFund.store";
+import { usePensionFundStore } from "@/presentation/stores/pensionFund.store";
 
 const pensionFundStore = usePensionFundStore();
 const {
   pensionFundList,
   isLoading,
-  search,
   currentPage,
   pageSize,
   ruleFormRef,
@@ -104,23 +97,25 @@ const {
 
 const isEditModalVisible = ref(false);
 const editForm = ref({ id: null, name: "" });
+const originalEditForm = ref({ id: null, name: "" });
 
 const openEditModal = (pensionFund) => {
   editForm.value.id = pensionFund.id;
   editForm.value.name = pensionFund.pensionFundName;
+  originalEditForm.value = JSON.parse(JSON.stringify(editForm.value)); 
   isEditModalVisible.value = true;
 };
 
 const editPensionFund = async () => {
-  if (!editForm.value.id || !editForm.value.name.trim()) {
-    return;
-  }
-  try {
-    await pensionFundStore.updatePensionFundRequest(editForm.value.id, editForm.value.name);
-    isEditModalVisible.value = false;
-    loadFund();
-  } catch (error) {
-    console.error(error);
+  if (!editForm.value.id || !editForm.value.name.trim()) return;
+  if (JSON.stringify(editForm.value) !== JSON.stringify(originalEditForm.value)) {
+    try {
+      await pensionFundStore.updatePensionFundRequest(editForm.value.id, editForm.value.name);
+      isEditModalVisible.value = false;
+      loadFund();
+    } catch (error) {
+      console.error(error);
+    }
   }
 };
 

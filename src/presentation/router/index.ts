@@ -83,6 +83,12 @@ const router = createRouter({
       name: 'ComprobantesPago',
       component: () => import("../views/PayrollHistory.vue"),
     },
+    {
+      path: '/solicitud/actualizacion-datos',
+      name: 'actualizacionDatos',
+      component: () => import("../views/updateDataView.vue"),
+    },
+
 
     {
       path: "/portal-rrhh",

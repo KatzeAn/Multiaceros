@@ -5,39 +5,34 @@
     </template>
 
     <el-card shadow="never" class="mb-6">
-      <el-form inline ref="ruleFormRef" :rules="rules" :model="arlForm">
-        <el-form-item prop="nameArl" label="Nombre">
-          <el-input v-model="arlForm.nameArl" placeholder="Nombre" clearable />
-        </el-form-item>
-        <el-form-item>
-          <el-button
-            :loading="isLoading"
-            type="primary"
-            @click="submitForm(ruleFormRef)"
-            class="mr-20"
-          >
-            Crear ARL
-          </el-button>
-          <el-checkbox v-model="showInactive">Mostrar Inactivos</el-checkbox>
-        </el-form-item>
+      <el-form inline ref="ruleFormRef" :rules="rules" :model="arlForm" class="flex items-center justify-between">
+        <div class="flex items-center gap-4">
+          <el-form-item prop="nameArl" label="Nombre">
+            <el-input v-model="arlForm.nameArl" placeholder="Nombre" clearable />
+          </el-form-item>
+          <el-form-item>
+            <el-button :loading="isLoading" type="primary" @click="submitForm(ruleFormRef)">
+              Crear ARL
+            </el-button>
+          </el-form-item>
+        </div>
+        <el-checkbox v-model="showInactive">Mostrar Inactivos</el-checkbox>
       </el-form>
     </el-card>
 
     <el-table :data="paginatedData" border class="w-full min-h-96 mb-4" stripe>
       <el-table-column prop="id" label="ID" />
-      <el-table-column prop="nameArl" label="Nombre" />
-      <el-table-column prop="isActive" label="Estado">
+      <el-table-column prop="nameArl" label="Nombre" align="center" />
+      <el-table-column prop="isActive" label="Estado" align="center">
         <template #default="{ row }">
           <el-tag :type="row.isActive ? 'success' : 'danger'">
             {{ row.isActive ? "Activo" : "Inactivo" }}
           </el-tag>
         </template>
       </el-table-column>
-      <el-table-column label="Acciones">
+      <el-table-column label="Acciones" align="center">
         <template #default="scope">
-          <el-button size="small"  @click="openEditModal(scope.row)">
-            Editar
-          </el-button>
+          <el-button size="small" @click="openEditModal(scope.row)">Editar</el-button>
           <el-button
             :loading="isLoading"
             size="small"
@@ -79,7 +74,7 @@
 <script lang="ts" setup>
 import { ref } from "vue";
 import { useArlViewModel } from "@/presentation/viewmodels/arlViewModel";
-import {useArlStore} from "@/presentation/stores/arl.store";
+import { useArlStore } from "@/presentation/stores/arl.store";
 
 const arlStore = useArlStore();
 const {
@@ -100,23 +95,26 @@ const {
 
 const isEditModalVisible = ref(false);
 const editForm = ref({ id: null, name: "" });
+const originalEditForm = ref({ id: null, name: "" });
 
 const openEditModal = (Arl) => {
   editForm.value.id = Arl.id;
   editForm.value.name = Arl.nameArl;
+  originalEditForm.value = JSON.parse(JSON.stringify(editForm.value)); 
   isEditModalVisible.value = true;
 };
 
 const editArl = async () => {
-  if (!editForm.value.id || !editForm.value.name.trim()) {
-    return;
-  }
-  try {
-    await arlStore.updateArlRequest(editForm.value.id, editForm.value.name);
-    isEditModalVisible.value = false;
-    loadArl();
-  } catch (error) {
-    console.error(error);
+  if (!editForm.value.id || !editForm.value.name.trim()) return;
+
+  if (JSON.stringify(editForm.value) !== JSON.stringify(originalEditForm.value)) {
+    try {
+      await arlStore.updateArlRequest(editForm.value.id, editForm.value.name);
+      isEditModalVisible.value = false;
+      loadArl();
+    } catch (error) {
+      console.error(error);
+    }
   }
 };
 
@@ -124,13 +122,13 @@ const deleteARL = async (id: number) => {
   try {
     await arlStore.deleteArlRequest(id);
     loadArl();
-    } catch (error) {
-      console.error(error);
-}
-}
+  } catch (error) {
+    console.error(error);
+  }
+};
 
 const loadArl = async () => {
   const data = await arlStore.fetchArl();
   arlList.value = data;
-}
+};
 </script>

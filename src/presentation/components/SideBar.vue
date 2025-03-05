@@ -388,7 +388,7 @@ const menuItems = ref([
       },
       {
         title: "Actualización de datos",
-        route: "#",
+        route: "/solicitud/actualizacion-datos",
       },
     ],
   },

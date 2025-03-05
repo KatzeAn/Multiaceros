@@ -5,39 +5,34 @@
     </template>
 
     <el-card shadow="never" class="mb-6">
-      <el-form inline ref="ruleFormRef" :rules="rules" :model="epsForm">
-        <el-form-item prop="epsName" label="Nombre">
-          <el-input v-model="epsForm.epsName" placeholder="Nombre" clearable />
-        </el-form-item>
-        <el-form-item>
-          <el-button
-            :loading="isLoading"
-            type="primary"
-            @click="submitForm(ruleFormRef)"
-            class="mr-20"
-          >
-            Crear EPS
-          </el-button>
-          <el-checkbox v-model="showInactive">Mostrar Inactivos</el-checkbox>
-        </el-form-item>
+      <el-form inline ref="ruleFormRef" :rules="rules" :model="epsForm" class="flex items-center justify-between">
+        <div class="flex items-center gap-4">
+          <el-form-item prop="epsName" label="Nombre">
+            <el-input v-model="epsForm.epsName" placeholder="Nombre" clearable />
+          </el-form-item>
+          <el-form-item>
+            <el-button :loading="isLoading" type="primary" @click="submitForm(ruleFormRef)">
+              Crear EPS
+            </el-button>
+          </el-form-item>
+        </div>
+        <el-checkbox v-model="showInactive">Mostrar Inactivos</el-checkbox>
       </el-form>
     </el-card>
 
     <el-table :data="paginatedData" border class="w-full min-h-96 mb-4" stripe>
       <el-table-column prop="id" label="ID" />
-      <el-table-column prop="epsName" label="Nombre" />
-      <el-table-column prop="isActive" label="Estado">
+      <el-table-column prop="epsName" label="Nombre" align="center" />
+      <el-table-column prop="isActive" label="Estado" align="center">
         <template #default="{ row }">
           <el-tag :type="row.isActive ? 'success' : 'danger'">
             {{ row.isActive ? "Activo" : "Inactivo" }}
           </el-tag>
         </template>
       </el-table-column>
-      <el-table-column label="Acciones">
+      <el-table-column label="Acciones" align="center">
         <template #default="scope">
-          <el-button size="small"  @click="openEditModal(scope.row)">
-            Editar
-          </el-button>
+          <el-button size="small" @click="openEditModal(scope.row)">Editar</el-button>
           <el-button
             :loading="isLoading"
             size="small"

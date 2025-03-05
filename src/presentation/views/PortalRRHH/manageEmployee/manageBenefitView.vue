@@ -5,39 +5,42 @@
     </template>
 
     <el-card shadow="never" class="mb-6">
-      <el-form inline ref="ruleFormRef" :rules="rules" :model="benefitForm">
-        <el-form-item prop="nameBenefit" label="Nombre">
-          <el-input
-            v-model="benefitForm.nameBenefit"
-            placeholder="Nombre"
-            clearable
-          />
-        </el-form-item>
-        <el-form-item>
-          <el-button
-            :loading="isLoading"
-            type="primary"
-            @click="submitForm(ruleFormRef)"
-            class="mr-20"
-          >
-            Crear beneficio
-          </el-button>
-          <el-checkbox v-model="showInactive" @change="fetchBenefit"> Mostrar Inactivos  </el-checkbox>
-        </el-form-item>
+      <el-form  inline  ref="ruleFormRef" :rules="rules"  :model="benefitForm" class="flex items-center justify-between" >
+        <div class="flex items-center gap-4">
+          <el-form-item prop="nameBenefit" label="Nombre">
+            <el-input
+              v-model="benefitForm.nameBenefit"
+              placeholder="Nombre"
+              clearable
+            />
+          </el-form-item>
+          <el-form-item>
+            <el-button
+              :loading="isLoading"
+              type="primary"
+              @click="submitForm(ruleFormRef)"
+            >
+              Crear beneficio
+            </el-button>
+          </el-form-item>
+        </div>
+        <el-checkbox v-model="showInactive" @change="fetchBenefit">
+          Mostrar Inactivos
+        </el-checkbox>
       </el-form>
     </el-card>
 
     <el-table :data="paginatedData" border class="w-full min-h-96 mb-4" stripe>
       <el-table-column prop="id" label="ID" />
-      <el-table-column prop="nameBenefit" label="Nombre" />
-      <el-table-column prop="isActive" label="Estado">
+      <el-table-column prop="nameBenefit" label="Nombre" align="center"/>
+      <el-table-column prop="isActive" label="Estado" align="center">
         <template #default="{ row }">
           <el-tag :type="row.isActive ? 'success' : 'danger'">
             {{ row.isActive ? "Activo" : "Inactivo" }}
           </el-tag>
         </template>
       </el-table-column>
-      <el-table-column label="Acciones">
+      <el-table-column label="Acciones" align="center">
         <template #default="{ row }">
           <el-button size="small" @click="openEditModal(row)">
             Editar
@@ -103,23 +106,25 @@ const {
 
 const isEditModalVisible = ref(false);
 const editForm = ref({ id: null, name: "" });
+const originalEditForm = ref({ id: null, name: "" });
 
 const openEditModal = (row) => {
-  editForm.value.id = row.id;
-  editForm.value.name = row.nameBenefit;
+  editForm.value = { id: row.id, name: row.nameBenefit };
+  originalEditForm.value = { ...editForm.value };
   isEditModalVisible.value = true;
 };
 
 const editBenefit = async () => {
-  if (!editForm.value.id || !editForm.value.name.trim()) {
-    return;
-  }
-  try {
-    await benefitStore.updateBenefitRequest(editForm.value.id, editForm.value.name);
-    isEditModalVisible.value = false;
-    fetchBenefit();
-  } catch (error) {
-    console.error(error);
+  if (!editForm.value.id || !editForm.value.name.trim()) 
+  return;
+  if (editForm.value.id !== originalEditForm.value.id || editForm.value.name !== originalEditForm.value.name) {
+    try {
+      await benefitStore.updateBenefitRequest(editForm.value.id, editForm.value.name);
+      isEditModalVisible.value = false;
+      fetchBenefit();
+    } catch (error) {
+      console.error(error);
+    }
   }
 };
 
@@ -133,7 +138,7 @@ const deleteBenefit = async (id: number) => {
 };
 const fetchBenefit = async () => {
   try {
-    const data = await benefitStore.fetchBenefit(!showInactive.value); 
+    const data = await benefitStore.fetchBenefit(!showInactive.value);
     if (data) {
       benefitList.value = data;
     }
