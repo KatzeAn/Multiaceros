@@ -2,7 +2,7 @@
   <el-card shadow="never">
     <template #header>
       <h2 class="text-xl text-gray-700 font-semibold">
-        Gestionar Fondos de cesantías
+        Gestionar Fondos de Cesantías
       </h2>
     </template>
 
@@ -12,41 +12,39 @@
         ref="ruleFormRef"
         :rules="rules"
         :model="severanceFundForm"
+        class="flex items-center justify-between"
       >
-        <el-form-item prop="severanceFundName" label="Nombre">
-          <el-input
-            v-model="severanceFundForm.severanceFundName"
-            placeholder="Nombre"
-            clearable
-          />
-        </el-form-item>
-        <el-form-item>
-          <el-button
-            :loading="isLoading"
-            type="primary"
-            @click="submitForm(ruleFormRef)"
-            class="mr-20"
-          >
-            Crear fondo
-          </el-button>
-          <el-checkbox v-model="showInactive">Mostrar Inactivos</el-checkbox>
-        </el-form-item>
+        <div class="flex items-center gap-4">
+          <el-form-item prop="severanceFundName" label="Nombre">
+            <el-input
+              v-model="severanceFundForm.severanceFundName"
+              placeholder="Nombre"
+              clearable
+            />
+          </el-form-item>
+          <el-form-item>
+            <el-button :loading="isLoading" type="primary" @click="submitForm(ruleFormRef)">
+              Crear fondo
+            </el-button>
+          </el-form-item>
+        </div>
+        <el-checkbox v-model="showInactive">Mostrar Inactivos</el-checkbox>
       </el-form>
     </el-card>
 
     <el-table :data="paginatedData" border class="w-full min-h-96 mb-4" stripe>
       <el-table-column prop="id" label="ID" />
-      <el-table-column prop="severanceFundName" label="Nombre" />
-      <el-table-column prop="isActive" label="Estado">
+      <el-table-column prop="severanceFundName" label="Nombre" align="center"/>
+      <el-table-column prop="isActive" label="Estado" align="center">
         <template #default="{ row }">
-          <el-tag :type="row.isActive ? 'success' : 'danger'">
+          <el-tag :type="row.isActive ? 'success' : 'danger'" align="center">
             {{ row.isActive ? "Activo" : "Inactivo" }}
           </el-tag>
         </template>
       </el-table-column>
-      <el-table-column label="Acciones">
+      <el-table-column label="Acciones" align="center">
         <template #default="scope">
-          <el-button size="small"  @click="openEditModal(scope.row)">
+          <el-button size="small" @click="openEditModal(scope.row)">
             Editar
           </el-button>
           <el-button
@@ -62,7 +60,7 @@
       </el-table-column>
     </el-table>
 
-    <el-dialog v-model="isEditModalVisible" title="Editar Fondo de cesantías">
+    <el-dialog v-model="isEditModalVisible" title="Editar Fondo de Cesantías">
       <el-form>
         <el-form-item label="Nuevo Nombre">
           <el-input v-model="editForm.name" />
@@ -70,7 +68,9 @@
       </el-form>
       <template #footer>
         <el-button @click="isEditModalVisible = false">Cancelar</el-button>
-        <el-button type="primary" @click="editSeveranceFund">Guardar Cambios</el-button>
+        <el-button type="primary" @click="editSeveranceFund">
+          Guardar Cambios
+        </el-button>
       </template>
     </el-dialog>
 
@@ -96,7 +96,6 @@ const  severanceStore = useSeveranceFundStore()
 const {
   severanceFundList,
   isLoading,
-  search,
   currentPage,
   pageSize,
   ruleFormRef,
@@ -111,36 +110,37 @@ const {
 
 const isEditModalVisible = ref(false);
 const editForm = ref({ id: null, name: "" });
+const originalEditForm = ref({ id: null, name: "" });
 
-const openEditModal = (SeveranceFund) => {
-  editForm.value.id = SeveranceFund.id;
-  editForm.value.name = SeveranceFund.severanceFundName;
+const openEditModal = (severanceFund) => {
+  editForm.value = { id: severanceFund.id, name: severanceFund.severanceFundName };
+  originalEditForm.value = { ...editForm.value };
   isEditModalVisible.value = true;
 };
 
 const editSeveranceFund = async () => {
-  if (!editForm.value.id || !editForm.value.name.trim()) {
-    return;
-  }
-  try {
-    await severanceStore.updateSeveranceFundRequest(editForm.value.id, editForm.value.name);
-    isEditModalVisible.value = false;
-    fetchSeveranceFund();
-  } catch (error) {
-    console.error(error);
+  if (!editForm.value.id || !editForm.value.name.trim()) return;
+  if (editForm.value.id !== originalEditForm.value.id || editForm.value.name !== originalEditForm.value.name) {
+    try {
+      await severanceStore.updateSeveranceFundRequest(editForm.value.id, editForm.value.name);
+      isEditModalVisible.value = false;
+      fetchSeveranceFund();
+    } catch (error) {
+      console.error(error);
+    }
   }
 };
 
-const deleteSeveranceFund =  async (id: number) => {
-  try{
+const deleteSeveranceFund = async (id: number) => {
+  try {
     await severanceStore.deleteSeveranceFundsRequest(id);
     await fetchSeveranceFund();
     }catch(error){
       console.error(error);
-      }
+  }
   }
 
-  const fetchSeveranceFund = async () => {
+const fetchSeveranceFund = async () => {
     const date = await severanceStore.fetchSeveranceFund();
     severanceFundList.value = date;
   }

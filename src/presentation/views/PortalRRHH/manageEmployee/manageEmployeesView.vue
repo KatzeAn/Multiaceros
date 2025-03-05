@@ -7,58 +7,60 @@
     />
   </el-dialog>
   <!-- MODAL PARA EDITAR EMPLEADO -->
-<el-dialog v-model="isEditModalOpen" title="Editar Empleado" top="6vh">
-  <EditEmployee
-    v-if="selectedEmployee"
-    :employee="selectedEmployee"
-    @close-form="closeEditForm"
-    @employee-updated="handleEmployeeUpdated"
-  />
-</el-dialog>
+  <el-dialog v-model="isEditModalOpen" title="Editar Empleado" top="6vh">
+    <EditEmployee
+      v-if="selectedEmployee"
+      :employee="selectedEmployee"
+      @close-form="closeEditForm"
+      @employee-updated="handleEmployeeUpdated"
+    />
+  </el-dialog>
 
   <el-card shadow="never">
     <template #header>
-  <div class="flex flex-col sm:flex-row sm:justify-between sm:items-center">
-    <h2 class="text-xl text-gray-700 font-semibold">Gestionar Empleados</h2>
+      <div class="flex flex-col sm:flex-row sm:justify-between sm:items-center">
+        <h2 class="text-xl text-gray-700 font-semibold">Gestionar Empleados</h2>
     <div class="flex flex-col sm:flex-row sm:items-center">
       <el-button type="primary" icon="Plus" @click="openAddModal" class="mb-2 sm:mb-0 sm:mr-4">
-        Agregar Empleado
-      </el-button>
+            Agregar Empleado
+          </el-button>
       <el-checkbox v-model="showInactive">Mostrar Inactivos</el-checkbox>
-    </div>
-  </div>
-</template>
-
-<el-table :data="paginatedData" border class="w-full min-h-96 mb-4" stripe>
-  <el-table-column label="Nombre" prop="fullName" />
-  <el-table-column label="Correo Electrónico" prop="email" />
-  <el-table-column label="Cargo" prop="jobTitle" />
-  <el-table-column label="Departamento" prop="division" />
-  <el-table-column prop="isActive" label="Estado">
-    <template #default="{ row }">
-      <el-tag :type="row.isActive ? 'success' : 'danger'">
-        {{ row.isActive ? "Activo" : "Inactivo" }}
-      </el-tag>
+        </div>
+      </div>
     </template>
-  </el-table-column>
-  <el-table-column label="Acciones">
-    <template #default="scope">
+
+    <el-table :data="paginatedData" border class="w-full min-h-96 mb-4" stripe>
+      <el-table-column label="Nombre" prop="fullName" />
+      <el-table-column label="Correo Electrónico" prop="email" align="center" />
+      <el-table-column label="Cargo" prop="jobTitle" align="center" />
+      <el-table-column label="Departamento" prop="division" align="center" />
+
+      <el-table-column prop="isActive" label="Estado" align="center">
+        <template #default="{ row }">
+          <el-tag :type="row.isActive ? 'success' : 'danger'">
+            {{ row.isActive ? "Activo" : "Inactivo" }}
+          </el-tag>
+        </template>
+      </el-table-column>
+
+      <el-table-column label="Acciones" align="center">
+        <template #default="scope">
       <el-button size="small" @click="openEditModal(scope.row)">
         Editar
       </el-button>
-      <el-button 
-        :loading="isLoading"
-        size="small" 
-        type="danger" 
-        @click="deactivateEmployee(scope.row.id)"
-        :disabled="!scope.row.isActive"
-        >
-        Desactivar
-      </el-button>
-    </template>
-  </el-table-column>
+          <el-button
+            :loading="isLoading"
+            size="small"
+            type="danger"
+            @click="deactivateEmployee(scope.row.id)"
+            :disabled="!scope.row.isActive"
+          >
+            Desactivar
+          </el-button>
+        </template>
+      </el-table-column>
 
-</el-table>
+    </el-table>
 
     <!-- Paginación -->
     <el-pagination

@@ -24,11 +24,6 @@
         <el-input v-model="jobPosting.salaryRange" />
       </el-form-item>
 
-      <div class="flex items-center my-6">
-    <div class="flex-grow border-t border-gray-300"></div>
-    <span class="mx-4 font-bold">Requerimientos</span>
-    <div class="flex-grow border-t border-gray-300"></div>
-  </div>
   <el-row :gutter="30">
     <el-col :span="20">
       <el-form-item label="Nuevo Requerimiento">
@@ -97,8 +92,11 @@
   </el-dialog>
 
   <!-- Tabla de Puestos de Trabajo -->
+  <div class="flex justify-between items-center mb-4">
+  <h2 class="text-lg font-semibold">Puestos de trabajo</h2>
+  <el-checkbox v-model="showInactive">Mostrar Inactivos</el-checkbox>
+</div>
 
-  <el-checkbox v-model="showInactive" class="ml-4">Mostrar Inactivos</el-checkbox>
 <el-table :data="paginatedData" border class="w-full min-h-96 mb-4" stripe>
   <el-table-column prop="title" label="Título">
     <template #default="{ row }">
@@ -106,7 +104,7 @@
     </template>
   </el-table-column>
 
-    <el-table-column prop="area" label="Área">
+  <el-table-column prop="area" label="Área">
     <template #default="{ row }">
       {{ getDivision(row.divisionId) }}
     </template>
@@ -122,7 +120,7 @@
 
   <el-table-column label="Nivel de Prioridad" prop="priorityText" />
 
-  <el-table-column prop="isActive" label="Estado">
+  <el-table-column prop="isActive" label="Estado" align="center"> 
     <template #default="{ row }">
       <el-tag :type="row.isActive ? 'success' : 'danger'">
         {{ row.isActive ? "Activo" : "Inactivo" }}
@@ -131,15 +129,15 @@
   </el-table-column>
 
   <el-table-column label="Acciones">
-  <template #default="scope">
-    <div class="flex space-x-2">
-      <el-button size="small" @click="openEditModal(scope.row)">Editar</el-button>
-      <el-button :loading="isLoading" size="small" type="danger" :disabled="!scope.row.isActive" @click="deleteJobTitle(scope.row.id)">
-        Desactivar
-      </el-button>
-    </div>
-  </template>
-</el-table-column>
+    <template #default="scope">
+      <div class="flex space-x-2">
+        <el-button size="small" @click="openEditModal(scope.row)">Editar</el-button>
+        <el-button :loading="isLoading" size="small" type="danger" :disabled="!scope.row.isActive" @click="deleteJobTitle(scope.row.id)">
+          Desactivar
+        </el-button>
+      </div>
+    </template>
+  </el-table-column>
 </el-table>
 
 
@@ -165,11 +163,6 @@
       <el-input v-model="selectedJobPosting.salaryRange" />
     </el-form-item>
 
-    <div class="flex items-center my-6">
-    <div class="flex-grow border-t border-gray-300"></div>
-    <span class="mx-4 font-bold">Requerimientos</span>
-    <div class="flex-grow border-t border-gray-300"></div>
-  </div>
   <el-row :gutter="30">
     <el-col :span="20">
       <el-form-item label="Nuevo Requerimiento">
@@ -394,8 +387,6 @@ watch(showInactive, async () => {
   console.log("Datos en jobPostingStore después del fetch:", jobPostingStore.jobPostings);
 });
 
-
-
 const handleSizeChange = (size: number) => {
   pageSize.value = size;
 };
@@ -404,19 +395,24 @@ const handlePageChange = (page: number) => {
   currentPage.value = page;
 };
 
+const originalJobPosting = ref<JobPosting | null>(null);
 const openEditModal = (job: JobPosting) => {
   selectedJobPosting.value = { ...job };
+  originalJobPosting.value = JSON.parse(JSON.stringify(job)); 
   isEditModalOpen.value = true;
 };
 
 const updateJobPosting = async () => {
-  if (!selectedJobPosting.value) return;
+  if (!selectedJobPosting.value || !originalJobPosting.value) return;
+  if (JSON.stringify(selectedJobPosting.value) === JSON.stringify(originalJobPosting.value)) {
+    return;
+  }
   try {
     await jobPostingStore.updateJobPosting(selectedJobPosting.value.id, selectedJobPosting.value);
     await jobPostingStore.fetchJobPostingsCopy();
     isEditModalOpen.value = false;
   } catch (error) {
-    console.error("Error al actualizar el puesto de trabajo:", error);
+    console.error("", error);
   }
 };
 
@@ -425,7 +421,7 @@ const deleteJobTitle = async (id: number) => {
     await jobPostingStore.deleteJobPosting(id);
     await jobPostingStore.fetchJobPostingsCopy();
   } catch (error) {
-    console.error("Error al eliminar el puesto de trabajo:", error);
+    console.error("", error);
   }
 };
 </script>
