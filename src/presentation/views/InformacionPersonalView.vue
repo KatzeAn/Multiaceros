@@ -32,6 +32,15 @@
                 </el-form-item>
               </el-col>
             </el-row>
+
+            <el-row>
+              <el-col :span="6">
+                <el-form-item label="Fecha de nacimiento" prop="birthDate">
+                  <el-date-picker v-model="basicInformationForm.birthDate" type="date" placeholder="Pick a date" />
+                </el-form-item>
+                <span v-if="basicInformationForm.age" style="margin-left: 120px">Edad: {{ basicInformationForm.age }}</span>
+              </el-col>
+            </el-row>
           </el-form>
         </el-card>
 
@@ -50,8 +59,26 @@
           <el-form :model="addressInformationForm" ref="formRef" label-width="120px" size="default" label-position="top">
             <el-row>
               <el-col :span="6">
-                <el-form-item label="Direccion" prop="address">
+                <el-form-item label="Dirección" prop="address">
                   <el-input v-model="addressInformationForm.address" placeholder="Enter an address" />
+                </el-form-item>
+              </el-col>
+            </el-row>
+
+            <el-row :gutter="30">
+              <el-col :span="6">
+                <el-form-item label="Ciudad" prop="city">
+                  <el-input v-model="addressInformationForm.city" placeholder="Enter a city" disabled />
+                </el-form-item>
+              </el-col>
+              <el-col :span="6">
+                <el-form-item label="Departamento/Estado" prop="state">
+                  <el-input v-model="addressInformationForm.state" placeholder="Enter a state" disabled />
+                </el-form-item>
+              </el-col>
+              <el-col :span="6">
+                <el-form-item label="País" prop="country">
+                  <el-input v-model="addressInformationForm.country" placeholder="Enter a country" disabled />
                 </el-form-item>
               </el-col>
             </el-row>
@@ -78,6 +105,14 @@
                 </el-form-item>
               </el-col>
             </el-row>
+
+            <el-row>
+              <el-col :span="6">
+                <el-form-item label="Correo electrónico" prop="email">
+                  <el-input v-model="contactInformationForm.email" placeholder="Enter an email" disabled />
+                </el-form-item>
+              </el-col>
+            </el-row>
           </el-form>
         </el-card>
       </div>
@@ -86,6 +121,16 @@
 
   <el-button class="floating-button" type="primary" @click="submitForm">Actualizar</el-button>
 </template>
+
+<style>
+.floating-button {
+  position: fixed;
+  bottom: 20px;
+  right: 20px;
+  z-index: 1000;
+}
+</style>
+
 
 <style>
 .floating-button {
