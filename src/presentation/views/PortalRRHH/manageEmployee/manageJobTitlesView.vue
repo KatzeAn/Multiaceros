@@ -82,7 +82,7 @@
 </template>
 
 <script lang="ts" setup>
-import { ref } from "vue";
+import { ref, onMounted } from "vue";
 import { useJobTitleViewModel } from "@/presentation/viewmodels/jobTitleViewModel";
 import {useJobTitleStore} from "@/presentation/stores/jobTitle.store";
 
@@ -100,6 +100,7 @@ const {
   submitForm,
   jobTitleForm,
   showInactive,
+  loadJobTitles
 } = useJobTitleViewModel();
 
 const isEditModalVisible = ref(false);
@@ -109,17 +110,17 @@ const originalEditForm = ref({ id: null, name: "" });
 const openEditModal = (jobtitle) => {
   editForm.value.id = jobtitle.id;
   editForm.value.name = jobtitle.name;
-  originalEditForm.value = JSON.parse(JSON.stringify(jobtitle)); // Copia profunda
+  originalEditForm.value = {...editForm.value}; 
   isEditModalVisible.value = true;
 };
 
 const editjobTitle = async () => {
   if (!editForm.value.id || !editForm.value.name.trim()) return;
-  if (JSON.stringify(editForm.value) !== JSON.stringify(originalEditForm.value)) {
+  if (editForm.value.id !== originalEditForm.value.id || editForm.value.name !== originalEditForm.value.name) {
     try {
       await jobTitleStore.updateJobTitleRequest(editForm.value.id, editForm.value.name);
       isEditModalVisible.value = false;
-      fetchJobTitles();
+      loadJobTitles();
     } catch (error) {
       console.error(error);
   }
@@ -129,13 +130,11 @@ const editjobTitle = async () => {
 const deleteJob = async (id: number) => {
   try {
     await jobTitleStore.deleteJobTitleRequest(id);
-    await fetchJobTitles();
+    await loadJobTitles();
   } catch (error) {
       console.error(error);
   }
 };
-const fetchJobTitles = async () => {
-        const date = await jobTitleStore.fetchJobTitles();
-        jobTitles.value = date;
-      }
+
+onMounted(loadJobTitles)
 </script>

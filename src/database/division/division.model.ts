@@ -8,8 +8,8 @@ export class DivisionModel implements DivisionRepository {
     getTeammates(userId: number): Promise<Teammate[]> {
         return apiRequest<Teammate[]>('get', `/Division/Division/Team/${userId}`);
     }
-    getDivisions(): Promise<Division[]> {
-        return apiRequest<Division[]>('get', '/Division');
+    getDivisions(isActive: boolean): Promise<Division[]> {
+        return apiRequest<Division[]>('get', `/Division?isActive=${isActive}`);
     }
     getOrganizationalChart(): Promise<DivisionWithEmployee[]> {
         return apiRequest<DivisionWithEmployee[]>('get', '/Division/GetOrganizationalChart');

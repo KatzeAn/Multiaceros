@@ -53,7 +53,7 @@ export function useEpsViewModel() {
   };
 
   const loadEps = async () => {
-    epsList.value = (await epsStore.fetchEps()) || [];
+    epsList.value = (await epsStore.fetchEps(!showInactive.value)) || [];
   };
 
   const submitForm = async (formEl: FormInstance | undefined) => {
@@ -94,6 +94,10 @@ export function useEpsViewModel() {
     });
   });
 
+  watch(showInactive, () => {
+    loadEps();
+  });
+
   onMounted(async () => {
     await loadEps();
   });
@@ -112,5 +116,6 @@ export function useEpsViewModel() {
     submitForm,
     epsForm,
     showInactive,
+    loadEps
   };
 }

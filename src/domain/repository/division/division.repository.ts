@@ -3,7 +3,7 @@ import type { DivisionWithEmployee } from "@/domain/Interfaces/Division/division
 import type { Teammate } from "@/domain/Interfaces/Division/teammate.interface";
 
 export abstract class DivisionRepository {
-  abstract getDivisions(): Promise<Division[]>;
+  abstract getDivisions(isActive?: boolean): Promise<Division[]>;
   abstract getOrganizationalChart(): Promise<DivisionWithEmployee[]>;
   abstract createDivision(name: string, createdBy: string): Promise<Division>;
   abstract updateDivision(id: number, newName: string, modifiedBy: string): Promise<Division>;

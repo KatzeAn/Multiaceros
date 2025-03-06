@@ -3,8 +3,8 @@ import { ArlRepository } from "@/domain/repository/arl/arl.repository";
 import { apiRequest } from "@/presentation/api/axiosInstance";
 
 export class ArlModel extends ArlRepository {
-  getAll(): Promise<Arl[]> {
-    return apiRequest<Arl[]>("get", "/Arl");
+  getAll(isActive: boolean): Promise<Arl[]> {
+    return apiRequest<Arl[]>("get", `/Arl?isActive=${isActive}`);
   }
   create(nameArl: string): Promise<Arl> {
     return apiRequest<Arl>("post", "/Arl", { nameArl });

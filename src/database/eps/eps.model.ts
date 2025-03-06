@@ -3,8 +3,8 @@ import type { EpsRepository } from "@/domain/repository/eps/eps.repository";
 import { apiRequest } from "@/presentation/api/axiosInstance";
 
 export class EpsModel implements EpsRepository {
-    getEps(): Promise<Eps[]> {
-        return apiRequest<Eps[]>("get", "/EPS");
+    getEps(isActive: boolean): Promise<Eps[]> {
+        return apiRequest<Eps[]>("get", `/EPS?isActive=${isActive}`);
     }
     getEpsById(id: number): Promise<Eps> {
         return apiRequest<Eps>("get", `/EPS/${id}`);

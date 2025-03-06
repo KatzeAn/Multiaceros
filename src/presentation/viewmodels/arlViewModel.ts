@@ -52,7 +52,7 @@ export function useArlViewModel() {
   };
 
   const loadArl = async () => {
-    arlList.value = (await arlStore.fetchArl()) || [];
+    arlList.value = (await arlStore.fetchArl(!showInactive.value)) || [];
   };
 
   const submitForm = async (formEl: FormInstance | undefined) => {
@@ -93,6 +93,10 @@ export function useArlViewModel() {
     });
   });
 
+  watch(showInactive, () => {
+    loadArl();
+  });
+
   onMounted(async () => {
     await loadArl();
   });
@@ -111,5 +115,6 @@ export function useArlViewModel() {
     submitForm,
     arlForm,
     showInactive,
+    loadArl
   };
 }

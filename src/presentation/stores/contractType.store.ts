@@ -7,13 +7,12 @@ export const useContracTypeStore = defineStore("contractType", () => {
   const contractTypeList = ref<ContractType[]>([]);
   const loading = ref(false);
 
-  const fetchContractType = async () => {
+  const fetchContractType = async (isActive: boolean = false) => {
     loading.value = true;
-
     try {
       const contractTypeModel = new ContractModel();
-      const response: ContractType[] = await contractTypeModel.getContracts();
-      contractTypeList.value = response;
+      const response: ContractType[] = await contractTypeModel.getContracts(isActive);
+      contractTypeList.value = Array.isArray(response) ? [...response] : [];
     } catch (error) {
       console.error("Error fetching contract types:", error);
       contractTypeList.value = [];

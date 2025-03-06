@@ -275,7 +275,7 @@ const fetchAllAbsences = async () => {
 };
 
 const fetchAbsenceTypes = async () => {
-  const result = await absenceStore.fetchAbsenceTypes();
+  const result = await absenceStore.fetchAbsenceTypes(true);
   if (result && Array.isArray(result.absenceList)) {
     absenceTypes.value = result.absenceList.reduce((acc, type) => {
       acc[type.id] = type.name;

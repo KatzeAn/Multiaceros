@@ -4,8 +4,8 @@ import type { ContractRepository } from "@/domain/repository/contract/contract.r
 import { apiRequest } from "@/presentation/api/axiosInstance";
 
 export class ContractModel implements ContractRepository {
-    getContracts(): Promise<ContractType[]> {
-        return apiRequest<ContractType[]>("get", "/Contract");
+    getContracts(isActive: boolean): Promise<ContractType[]> {
+        return apiRequest<ContractType[]>("get",`/ContractType?isActive=${isActive}` );
     }
     createContract(contract: Contract): Promise<Contract> {
         return apiRequest<Contract>("post", "/Contract", { contract });

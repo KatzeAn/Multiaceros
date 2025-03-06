@@ -95,13 +95,11 @@
 </template>
 
 <script lang="ts" setup>
-import { onMounted, ref } from "vue";
+import { onMounted, ref, computed } from "vue";
 import { useContracTypeStore } from "@/presentation/stores/contractType.store";
 
 import { useDepartmentViewModel } from "@/presentation/viewmodels/departmentViewModel";
 import { useJobTitleViewModel } from "@/presentation/viewmodels/jobTitleViewModel";
-
-import type { ContractType } from "@/domain/Interfaces/Contract/contractType.interface";
 
 import type { EmployeeRequest } from "@/domain/Interfaces/Employee/EmployeeRequest.interface";
 
@@ -112,18 +110,14 @@ const props = defineProps<{
 const { divisionList } = useDepartmentViewModel();
 const { jobTitles } = useJobTitleViewModel();
 
-const { fetchContractType } = useContracTypeStore();
-
-const contractTypeOptions = ref<ContractType[]>([]);
+const contractTypeStore = useContracTypeStore();
+const contractTypeOptions = computed(() => contractTypeStore.contractTypeList);
 
 const loading = ref(false);
 
 const loadData = async () => {
   loading.value = true;
-
-  const contractTypeStore = useContracTypeStore(); 
-  await contractTypeStore.fetchContractType(); 
-  contractTypeOptions.value = contractTypeStore.contractTypeList;
+  await contractTypeStore.fetchContractType(true); 
   loading.value = false;
 };
 

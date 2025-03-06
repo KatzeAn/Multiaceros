@@ -89,7 +89,7 @@
 </template>
 
 <script lang="ts" setup>
-import { ref } from "vue";
+import { ref, onMounted } from "vue";
 import { useFamilyCompensationFundViewModel } from "@/presentation/viewmodels/familyCompensationFundViewModel";
 import { useFamilyCompensationFundStore } from "@/presentation/stores/familyCompensationFund.store";
 
@@ -107,6 +107,7 @@ const {
   submitForm,
   familyCompensationFundForm,
   showInactive,
+  loadFamilyCompensationFund
 } = useFamilyCompensationFundViewModel();
 
 const isEditModalVisible = ref(false);
@@ -116,21 +117,20 @@ const originalEditForm = ref({ id: null, name: "" });
 const openEditModal = (fund) => {
   editForm.value.id = fund.id;
   editForm.value.name = fund.compensationFundName;
-  originalEditForm.value = JSON.parse(JSON.stringify(editForm.value)); // Copia profunda
+  originalEditForm.value = { ...editForm.value };
   isEditModalVisible.value = true;
 };
 
 const editFamilyCompensationFund = async () => {
   if (!editForm.value.id || !editForm.value.name.trim()) return;
-
-  if (JSON.stringify(editForm.value) !== JSON.stringify(originalEditForm.value)) {
+  if (editForm.value.id !== originalEditForm.value.id || editForm.value.name !== originalEditForm.value.name) {
     try {
       await familyCompensationFundStore.updateFamilyCompensationFundsRequest(
         editForm.value.id,
         editForm.value.name
       );
       isEditModalVisible.value = false;
-      fetchFamilyCompensationFund();
+      loadFamilyCompensationFund();
     } catch (error) {
       console.error(error);
     }
@@ -140,14 +140,11 @@ const editFamilyCompensationFund = async () => {
 const deleteFamilyFund = async (id: number) => {
   try {
     await familyCompensationFundStore.deleteFamilyCompesationRequest(id);
-    fetchFamilyCompensationFund();
+   await loadFamilyCompensationFund();
   } catch (error) {
     console.error(error);
   }
 };
 
-const fetchFamilyCompensationFund = async () => {
-  const data = await familyCompensationFundStore.fetchFamilyCompensationFund();
-  familyCompensationFundList.value = data;
-};
+onMounted(loadFamilyCompensationFund)
 </script>

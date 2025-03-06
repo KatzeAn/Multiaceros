@@ -55,7 +55,7 @@ export function useFamilyCompensationFundViewModel() {
 
   const loadFamilyCompensationFund = async () => {
     familyCompensationFundList.value =
-      (await familyCompensationFundStore.fetchFamilyCompensationFund()) || [];
+      (await familyCompensationFundStore.fetchFamilyCompensationFund(!showInactive.value)) || [];
   };
 
   const submitForm = async (formEl: FormInstance | undefined) => {
@@ -98,6 +98,9 @@ export function useFamilyCompensationFundViewModel() {
       pageSize: pageSize.value,
     });
   });
+  watch(showInactive, () => {
+    loadFamilyCompensationFund();
+  });
 
   onMounted(async () => {
     await loadFamilyCompensationFund();
@@ -117,5 +120,6 @@ export function useFamilyCompensationFundViewModel() {
     submitForm,
     familyCompensationFundForm,
     showInactive,
+    loadFamilyCompensationFund
   };
 }

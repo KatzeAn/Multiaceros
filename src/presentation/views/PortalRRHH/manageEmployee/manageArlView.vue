@@ -72,7 +72,7 @@
 </template>
 
 <script lang="ts" setup>
-import { ref } from "vue";
+import { onMounted, ref } from "vue";
 import { useArlViewModel } from "@/presentation/viewmodels/arlViewModel";
 import { useArlStore } from "@/presentation/stores/arl.store";
 
@@ -80,7 +80,6 @@ const arlStore = useArlStore();
 const {
   arlList,
   isLoading,
-  search,
   currentPage,
   pageSize,
   ruleFormRef,
@@ -91,6 +90,7 @@ const {
   submitForm,
   arlForm,
   showInactive,
+  loadArl
 } = useArlViewModel();
 
 const isEditModalVisible = ref(false);
@@ -100,14 +100,13 @@ const originalEditForm = ref({ id: null, name: "" });
 const openEditModal = (Arl) => {
   editForm.value.id = Arl.id;
   editForm.value.name = Arl.nameArl;
-  originalEditForm.value = JSON.parse(JSON.stringify(editForm.value)); 
+  originalEditForm.value = { ...editForm.value };
   isEditModalVisible.value = true;
 };
 
 const editArl = async () => {
   if (!editForm.value.id || !editForm.value.name.trim()) return;
-
-  if (JSON.stringify(editForm.value) !== JSON.stringify(originalEditForm.value)) {
+  if (editForm.value.id !== originalEditForm.value.id || editForm.value.name !== originalEditForm.value.name) {
     try {
       await arlStore.updateArlRequest(editForm.value.id, editForm.value.name);
       isEditModalVisible.value = false;
@@ -121,14 +120,11 @@ const editArl = async () => {
 const deleteARL = async (id: number) => {
   try {
     await arlStore.deleteArlRequest(id);
-    loadArl();
+    await loadArl();
   } catch (error) {
     console.error(error);
   }
 };
 
-const loadArl = async () => {
-  const data = await arlStore.fetchArl();
-  arlList.value = data;
-};
+onMounted(loadArl)
 </script>

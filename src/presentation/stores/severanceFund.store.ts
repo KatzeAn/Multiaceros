@@ -6,15 +6,19 @@ import type { SeveranceFund } from "@/domain/Interfaces/severanceFund/severanceF
 import { useUserStore } from "./user.store";
 
 export const useSeveranceFundStore = defineStore("severanceFund", () => {
+  const severanceFunds = ref<SeveranceFund[]>([]);
   const isLoading = ref(false);
 
-  const fetchSeveranceFund = async () => {
+  const fetchSeveranceFund = async (isActive: boolean = false) => {
     try {
       isLoading.value = true;
       const severanceFundModel = new SeveranceFundModel();
-      const data = await severanceFundModel.getSeveranceFund();
-      return Array.isArray(data) ? data : [];
+      const data = await severanceFundModel.getSeveranceFund(isActive);
+      severanceFunds.value = Array.isArray(data) ? [...data] : [];
+      return severanceFunds.value;
     } catch (error) {
+      console.error(error);
+      severanceFunds.value = [];
       ElNotification({
         title: "Error",
         message: "No se pudieron cargar los fondos de cesantías",

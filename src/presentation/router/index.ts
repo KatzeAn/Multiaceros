@@ -132,7 +132,7 @@ const router = createRouter({
           path: "trámites",
           component: () =>
             import(
-              "../views/PortalRRHH/UserRequestsReview.vue"
+              "../views/PortalRRHH/UserRequestsView.vue"
             ),
         },
         
