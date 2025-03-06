@@ -16,19 +16,20 @@ export const useAbsenceStore = defineStore("absence", () => {
     name: "",
   });
 
-  const fetchAbsences = async (type: keyof AbsenceModel) => {
+  const fetchAbsences = async (type: keyof AbsenceModel, isActive?: boolean) => {
     const result = {
       loading: true,
       absenceList: [] as Absence[],
     };
-
+  
     try {
       const absenceService = new AbsenceModel();
-
+  
       if (typeof absenceService[type] === "function") {
-        const absencesResponse = await (
-          absenceService[type] as () => Promise<Absence[]>
-        )();
+        const absencesResponse = isActive !== undefined
+          ? await (absenceService[type] as (isActive: boolean) => Promise<Absence[]>)(isActive)
+          : await (absenceService[type] as () => Promise<Absence[]>)();
+        
         result.absenceList = absencesResponse;
       } else {
         throw new Error(`Method ${type} does not exist on AbsenceModel`);
@@ -38,18 +39,18 @@ export const useAbsenceStore = defineStore("absence", () => {
     } finally {
       result.loading = false;
     }
-
+  
     return result;
   };
-
+  
   const fetchMonthlyAbsences = () => fetchAbsences("getMonthlyAbsences");
   const fetchPendingAbsences = () => fetchAbsences("getPendingAbsences");
   const fetchUpcomingAbsences = () => fetchAbsences("getUpcomingAbsences");
   const fetchAllAbsences = () => fetchAbsences("getAbsences");
   const fetchApprovedAbsences = () => fetchAbsences("getApprovedAbsences");
   const fetchRejectedAbsences = () => fetchAbsences("getRejectedAbsences");
-  const fetchAbsenceTypes = async () => fetchAbsences("getAbsenceTypes");
-
+  const fetchAbsenceTypes = async (isActive: boolean) => {return fetchAbsences("getAbsenceTypes", isActive);};
+  
   const approveAbsence = async (absenceId: number) => {
     try {
       const absenceService = new AbsenceModel();

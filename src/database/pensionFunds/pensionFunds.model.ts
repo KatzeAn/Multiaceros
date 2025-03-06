@@ -3,8 +3,8 @@ import type { PensionFundsRepository } from "@/domain/repository/pensionFunds/pe
 import { apiRequest } from "@/presentation/api/axiosInstance";
 
 export class PensionFundsModel implements PensionFundsRepository {
-    getPensionFunds(): Promise<PensionFunds[]> {
-        return apiRequest<PensionFunds[]>("get", "/PensionFunds/GetPensionFunds");
+    getPensionFunds(isActive: boolean): Promise<PensionFunds[]> {
+        return apiRequest<PensionFunds[]>("get", `/PensionFunds?isActive=${isActive}`);
     }
     createPensionFund(data: PensionFunds): Promise<PensionFunds> {
         return apiRequest<PensionFunds>("post", "/PensionFunds/CreatePensionFunds", data);

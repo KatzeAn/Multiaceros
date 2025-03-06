@@ -1,30 +1,30 @@
 import { BloodTypeModel } from "@/database/bloodType/bloodType.model";
 import type { BloodType } from "@/domain/Interfaces/BloodType/bloodType.interface";
 import { defineStore } from "pinia";
+import { ref } from "vue";
 
 export const useBloodTypeStore = defineStore("bloodType", () => {
-  const fetchBloodType = async () => {
-    const result = {
-      loading: true,
-      bloodTypeList: [] as BloodType[],
-    };
+  const bloodTypeList = ref<BloodType[]>([]);
+  const isLoading = ref(false);
+  const bloodTypeModel = new BloodTypeModel();
 
+  const fetchBloodType = async (isActive: boolean = false) => {
     try {
-      result.loading = true;
-      const bloodTypeModel = new BloodTypeModel();
-      const response: BloodType[] = await bloodTypeModel.getBloodTypes();
-      result.bloodTypeList = response;
+      isLoading.value = true;
+      const response: BloodType[] = await bloodTypeModel.getBloodTypes(isActive);
+      bloodTypeList.value = Array.isArray(response) ? response : [];
     } catch (error) {
       console.error("Error fetching blood types:", error);
-      result.bloodTypeList = [];
+      bloodTypeList.value = [];
     } finally {
-      result.loading = false;
+      isLoading.value = false;
     }
 
-    return result;
   };
 
   return {
     fetchBloodType,
+    bloodTypeList,
+    isLoading,   
   };
 });

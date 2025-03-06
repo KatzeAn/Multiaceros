@@ -6,15 +6,19 @@ import { ref } from "vue";
 import { useUserStore } from "./user.store";
 
 export const useEpsStore = defineStore("eps", () => {
+  const epsList = ref<Eps[]>([]);
   const isLoading = ref(false);
 
-  const fetchEps = async () => {
+  const fetchEps = async (isActive: boolean = false) => {
     try {
       isLoading.value = true;
       const epsModel = new EpsModel();
-      const data = await epsModel.getEps();
-      return Array.isArray(data) ? data : [];
+      const data = await epsModel.getEps(isActive);
+      epsList.value = Array.isArray(data) ? [...data] : [];
+      return epsList.value;
     } catch (error) {
+      console.error(error);
+      epsList.value = [];
       ElNotification({
         title: "Error",
         message: "No se pudieron cargar los EPS",

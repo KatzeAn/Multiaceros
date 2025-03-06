@@ -52,7 +52,7 @@ export function usePensionFundViewModel() {
   };
 
   const loadPensionFund = async () => {
-    pensionFundList.value = (await pensionFundStore.fetchPensionFund()) || [];
+    pensionFundList.value = (await pensionFundStore.fetchPensionFund(!showInactive.value)) || [];
   };
 
   const submitForm = async (formEl: FormInstance | undefined) => {
@@ -92,6 +92,9 @@ export function usePensionFundViewModel() {
       pageSize: pageSize.value,
     });
   });
+  watch(showInactive, () => {
+    loadPensionFund();
+  });
 
   onMounted(async () => {
     await loadPensionFund();
@@ -111,5 +114,6 @@ export function usePensionFundViewModel() {
     submitForm,
     pensionFundForm,
     showInactive,
+    loadPensionFund
   };
 }

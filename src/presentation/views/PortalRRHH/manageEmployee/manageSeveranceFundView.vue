@@ -88,7 +88,7 @@
 </template>
 
 <script lang="ts" setup>
-import { ref } from "vue";
+import { ref, onMounted } from "vue";
 import { useSeveranceFundViewModel } from "@/presentation/viewmodels/severanceFundViewModel";
 import {useSeveranceFundStore} from "@/presentation/stores/severanceFund.store"
 
@@ -106,6 +106,7 @@ const {
   submitForm,
   severanceFundForm,
   showInactive,
+  loadSeveranceFund
 } = useSeveranceFundViewModel();
 
 const isEditModalVisible = ref(false);
@@ -124,7 +125,7 @@ const editSeveranceFund = async () => {
     try {
       await severanceStore.updateSeveranceFundRequest(editForm.value.id, editForm.value.name);
       isEditModalVisible.value = false;
-      fetchSeveranceFund();
+      loadSeveranceFund();
     } catch (error) {
       console.error(error);
     }
@@ -134,14 +135,9 @@ const editSeveranceFund = async () => {
 const deleteSeveranceFund = async (id: number) => {
   try {
     await severanceStore.deleteSeveranceFundsRequest(id);
-    await fetchSeveranceFund();
+    await loadSeveranceFund();
     }catch(error){
       console.error(error);
   }
-  }
-
-const fetchSeveranceFund = async () => {
-    const date = await severanceStore.fetchSeveranceFund();
-    severanceFundList.value = date;
   }
 </script>

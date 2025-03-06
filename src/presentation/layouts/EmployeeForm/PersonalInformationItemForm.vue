@@ -38,12 +38,9 @@
 
     <el-col :span="8">
       <el-form-item label="Tipo de Sangre" prop="bloodTypeId">
-        <el-select
-          v-model="employeeRequestForm.bloodTypeId"
-          placeholder="Seleccione el tipo de sangre"
-        >
+        <el-select v-model="employeeRequestForm.bloodTypeId" placeholder="Seleccione el tipo de sangre">
           <el-option
-            v-for="bloodType in bloodTypeOptions"
+            v-for="bloodType in bloodTypeStore.bloodTypeList"
             :key="bloodType.id"
             :label="bloodType.name"
             :value="bloodType.id"
@@ -77,26 +74,24 @@
 import { ref, onMounted } from "vue";
 import { useBloodTypeStore } from "@/presentation/stores/bloodType.store";
 import type { UploadUserFile } from "element-plus";
-import type { BloodType } from "@/domain/Interfaces/BloodType/bloodType.interface";
 import type { EmployeeRequest } from "@/domain/Interfaces/Employee/EmployeeRequest.interface";
 
 const props = defineProps<{
   employeeRequestForm: EmployeeRequest;
 }>();
 
-const { fetchBloodType } = useBloodTypeStore();
+const bloodTypeStore = useBloodTypeStore();
 const fileList = ref<UploadUserFile[]>([]);
-const bloodTypeOptions = ref<BloodType[]>([]);
 const loading = ref(false);
 
 const loadData = async () => {
-  const { loading: isLoading, bloodTypeList: bloodTypeList } =
-    await fetchBloodType();
-  loading.value = isLoading;
-  bloodTypeOptions.value = bloodTypeList;
+  loading.value = true;
+  await bloodTypeStore.fetchBloodType(true);
+  loading.value = bloodTypeStore.isLoading;
 };
 
 onMounted(() => {
   loadData();
 });
+
 </script>

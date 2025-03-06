@@ -8,16 +8,20 @@ import { useUserStore } from "./user.store";
 import type { Teammate } from "@/domain/Interfaces/Division/teammate.interface";
 
 export const useDivisionStore = defineStore("division", () => {
+  const divisions = ref<Division[]>([]);
   const isLoading = ref(false);
   const userStore = useUserStore();
 
-  const fetchDivision = async () => {
+  const fetchDivision = async (isActive: boolean = false) => {
     try {
       isLoading.value = true;
       const divisionModel = new DivisionModel();
-      const data = await divisionModel.getDivisions();
-      return Array.isArray(data) ? data : [];
+      const data = await divisionModel.getDivisions(isActive);
+      divisions.value = Array.isArray(data) ? [...data] : [];
+      return divisions.value;
     } catch (error) {
+      console.error(error);
+      divisions.value = [];
       ElNotification({
         title: "Error",
         message: "No se pudieron cargar los departamentos",

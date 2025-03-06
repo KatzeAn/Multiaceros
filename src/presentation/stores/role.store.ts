@@ -7,17 +7,21 @@ import { ElNotification } from "element-plus";
 
 export const useRoleStore = defineStore("role", () => {
     const roles = ref<Role[]>([]);
+    const isLoading = ref(false);
     const roleModel = new RoleModel();
 
-    const fetchRoles = async () => {
+    const fetchRoles = async (isActive: boolean = false) => {
         try {
-            const response = await roleModel.getRoles();
-            roles.value = response;
+            isLoading.value = true;
+            const response = await roleModel.getRoles(isActive);
+            roles.value = Array.isArray(response) ? [...response] : [];
         } catch (error) {
             console.error("Error al obtener roles:", error);
+            roles.value = [];
+        } finally {
+            isLoading.value = false;
         }
     };
-
 
 const assignUserRole = async (userId: number, roleData: RoleRequest) => {
     try {

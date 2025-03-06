@@ -53,7 +53,7 @@ export function useJobTitleViewModel() {
   };
 
   const loadJobTitles = async () => {
-    jobTitles.value = (await jobTitleStore.fetchJobTitles()) || [];
+    jobTitles.value = (await jobTitleStore.fetchJobTitles(!showInactive.value)) || [];
   };
 
   const submitForm = async (formEl: FormInstance | undefined) => {
@@ -94,6 +94,9 @@ export function useJobTitleViewModel() {
       pageSize: pageSize.value,
     });
   });
+  watch(showInactive, () => {
+    loadJobTitles();
+  });
 
   onMounted(async () => {
     await loadJobTitles();
@@ -113,5 +116,6 @@ export function useJobTitleViewModel() {
     submitForm,
     jobTitleForm,
     showInactive,
+    loadJobTitles
   };
 }

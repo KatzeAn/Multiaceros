@@ -6,26 +6,29 @@ import type { PensionFunds } from "@/domain/Interfaces/PensionFunds/pensionFunds
 import { useUserStore } from "./user.store";
 
 export const usePensionFundStore = defineStore("pensionFund", () => {
+  const pensionFunds = ref<PensionFunds[]>([]);
   const isLoading = ref(false);
 
-  const fetchPensionFund = async () => {
+  const fetchPensionFund = async (isActive: boolean = false) => {
     try {
       isLoading.value = true;
       const pensionFundModel = new PensionFundsModel();
-      const data = await pensionFundModel.getPensionFunds();
-      return Array.isArray(data) ? data : []; // Retornar los datos correctamente
+      const data = await pensionFundModel.getPensionFunds(isActive);
+      pensionFunds.value = Array.isArray(data) ? [...data] : [];
+      return pensionFunds.value;
     } catch (error) {
+      console.error(error);
+      pensionFunds.value = [];
       ElNotification({
         title: "Error",
         message: "No se pudieron cargar los fondos de pensión",
         type: "error",
       });
-      return []; // Devolver un array vacío en caso de error
+      return [];
     } finally {
       isLoading.value = false;
     }
   };
-  
 
   const createPensionFundRequest = async (data: PensionFunds) => {
     try {

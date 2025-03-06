@@ -1,24 +1,30 @@
 import { defineStore } from "pinia";
-import { reactive, ref } from "vue";
+import {  ref } from "vue";
 import { JobTitleModel } from "@/database/jobTitle/jobTitle.model";
 import type { JobTitle } from "@/domain/Interfaces/JobTitle/JobTitle.interface";
 import { ElNotification } from "element-plus";
 import { useUserStore } from "./user.store";
 
 export const useJobTitleStore = defineStore("jobTitle", () => {
+  const jobTitles = ref<JobTitle[]>([]);
   const isLoading = ref(false);
 
-  const fetchJobTitles = async () => {
+  const fetchJobTitles = async (isActive: boolean = false) => {
     try {
       isLoading.value = true;
       const jobTitleModel = new JobTitleModel();
-      return await jobTitleModel.getJobTitles();
+      const data = await jobTitleModel.getJobTitles(isActive);
+      jobTitles.value = Array.isArray(data) ? [...data] : [];
+      return jobTitles.value;
     } catch (error) {
+      console.error(error);
+      jobTitles.value = [];
       ElNotification({
         title: "Error",
         message: "No se pudieron cargar los cargos",
         type: "error",
       });
+      return [];
     } finally {
       isLoading.value = false;
     }

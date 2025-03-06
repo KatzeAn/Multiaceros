@@ -58,14 +58,14 @@
     </el-tabs>
 
     <el-dialog v-model="isDialogVisible" title="Cambiar Rol" width="30%">
-      <el-select v-model="selectedRoleId" placeholder="Selecciona un rol">
-        <el-option v-for="role in roles" :key="role.id" :label="role.name" :value="role.id" />
-      </el-select>
-      <template #footer>
-        <el-button @click="isDialogVisible = false">Cancelar</el-button>
-        <el-button type="primary" @click="confirmRoleChange">Confirmar</el-button>
-      </template>
-    </el-dialog>
+  <el-select v-model="selectedRoleId" placeholder="Selecciona un rol">
+    <el-option v-for="role in availableRoles"  :key="role.id" :label="role.name" :value="role.id" />
+  </el-select>
+  <template #footer>
+    <el-button @click="isDialogVisible = false">Cancelar</el-button>
+    <el-button type="primary" @click="confirmRoleChange">Confirmar</el-button>
+  </template>
+</el-dialog>
   </div>
 </template>
 
@@ -79,27 +79,25 @@ import ManageNotificacions from "@/presentation/components/ManageNotifications.v
 import ManageContracts from "@/presentation/components/ManageContracts.vue";
 import graficConnection from "@/presentation/components/graficConnection.vue";
 
+const availableRoles = computed(() => roleStore.roles); 
 const userStore = useUserStore();
 const roleStore = useRoleStore();
 
 const searchQuery = ref("");
 const users = ref([]);
-const roles = ref([]);
 const isDialogVisible = ref(false);
 const selectedRoleId = ref(null);
 const selectedUser = ref(null);
-const notifications = ref([]);
 const activeTab = ref("users");
 
 onMounted(async () => {
   const result = await userStore.fetchUsers();
   users.value = Array.isArray(result) ? result : result.users || [];
-  await roleStore.fetchRoles();
-  roles.value = roleStore.roles;
+  await roleStore.fetchRoles(true)
 });
 
 const filteredUsers = computed(() =>
-  users.value.filter(user =>
+  users.value.filter((user) =>
     user.userFirstName.toLowerCase().includes(searchQuery.value.toLowerCase()) ||
     user.userEmail.toLowerCase().includes(searchQuery.value.toLowerCase())
   )

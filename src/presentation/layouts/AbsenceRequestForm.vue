@@ -92,7 +92,7 @@ const absenceTypes = ref<{ label: string; value: string }[]>([]);
 
 onMounted(async () => {
   try {
-    const response = await fetchAbsenceTypes(); 
+    const response = await fetchAbsenceTypes(true); 
     console.log("Respuesta de fetchAbsenceTypes:", response); 
 
     if (Array.isArray(response.absenceList)) {

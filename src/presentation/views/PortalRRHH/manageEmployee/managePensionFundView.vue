@@ -75,7 +75,7 @@
 
 
 <script lang="ts" setup>
-import { ref } from "vue";
+import { ref, onMounted } from "vue";
 import { usePensionFundViewModel } from "@/presentation/viewmodels/pensionFundViewModel";
 import { usePensionFundStore } from "@/presentation/stores/pensionFund.store";
 
@@ -93,6 +93,7 @@ const {
   submitForm,
   pensionFundForm,
   showInactive,
+  loadPensionFund
 } = usePensionFundViewModel();
 
 const isEditModalVisible = ref(false);
@@ -102,17 +103,17 @@ const originalEditForm = ref({ id: null, name: "" });
 const openEditModal = (pensionFund) => {
   editForm.value.id = pensionFund.id;
   editForm.value.name = pensionFund.pensionFundName;
-  originalEditForm.value = JSON.parse(JSON.stringify(editForm.value)); 
+  originalEditForm.value = {...editForm.value}
   isEditModalVisible.value = true;
 };
 
 const editPensionFund = async () => {
   if (!editForm.value.id || !editForm.value.name.trim()) return;
-  if (JSON.stringify(editForm.value) !== JSON.stringify(originalEditForm.value)) {
+  if (editForm.value.id !== originalEditForm.value.id || editForm.value.name !== originalEditForm.value.name) {
     try {
       await pensionFundStore.updatePensionFundRequest(editForm.value.id, editForm.value.name);
       isEditModalVisible.value = false;
-      loadFund();
+      loadPensionFund();
     } catch (error) {
       console.error(error);
     }
@@ -122,15 +123,11 @@ const editPensionFund = async () => {
 const deleteFund = async (id: number) => {
   try {
     await pensionFundStore.deletePensionFundRequest(id);
-    await loadFund();
+    await loadPensionFund();
   } catch (error) {
     console.error("Error al eliminar el fondo de pensión", error);
   }
 };
 
-
-const loadFund = async () => {
-  const data = await pensionFundStore.fetchPensionFund();
-  pensionFundList.value = data;
-};
+onMounted(loadPensionFund)
 </script>

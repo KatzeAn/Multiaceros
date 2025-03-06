@@ -72,7 +72,7 @@
 </template>
 
 <script lang="ts" setup>
-import { ref } from "vue";
+import { ref, onMounted } from "vue";
 import { useEpsStore } from "@/presentation/stores/eps.store";
 import { useEpsViewModel } from "@/presentation/viewmodels/epsViewModel";
 
@@ -80,7 +80,6 @@ const epsStore = useEpsStore();
 const {
   epsList,
   isLoading,
-  search,
   currentPage,
   pageSize,
   ruleFormRef,
@@ -91,6 +90,7 @@ const {
   submitForm,
   epsForm,
   showInactive,
+  loadEps
 } = useEpsViewModel();
 
 const isEditModalVisible = ref(false);
@@ -109,7 +109,7 @@ const editEps = async () => {
   try {
     await epsStore.updateEpsRequest(editForm.value.id, editForm.value.name);
     isEditModalVisible.value = false;
-    loadEps();
+    await loadEps();
   } catch (error) {
     console.error(error);
   }
@@ -118,14 +118,11 @@ const editEps = async () => {
 const deleteEps = async (id: number) => {
   try {
     await epsStore.deleteEpsRequest(id); 
-    loadEps(); 
+    await loadEps(); 
   } catch (error) {
-    console.error("Error al eliminar EPS:", error);
+    console.error( error);
   }
 };
 
-const loadEps = async () => {
-  const data = await epsStore.fetchEps();
-  epsList.value = data;
-};
+onMounted(loadEps); 
 </script>

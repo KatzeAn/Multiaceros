@@ -84,7 +84,7 @@
 </template>
 
 <script lang="ts" setup>
-import { ref } from "vue";
+import { ref, onMounted } from "vue";
 import { useDivisionStore } from "@/presentation/stores/division.store";
 import { useDepartmentViewModel } from "@/presentation/viewmodels/departmentViewModel";
 
@@ -102,6 +102,7 @@ const {
   submitForm,
   divisionForm,
   showInactive,
+  loadDivision
 } = useDepartmentViewModel();
 
 const isEditModalVisible = ref(false);
@@ -111,17 +112,17 @@ const originalEditForm = ref({ id: null, name: "" });
 const openEditModal = (division) => {
   editForm.value.id = division.id;
   editForm.value.name = division.name;
-  originalEditForm.value = JSON.parse(JSON.stringify(division));
+  originalEditForm.value = { ...editForm.value };
   isEditModalVisible.value = true;
 };
 
 const editDivision = async () => {
   if (!editForm.value.id || !editForm.value.name.trim()) return;
-  if (JSON.stringify(editForm.value) !== JSON.stringify(originalEditForm.value)) {
+  if (editForm.value.id !== originalEditForm.value.id || editForm.value.name !== originalEditForm.value.name) {
     try {
       await divisionStore.updateDivisionRequest(editForm.value.id, editForm.value.name);
       isEditModalVisible.value = false;
-      loadDivisions();
+      loadDivision(); 
     } catch (error) {
       console.error(error);
     }
@@ -131,12 +132,10 @@ const editDivision = async () => {
 const deactivateDivision = async (id: number) => {
   try {
     await divisionStore.deleteDivisionRequest(id);
-    loadDivisions();
+    await loadDivision();
   } catch (error) {
   }
 };
-const loadDivisions = async () => {
-  const data = await divisionStore.fetchDivision();
-  divisionList.value = data;
-};
+
+onMounted(loadDivision); 
 </script>

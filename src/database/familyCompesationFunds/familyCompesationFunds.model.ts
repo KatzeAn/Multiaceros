@@ -5,11 +5,8 @@ import { apiRequest } from "@/presentation/api/axiosInstance";
 export class FamilyCompesationFundsModel
   implements FamilyCompesationFundsRepository
 {
-  getFamilyCompesationFunds(): Promise<FamilyCompesationFunds[]> {
-    return apiRequest<FamilyCompesationFunds[]>(
-      "get",
-      "FamilyCompesationFunds/GetFamilyCompesationFunds"
-    );
+  getFamilyCompesationFunds(isActive: boolean): Promise<FamilyCompesationFunds[]> {
+    return apiRequest<FamilyCompesationFunds[]>( "get",`/FamilyCompesationFunds?isActive=${isActive}`);
   }
   createFamilyCompesationFunds(
     data: FamilyCompesationFunds

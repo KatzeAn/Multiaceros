@@ -25,8 +25,8 @@ export class AbsenceModel extends AbsenceRepository {
   getRejectedAbsences(): Promise<Absence[]> {
     return apiRequest<Absence[]>("get", "/Absence/Rejected");
   }
-  getAbsenceTypes(): Promise<Absence[]> {
-    return apiRequest<Absence[]>("get", "/Absence/absence-types");
+  getAbsenceTypes(isActive: boolean): Promise<Absence[]> {
+    return apiRequest<Absence[]>("get", `/AbsenseTypes?isActive=${isActive}`);
   }
   
 

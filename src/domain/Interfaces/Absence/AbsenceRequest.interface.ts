@@ -7,4 +7,5 @@ export interface AbsenceRequest {
     Comment: string;
     EvidenceFilePath: string;
     UserId: string;
+    isActive: boolean;
 }

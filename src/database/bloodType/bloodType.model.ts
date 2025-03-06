@@ -3,7 +3,7 @@ import type { BloodTypeRepository } from "@/domain/repository/bloodType/bloodTyp
 import { apiRequest } from "@/presentation/api/axiosInstance";
 
 export class BloodTypeModel implements BloodTypeRepository {
-    getBloodTypes(): Promise<BloodType[]> {
-        return apiRequest<BloodType[]>("get", "/BloodType");
+    getBloodTypes(isActive: boolean): Promise<BloodType[]> {
+        return apiRequest<BloodType[]>("get", `/BloodType?isActive=${isActive}`);
     }
 }

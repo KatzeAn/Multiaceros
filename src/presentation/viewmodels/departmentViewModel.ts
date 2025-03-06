@@ -53,7 +53,7 @@ const filterTableData = computed(() =>
   };
 
   const loadDivision = async () => {
-    divisionList.value = (await divisionStore.fetchDivision()) || [];
+    divisionList.value = (await divisionStore.fetchDivision(!showInactive.value)) || [];
   };
 
   const submitForm = async (formEl: FormInstance | undefined) => {
@@ -93,7 +93,11 @@ const filterTableData = computed(() =>
       pageSize: pageSize.value,
     });
   });
-
+  
+  watch(showInactive, () => {
+    loadDivision();
+  });
+  
   onMounted(async () => {
     await loadDivision();
   });
@@ -112,5 +116,6 @@ const filterTableData = computed(() =>
     submitForm,
     divisionForm,
     showInactive,
+    loadDivision
   };
 }

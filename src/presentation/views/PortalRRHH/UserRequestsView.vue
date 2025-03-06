@@ -1,0 +1,141 @@
+<template>
+    <el-row class="mb-4" :gutter="16">
+      <el-col :span="24">
+        <span class="font-bold text-2xl">Resumen de Solicitudes</span>
+      </el-col>
+  
+      <el-col :xs="24" :sm="12" :md="8" :lg="8" class="mb-4 sm:mb-0">
+        <div class="statistic-card bg-[var(--success-alt-color)]">
+          <el-statistic :value="approvedRequests.length">
+            <template #title>
+              <div style="display: inline-flex; align-items: center">
+                Solicitudes Aprobadas
+                <el-tooltip effect="dark" content="Número de solicitudes aprobadas este mes" placement="top">
+                  <el-icon style="margin-left: 4px" :size="12">
+                    <Warning />
+                  </el-icon>
+                </el-tooltip>
+              </div>
+            </template>
+          </el-statistic>
+        </div>
+      </el-col>
+  
+      <el-col :xs="24" :sm="12" :md="8" :lg="8" class="mb-4 sm:mb-0">
+        <div class="statistic-card bg-[var(--info-alt-color)]">
+          <el-statistic :value="requests.length">
+            <template #title>
+              <div style="display: inline-flex; align-items: center">
+                Total de Solicitudes
+                <el-tooltip effect="dark" content="Total de solicitudes creadas este mes" placement="top">
+                  <el-icon style="margin-left: 4px" :size="12">
+                    <Warning />
+                  </el-icon>
+                </el-tooltip>
+              </div>
+            </template>
+          </el-statistic>
+        </div>
+      </el-col>
+    </el-row>
+    
+    <el-tabs v-model="activeTab">
+      <el-tab-pane label="Pendientes" name="pending">
+        <el-table :data="pendingRequests" style="width: 100%" stripe>
+          <el-table-column prop="firstName" label="Nombre" />
+          <el-table-column prop="lastName" label="Apellido" />
+          <el-table-column prop="position" label="Cargo" />
+          <el-table-column prop="department" label="Departamento" />
+          <el-table-column label="Acciones" width="200">
+            <template #default="{ row }">
+              <el-button type="primary" @click="openReviewModal(row)">Revisar</el-button>
+            </template>
+          </el-table-column>
+        </el-table>
+      </el-tab-pane>
+    
+      <el-tab-pane label="Aprobados" name="approved">
+        <el-table :data="approvedRequests" style="width: 100%" stripe>
+          <el-table-column prop="firstName" label="Nombre" />
+          <el-table-column prop="lastName" label="Apellido" />
+          <el-table-column prop="position" label="Cargo" />
+          <el-table-column prop="department" label="Departamento" />
+          <el-table-column label="Estado">
+            <template #default><el-tag type="success">Aprobado</el-tag></template>
+          </el-table-column>
+        </el-table>
+      </el-tab-pane>
+    
+      <el-tab-pane label="Rechazados" name="rejected">
+        <el-table :data="rejectedRequests" style="width: 100%" stripe>
+          <el-table-column prop="firstName" label="Nombre" />
+          <el-table-column prop="lastName" label="Apellido" />
+          <el-table-column prop="position" label="Cargo" />
+          <el-table-column prop="department" label="Departamento" />
+          <el-table-column label="Estado">
+            <template #default><el-tag type="danger">Rechazado</el-tag></template>
+          </el-table-column>
+        </el-table>
+      </el-tab-pane>
+    </el-tabs>
+    
+    <el-dialog v-model="isReviewModalVisible" title="Revisión de Solicitud" width="500px">
+      <el-form label-position="top">
+        <el-form-item label="Correo Electrónico">
+          <el-input v-model="selectedRequest.email" disabled />
+        </el-form-item>
+        <el-form-item label="Títulos o certificaciones">
+          <el-input v-model="selectedRequest.titles" disabled />
+        </el-form-item>
+        <el-form-item label="Motivo de la Solicitud">
+          <el-input type="textarea" v-model="selectedRequest.reason" disabled />
+        </el-form-item>
+      </el-form>
+      <template #footer>
+        <el-button @click="isReviewModalVisible = false">Cerrar</el-button>
+        <el-button type="danger" @click="rejectRequest">Rechazar</el-button>
+        <el-button type="success" @click="approveRequest">Aprobar</el-button>
+      </template>
+    </el-dialog>
+  </template>
+  
+  <script lang="ts" setup>
+  import { ref, computed } from "vue";
+  
+  const activeTab = ref("pending");
+  const isReviewModalVisible = ref(false);
+  const selectedRequest = ref({});
+  
+  const requests = ref([
+    { id: 1, firstName: "Juan", lastName: "Pérez", position: "Desarrollador", department: "IT", email: "juan@example.com", titles: "Ingeniero", reason: "Actualizar datos", status: "pending" },
+    { id: 2, firstName: "Ana", lastName: "Gómez", position: "Analista", department: "Recursos Humanos", email: "ana@example.com", titles: "Psicóloga", reason: "Corrección", status: "approved" },
+  ]);
+  
+  const pendingRequests = computed(() => requests.value.filter(r => r.status === "pending"));
+  const approvedRequests = computed(() => requests.value.filter(r => r.status === "approved"));
+  const rejectedRequests = computed(() => requests.value.filter(r => r.status === "rejected"));
+  
+  const openReviewModal = (request) => {
+    selectedRequest.value = { ...request };
+    isReviewModalVisible.value = true;
+  };
+  
+  const approveRequest = () => {
+    selectedRequest.value.status = "approved";
+    isReviewModalVisible.value = false;
+  };
+  
+  const rejectRequest = () => {
+    selectedRequest.value.status = "rejected";
+    isReviewModalVisible.value = false;
+  };
+  </script>
+  
+  <style scoped>
+  .statistic-card {
+    padding: 20px;
+    border-radius: 10px;
+    color: white;
+  }
+  </style>
+  

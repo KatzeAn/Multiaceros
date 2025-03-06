@@ -55,7 +55,7 @@ export function useSeveranceFundViewModel() {
 
   const loadSeveranceFund = async () => {
     severanceFundList.value =
-      (await severanceFundStore.fetchSeveranceFund()) || [];
+      (await severanceFundStore.fetchSeveranceFund(!showInactive.value)) || [];
   };
 
   const submitForm = async (formEl: FormInstance | undefined) => {
@@ -96,6 +96,10 @@ export function useSeveranceFundViewModel() {
       pageSize: pageSize.value,
     });
   });
+  watch(showInactive, () => {
+    loadSeveranceFund();
+  });
+
 
   onMounted(async () => {
     await loadSeveranceFund();
@@ -115,5 +119,6 @@ export function useSeveranceFundViewModel() {
     submitForm,
     severanceFundForm,
     showInactive,
+    loadSeveranceFund
   };
 }

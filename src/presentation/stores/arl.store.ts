@@ -6,15 +6,19 @@ import type { Arl } from "@/domain/Interfaces/Arl/Arl.interface";
 import { useUserStore } from "./user.store";
 
 export const useArlStore = defineStore("arl", () => {
+  const arlList = ref<Arl[]>([]);
   const isLoading = ref(false);
 
-  const fetchArl = async () => {
+  const fetchArl = async (isActive: boolean = false) => {
     try {
       isLoading.value = true;
       const arlModel = new ArlModel();
-      const data = await arlModel.getAll();
-      return Array.isArray(data) ? data : [];
+      const data = await arlModel.getAll(isActive);
+      arlList.value = Array.isArray(data) ? [...data] : [];
+      return arlList.value;
     } catch (error) {
+      console.error(error);
+      arlList.value = [];
       ElNotification({
         title: "Error",
         message: "No se pudieron cargar las ARL",

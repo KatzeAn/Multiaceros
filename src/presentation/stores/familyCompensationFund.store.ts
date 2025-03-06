@@ -8,16 +8,19 @@ import { useUserStore } from "./user.store";
 export const useFamilyCompensationFundStore = defineStore(
   "familyCompensationFund",
   () => {
+    const familyCompensationFunds = ref<FamilyCompensationFunds[]>([]);
     const isLoading = ref(false);
 
-    const fetchFamilyCompensationFund = async () => {
+    const fetchFamilyCompensationFund = async (isActive: boolean = false) => {
       try {
         isLoading.value = true;
         const familyCompensationFundModel = new FamilyCompesationFundsModel();
-        const data =
-          await familyCompensationFundModel.getFamilyCompesationFunds();
-        return Array.isArray(data) ? data : [];
+        const data = await familyCompensationFundModel.getFamilyCompesationFunds(isActive);
+        familyCompensationFunds.value = Array.isArray(data) ? [...data] : [];
+        return familyCompensationFunds.value;
       } catch (error) {
+        console.error(error);
+        familyCompensationFunds.value = [];
         ElNotification({
           title: "Error",
           message: "No se pudieron cargar los fondos de compensación familiar",

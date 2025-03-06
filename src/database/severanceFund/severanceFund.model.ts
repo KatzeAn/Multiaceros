@@ -3,8 +3,8 @@ import type { SeveranceFundRepository } from "@/domain/repository/severanceFund/
 import { apiRequest } from "@/presentation/api/axiosInstance";
 
 export class SeveranceFundModel implements SeveranceFundRepository {
-    getSeveranceFund(): Promise<SeveranceFund[]> {
-        return apiRequest<SeveranceFund[]>("get", "/SeveranceFund/GetSeveranceFund");
+    getSeveranceFund(isActive: boolean): Promise<SeveranceFund[]> {
+        return apiRequest<SeveranceFund[]>("get", `/SeveranceFund?isActive=${isActive}`);
     }
     createSeveranceFund(data: SeveranceFund): Promise<SeveranceFund> {
         return apiRequest<SeveranceFund>("post", "/SeveranceFund/CreateSeveranceFund", { SeveranceFundName: data.severanceFundName, CreatedBy: data.createdBy });

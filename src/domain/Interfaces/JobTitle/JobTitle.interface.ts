@@ -3,4 +3,5 @@ export interface JobTitle {
   name: string;
   createdBy?: string;
   modifiedBy?: string;
+  isActive?: boolean;
 }
