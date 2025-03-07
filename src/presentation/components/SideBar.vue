@@ -211,24 +211,18 @@
       <div class="px-6 pt-4">
         <ul class="flex flex-col space-y-2">
           <!-- Configuraciones -->
-          <li>
-            <div
-              class="text-gray-500"
-              :class="{
-                'hover:text-white hover:bg-gray-800': false,
-                'opacity-50 cursor-not-allowed pointer-events-none': true,
-              }"
+        <li>
+          <div class="text-gray-500 hover:text-white hover:bg-gray-800">
+            <router-link
+              to="/configuraciones"
+              class="flex items-center w-full pl-2 pr-4 py-2 rounded"
             >
-              <router-link
-                to="#"
-                class="flex item-center w-full pl-2 pr-4 py-2 rounded"
-                @click.prevent
-              >
-                <span class="material-symbols-outlined pr-2">settings</span>
-                Configuraciones
-              </router-link>
-            </div>
-          </li>
+              <span class="material-symbols-outlined pr-2">settings</span>
+              Configuraciones
+            </router-link>
+          </div>
+        </li>
+
         </ul>
       </div>
     </el-scrollbar>

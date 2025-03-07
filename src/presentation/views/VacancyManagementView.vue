@@ -338,15 +338,15 @@ const removeRequirement = (index: number) => {
 const loadData = async () => {
   try {
     const store = useContracTypeStore();
-    await store.fetchContractType();
+    await store.fetchContractType(true);
     contractTypeList.value = store.contractTypeList;
 
     isLoadingJobTitles.value = true;
-    jobTitleList.value = await jobTitleStore.fetchJobTitles();
+    jobTitleList.value = await jobTitleStore.fetchJobTitles(true);
     isLoadingJobTitles.value = false;
 
     isLoadingDivisions.value = true;
-    divisionList.value = await divisionStore.fetchDivision();
+    divisionList.value = await divisionStore.fetchDivision(true);
     isLoadingDivisions.value = false;
   } catch (error) {
     console.error("Error cargando datos:", error);
@@ -384,7 +384,6 @@ const paginatedData = computed(() => {
 
 watch(showInactive, async () => {
   await jobPostingStore.fetchJobPostingsCopy(showInactive.value);
-  console.log("Datos en jobPostingStore después del fetch:", jobPostingStore.jobPostings);
 });
 
 const handleSizeChange = (size: number) => {

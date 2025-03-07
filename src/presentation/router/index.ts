@@ -232,6 +232,11 @@ const router = createRouter({
         },
       ],
     },
+    {
+      path: "/configuraciones",
+      name: "Configuraciones",
+      component: () => import("../views/SettingsView.vue"),
+    },
 
     {
       path: "/:pathMatch(.*)*",
