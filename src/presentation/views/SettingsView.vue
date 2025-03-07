@@ -1,7 +1,10 @@
 <template>
   <el-card shadow="never">
     <template #header>
-      <h2 class="text-xl text-gray-700 font-semibold">Configuración de Notificaciones</h2>
+      <div style="display: flex; align-items: center;">
+        <el-icon><Bell /></el-icon>
+        <h2 class="text-xl text-gray-700 font-semibold" style="margin-left: 8px;">Configuración de Notificaciones</h2>
+      </div>
       <el-checkbox v-model="showInactive" class="mt-2">Mostrar Inactivos</el-checkbox>
     </template>
 
@@ -68,6 +71,7 @@
 import { ref, onMounted} from "vue";
 import { useNotificationConfigStore } from "@/presentation/stores/Notifications.store";
 import { useNotificationConfigViewModel } from "@/presentation/viewmodels/NotificationsViewModel";
+import { Bell } from '@element-plus/icons-vue';
 
 const notificationStore = useNotificationConfigStore();
 const {
