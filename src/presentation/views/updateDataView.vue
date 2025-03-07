@@ -56,7 +56,7 @@
   
             <el-form-item>
               <el-button type="primary" @click="enviarSolicitud" round>
-                <el-icon><Upload /></el-icon> Enviar Solicitud
+                Enviar Solicitud
               </el-button>
             </el-form-item>
           </el-form>
@@ -84,7 +84,7 @@
   
             <el-form-item>
               <el-button type="primary" @click="enviarSolicitudPassword" round>
-                <el-icon><Check /></el-icon> Enviar Solicitud
+                Enviar Solicitud
               </el-button>
             </el-form-item>
           </el-form>
@@ -95,8 +95,6 @@
   </template>
   
   <script>
-  import { Message, CollectionTag, School, OfficeBuilding, Flag, Edit, Upload, Lock, Key, Check } from "@element-plus/icons-vue";
-  
   export default {
     data() {
       return {
