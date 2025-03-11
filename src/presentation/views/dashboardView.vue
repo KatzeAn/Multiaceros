@@ -7,7 +7,7 @@
         <el-icon :size="50" class="text-3xl ml-3"><Avatar /></el-icon>
         <div class="ml-6">
           <p class="text-gray-500 text-sm uppercase font-medium">Usuarios Conectados</p>
-          <p class="text-2xl font-semibold text-gray-900">150</p>
+          <p class="text-2xl font-semibold text-gray-900">{{ connectedUsersCount }}</p>
         </div>
       </div>
 
@@ -70,7 +70,7 @@
 </template>
 
 <script setup>
-import { ref, computed, onMounted } from "vue";
+import { ref, computed, onMounted, onUnmounted } from "vue";
 import { useUserStore } from "@/presentation/stores/user.store";
 import { useRoleStore } from "@/presentation/stores/role.store";
 import loggedUsers from "@/presentation/components/loggedUsers.vue";
@@ -89,11 +89,29 @@ const isDialogVisible = ref(false);
 const selectedRoleId = ref(null);
 const selectedUser = ref(null);
 const activeTab = ref("users");
+const connectedUsersCount = ref(0);
+let interval = null;
+
+const fetchActiveUsers = async () => {
+  try {
+    connectedUsersCount.value = await userStore.getUserCount();
+  } catch (error) {
+    console.error("Error al obtener usuarios conectados", error);
+  }
+};
 
 onMounted(async () => {
   const result = await userStore.fetchUsers();
   users.value = Array.isArray(result) ? result : result.users || [];
-  await roleStore.fetchRoles(true)
+  await roleStore.fetchRoles(true);
+  fetchActiveUsers();
+  interval = setInterval(() => {
+    fetchActiveUsers();
+  }, 30000); // Actualiza cada 30 segundos
+});
+
+onUnmounted(() => {
+  clearInterval(interval);
 });
 
 const filteredUsers = computed(() =>
