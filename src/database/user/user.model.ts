@@ -18,4 +18,10 @@ export class UserModel extends UserRepository {
   async getBirthdaysOfMonth(): Promise<UserBirthdayList> {
     return apiRequest<UserBirthdayList>("get", "/User/GetBirthdays");
   }
+  heartbeat(userId: string): Promise<void> {
+    return apiRequest<void>("post", "/User/heartbeat",  userId );
+}
+  getUserCount(): Promise<number> {
+    return apiRequest<number>("get", "/User/count");
+  }
 }
