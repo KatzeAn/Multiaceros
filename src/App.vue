@@ -1,31 +1,47 @@
 <script setup lang="ts">
-import { RouterLink, RouterView } from "vue-router";
+import { RouterView } from "vue-router";
 import NavBar from "./presentation/components/NavBar.vue";
 import SideBar from "./presentation/components/SideBar.vue";
+import ChatComponent from "@/presentation/components/chatBot.vue";
 import { onMounted, onUnmounted, ref } from "vue";
-
-const asideWidth = ref("258px"); // Valor inicial
-
+import {useUserStore} from "@/presentation/stores/user.store";
 import { useAuthStore } from "./presentation/stores/auth.store";
 
+const asideWidth = ref("258px"); // Valor inicial
+const isModalVisible = ref(false); 
 const authStore = useAuthStore();
+const userStore = useUserStore();
+let interval: ReturnType<typeof setInterval>;
 
 const resetTimer = () => {
   authStore.resetInactivityTimer();
+};
+
+const sendHeartbeat = async () => {
+  try {
+    await userStore.heartbeat();
+  } catch (error) {
+    console.error("Error sending heartbeat:", error);
+  }
 };
 
 onMounted(() => {
   window.addEventListener("mousemove", resetTimer);
   window.addEventListener("keydown", resetTimer);
   window.addEventListener("click", resetTimer);
+
+  sendHeartbeat();
+  interval = setInterval(() => {
+    sendHeartbeat();
+  }, 30000); // Cada 30 segundos
 });
 
 onUnmounted(() => {
   window.removeEventListener("mousemove", resetTimer);
   window.removeEventListener("keydown", resetTimer);
   window.removeEventListener("click", resetTimer);
+  clearInterval(interval);
 });
-
 </script>
 
 <template>
@@ -34,11 +50,7 @@ onUnmounted(() => {
       <SideBar @update:asideWidth="(width) => (asideWidth = width)" />
     </el-aside>
     <el-container>
-      <el-header
-        height="60px"
-        class="no-margin-padding"
-        v-if="!$route.meta.hideNavbar"
-      >
+      <el-header height="60px" class="no-margin-padding" v-if="!$route.meta.hideNavbar">
         <NavBar />
       </el-header>
       <el-main class="prueba no-margin-padding">
@@ -46,6 +58,15 @@ onUnmounted(() => {
         <RouterView v-if="$route.meta.hideNavbar" />
       </el-main>
     </el-container>
+    <img 
+      src="@/presentation/assets/avatar.png" 
+      alt="Chat"  
+      class="fixed bottom-5 right-5 w-16 h-16 rounded-full cursor-pointer shadow-lg"
+      @click="isModalVisible = true"
+    />
+    <div v-show="isModalVisible" class="fixed bottom-20 right-5 bg-white rounded-lg shadow-lg p-4 z-50">
+      <ChatComponent @closeChat="isModalVisible = false" />
+    </div>
   </el-container>
 </template>
 

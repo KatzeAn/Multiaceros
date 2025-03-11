@@ -83,6 +83,26 @@ export const useUserStore = defineStore('user', () => {
         return result;
     };
 
+    const heartbeat = async () => {
+        try {
+            const userId = getUserId.value;
+            const userService = new UserModel();
+            return await userService.heartbeat(userId);
+        } catch (error) {
+            console.error(error);
+            return "";
+        }
+    };
+
+    const getUserCount = async () => {
+        try {
+            const userService = new UserModel();
+            return await userService.getUserCount();
+        } catch (error) {
+            console.error(error);
+            return 0;
+        }
+    };
     return {
         isAuthenticated,
         getUsername,
@@ -92,5 +112,7 @@ export const useUserStore = defineStore('user', () => {
         users,
         loadingUsers,
         fetchBirthdaysOfMonth,
-    }
+        heartbeat,
+        getUserCount,
+    };
 });
