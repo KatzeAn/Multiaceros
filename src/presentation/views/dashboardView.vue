@@ -55,6 +55,11 @@
       <el-tab-pane label="Gestión de Contratos" name="contracts">
         <ManageContracts />
       </el-tab-pane>
+
+      <el-tab-pane label="Subir  Contratos" name="contractsupload">
+        <UploadContracts/>
+      </el-tab-pane>
+
     </el-tabs>
 
     <el-dialog v-model="isDialogVisible" title="Cambiar Rol" width="30%">
@@ -78,6 +83,7 @@ import { Avatar } from '@element-plus/icons-vue';
 import ManageNotificacions from "@/presentation/components/ManageNotifications.vue";
 import ManageContracts from "@/presentation/components/ManageContracts.vue";
 import graficConnection from "@/presentation/components/graficConnection.vue";
+import UploadContracts from "@/presentation/components/UploadContracts.vue";
 
 const availableRoles = computed(() => roleStore.roles); 
 const userStore = useUserStore();
