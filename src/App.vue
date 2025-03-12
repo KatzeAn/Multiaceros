@@ -19,11 +19,15 @@ const resetTimer = () => {
 
 const sendHeartbeat = async () => {
   try {
+    if (!authStore.loginWithEmailAndPassword) {
+      return;
+    }
     await userStore.heartbeat();
   } catch (error) {
-    console.error("Error sending heartbeat:", error);
+    console.error(error);
   }
 };
+
 
 onMounted(() => {
   window.addEventListener("mousemove", resetTimer);
