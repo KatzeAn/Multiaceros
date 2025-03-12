@@ -56,8 +56,12 @@
         <ManageContracts />
       </el-tab-pane>
 
-      <el-tab-pane label="Subir  Contratos" name="contractsupload">
+      <el-tab-pane label="Subir  Contratos" name="contractsUpload">
         <UploadContracts/>
+      </el-tab-pane>
+
+      <el-tab-pane label="Carga de empleados" name="employe">
+        <EmployeeLoad/>
       </el-tab-pane>
 
     </el-tabs>
@@ -84,6 +88,7 @@ import ManageNotificacions from "@/presentation/components/ManageNotifications.v
 import ManageContracts from "@/presentation/components/ManageContracts.vue";
 import graficConnection from "@/presentation/components/graficConnection.vue";
 import UploadContracts from "@/presentation/components/UploadContracts.vue";
+import EmployeeLoad from "@/presentation/components/EmployeeLoad.vue";
 
 const availableRoles = computed(() => roleStore.roles); 
 const userStore = useUserStore();
