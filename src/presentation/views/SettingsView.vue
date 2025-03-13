@@ -11,7 +11,11 @@
     <el-table :data="paginatedData" border class="w-full min-h-96 mb-4" stripe>
       <el-table-column prop="name" label="Nombre" />
       <el-table-column prop="description" label="Descripción" align="center" />
-      <el-table-column prop="daysBefore" label="Días Antes" align="center" />
+      <el-table-column label="Días Antes" align="center">
+        <template #default="{ row }">
+          <span v-if="row.id !== 2">{{ row.daysBefore }}</span>
+        </template>
+      </el-table-column>
       <el-table-column prop="isActive" label="Estado" align="center">
         <template #default="{ row }">
           <el-tag :type="row.isActive ? 'success' : 'danger'">
@@ -33,12 +37,14 @@
         </template>
       </el-table-column>
     </el-table>
+
     <el-drawer v-model="isDrawerVisible" title="Editar Notificación" size="40%">
-    <el-form :model="editForm" label-width="120px" style="padding: 20px;">
+    <el-form :model="editForm" label-width="auto" style="padding: 20px;">
       <el-form-item label="Nombre">
         <el-input v-model="editForm.name" disabled />
       </el-form-item>
-      <el-form-item label="Días Antes">
+
+      <el-form-item v-if="editForm.id !== 2" label="Días Antes">
         <el-select v-model="editForm.daysBefore" placeholder="Seleccione un período">
           <el-option label="60 días" value="60" />
           <el-option label="30 días" value="30" />
@@ -46,9 +52,15 @@
           <el-option label="5 días" value="5" />
         </el-select>
       </el-form-item>
-      <el-form-item label="Descripción">
+
+      <el-form-item v-if="editForm.id === 2" label="Días de Vacaciones Excedentes" class="el-form-item--medium">
+        <el-input v-model="editForm.excessVacationDays" type="number" min="0" />
+      </el-form-item>
+
+      <el-form-item label="Descripción" class="el-form-item--medium">
         <el-input v-model="editForm.description" type="textarea" :rows="4" />
       </el-form-item>
+
       <el-form-item>
         <el-button type="primary" @click="saveChanges">Guardar</el-button>
         <el-button @click="isDrawerVisible = false">Cancelar</el-button>
@@ -88,7 +100,7 @@ const {
 } = useNotificationConfigViewModel();
 
 const isDrawerVisible = ref(false);
-const editForm = ref({ id: null, name: "", daysBefore: "", isActive: false, description: "" });
+const editForm = ref({ id: null, name: "", daysBefore: "", excessVacationDays: "", isActive: false, description: "" });
 
 const openEditDrawer = (notification) => {
   editForm.value = { ...notification };
@@ -98,11 +110,8 @@ const openEditDrawer = (notification) => {
 const saveChanges = async () => {
   try {
     editForm.value.modifiedBy = userId;
-    const updatedData = {...editForm.value, notificationConfigId: editForm.value.id, };
-    await notificationStore.updateNotificationConfigRequest(
-      editForm.value.id,
-      updatedData
-    );
+    const updatedData = { ...editForm.value, notificationConfigId: editForm.value.id };
+    await notificationStore.updateNotificationConfigRequest(editForm.value.id, updatedData);
     isDrawerVisible.value = false;
     await loadNotifications();
   } catch (error) {
@@ -115,13 +124,9 @@ const toggleStatus = async (notification) => {
     const updatedData = {
       isActive: !notification.isActive,
       modifiedBy: userId,
-      notificationConfigId: notification.id, 
+      notificationConfigId: notification.id,
     };
-    console.log("ID a enviar toggleStatus:", notification.id);
-    await notificationStore.updateNotificationConfigRequest(
-      notification.id,
-      updatedData
-    );
+    await notificationStore.updateNotificationConfigRequest(notification.id, updatedData);
     await loadNotifications();
   } catch (error) {
     console.error(error);

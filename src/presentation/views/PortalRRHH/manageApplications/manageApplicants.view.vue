@@ -30,11 +30,11 @@
         </template>
       </el-table-column>
       <el-table-column prop="jobPostingTitle" label="Cargo aplicado" />
-      <el-table-column label="Etapa">
-        <template #default="{ row }">
-          {{ EmployeePotentialStatusEnum[row.status] }}
-        </template>
-      </el-table-column>
+          <!-- <el-table-column label="Etapa">  -->
+        <!-- <template #default="{ row }"> -->
+          <!-- {{ EmployeePotentialStatusEnum[row.status] }} -->
+        <!-- </template> -->
+      <!-- </el-table-column> -->
       <el-table-column prop="email" label="Correo electrónico" />
       <el-table-column prop="cellPhone" label="Celular" />
       <el-table-column label="Acciones">

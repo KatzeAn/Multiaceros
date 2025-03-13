@@ -119,29 +119,8 @@
     </el-col>
   </el-row>
 
-  <el-button class="floating-button" type="primary" @click="submitForm">Actualizar</el-button>
+  <el-button class="floating" type="primary" @click="submitForm">Actualizar</el-button>
 </template>
-
-<style>
-.floating-button {
-  position: fixed;
-  bottom: 20px;
-  right: 20px;
-  z-index: 1000;
-}
-</style>
-
-
-<style>
-.floating-button {
-  position: fixed;
-  bottom: 20px;
-  right: 20px;
-  z-index: 1000;
-}
-</style>
-
-
 <script lang="ts" setup>
 import { ref, reactive, onMounted } from "vue";
 import type { FormInstance } from "element-plus";
@@ -234,11 +213,7 @@ const submitForm = async () => {
   });
 };
 
-const resetForm = () => {
-  if (formRef.value) {
-    formRef.value.resetFields();
-  }
-};
+
 
 const loadData = async () => {
   const userId = Number(userStore.getUserId);
@@ -267,5 +242,11 @@ onMounted(() => {
     loadData()
 });
 </script>
-
-<style lang="scss" scoped></style>
+<style>
+.floating {
+  position: fixed;
+  bottom: 80px;
+  right: 80px;
+  z-index: 100;
+}
+</style>

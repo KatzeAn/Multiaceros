@@ -4,7 +4,7 @@ export interface NotificationConfig {
     daysBefore: string;
     isActive: boolean;
     description: string;
-    excessVacationDays?: number;
+    excessVacationDays: number;
     modifiedBy: string;
     createdAt?: string;
     updatedAt?: string;

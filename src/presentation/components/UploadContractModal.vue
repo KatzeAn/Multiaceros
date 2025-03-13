@@ -14,7 +14,7 @@
       <div v-if="!archivo" class="text-gray-600">Arrastra y suelta un archivo aquí o haz clic para seleccionar</div>
       <div v-else class="flex justify-between items-center bg-gray-200 p-2 rounded">
         <span class="text-gray-500">{{ archivo.name }}</span>
-        <el-icon class="cursor-pointer  @click.stop="eliminarArchivo"><Close /></el-icon>
+        <el-icon class="cursor-pointer text-red-500" @click.stop="eliminarArchivo"><Close /></el-icon>
       </div>
     </div>
 
