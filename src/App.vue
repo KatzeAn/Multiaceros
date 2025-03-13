@@ -81,14 +81,15 @@ onUnmounted(() => {
     <img 
       src="@/presentation/assets/avatar.png" 
       alt="Chat"  
-      class="fixed bottom-5 right-5 w-16 h-16 rounded-full cursor-pointer shadow-lg"
+      class="fixed bottom-16 right-5 w-16 h-16 rounded-full cursor-pointer shadow-lg"
       @click="isModalVisible = true"
     />
-    <div v-show="isModalVisible" class="fixed bottom-20 right-5 bg-white rounded-lg shadow-lg p-4 z-50">
+    <div v-show="isModalVisible" class="fixed bottom-38 right-5 bg-white rounded-lg shadow-lg p-4 z-50">
       <ChatComponent @closeChat="isModalVisible = false" />
     </div>
   </el-container>
 </template>
+
 
 <style scoped>
 .no-margin-padding {
