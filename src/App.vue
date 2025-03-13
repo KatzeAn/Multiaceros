@@ -3,11 +3,27 @@ import { RouterView } from "vue-router";
 import NavBar from "./presentation/components/NavBar.vue";
 import SideBar from "./presentation/components/SideBar.vue";
 import ChatComponent from "@/presentation/components/chatBot.vue";
-import { onMounted, onUnmounted, ref } from "vue";
+import { computed, onMounted, onUnmounted, ref } from "vue";
 import {useUserStore} from "@/presentation/stores/user.store";
 import { useAuthStore } from "./presentation/stores/auth.store";
 
-const asideWidth = ref("258px"); // Valor inicial
+const isSmallScreen = ref(window.innerWidth < 800);
+
+const handleResize = () => {
+  isSmallScreen.value = window.innerWidth < 800;
+};
+
+onMounted(() => {
+  window.addEventListener('resize', handleResize);
+});
+
+onUnmounted(() => {
+  window.removeEventListener('resize', handleResize);
+});
+
+const asideWidth = computed(() => {
+    return isSmallScreen.value ? '0px' : '258px';
+});
 const isModalVisible = ref(false); 
 const authStore = useAuthStore();
 const userStore = useUserStore();
