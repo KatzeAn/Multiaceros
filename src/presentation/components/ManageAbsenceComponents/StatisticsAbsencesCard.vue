@@ -81,7 +81,7 @@
    </el-row> 
    <el-tabs v-model="activeTab">
     <el-tab-pane label="Pendientes" name="pending">
-      <el-table :data="pendingAbsences" class="custom-table">
+      <el-table :data="pendingAbsences" class="custom-table" style="margin-bottom: 80px;">
         <el-table-column prop="employeeFullName" label="Nombre" width="150" />
         <el-table-column prop="startDate" label="Desde" width="180">
             <template #default="{ row }">
@@ -123,7 +123,7 @@
       </el-table>
     </el-tab-pane>
 
-    <el-tab-pane label="Aprobadas" name="approved">
+    <el-tab-pane label="Aprobadas" name="approved" style="margin-bottom: 80px;">
       <el-table :data="approvedAbsences" class="custom-table">
         <el-table-column prop="employeeFullName" label="Nombre" width="150" />
         <el-table-column prop="startDate" label="Desde" width="180">
@@ -158,7 +158,7 @@
       </el-table>
     </el-tab-pane>
 
-    <el-tab-pane label="Rechazadas" name="rejected">
+    <el-tab-pane label="Rechazadas" name="rejected" style="margin-bottom: 80px;">
       <el-table :data="rejectedAbsences" class="custom-table">
         <el-table-column prop="employeeFullName" label="Nombre" width="150" />
         <el-table-column prop="startDate" label="Desde" width="180">
@@ -192,7 +192,7 @@
       </el-table>
     </el-tab-pane>
 
-    <el-tab-pane label="Historial" name="all">
+    <el-tab-pane label="Historial" name="all" style="margin-bottom: 80px;">
       <el-table :data="allAbsences" class="custom-table">
         <el-table-column prop="employeeFullName" label="Nombre" width="150" />
         <el-table-column prop="startDate" label="Desde" width="180">

@@ -5,10 +5,10 @@
     </template>
 
     <el-card shadow="never" class="mb-6">
-      <el-form inline ref="ruleFormRef" :rules="rules" :model="pensionFundForm" class="flex items-center justify-between">
-        <div class="flex items-center gap-4">
+      <el-form ref="ruleFormRef" :rules="rules" :model="pensionFundForm" class="flex flex-wrap items-center">
+        <div class="flex flex-col items-center gap-4 mb-2 md:mb-0">
           <el-form-item prop="pensionFundName" label="Nombre">
-            <el-input v-model="pensionFundForm.pensionFundName" placeholder="Nombre" clearable />
+            <el-input v-model="pensionFundForm.pensionFundName" placeholder="Nombre" clearable  style="width: 150px;"/>
           </el-form-item>
           <el-form-item>
             <el-button :loading="isLoading" type="primary" @click="submitForm(ruleFormRef)">
@@ -16,7 +16,9 @@
             </el-button>
           </el-form-item>
         </div>
-        <el-checkbox v-model="showInactive">Mostrar Inactivos</el-checkbox>
+        <div class="w-full md:w-auto mt-2 md:mt-0 md:ml-auto">
+          <el-checkbox v-model="showInactive">Mostrar Inactivos</el-checkbox>
+        </div>
       </el-form>
     </el-card>
 
@@ -30,36 +32,31 @@
           </el-tag>
         </template>
       </el-table-column>
-      <el-table-column label="Acciones" align="center">
+      <el-table-column label="Acciones" align="center" width="150">
         <template #default="scope">
           <el-button size="small" @click="openEditModal(scope.row)">
             Editar
           </el-button>
-          <el-button
-            :loading="isLoading"
-            size="small"
-            type="danger"
-            :disabled="!scope.row.isActive"
-            @click="deleteFund(scope.row.id)"
-          >
+          <el-button :loading="isLoading" size="small" type="danger" :disabled="!scope.row.isActive" @click="deleteFund(scope.row.id)">
             Desactivar
           </el-button>
         </template>
       </el-table-column>
     </el-table>
 
-    <el-dialog v-model="isEditModalVisible" title="Editar Fondo de Pension">
-      <el-form>
+    <el-dialog v-model="isEditModalVisible" title="Editar Fondo de Pension" :width="isSmallScreen ? '90%' : '500px'" :style="{ maxWidth: '800px' }">
+      <el-form :label-position="isSmallScreen ? 'top' : 'left'">
         <el-form-item label="Nuevo Nombre">
           <el-input v-model="editForm.name" />
         </el-form-item>
       </el-form>
       <template #footer>
-        <el-button @click="isEditModalVisible = false">Cancelar</el-button>
-        <el-button type="primary" @click="editPensionFund">Guardar Cambios</el-button>
+        <el-button @click="isEditModalVisible = false" :size="isSmallScreen ? 'small' : 'default'">Cancelar</el-button>
+        <el-button type="primary" @click="editPensionFund" :size="isSmallScreen ? 'small' : 'default'">Guardar Cambios</el-button>
       </template>
     </el-dialog>
 
+    <el-pagination v-model:current-page="currentPage" :page-size="pageSize" :page-sizes="[10, 20, 50]" layout="total, sizes, prev, pager, next" :total="pensionFundList.length" @size-change="handleSizeChange" @current-change="handlePageChange" />
     <!-- Paginación -->
     <el-pagination
       v-model:current-page="currentPage"
@@ -75,10 +72,11 @@
 
 
 <script lang="ts" setup>
-import { ref, onMounted } from "vue";
+import { ref, onMounted, computed } from "vue";
 import { usePensionFundViewModel } from "@/presentation/viewmodels/pensionFundViewModel";
 import { usePensionFundStore } from "@/presentation/stores/pensionFund.store";
 
+const isSmallScreen = computed(() => window.innerWidth < 800);
 const pensionFundStore = usePensionFundStore();
 const {
   pensionFundList,

@@ -6,7 +6,7 @@
 
   <el-card shadow="never">
     <template #header>
-      <div class="flex flex-row justify-between">
+      <div class="flex flex-wrap justify-between">
         <h2 class="text-xl text-gray-700 font-semibold">
           Todos los candidatos
         </h2>
@@ -29,17 +29,17 @@
           {{ `${row.firstName} ${row.surName}` }}
         </template>
       </el-table-column>
-      <el-table-column prop="jobPostingTitle" label="Cargo aplicado" />
+      <el-table-column prop="jobPostingTitle" label="Cargo aplicado" width="150" />
           <!-- <el-table-column label="Etapa">  -->
         <!-- <template #default="{ row }"> -->
           <!-- {{ EmployeePotentialStatusEnum[row.status] }} -->
         <!-- </template> -->
       <!-- </el-table-column> -->
-      <el-table-column prop="email" label="Correo electrónico" />
-      <el-table-column prop="cellPhone" label="Celular" />
-      <el-table-column label="Acciones">
+      <el-table-column prop="email" label="Correo electrónico" width="150" />
+      <el-table-column prop="cellPhone" label="Celular" width="150" />
+      <el-table-column label="Acciones" width="150">
   <template #default="scope">
-    <div class="flex gap-2">
+    <div class="flex flex-wrap items-center  gap-2">
       <el-button size="small"  @click="handleRowClick"> Detalles </el-button>
       <el-button disabled size="small" type="danger">
         Desactivar

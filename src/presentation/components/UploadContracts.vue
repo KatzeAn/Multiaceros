@@ -4,10 +4,10 @@
       <el-input v-model="searchQuery" placeholder="Buscar empleado..." clearable class="mb-4" />
       
       <el-table :data="filteredData" border class="w-full min-h-96 mb-4" stripe>
-        <el-table-column label="Nombre" prop="fullName" />
-        <el-table-column label="Correo Electrónico" prop="email" align="center" />
-        <el-table-column label="Cargo" prop="jobTitle" align="center" />
-        <el-table-column label="Departamento" prop="division" align="center" />
+        <el-table-column label="Nombre" prop="fullName" width="150"/>
+        <el-table-column label="Correo Electrónico" prop="email" align="center"  width="150"/>
+        <el-table-column label="Cargo" prop="jobTitle" align="center" width="150"/>
+        <el-table-column label="Departamento" prop="division" align="center" width="150" />
   
         <el-table-column prop="isActive" label="Estado" align="center">
           <template #default="{ row }">
@@ -16,7 +16,7 @@
             </el-tag>
           </template>
         </el-table-column>
-        <el-table-column label="Acciones" align="center">
+        <el-table-column label="Acciones" align="center" width="150">
           <template #default="scope">
             <el-button size="small" @click="openUploadModal">
               Subir contrato

@@ -2,11 +2,11 @@
     <div class="p-6">
       <el-table :data="birthdayUsers" style="width: 100%">
         <el-table-column prop="userFirstName" label="Nombre" />
-        <el-table-column prop="surName" label="Apellido" />
-        <el-table-column prop="birthday" label="Cumpleaños" />
-        <el-table-column label="Recordatorio">
+        <el-table-column prop="surName" label="Apellido"  width="150" />
+        <el-table-column prop="birthday" label="Cumpleaños"  width="150"/>
+        <el-table-column label="Recordatorio"  width="150" >
           <template v-slot="scope">
-            <el-select v-model="scope.row.reminder" placeholder="Selecciona una opción">
+            <el-select v-model="scope.row.reminder" placeholder="Selecciona una opción" >
               <el-option label="No recordar" value="never" />
               <el-option label="30 días antes" value="30days" />
               <el-option label="15 días antes" value="15days" />
@@ -15,7 +15,7 @@
             </el-select>
           </template>
         </el-table-column>
-        <el-table-column label="Acciones">
+        <el-table-column label="Acciones" width="150">
           <template v-slot="scope">
             <el-button size="small" type="danger" @click="removeNotification(scope.row)">
               Deshacer

@@ -128,7 +128,7 @@
     </template>
   </el-table-column>
 
-  <el-table-column label="Acciones">
+  <el-table-column label="Acciones" width="150">
     <template #default="scope">
       <div class="flex space-x-2">
         <el-button size="small" @click="openEditModal(scope.row)">Editar</el-button>

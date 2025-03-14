@@ -9,14 +9,14 @@
     
     <el-table :data="contracts" style="width: 100%" border stripe>
       <el-table-column label="Nombre" prop="userFirstName" />
-      <el-table-column label="Apellido" prop="userSurName" />
-      <el-table-column label="Correo Electrónico" prop="userEmail" />
-      <el-table-column label="Tipo de contrato" prop="contractType" />
-      <el-table-column label="Fecha de finalización del contrato">
+      <el-table-column label="Apellido" prop="userSurName"width="100" />
+      <el-table-column label="Correo Electrónico" prop="userEmail" width="100"/>
+      <el-table-column label="Tipo de contrato" prop="contractType"  width="100"/>
+      <el-table-column label="Fecha de finalización del contrato"  width="150">
         <template #default="{ row }">{{ new Date(row.contractEndDate).toISOString().split('T')[0] }}</template>
       </el-table-column>
       <el-table-column label="Días para vencer" prop="daysRemaining" />
-      <el-table-column label="Acciones" align="center">
+      <el-table-column label="Acciones" align="center" width="150">
         <template #default="{ row }">
           <el-button  size="small"   @click="renewContract(row)"   :disabled="row.willBeRenewed">Renovar Proximamente</el-button>
           <el-button size="small"  @click="openExtendDateModal(row)"> Extender Fecha</el-button>

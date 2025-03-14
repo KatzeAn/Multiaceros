@@ -40,8 +40,8 @@
     </el-row>
     
     <el-tabs v-model="activeTab">
-      <el-tab-pane label="Pendientes" name="pending">
-        <el-table :data="pendingRequests" style="width: 100%" stripe>
+      <el-tab-pane label="Pendientes" name="pending" >
+        <el-table :data="pendingRequests"  stripe style="margin-bottom: 80px;">
           <el-table-column prop="firstName" label="Nombre" />
           <el-table-column prop="lastName" label="Apellido" />
           <el-table-column prop="position" label="Cargo" />
@@ -54,8 +54,8 @@
         </el-table>
       </el-tab-pane>
     
-      <el-tab-pane label="Aprobados" name="approved">
-        <el-table :data="approvedRequests" style="width: 100%" stripe>
+      <el-tab-pane label="Aprobados" name="approved" >
+        <el-table :data="approvedRequests"style="margin-bottom: 80px;" stripe>
           <el-table-column prop="firstName" label="Nombre" />
           <el-table-column prop="lastName" label="Apellido" />
           <el-table-column prop="position" label="Cargo" />
@@ -66,8 +66,8 @@
         </el-table>
       </el-tab-pane>
     
-      <el-tab-pane label="Rechazados" name="rejected">
-        <el-table :data="rejectedRequests" style="width: 100%" stripe>
+      <el-tab-pane label="Rechazados" name="rejected" style="margin-bottom: 80px;">
+        <el-table :data="rejectedRequests" style="margin-bottom: 80px;" stripe>
           <el-table-column prop="firstName" label="Nombre" />
           <el-table-column prop="lastName" label="Apellido" />
           <el-table-column prop="position" label="Cargo" />
@@ -82,13 +82,13 @@
     <el-dialog v-model="isReviewModalVisible" title="Revisión de Solicitud" width="500px">
       <el-form label-position="top">
         <el-form-item label="Correo Electrónico">
-          <el-input v-model="selectedRequest.email" disabled />
+          <el-input  disabled />
         </el-form-item>
         <el-form-item label="Títulos o certificaciones">
-          <el-input v-model="selectedRequest.titles" disabled />
+          <el-input  disabled />
         </el-form-item>
         <el-form-item label="Motivo de la Solicitud">
-          <el-input type="textarea" v-model="selectedRequest.reason" disabled />
+          <el-input type="textarea" disabled />
         </el-form-item>
       </el-form>
       <template #footer>
@@ -109,6 +109,10 @@
   const requests = ref([
     { id: 1, firstName: "Juan", lastName: "Pérez", position: "Desarrollador", department: "IT", email: "juan@example.com", titles: "Ingeniero", reason: "Actualizar datos", status: "pending" },
     { id: 2, firstName: "Ana", lastName: "Gómez", position: "Analista", department: "Recursos Humanos", email: "ana@example.com", titles: "Psicóloga", reason: "Corrección", status: "approved" },
+    { id: 1, firstName: "Juan", lastName: "Pérez", position: "Desarrollador", department: "IT", email: "juan@example.com", titles: "Ingeniero", reason: "Actualizar datos", status: "pending" },
+    { id: 2, firstName: "Ana", lastName: "Gómez", position: "Analista", department: "Recursos Humanos", email: "ana@example.com", titles: "Psicóloga", reason: "Corrección", status: "approved" },
+    { id: 1, firstName: "Juan", lastName: "Pérez", position: "Desarrollador", department: "IT", email: "juan@example.com", titles: "Ingeniero", reason: "Actualizar datos", status: "pending" },
+    { id: 2, firstName: "Ana", lastName: "Gómez", position: "Analista", department: "Recursos Humanos", email: "ana@example.com", titles: "Psicóloga", reason: "Corrección", status: "rejected" },
   ]);
   
   const pendingRequests = computed(() => requests.value.filter(r => r.status === "pending"));

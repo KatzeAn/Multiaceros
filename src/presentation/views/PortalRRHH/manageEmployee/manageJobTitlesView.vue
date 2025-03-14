@@ -5,8 +5,8 @@
     </template>
 
     <el-card shadow="never" class="mb-6">
-      <el-form inline ref="ruleFormRef" :rules="rules" :model="jobTitleForm" class="flex items-center justify-between">
-        <div class="flex items-center gap-4">
+      <el-form inline ref="ruleFormRef" :rules="rules" :model="jobTitleForm" class="flex flex-wrap items-center justify-between">
+        <div class="flex flex-col items-center gap-4 mb-2 md:mb-0">
           <el-form-item prop="name" label="Nombre">
           <el-input
             v-model="jobTitleForm.name"
@@ -24,7 +24,9 @@
             </el-button>
           </el-form-item>
         </div>
+        <div class="w-full md:w-auto mt-2 md:mt-0 md:ml-auto">
         <el-checkbox v-model="showInactive">Mostrar Inactivos</el-checkbox>
+      </div>
       </el-form>
     </el-card>
 
@@ -38,7 +40,7 @@
           </el-tag>
         </template>
       </el-table-column>
-      <el-table-column label="Acciones" align="center">
+      <el-table-column label="Acciones" align="center" width="150">
         <template #default="scope">
           <el-button size="small" @click="openEditModal(scope.row)">
             Editar
@@ -56,15 +58,15 @@
       </el-table-column>
     </el-table>
 
-    <el-dialog v-model="isEditModalVisible" title="Editar Cargo">
-      <el-form>
+    <el-dialog v-model="isEditModalVisible" title="Editar Cargo" :width="isSmallScreen ? '90%' : '500px'" :style="{ maxWidth: '800px' }">
+      <el-form :label-position="isSmallScreen ? 'top' : 'left'">
         <el-form-item label="Nuevo Nombre">
           <el-input v-model="editForm.name" />
         </el-form-item>
       </el-form>
       <template #footer>
-        <el-button @click="isEditModalVisible = false">Cancelar</el-button>
-        <el-button type="primary" @click="editjobTitle">Guardar Cambios</el-button>
+        <el-button @click="isEditModalVisible = false" :size="isSmallScreen ? 'small' : 'default'">Cancelar</el-button>
+        <el-button type="primary" @click="editjobTitle" :size="isSmallScreen ? 'small' : 'default'">Guardar Cambios</el-button>
       </template>
     </el-dialog>
 
@@ -82,10 +84,11 @@
 </template>
 
 <script lang="ts" setup>
-import { ref, onMounted } from "vue";
+import { ref, onMounted, computed } from "vue";
 import { useJobTitleViewModel } from "@/presentation/viewmodels/jobTitleViewModel";
 import {useJobTitleStore} from "@/presentation/stores/jobTitle.store";
 
+const isSmallScreen = computed(() => window.innerWidth < 800);
 const jobTitleStore = useJobTitleStore();
 const {
   jobTitles,

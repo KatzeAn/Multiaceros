@@ -12,9 +12,9 @@
         ref="ruleFormRef"
         :rules="rules"
         :model="familyCompensationFundForm"
-        class="flex items-center justify-between"
+        class="flex flex-wrap items-center justify-between"
       >
-        <div class="flex items-center gap-4">
+        <div class="flex flex-col items-center gap-4">
           <el-form-item prop="compensationFundName" label="Nombre">
             <el-input
               v-model="familyCompensationFundForm.compensationFundName"
@@ -42,7 +42,7 @@
           </el-tag>
         </template>
       </el-table-column>
-      <el-table-column label="Acciones" align="center">
+      <el-table-column label="Acciones" align="center" width="150">
         <template #default="scope">
           <el-button size="small" @click="openEditModal(scope.row)">
             Editar
@@ -61,15 +61,15 @@
     </el-table>
 
     <!-- Modal para editar fondo de compensación -->
-    <el-dialog v-model="isEditModalVisible" title="Editar Fondo de Compensación">
-      <el-form>
+    <el-dialog v-model="isEditModalVisible" title="Editar Fondo de Compensación" :width="isSmallScreen ? '90%' : '500px'" :style="{ maxWidth: '800px' }">
+      <el-form label-position="isSmallScreen ? 'top' : 'left'">
         <el-form-item label="Nuevo Nombre">
           <el-input v-model="editForm.name" />
         </el-form-item>
       </el-form>
       <template #footer>
-        <el-button @click="isEditModalVisible = false">Cancelar</el-button>
-        <el-button type="primary" @click="editFamilyCompensationFund">
+        <el-button @click="isEditModalVisible = false" :size="isSmallScreen ? 'small' : 'default'">Cancelar</el-button>
+        <el-button type="primary" @click="editFamilyCompensationFund" :size="isSmallScreen ? 'small' : 'default'">
           Guardar Cambios
         </el-button>
       </template>
@@ -89,10 +89,11 @@
 </template>
 
 <script lang="ts" setup>
-import { ref, onMounted } from "vue";
+import { ref, onMounted, computed } from "vue";
 import { useFamilyCompensationFundViewModel } from "@/presentation/viewmodels/familyCompensationFundViewModel";
 import { useFamilyCompensationFundStore } from "@/presentation/stores/familyCompensationFund.store";
 
+const isSmallScreen = computed(() => window.innerWidth < 800);
 const familyCompensationFundStore = useFamilyCompensationFundStore();
 const {
   familyCompensationFundList,

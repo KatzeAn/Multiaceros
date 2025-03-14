@@ -5,8 +5,8 @@
     </template>
 
     <el-card shadow="never" class="mb-6">
-      <el-form  inline  ref="ruleFormRef" :rules="rules"  :model="benefitForm" class="flex items-center justify-between" >
-        <div class="flex items-center gap-4">
+      <el-form  inline  ref="ruleFormRef" :rules="rules"  :model="benefitForm" class="flex flex-wrap items-center justify-between" >
+        <div class="flex  flex-col items-center gap-4">
           <el-form-item prop="nameBenefit" label="Nombre">
             <el-input
               v-model="benefitForm.nameBenefit"
@@ -40,7 +40,7 @@
           </el-tag>
         </template>
       </el-table-column>
-      <el-table-column label="Acciones" align="center">
+      <el-table-column label="Acciones" align="center" width="150">
         <template #default="{ row }">
           <el-button size="small" @click="openEditModal(row)">
             Editar
@@ -58,15 +58,15 @@
       </el-table-column>
     </el-table>
 
-    <el-dialog v-model="isEditModalVisible" title="Editar beneficio">
-      <el-form>
+    <el-dialog v-model="isEditModalVisible" title="Editar beneficio" :width="isSmallScreen ? '90%' : '500px'" :style="{ maxWidth: '800px' }">
+      <el-form :label-position="isSmallScreen ? 'top' : 'left'">
         <el-form-item label="Nuevo Nombre">
           <el-input v-model="editForm.name" />
         </el-form-item>
       </el-form>
       <template #footer>
-        <el-button @click="isEditModalVisible = false">Cancelar</el-button>
-        <el-button type="primary" @click="editBenefit">Guardar Cambios</el-button>
+        <el-button @click="isEditModalVisible = false" :size="isSmallScreen ? 'small' : 'default'">Cancelar</el-button>
+        <el-button type="primary" @click="editBenefit" :size="isSmallScreen ? 'small' : 'default'">Guardar Cambios</el-button>
       </template>
     </el-dialog>
 
@@ -84,9 +84,11 @@
 </template>
 
 <script lang="ts" setup>
-import { ref, onMounted } from "vue";
+import { ref, onMounted, computed } from "vue";
 import { useBenefitViewModel } from "@/presentation/viewmodels/benefitViewModel";
 import { useBenefitStore } from "@/presentation/stores/benefit.store";
+
+const isSmallScreen = computed(() => window.innerWidth < 800);
 
 const benefitStore = useBenefitStore();
 const {

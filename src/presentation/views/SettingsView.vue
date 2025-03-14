@@ -9,9 +9,9 @@
     </template>
 
     <el-table :data="paginatedData" border class="w-full min-h-96 mb-4" stripe>
-      <el-table-column prop="name" label="Nombre" />
-      <el-table-column prop="description" label="Descripción" align="center" />
-      <el-table-column label="Días Antes" align="center">
+      <el-table-column prop="name" label="Nombre" width="150" />
+      <el-table-column prop="description" label="Descripción" align="center" width="200" />
+      <el-table-column label="Días Antes" align="center" width="100">
         <template #default="{ row }">
           <span v-if="row.id !== 2">{{ row.daysBefore }}</span>
         </template>
@@ -23,7 +23,7 @@
           </el-tag>
         </template>
       </el-table-column>
-      <el-table-column label="Acciones" align="center">
+      <el-table-column label="Acciones" align="center" width="150">
         <template #default="{ row }">
           <el-button size="small" @click="openEditDrawer(row)">Editar</el-button>
           <el-button
@@ -38,35 +38,35 @@
       </el-table-column>
     </el-table>
 
-    <el-drawer v-model="isDrawerVisible" title="Editar Notificación" size="40%">
-    <el-form :model="editForm" label-width="auto" style="padding: 20px;">
-      <el-form-item label="Nombre">
-        <el-input v-model="editForm.name" disabled />
-      </el-form-item>
+    <el-drawer v-model="isDrawerVisible" title="Editar Notificación" :fullscreen="isSmallScreen" :size="isSmallScreen ? '100%' : '40%'"  >
+      <el-form :model="editForm" label-width="auto" style="padding: 20px;">
+        <el-form-item label="Nombre">
+          <el-input v-model="editForm.name" disabled />
+        </el-form-item>
 
-      <el-form-item v-if="editForm.id !== 2" label="Días Antes">
-        <el-select v-model="editForm.daysBefore" placeholder="Seleccione un período">
-          <el-option label="60 días" value="60" />
-          <el-option label="30 días" value="30" />
-          <el-option label="15 días" value="15" />
-          <el-option label="5 días" value="5" />
-        </el-select>
-      </el-form-item>
+        <el-form-item v-if="editForm.id !== 2" label="Días Antes">
+          <el-select v-model="editForm.daysBefore" placeholder="Seleccione un período">
+            <el-option label="60 días" value="60" />
+            <el-option label="30 días" value="30" />
+            <el-option label="15 días" value="15" />
+            <el-option label="5 días" value="5" />
+          </el-select>
+        </el-form-item>
 
-      <el-form-item v-if="editForm.id === 2" label="Días de Vacaciones Excedentes" class="el-form-item--medium">
-        <el-input v-model="editForm.excessVacationDays" type="number" min="0" />
-      </el-form-item>
+        <el-form-item v-if="editForm.id === 2" label="Días de Vacaciones Excedentes" class="el-form-item--medium">
+          <el-input v-model="editForm.excessVacationDays" type="number" min="0" />
+        </el-form-item>
 
-      <el-form-item label="Descripción" class="el-form-item--medium">
-        <el-input v-model="editForm.description" type="textarea" :rows="4" />
-      </el-form-item>
+        <el-form-item label="Descripción" class="el-form-item--medium">
+          <el-input v-model="editForm.description" type="textarea" :rows="4" />
+        </el-form-item>
 
-      <el-form-item>
-        <el-button type="primary" @click="saveChanges">Guardar</el-button>
-        <el-button @click="isDrawerVisible = false">Cancelar</el-button>
-      </el-form-item>
-    </el-form>
-  </el-drawer>
+        <el-form-item>
+          <el-button type="primary" @click="saveChanges">Guardar</el-button>
+          <el-button @click="isDrawerVisible = false">Cancelar</el-button>
+        </el-form-item>
+      </el-form>
+    </el-drawer>
     <el-pagination
       v-model:current-page="currentPage"
       :page-size="pageSize"
@@ -80,10 +80,26 @@
 </template>
 
 <script setup>
-import { ref, onMounted} from "vue";
+import { ref, onMounted, onBeforeUnmount, computed } from "vue";
 import { useNotificationConfigStore } from "@/presentation/stores/Notifications.store";
 import { useNotificationConfigViewModel } from "@/presentation/viewmodels/NotificationsViewModel";
-import { Bell } from '@element-plus/icons-vue';
+import { Bell } from "@element-plus/icons-vue";
+
+const screenWidth = ref(window.innerWidth);
+
+const updateScreenWidth = () => {
+  screenWidth.value = window.innerWidth;
+};
+
+const isSmallScreen = computed(() => screenWidth.value < 800);
+
+onMounted(() => {
+  window.addEventListener("resize", updateScreenWidth);
+});
+
+onBeforeUnmount(() => {
+  window.removeEventListener("resize", updateScreenWidth);
+});
 
 const notificationStore = useNotificationConfigStore();
 const {
@@ -100,7 +116,14 @@ const {
 } = useNotificationConfigViewModel();
 
 const isDrawerVisible = ref(false);
-const editForm = ref({ id: null, name: "", daysBefore: "", excessVacationDays: "", isActive: false, description: "" });
+const editForm = ref({
+  id: null,
+  name: "",
+  daysBefore: "",
+  excessVacationDays: "",
+  isActive: false,
+  description: "",
+});
 
 const openEditDrawer = (notification) => {
   editForm.value = { ...notification };
