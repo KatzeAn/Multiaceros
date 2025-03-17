@@ -86,13 +86,13 @@
             v-model="employeePotentialForm.jobPostingId"
             placeholder="Seleccione el puesto a referir"
           >
-  <el-option
-              v-for="jobPosting in jobPostingList"
-              :key="jobPosting.id"
-              :label="jobPosting.title"
-              :value="jobPosting.id"
-  />
-</el-select>
+              <el-option
+                 v-for="jobPosting in jobPostingList"
+                 :key="jobPosting.id"
+                 :label="jobPosting.title"
+                 :value="jobPosting.id"
+              />
+            </el-select>
         </el-form-item>
       </div>
 
