@@ -24,6 +24,7 @@ export function useEmployeePotentialViewModel() {
     dateOfBirth: "",
     email: "",
     cellPhone: "",
+    
   });
 
   const rules = reactive({
