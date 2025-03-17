@@ -109,7 +109,7 @@
 import { useEmployeePotentialViewModel } from "@/presentation/viewmodels/employeePotentialViewModel";
 import { useJobPostingViewModel } from "@/presentation/viewmodels/jobPostingViewModel";
 import { ElNotification } from "element-plus";
-import { ref } from "vue";
+import { onMounted, ref, watch } from "vue";
 
 const props = defineProps<{
   dialog: boolean;
@@ -137,4 +137,5 @@ const handleFileChange = (file) => {
   fileList.value = [file];
   uploadedFile.value = file.raw;
 };
+
 </script>
