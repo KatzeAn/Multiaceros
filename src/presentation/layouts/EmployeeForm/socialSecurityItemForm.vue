@@ -6,7 +6,7 @@
   </div>
 
   <el-row :gutter="30">
-    <el-col :span="12">
+    <el-col :xs="24" :sm="12">
       <el-form-item label="EPS" prop="epsData.id">
         <el-select
           v-model="employeeRequestForm.epsData.id"
@@ -22,7 +22,7 @@
       </el-form-item>
     </el-col>
 
-    <el-col :span="12">
+    <el-col :xs="24" :sm="12">
       <el-form-item label="Tipo de EPS" prop="epsData.epsTypeId">
         <el-select
           v-model="employeeRequestForm.epsData.epsTypeId"
@@ -36,7 +36,7 @@
   </el-row>
 
   <el-row :gutter="30">
-    <el-col :span="12">
+    <el-col :xs="24" :sm="12">
       <el-form-item label="ARL" prop="arlData.id">
         <el-select
           v-model="employeeRequestForm.arlData.id"
@@ -52,7 +52,7 @@
       </el-form-item>
     </el-col>
 
-    <el-col :span="12">
+    <el-col :xs="24" :sm="12">
       <el-form-item label="Riesgo" prop="arlData.riskId">
         <el-input-number
           style="width: 100%"
@@ -66,7 +66,7 @@
   </el-row>
 
   <el-row :gutter="30">
-    <el-col :span="12">
+    <el-col :xs="24" :sm="12">
       <el-form-item label="Fondo de pensiones" prop="pensionFundInfoData.id">
         <el-select
           v-model="employeeRequestForm.pensionFundInfoData.id"
@@ -82,7 +82,7 @@
       </el-form-item>
     </el-col>
 
-    <el-col :span="12">
+    <el-col :xs="24" :sm="12">
       <el-form-item
         label="Tipo de fondo de pensión"
         prop="pensionFundInfoData.pensionFundTypeId"
@@ -99,7 +99,7 @@
   </el-row>
 
   <el-row :gutter="30">
-    <el-col :span="12">
+    <el-col :xs="24" :sm="12">
       <el-form-item
         label="Caja de compensación"
         prop="familyCompensationFundId"
@@ -118,7 +118,7 @@
       </el-form-item>
     </el-col>
 
-    <el-col :span="12">
+    <el-col :xs="24" :sm="12">
       <el-form-item label="Fondo de cesantías" prop="severanceFundId">
         <el-select
           v-model="employeeRequestForm.severanceFundId"

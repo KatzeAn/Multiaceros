@@ -2,10 +2,10 @@
   <main class="flex flex-col gap-6">
     <div class="bg-[var(--secondary-color)] p-6 rounded-xl text-white">
       <el-row :gutter="30">
-        <el-col :span="3">
+        <el-col :xs="24" :sm="12" :md="8" :lg="3">
           <el-avatar shape="square" :size="110" :src="state.squareUrl" />
         </el-col>
-        <el-col :span="21">
+        <el-col :xs="24" :sm="12" :md="8" :lg="21">
           <div class="flex flex-col">
             <div class="flex flex-col">
               <span class="text-3xl font-bold">{{ userFullName }}</span>

@@ -16,12 +16,15 @@ export const useJobPostingStore = defineStore("jobPosting", () => {
       isLoading.value = true;
       const data = await jobPostingModel.getAllJobPostingsCopy(deactivate);
       jobPostings.value = Array.isArray(data) ? [...data] : [];
+      return jobPostings.value; // <-- Agregar esto para devolver los datos
     } catch (error) {
       jobPostings.value = []; 
+      return []; // <-- También retornar array vacío en caso de error
     } finally {
       isLoading.value = false;
     }
   };
+  
   
   const createJobPosting = async (job: JobPosting) => {
     try {

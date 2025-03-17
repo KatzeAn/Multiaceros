@@ -2,16 +2,16 @@
   <div class="p-6">
     <h1 class="text-2xl font-bold mb-4">Panel de Gestión Administrativa</h1>
 
-    <div class="grid grid-cols-2 gap-4">
-      <div class="bg-white h-40 rounded-xl shadow-lg flex items-center border border-gray-200 w-96">
+    <div class="grid md:grid-cols-2 gap-4">
+      <div class="bg-white h-40 rounded-xl shadow-lg flex items-center border border-gray-200 w-80">
         <el-icon :size="50" class="text-3xl ml-3"><Avatar /></el-icon>
-        <div class="ml-6">
+        <div class="ml-6 w-full md:w-96">
           <p class="text-gray-500 text-sm uppercase font-medium">Usuarios Conectados</p>
           <p class="text-2xl font-semibold text-gray-900">{{ connectedUsersCount }}</p>
         </div>
       </div>
 
-      <div class="bg-white p-4 rounded-lg shadow-md">
+      <div class="bg-white p-4 rounded-lg" v-if="isGraphVisible"> 
         <h2 class="text-lg font-semibold mb-2">Conexiones por Hora</h2>
         <graficConnection />
       </div>
@@ -33,7 +33,7 @@
             </template>
           </el-table-column>
           <el-table-column label="Correo Electrónico" prop="userEmail" />
-          <el-table-column label="Acciones" align="center">
+          <el-table-column label="Acciones" align="center" width="150">
             <template #default="scope">
               <el-button size="small" @click="openRoleChangeDialog(scope.row)">
                 Cambiar Rol
@@ -66,15 +66,17 @@
 
     </el-tabs>
 
-    <el-dialog v-model="isDialogVisible" title="Cambiar Rol" width="30%">
-  <el-select v-model="selectedRoleId" placeholder="Selecciona un rol">
-    <el-option v-for="role in availableRoles"  :key="role.id" :label="role.name" :value="role.id" />
-  </el-select>
-  <template #footer>
-    <el-button @click="isDialogVisible = false">Cancelar</el-button>
-    <el-button type="primary" @click="confirmRoleChange">Confirmar</el-button>
-  </template>
-</el-dialog>
+    <el-dialog v-model="isDialogVisible"  title="Cambiar Rol" >
+    <el-select v-model="selectedRoleId"  placeholder="Selecciona un rol"  style="width: 100%;"  >
+      <el-option v-for="role in availableRoles" :key="role.id" :label="role.name"  :value="role.id" />
+    </el-select>
+    <template #footer>
+      <div :style="isSmallScreen ? 'display: flex; flex-direction: column; gap: 10px;' : ''">
+        <el-button @click="isDialogVisible = false" :size="isSmallScreen ? 'small' : 'default'">Cancelar</el-button>
+        <el-button type="primary" @click="confirmRoleChange" :size="isSmallScreen ? 'small' : 'default'">Confirmar</el-button>
+      </div>
+    </template>
+  </el-dialog>
   </div>
 </template>
 
@@ -89,6 +91,13 @@ import ManageContracts from "@/presentation/components/ManageContracts.vue";
 import graficConnection from "@/presentation/components/graficConnection.vue";
 import UploadContracts from "@/presentation/components/UploadContracts.vue";
 import EmployeeLoad from "@/presentation/components/EmployeeLoad.vue";
+
+const isSmallScreen = computed(() => window.innerWidth < 800);
+const isGraphVisible = ref(window.innerWidth >= 800); 
+
+const handleResize = () => {
+  isGraphVisible.value = window.innerWidth >= 800;
+};
 
 const availableRoles = computed(() => roleStore.roles); 
 const userStore = useUserStore();
@@ -119,10 +128,12 @@ onMounted(async () => {
   interval = setInterval(() => {
     fetchActiveUsers();
   }, 30000); // Actualiza cada 30 segundos
+  window.addEventListener("resize", handleResize);
 });
 
 onUnmounted(() => {
   clearInterval(interval);
+  window.removeEventListener("resize", handleResize);
 });
 
 const filteredUsers = computed(() =>

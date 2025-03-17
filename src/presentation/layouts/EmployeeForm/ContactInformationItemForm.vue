@@ -6,19 +6,19 @@
   </div>
 
   <el-row :gutter="30">
-    <el-col :span="8">
+    <el-col :xs="24" :sm="12" :md="8">
       <el-form-item label="Dirección de residencia" prop="userData.address">
         <el-input v-model="employeeRequestForm.userData.address" />
       </el-form-item>
     </el-col>
 
-    <el-col :span="8">
+    <el-col :xs="24" :sm="12" :md="8">
       <el-form-item label="Celular" prop="userData.cellPhone">
         <el-input type="tel" v-model="employeeRequestForm.userData.cellPhone" />
       </el-form-item>
     </el-col>
 
-    <el-col :span="8">
+    <el-col :xs="24" :sm="12" :md="8">
       <el-form-item label="Email" prop="userData.userEmail">
         <el-input
           type="email"

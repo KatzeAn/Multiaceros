@@ -1,11 +1,12 @@
 <template>
-  <el-drawer
+ <el-drawer
     :model-value="drawer"
     @update:model-value="$emit('update:drawer', $event)"
-    direction="rtl"
     :before-close="handleClose"
-    size="50%"
     style="background-color: var(--base-color)"
+    :fullscreen="isSmallScreen"
+    :size="isSmallScreen ? '100%' : '40%'"
+    class="custom-drawer"
   >
     <template #header>
       <div class="flex flex-row justify-between">
@@ -180,7 +181,23 @@
 <script lang="ts" setup>
 import { EmployeePotentialStatusEnum } from "@/presentation/common/enum/employeePotentialStatus";
 import { useEmployeePotentialViewModel } from "@/presentation/viewmodels/employeePotentialViewModel";
-import { onMounted, watch } from "vue";
+import { onMounted, watch, computed, onBeforeUnmount, ref } from "vue";
+
+const screenWidth = ref(window.innerWidth);
+
+const updateScreenWidth = () => {
+  screenWidth.value = window.innerWidth;
+};
+
+const isSmallScreen = computed(() => screenWidth.value < 800);
+
+onMounted(() => {
+  window.addEventListener("resize", updateScreenWidth);
+});
+
+onBeforeUnmount(() => {
+  window.removeEventListener("resize", updateScreenWidth);
+});
 
 // Definir las props
 const props = defineProps<{
@@ -210,3 +227,15 @@ watch(
   { immediate: true }
 );
 </script>
+<style>
+.custom-drawer .el-drawer__header {
+  position: relative;
+}
+
+.custom-drawer .el-drawer__close-btn {
+  position: absolute;
+  top: 15px;
+  left: 15px;
+  right: auto;
+}
+</style>

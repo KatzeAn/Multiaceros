@@ -46,7 +46,7 @@
         <el-table-column prop="date" label="Fecha" width="180" />
         <el-table-column prop="name" label="Hora" width="180" />
         <el-table-column prop="address" label="Descripción" />
-        <el-table-column prop="address" label="Acciones">
+        <el-table-column prop="address" label="Acciones" width="150">
             <el-button type="primary" @click="dialogVisible2 = true">Editar</el-button>
             <el-button type="danger" @click="">Eliminar</el-button>
         </el-table-column>

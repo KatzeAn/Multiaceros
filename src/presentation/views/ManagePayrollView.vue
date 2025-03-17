@@ -1,5 +1,5 @@
 <template>
-  <div class="grid grid-cols-2 gap-6 p-6 justify-center">
+  <div class=" grid-cols-2  p-6 justify-center flex flex-col gap-6 items-center">
     <!-- Sección izquierda (Descargas) -->
     <div class="flex flex-col gap-6">
       <!-- Descarga de Nómina -->
@@ -40,8 +40,8 @@
         <p v-if="loadingSeverance" class="text-sm text-gray-500 mt-4">Generando archivo, por favor espera...</p>
       </div>
     </div>
-    <div class="flex items-center justify-center">
-      <div class="card flex flex-col items-center justify-center max-w-[600px] w-full p-6 bg-gray-50 rounded-lg shadow-md border border-gray-200">
+    <div class="flex flex-col gap-6 items-center">
+      <div class="card flex flex-col items-center justify-center p-6 bg-gray-50 rounded-lg shadow-md border border-gray-200">
         <h2 class="text-2xl font-bold text-gray-700 mb-4">Distribución de Salarios</h2>
         <GraficSalary />
       </div>

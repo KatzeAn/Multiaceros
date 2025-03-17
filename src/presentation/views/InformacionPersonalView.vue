@@ -16,17 +16,17 @@
 
           <el-form :model="basicInformationForm" ref="formRef" label-width="120px" size="default" label-position="top">
             <el-row :gutter="30">
-              <el-col :span="6">
+              <el-col :xs="24" :sm="12" :md="8">
                 <el-form-item label="Primer nombre" prop="firstName">
                   <el-input v-model="basicInformationForm.firstName" placeholder="Enter first name" />
                 </el-form-item>
               </el-col>
-              <el-col :span="6">
+              <el-col :xs="24" :sm="12" :md="8">
                 <el-form-item label="Segundo nombre" prop="middleName">
                   <el-input v-model="basicInformationForm.middleName" placeholder="Enter middle name" />
                 </el-form-item>
               </el-col>
-              <el-col :span="6">
+              <el-col :xs="24" :sm="12" :md="8">
                 <el-form-item label="Primer apellido" prop="lastName">
                   <el-input v-model="basicInformationForm.lastName" placeholder="Enter last name" />
                 </el-form-item>
@@ -34,7 +34,7 @@
             </el-row>
 
             <el-row>
-              <el-col :span="6">
+              <el-col :xs="24" :sm="12" :md="8">
                 <el-form-item label="Fecha de nacimiento" prop="birthDate">
                   <el-date-picker v-model="basicInformationForm.birthDate" type="date" placeholder="Pick a date" />
                 </el-form-item>
@@ -58,7 +58,7 @@
 
           <el-form :model="addressInformationForm" ref="formRef" label-width="120px" size="default" label-position="top">
             <el-row>
-              <el-col :span="6">
+              <el-col :xs="24" :sm="12" :md="8">
                 <el-form-item label="Dirección" prop="address">
                   <el-input v-model="addressInformationForm.address" placeholder="Enter an address" />
                 </el-form-item>
@@ -66,17 +66,17 @@
             </el-row>
 
             <el-row :gutter="30">
-              <el-col :span="6">
+              <el-col :xs="24" :sm="12" :md="8">
                 <el-form-item label="Ciudad" prop="city">
                   <el-input v-model="addressInformationForm.city" placeholder="Enter a city" disabled />
                 </el-form-item>
               </el-col>
-              <el-col :span="6">
+              <el-col :xs="24" :sm="12" :md="8">
                 <el-form-item label="Departamento/Estado" prop="state">
                   <el-input v-model="addressInformationForm.state" placeholder="Enter a state" disabled />
                 </el-form-item>
               </el-col>
-              <el-col :span="6">
+              <el-col :xs="24" :sm="12" :md="8">
                 <el-form-item label="País" prop="country">
                   <el-input v-model="addressInformationForm.country" placeholder="Enter a country" disabled />
                 </el-form-item>
@@ -99,7 +99,7 @@
 
           <el-form :model="contactInformationForm" ref="formRef" label-width="120px" size="default" label-position="top">
             <el-row>
-              <el-col :span="6">
+              <el-col :xs="24" :sm="12" :md="8">
                 <el-form-item label="Celular" prop="phone">
                   <el-input v-model="contactInformationForm.phone" placeholder="Enter a cellphone" />
                 </el-form-item>
@@ -107,7 +107,7 @@
             </el-row>
 
             <el-row>
-              <el-col :span="6">
+              <el-col :xs="24" :sm="12" :md="8">
                 <el-form-item label="Correo electrónico" prop="email">
                   <el-input v-model="contactInformationForm.email" placeholder="Enter an email" disabled />
                 </el-form-item>

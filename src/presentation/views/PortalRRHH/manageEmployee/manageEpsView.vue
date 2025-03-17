@@ -5,8 +5,8 @@
     </template>
 
     <el-card shadow="never" class="mb-6">
-      <el-form inline ref="ruleFormRef" :rules="rules" :model="epsForm" class="flex items-center justify-between">
-        <div class="flex items-center gap-4">
+      <el-form inline ref="ruleFormRef" :rules="rules" :model="epsForm" class="flex flex-wrap items-center justify-between">
+        <div class="flex flex-col items-center gap-4">
           <el-form-item prop="epsName" label="Nombre">
             <el-input v-model="epsForm.epsName" placeholder="Nombre" clearable />
           </el-form-item>
@@ -30,7 +30,7 @@
           </el-tag>
         </template>
       </el-table-column>
-      <el-table-column label="Acciones" align="center">
+      <el-table-column label="Acciones" align="center" width="150">
         <template #default="scope">
           <el-button size="small" @click="openEditModal(scope.row)">Editar</el-button>
           <el-button
@@ -46,15 +46,15 @@
       </el-table-column>
     </el-table>
 
-    <el-dialog v-model="isEditModalVisible" title="Editar Eps">
-      <el-form>
+    <el-dialog v-model="isEditModalVisible" title="Editar Eps" :width="isSmallScreen ? '90%' : '500px'" :style="{ maxWidth: '800px' }">
+      <el-form  :label-position="isSmallScreen ? 'top' : 'left'">
         <el-form-item label="Nuevo Nombre">
           <el-input v-model="editForm.name" />
         </el-form-item>
       </el-form>
       <template #footer>
-        <el-button @click="isEditModalVisible = false">Cancelar</el-button>
-        <el-button type="primary" @click="editEps">Guardar Cambios</el-button>
+        <el-button @click="isEditModalVisible = false" :size="isSmallScreen ? 'small' : 'default'">Cancelar</el-button>
+        <el-button type="primary" @click="editEps" :size="isSmallScreen ? 'small' : 'default'">Guardar Cambios</el-button>
       </template>
     </el-dialog>
 
@@ -72,9 +72,11 @@
 </template>
 
 <script lang="ts" setup>
-import { ref, onMounted } from "vue";
+import { ref, onMounted, computed } from "vue";
 import { useEpsStore } from "@/presentation/stores/eps.store";
 import { useEpsViewModel } from "@/presentation/viewmodels/epsViewModel";
+
+const isSmallScreen = computed(() => window.innerWidth < 800);
 
 const epsStore = useEpsStore();
 const {

@@ -11,7 +11,7 @@
           </el-tag>
         </template>
       </el-table-column>
-      <el-table-column label="Acciones">
+      <el-table-column label="Acciones" width="150"> 
         <template v-slot="scope">
           <el-button size="small" type="danger" @click="logoutUser(scope.row)">Cerrar Sesión</el-button>
         </template>

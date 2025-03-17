@@ -43,7 +43,7 @@
         </template>
       </el-table-column>
 
-      <el-table-column label="Acciones" align="center">
+      <el-table-column label="Acciones" align="center" width="150">
         <template #default="scope">
       <el-button size="small" @click="openEditModal(scope.row)">
         Editar

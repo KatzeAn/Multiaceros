@@ -1,5 +1,8 @@
 <template>
-  <div class="w-64 h-screen fixed bg-gray-900 rounded-r-md">
+  <div class="sidebar-container">
+    <aside class="sidebar w-64 h-screen fixed bg-gray-900 rounded-r-md">
+      <el-scrollbar height="100%">
+        <div class="w-64 h-screen fixed bg-gray-900 rounded-r-md">
     <div class="px-6 pt-8">
       <div class="flex items-center justify-between">
         <a href="#">
@@ -251,8 +254,78 @@
       </button>
     </div>
   </div>
-</template>
+</el-scrollbar>
+    </aside>
 
+    <nav class="navbar fixed bottom-0 left-0 w-full bg-gray-900 z-50 p-4 sm:hidden">
+      <ul class="flex  justify-evenly overflow-x-auto">
+        <li>
+          <router-link to="/home" class="text-gray-400 hover:text-white">
+            <span class="material-symbols-outlined">space_dashboard</span>
+          </router-link>
+        </li>
+        <li v-for="(item, index) in menuItems" :key="index">
+          <el-popover placement="top" trigger="click" :width="260">
+            <template #reference>
+              <button class="text-gray-400 hover:text-white">
+                <span class="material-symbols-outlined">{{ item.icon }}</span>
+              </button>
+            </template>
+            <el-menu background-color="#2d3748" text-color="#a0aec0" active-text-color="#ffffff"  >
+              <el-menu-item v-for="(subItem, subIndex) in item.subItems" :key="subIndex" >
+                <router-link
+                  v-if="subItem.route"
+                  :to="subItem.route"
+                  class="block px-4 py-2 rounded truncate"
+                >
+                  {{ subItem.title }}
+                </router-link>
+                <button
+                  v-else-if="subItem.action"
+                  @click="subItem.action"
+                  class="block px-4 py-2 rounded truncate"
+                >
+                  {{ subItem.title }}
+                </button>
+              </el-menu-item>
+            </el-menu>
+          </el-popover>
+        </li>
+
+        <li>
+          <el-popover placement="top" trigger="click" :width="270">
+            <template #reference>
+              <button class="text-gray-400 hover:text-white">
+                <span class="material-symbols-outlined">admin_panel_settings</span>
+              </button>
+            </template>
+
+            <el-menu background-color="#2d3748" text-color="#a0aec0" active-text-color="#ffffff"  >
+              <el-menu-item v-for="(subItem, subIndex) in recursosHumanosSubItems" :key="subIndex"  >
+                <router-link
+                  :to="subItem.route"
+                  class="block px-4 py-2 rounded truncate"
+                >
+                  {{ subItem.title }}
+                </router-link>
+              </el-menu-item>
+            </el-menu>
+          </el-popover>
+        </li>
+        <li>
+          <router-link to="/portal-rrhh/gestion-administrativa" class="text-gray-400 hover:text-white">
+            <span class="material-symbols-outlined">bar_chart</span>
+          </router-link>
+        </li>
+        <li>
+          <router-link to="/configuraciones" class="text-gray-400 hover:text-white">
+            <span class="material-symbols-outlined">settings</span>
+          </router-link>
+        </li>
+      </ul>
+    </nav>
+  </div>
+</template>
 <script setup lang="ts">
 import { ref } from "vue";
 import { useUserStore } from "@/presentation/stores/user.store";
@@ -280,9 +353,6 @@ const downloadLetter = async () => {
 
 const { getUsername, getUserEmail } = useUserStore();
 
-// Estado para controlar qué menús están abiertos
-const openMenus = ref<boolean[]>([]);
-
 // Lista de elementos del menú
 const menuItems = ref([
   {
@@ -293,18 +363,18 @@ const menuItems = ref([
         title: "Información personal",
         route: "/perfil/informacion-personal",
       },
-      {
-        title: "Información profesional",
-        route: "#",
-      },
-      {
-        title: "Información salarial",
-        route: "#",
-      },
-      {
-        title: "Tiempo libre",
-        route: "#",
-      },
+      // {
+      //   title: "Información profesional",
+      //   route: "#",
+      // },
+      // {
+      //   title: "Información salarial",
+      //   route: "#",
+      // },
+      // {
+      //   title: "Tiempo libre",
+      //   route: "#",
+      // },
     ],
   },
   {
@@ -329,48 +399,31 @@ const menuItems = ref([
         title: "Crear una ausencia",
         route: "/ausencias/solicitar-ausencia",
       },
-      {
-        title: "Mis ausencias",
-        route: "#",
-      },
+      // {
+      //   title: "Mis ausencias",
+      //   route: "#",
+      // },
     ],
   },
-  {
-    title: "Evaluaciones",
-    icon: "spellcheck",
-    subItems: [
-      {
-        title: "Desempeño",
-        route: "#",
-      },
-      {
-        title: "Retroalimentación",
-        route: "#",
-      },
-      {
-        title: "Clima laboral",
-        route: "#",
-      },
-    ],
-  },
-  {
-    title: "Políticas y Documentos",
-    icon: "policy",
-    subItems: [
-      {
-        title: "Manual del empleado",
-        route: "#",
-      },
-      {
-        title: "Reglamentos",
-        route: "#",
-      },
-      {
-        title: "procedimientos",
-        route: "#",
-      },
-    ],
-  },
+ 
+  //{
+   // title: "Políticas y Documentos",
+    //icon: "policy",
+    //subItems: [
+      //{
+       // title: "Manual del empleado",
+       // route: "#",
+      //},
+      //{
+      //  title: "Reglamentos",
+        //route: "#",
+      //},
+     // {
+       // title: "procedimientos",
+      //  route: "#",
+     // },
+   // ],
+  //},
   {
     title: "Solicitudes  y trámites",
     icon: "procedure",
@@ -395,7 +448,7 @@ const recursosHumanosSubItems = ref([
     route: "/portal-rrhh/empleados",
   },
   {
-    title: "Gestión de vacantes y reclutamiento",
+    title: "Gestión de vacantes",
     route: "/portal-rrhh/aplicaciones",
   },
   {
@@ -403,7 +456,7 @@ const recursosHumanosSubItems = ref([
     route: "/portal-rrhh/gestionar-ausencias",
   },
   {
-    title: "Nómina y compensaciones",
+    title: "Nómina y compensacion",
     route: "/portal-rrhh/gestionar-nomina",
   },
   {
@@ -414,15 +467,16 @@ const recursosHumanosSubItems = ref([
     title: "Trámites",
     route: "/portal-rrhh/trámites",
   },
-  {
-    title: "Reporte y análisis",
-    route: "#",
-  },
-  {
-    title: "Políticas y procedimientos",
-    route: "#",
-  },
+  //{
+   // title: "Reporte y análisis",
+    //route: "#",
+  //},
+  //{
+   // title: "Políticas y procedimientos",
+    //route: "#",
+  //},
 ]);
+const openMenus = ref<boolean[]>(Array(menuItems.value.length).fill(false));
 
 // Alternar la visibilidad del menú
 const toggleMenu = (index: number) => {
@@ -431,13 +485,22 @@ const toggleMenu = (index: number) => {
 </script>
 
 <style scoped>
-/* Animación para el ícono de flecha */
-.rotate-180 {
-  transform: rotate(180deg);
-  transition: transform 0.3s ease;
+.sidebar-container {
+  position: relative;
 }
 
-.router-link-exact-active {
-  border-right: 4px solid #6b7280;
+.navbar {
+  display: none;
 }
+
+@media (max-width: 800px) {
+  .sidebar {
+    display: none;
+  }
+
+  .navbar {
+    display: block;
+  }
+}
+
 </style>

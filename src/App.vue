@@ -3,11 +3,27 @@ import { RouterView } from "vue-router";
 import NavBar from "./presentation/components/NavBar.vue";
 import SideBar from "./presentation/components/SideBar.vue";
 import ChatComponent from "@/presentation/components/chatBot.vue";
-import { onMounted, onUnmounted, ref } from "vue";
+import { computed, onMounted, onUnmounted, ref } from "vue";
 import {useUserStore} from "@/presentation/stores/user.store";
 import { useAuthStore } from "./presentation/stores/auth.store";
 
-const asideWidth = ref("258px"); // Valor inicial
+const isSmallScreen = ref(window.innerWidth < 800);
+
+const handleResize = () => {
+  isSmallScreen.value = window.innerWidth < 800;
+};
+
+onMounted(() => {
+  window.addEventListener('resize', handleResize);
+});
+
+onUnmounted(() => {
+  window.removeEventListener('resize', handleResize);
+});
+
+const asideWidth = computed(() => {
+    return isSmallScreen.value ? '0px' : '258px';
+});
 const isModalVisible = ref(false); 
 const authStore = useAuthStore();
 const userStore = useUserStore();
@@ -65,14 +81,15 @@ onUnmounted(() => {
     <img 
       src="@/presentation/assets/avatar.png" 
       alt="Chat"  
-      class="fixed bottom-5 right-5 w-16 h-16 rounded-full cursor-pointer shadow-lg"
+      class="fixed bottom-16 right-5 w-16 h-16 rounded-full cursor-pointer shadow-lg"
       @click="isModalVisible = true"
     />
-    <div v-show="isModalVisible" class="fixed bottom-20 right-5 bg-white rounded-lg shadow-lg p-4 z-50">
+    <div v-show="isModalVisible" class="fixed bottom-38 right-5 bg-white rounded-lg shadow-lg p-4 z-50">
       <ChatComponent @closeChat="isModalVisible = false" />
     </div>
   </el-container>
 </template>
+
 
 <style scoped>
 .no-margin-padding {

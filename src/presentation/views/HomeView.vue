@@ -208,7 +208,7 @@ const download = async () => {
 
 
       <!-- Card para equipo -->
-      <Organigrama />
+      <!-- <Organigrama /> -->
             <el-card class="col-[1/-1]" style="min-height: 300px" shadow="hover">
         <template #header>
           <div class="card-header">

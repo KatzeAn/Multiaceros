@@ -4,6 +4,7 @@
     @update:model-value="$emit('update:dialog', $event)"
     title="Candidato"
     top="6vh"
+    width="90%"
   >
     <el-form
       ref="ruleFormRef"
@@ -15,7 +16,7 @@
       label-position="top"
       status-icon
     >
-      <div class="grid grid-cols-2 gap-6 space-y-2">
+      <div class="grid grid-cols-1 md:grid-cols-2 gap-6 space-y-2">
         <el-form-item prop="numberDocument" label="Número de documento">
           <el-input
             placeholder="Documento"
@@ -53,9 +54,9 @@
           />
         </el-form-item>
 
-        <el-form-item prop="email" label="Correo eléctronico">
+        <el-form-item prop="email" label="Correo electrónico">
           <el-input
-            placeholder="Correo eléctronico"
+            placeholder="Correo electrónico"
             v-model="employeePotentialForm.email"
           />
         </el-form-item>
@@ -66,31 +67,32 @@
             v-model="employeePotentialForm.cellPhone"
           />
         </el-form-item>
+
         <el-form-item label="Adjuntar archivo">
-        <el-upload
-          action=""
-          :auto-upload="false"
-          :file-list="fileList"
-          :limit="1"
-          accept=".pdf,.doc,.docx"
-          @change="handleFileChange"
-        >
-          <el-button type="primary">Seleccionar archivo</el-button>
-        </el-upload>
-      </el-form-item>
+          <el-upload
+            action=""
+            :auto-upload="false"
+            :file-list="fileList"
+            :limit="1"
+            accept=".pdf,.doc,.docx"
+            @change="handleFileChange"
+          >
+            <el-button type="primary">Seleccionar archivo</el-button>
+          </el-upload>
+        </el-form-item>
 
         <el-form-item prop="jobPostingId" label="Puesto a referir">
           <el-select
             v-model="employeePotentialForm.jobPostingId"
             placeholder="Seleccione el puesto a referir"
           >
-            <el-option
-              v-for="jobPosting in jobPostingList"
-              :key="jobPosting.id"
-              :label="jobPosting.title"
-              :value="jobPosting.id"
-            />
-          </el-select>
+              <el-option
+                 v-for="jobPosting in jobPostingList"
+                 :key="jobPosting.id"
+                 :label="jobPosting.title"
+                 :value="jobPosting.id"
+              />
+            </el-select>
         </el-form-item>
       </div>
 
@@ -107,7 +109,7 @@
 import { useEmployeePotentialViewModel } from "@/presentation/viewmodels/employeePotentialViewModel";
 import { useJobPostingViewModel } from "@/presentation/viewmodels/jobPostingViewModel";
 import { ElNotification } from "element-plus";
-import { ref } from "vue";
+import { onMounted, ref, watch } from "vue";
 
 const props = defineProps<{
   dialog: boolean;
@@ -130,9 +132,10 @@ const handleSubmit = () => {
 
 const { ruleFormRef, rules, submitForm, isLoading, employeePotentialForm, uploadedFile} =
   useEmployeePotentialViewModel();
-  const fileList = ref([]);
+const fileList = ref([]);
 const handleFileChange = (file) => {
   fileList.value = [file];
   uploadedFile.value = file.raw;
 };
+
 </script>
