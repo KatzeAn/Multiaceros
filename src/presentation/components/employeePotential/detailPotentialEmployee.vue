@@ -1,11 +1,12 @@
 <template>
-  <el-drawer
+ <el-drawer
     :model-value="drawer"
     @update:model-value="$emit('update:drawer', $event)"
-    direction="rtl"
     :before-close="handleClose"
     style="background-color: var(--base-color)"
-     :fullscreen="isSmallScreen" :size="isSmallScreen ? '100%' : '40%'"
+    :fullscreen="isSmallScreen"
+    :size="isSmallScreen ? '100%' : '40%'"
+    class="custom-drawer"
   >
     <template #header>
       <div class="flex flex-row justify-between">
@@ -226,3 +227,15 @@ watch(
   { immediate: true }
 );
 </script>
+<style>
+.custom-drawer .el-drawer__header {
+  position: relative;
+}
+
+.custom-drawer .el-drawer__close-btn {
+  position: absolute;
+  top: 15px;
+  left: 15px;
+  right: auto;
+}
+</style>

@@ -6,7 +6,7 @@
   </div>
 
   <el-row :gutter="30">
-    <el-col :span="8">
+    <el-col :xs="24" :sm="12" :md="8">
       <el-form-item label="Salario" prop="salary">
         <el-input-number
           style="width: 100%"
@@ -17,7 +17,7 @@
       </el-form-item>
     </el-col>
 
-    <el-col :span="8">
+    <el-col :xs="24" :sm="12" :md="8">
       <el-form-item label="Departamento" prop="divisionId">
         <el-select
           v-model="employeeRequestForm.divisionId"
@@ -33,7 +33,7 @@
       </el-form-item>
     </el-col>
 
-    <el-col :span="8">
+    <el-col :xs="24" :sm="12" :md="8">
       <el-form-item label="Cargo" prop="jobTitleId">
         <el-select
           v-model="employeeRequestForm.jobTitleId"
@@ -48,10 +48,8 @@
         </el-select>
       </el-form-item>
     </el-col>
-  </el-row>
 
-  <el-row :gutter="30">
-    <el-col :span="8">
+    <el-col :xs="24" :sm="12" :md="8">
       <el-form-item label="Tipo de contrato" prop="contractData.contractTypeId">
         <el-select
           v-model="employeeRequestForm.contractData.contractTypeId"
@@ -66,7 +64,8 @@
         </el-select>
       </el-form-item>
     </el-col>
-    <el-col :span="8">
+
+    <el-col :xs="24" :sm="12" :md="8">
       <el-form-item
         label="Fecha de inicio"
         prop="contractData.contractStartDate"
@@ -80,7 +79,8 @@
         />
       </el-form-item>
     </el-col>
-    <el-col :span="8">
+
+    <el-col :xs="24" :sm="12" :md="8">
       <el-form-item label="Fecha de fin" prop="contractData.contractEndDate">
         <el-date-picker
           v-model="employeeRequestForm.contractData.contractEndDate"

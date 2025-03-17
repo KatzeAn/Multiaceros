@@ -7,7 +7,7 @@
   </div>
 
   <el-row :gutter="30">
-    <el-col :span="8">
+    <el-col :xs="24" :sm="12" :md="8">
       <el-form-item label="Número de Documento" prop="userData.numberDocument">
         <el-input
           type="number"
@@ -16,27 +16,25 @@
       </el-form-item>
     </el-col>
 
-    <el-col :span="8">
+    <el-col :xs="24" :sm="12" :md="8">
       <el-form-item label="Primer Nombre" prop="userData.userFirstName">
         <el-input v-model="employeeRequestForm.userData.userFirstName" />
       </el-form-item>
     </el-col>
 
-    <el-col :span="8">
+    <el-col :xs="24" :sm="12" :md="8">
       <el-form-item label="Segundo Nombre" prop="userData.userMiddleName">
         <el-input v-model="employeeRequestForm.userData.userMiddleName" />
       </el-form-item>
     </el-col>
-  </el-row>
 
-  <el-row :gutter="30">
-    <el-col :span="8">
+    <el-col :xs="24" :sm="12" :md="8">
       <el-form-item label="Primer Apellido" prop="userData.surName">
         <el-input v-model="employeeRequestForm.userData.surName" />
       </el-form-item>
     </el-col>
 
-    <el-col :span="8">
+    <el-col :xs="24" :sm="12" :md="8">
       <el-form-item label="Tipo de Sangre" prop="bloodTypeId">
         <el-select v-model="employeeRequestForm.bloodTypeId" placeholder="Seleccione el tipo de sangre">
           <el-option
@@ -49,7 +47,7 @@
       </el-form-item>
     </el-col>
 
-    <el-col :span="8">
+    <el-col :xs="24" :sm="12" :md="8">
       <el-form-item label="Fecha de nacimiento" prop="userData.birthday">
         <el-date-picker
           v-model="employeeRequestForm.userData.birthday"
@@ -59,12 +57,10 @@
         />
       </el-form-item>
     </el-col>
-  </el-row>
 
-  <el-row :gutter="30">
-    <el-col :span="8">
+    <el-col :xs="24">
       <el-upload v-model:file-list="fileList">
-        <el-button disabled type="primary">Subir Foto del empleado</el-button>
+        <el-button disabled type="primary">Subir Foto </el-button>
       </el-upload>
     </el-col>
   </el-row>

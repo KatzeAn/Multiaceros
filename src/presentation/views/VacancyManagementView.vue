@@ -4,86 +4,105 @@
   </el-button>
 
   <el-dialog v-model="isAddModalOpen" title="Añadir Nuevo Puesto de Trabajo">
-    <el-form ref="formRef" :model="jobPosting">
-      <el-form-item label="Título" prop="title">
-        <el-select v-model="jobPosting.jobTitleId">
-          <el-option
-            v-for="jobTitle in jobTitleList"
-            :key="jobTitle.id"
-            :label="jobTitle.name"
-            :value="jobTitle.id"
-          />
-        </el-select>
-      </el-form-item>
+    <el-form ref="formRef" :model="jobPosting" label-position="top">
+      <el-row :gutter="24">
+        <el-col :span="24">
+          <el-form-item label="Título" prop="title">
+            <el-select v-model="jobPosting.jobTitleId" style="width: 100%">
+              <el-option
+                v-for="jobTitle in jobTitleList"
+                :key="jobTitle.id"
+                :label="jobTitle.name"
+                :value="jobTitle.id"
+              />
+            </el-select>
+          </el-form-item>
+        </el-col>
 
-      <el-form-item label="Descripción" prop="description">
-        <el-input v-model="jobPosting.description" type="textarea" />
-      </el-form-item>
+        <el-col :span="24">
+          <el-form-item label="Descripción" prop="description">
+            <el-input v-model="jobPosting.description" type="textarea" style="width: 100%" />
+          </el-form-item>
+        </el-col>
 
-      <el-form-item label="Rango Salarial" prop="salaryRange">
-        <el-input v-model="jobPosting.salaryRange" />
-      </el-form-item>
+        <el-col :span="24">
+          <el-form-item label="Rango Salarial" prop="salaryRange">
+            <el-input v-model="jobPosting.salaryRange" style="width: 100%" />
+          </el-form-item>
+        </el-col>
 
-  <el-row :gutter="30">
-    <el-col :span="20">
-      <el-form-item label="Nuevo Requerimiento">
-        <el-input v-model="newRequirement" placeholder="Ingrese un requerimiento" />
-      </el-form-item>
-    </el-col>
-    <el-col :span="4">
-      <div class="h-full flex items-center justify-start m-1">
-        <el-button type="primary" class="w-full" @click="addRequirement"> Agregar </el-button>
-      </div>
-    </el-col>
-  </el-row>
+            <el-col :span="24">
+          <el-row :gutter="30">
+            <el-col :span="24">
+              <el-form-item label="Nuevo Requerimiento">
+                <el-input v-model="newRequirement" placeholder="Ingrese un requerimiento" style="width: 100%" />
+              </el-form-item>
+            </el-col>
+            <el-col :span="4">
+              <div class="h-full flex items-center justify-start m-1">
+                <el-button type="primary" class="w-full" @click="addRequirement"> Agregar </el-button>
+              </div>
+            </el-col>
+          </el-row>
+        </el-col>
 
-  <el-row :gutter="30">
-    <el-col :span="24">
-      <ul>
-        <li v-for="(requirement, index) in jobPosting.requirements" :key="index" class="flex justify-between items-center py-2 border-b" >
-          <span>{{ requirement }}</span>
-          <button type="button" @click="removeRequirement(index)" class="text-red-500"> Eliminar</button>
-        </li>
-      </ul>
-    </el-col>
-  </el-row>
+        <el-col :span="24">
+          <ul>
+            <li v-for="(requirement, index) in jobPosting.requirements" :key="index" class="flex justify-between items-center py-2 border-b">
+              <span>{{ requirement }}</span>
+              <button type="button" @click="removeRequirement(index)" class="text-red-500"> Eliminar</button>
+            </li>
+          </ul>
+        </el-col>
 
-      <el-form-item label="Años de Experiencia" prop="experienceLevel">
-        <el-input-number v-model="jobPosting.experienceLevel" :min="1" />
-      </el-form-item>
+        <el-col :span="24">
+          <el-form-item label="Años de Experiencia" prop="experienceLevel">
+            <el-input-number v-model="jobPosting.experienceLevel" :min="1" style="width: 100%" />
+          </el-form-item>
+        </el-col>
 
-      <el-form-item label="Área" prop="area">
-        <el-select v-model="jobPosting.divisionId">
-          <el-option
-            v-for="division in divisionList"
-            :key="division.id"
-            :label="division.name"
-            :value="division.id"
-          />
-        </el-select>
-      </el-form-item>
+        <el-col :span="24">
+          <el-form-item label="Área" prop="area">
+            <el-select v-model="jobPosting.divisionId" style="width: 100%">
+              <el-option
+                v-for="division in divisionList"
+                :key="division.id"
+                :label="division.name"
+                :value="division.id"
+              />
+            </el-select>
+          </el-form-item>
+        </el-col>
 
-      <el-form-item label="Modalidad" prop="modality">
-        <el-select v-model="jobPosting.modality">
-          <el-option label="Presencial" :value="1" />
-          <el-option label="Remoto" :value="2" />
-          <el-option label="Híbrido" :value="3" />
-        </el-select>
-      </el-form-item>
+        <el-col :span="24">
+          <el-form-item label="Modalidad" prop="modality">
+            <el-select v-model="jobPosting.modality" style="width: 100%">
+              <el-option label="Presencial" :value="1" />
+              <el-option label="Remoto" :value="2" />
+              <el-option label="Híbrido" :value="3" />
+            </el-select>
+          </el-form-item>
+        </el-col>
 
-      <el-form-item label="Tipo de Contrato" prop="contractType">
-        <el-select v-model="jobPosting.contractType">
-          <el-option
-            v-for="contractType in contractTypeList"
-            :key="contractType.id"
-            :label="contractType.typeOfContract"
-            :value="contractType.id"
-          />
-        </el-select>
-        <el-form-item label="Nivel de Prioridad" prop="priority">
-  <el-input-number v-model="jobPosting.priority" :min="1" />
-</el-form-item>
-</el-form-item>
+        <el-col :span="24">
+          <el-form-item label="Tipo de Contrato" prop="contractType">
+            <el-select v-model="jobPosting.contractType" style="width: 100%">
+              <el-option
+                v-for="contractType in contractTypeList"
+                :key="contractType.id"
+                :label="contractType.typeOfContract"
+                :value="contractType.id"
+              />
+            </el-select>
+          </el-form-item>
+        </el-col>
+
+        <el-col :span="24">
+          <el-form-item label="Nivel de Prioridad" prop="priority">
+            <el-input-number v-model="jobPosting.priority" :min="1" style="width: 100%" />
+          </el-form-item>
+        </el-col>
+      </el-row>
 
       <el-form-item>
         <el-button type="primary" @click="submitJobPosting">Confirmar</el-button>

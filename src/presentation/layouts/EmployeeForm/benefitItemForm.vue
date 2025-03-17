@@ -6,7 +6,7 @@
   </div>
 
   <el-row :gutter="30">
-    <el-col :span="10">
+    <el-col :xs="24" :sm="12" :md="10">
       <el-form-item label="Beneficios" prop="benefits">
         <el-select
           v-model="newBenefit.id"
@@ -22,7 +22,7 @@
       </el-form-item>
     </el-col>
 
-    <el-col :span="10">
+    <el-col :xs="24" :sm="12" :md="10">
       <el-form-item label="Valor" prop="benefits">
         <el-input
           type="number"
@@ -32,7 +32,7 @@
       </el-form-item>
     </el-col>
 
-    <el-col :span="4">
+    <el-col :xs="24" :sm="24" :md="4">
       <div class="h-full flex items-center justify-start m-1">
         <el-button type="primary" class="w-full" @click="addBenefit">
           Agregar
@@ -42,7 +42,7 @@
   </el-row>
 
   <el-row :gutter="30">
-    <el-col :span="24">
+    <el-col :xs="24">
       <ul>
         <li
           v-for="(benefit, index) in reactiveEmployeeRequest.benefits"
