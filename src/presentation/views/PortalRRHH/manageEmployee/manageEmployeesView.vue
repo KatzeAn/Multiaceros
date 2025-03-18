@@ -7,7 +7,7 @@
     />
   </el-dialog>
   <!-- MODAL PARA EDITAR EMPLEADO -->
-  <el-dialog v-model="isEditModalOpen" title="Editar Empleado" top="6vh">
+  <el-dialog v-model="isEditModalOpen" title="Editar Empleado" top="6vh" >
     <EditEmployee
       v-if="selectedEmployee"
       :employee="selectedEmployee"
