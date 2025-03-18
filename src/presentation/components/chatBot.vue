@@ -41,11 +41,12 @@
 </template>
   
   <script>
+  import avatarImage from '@/presentation/assets/avatar.png';
   export default {
     data() {
       return {
-        avatar: 'src/presentation/assets/avatar.png',
-        messages: [
+        avatar: avatarImage,
+         messages: [
           { id: 1, text: 'Hola, ¿cómo estás?', sender: 'bot' },
           { id: 2, text: '¡Hola! Estoy bien, gracias.', sender: 'user' },
         ],

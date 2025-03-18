@@ -4,7 +4,8 @@
     @update:model-value="$emit('update:dialog', $event)"
     title="Candidato"
     top="6vh"
-    width="90%"
+    width="90%" 
+    :style="{ maxWidth: '800px' }""
   >
     <el-form
       ref="ruleFormRef"

@@ -3,7 +3,7 @@
     Agregar Puesto de Trabajo
   </el-button>
 
-  <el-dialog v-model="isAddModalOpen" title="Añadir Nuevo Puesto de Trabajo" width="90%">
+  <el-dialog v-model="isAddModalOpen" title="Añadir Nuevo Puesto de Trabajo" width="90%" :style="{ maxWidth: '800px' }">
     <el-form ref="formRef" :model="jobPosting" label-position="top">
       <div class="grid grid-cols-1 gap-4">
         <el-form-item label="Título" prop="title">
@@ -145,7 +145,7 @@
 
 
   <!-- Modal para editar puesto -->
-  <el-dialog v-model="isEditModalOpen" title="Editar Puesto de Trabajo" width="90%">
+  <el-dialog v-model="isEditModalOpen" title="Editar Puesto de Trabajo" width="90%" :style="{ maxWidth: '800px' }">
     <el-form ref="editFormRef" :model="selectedJobPosting">
       <el-form-item label="Título" prop="title">
         <el-select v-model="selectedJobPosting.jobTitleId" class="w-full">
