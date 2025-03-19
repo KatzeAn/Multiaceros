@@ -5,7 +5,7 @@
     title="Candidato"
     top="6vh"
     width="90%" 
-    :style="{ maxWidth: '800px' }""
+    :style="{ maxWidth: '800px' }"
   >
     <el-form
       ref="ruleFormRef"
@@ -111,6 +111,7 @@ import { useEmployeePotentialViewModel } from "@/presentation/viewmodels/employe
 import { useJobPostingViewModel } from "@/presentation/viewmodels/jobPostingViewModel";
 import { ElNotification } from "element-plus";
 import { onMounted, ref, watch } from "vue";
+import type { UploadFile } from "element-plus";
 
 const props = defineProps<{
   dialog: boolean;
@@ -133,10 +134,14 @@ const handleSubmit = () => {
 
 const { ruleFormRef, rules, submitForm, isLoading, employeePotentialForm, uploadedFile} =
   useEmployeePotentialViewModel();
-const fileList = ref([]);
-const handleFileChange = (file) => {
-  fileList.value = [file];
-  uploadedFile.value = file.raw;
+  const fileList = ref<UploadFile[]>([]);
+
+const handleFileChange = (file: UploadFile) => {
+  if (file.raw) {
+    fileList.value = [file]; // Ahora no dará error
+    uploadedFile.value = file.raw;
+  }
 };
+
 
 </script>

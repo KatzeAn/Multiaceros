@@ -3,7 +3,7 @@ import { UserProfileRepository } from "@/domain/repository/user/UserProfile.repo
 import axiosInstance from "@/presentation/api/axiosInstance";
 
 export class UserProfileModel extends UserProfileRepository {
-  async getUserProfile(userId: string): Promise<UserProfile> {
+  async getUserProfile(userId: number): Promise<UserProfile> {
     try {
       const response = await axiosInstance.get(`/User/GetUserProfile/${userId}`);
       return response.data as UserProfile;
