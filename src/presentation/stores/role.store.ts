@@ -9,7 +9,8 @@ export const useRoleStore = defineStore("role", () => {
     const roles = ref<Role[]>([]);
     const isLoading = ref(false);
     const roleModel = new RoleModel();
-
+    const errorMessage = ref<string | null | undefined>(null);
+    
     const fetchRoles = async (isActive: boolean = false) => {
         try {
             isLoading.value = true;
@@ -32,14 +33,14 @@ const assignUserRole = async (userId: number, roleData: RoleRequest) => {
             type: "success",
         });
         return response;
-    } catch (error) {
-        ElNotification({
-            title: "Error",
-            message: "Hubo un problema al cambiar el rol.",
-            type: "error",
-        });
-        throw error;
-    }
+    } catch (error: any) {
+          errorMessage.value = error as string;
+          ElNotification({
+              title: 'Error',
+              message: errorMessage.value,
+              type: 'error',
+          });
+      }
 };
 
 

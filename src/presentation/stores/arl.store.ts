@@ -8,6 +8,7 @@ import { useUserStore } from "./user.store";
 export const useArlStore = defineStore("arl", () => {
   const arlList = ref<Arl[]>([]);
   const isLoading = ref(false);
+  const errorMessage = ref<string | null | undefined>(null);
 
   const fetchArl = async (isActive: boolean = false) => {
     try {
@@ -35,12 +36,15 @@ export const useArlStore = defineStore("arl", () => {
       isLoading.value = true;
       const arlModel = new ArlModel();
       await arlModel.create(data.nameArl);
-      await fetchArl(); // Recargar lista después de crear
-    } catch (error) {
-      throw error;
-    } finally {
-      isLoading.value = false;
-    }
+      await fetchArl();
+    } catch (error: any) {
+      errorMessage.value = error as string;
+      ElNotification({
+          title: 'Error',
+          message: errorMessage.value,
+          type: 'error',
+      });
+  }
   };
   const deleteArlRequest = async (id: number) => {
     try {
@@ -57,14 +61,13 @@ export const useArlStore = defineStore("arl", () => {
         type: "success",
     });
       await fetchArl(); 
-    } catch (error) {
+    } catch (error: any) {
+      errorMessage.value = error as string;
       ElNotification({
-          title: "Error",
-          message: "No se pudo eliminar la ARL.",
-          type: "error",
+          title: 'Error',
+          message: errorMessage.value,
+          type: 'error',
       });
-  } finally {
-      isLoading.value = false;
   }
 };
 
@@ -82,18 +85,16 @@ const updateArlRequest = async (id: number, nameArl: string) => {
       message: "ARL actualizada con éxito.",
       type: "success",
       });
-    
       await fetchArl();
-      } catch (error) {
-        ElNotification({
-          title: "Error",
-          message: "No se pudo actualizar la ARL.",
-          type: "error",
-          });
-          } finally {
-            isLoading.value = false;
-            }
-            };
+    } catch (error: any) {
+      errorMessage.value = error as string;
+      ElNotification({
+          title: 'Error',
+          message: errorMessage.value,
+          type: 'error',
+      });
+  }
+};
 
 
   return {

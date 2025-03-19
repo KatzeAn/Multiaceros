@@ -8,6 +8,7 @@ import { useUserStore } from "./user.store";
 export const useJobTitleStore = defineStore("jobTitle", () => {
   const jobTitles = ref<JobTitle[]>([]);
   const isLoading = ref(false);
+  const errorMessage = ref<string | null | undefined>(null);
 
   const fetchJobTitles = async (isActive: boolean = false) => {
     try {
@@ -36,11 +37,14 @@ export const useJobTitleStore = defineStore("jobTitle", () => {
       const jobTitleModel = new JobTitleModel();
       await jobTitleModel.createJobTitle(jobTitle);
       await fetchJobTitles(); // Recargar lista después de crear
-    } catch (error) {
-      throw error;
-    } finally {
-      isLoading.value = false;
-    }
+    } catch (error: any) {
+          errorMessage.value = error as string;
+          ElNotification({
+              title: 'Error',
+              message: errorMessage.value,
+              type: 'error',
+          });
+      }
   };
 
   const deleteJobTitleRequest = async (jobTitleId: number) => {
@@ -58,16 +62,15 @@ export const useJobTitleStore = defineStore("jobTitle", () => {
         type: "success",
         });
         await fetchJobTitles();
-        } catch (error) {
-          ElNotification({
-            title: "Error",
-            message: "No se pudo eliminar el cargo",
-            type: "error",
-            });
-            } finally {
-
-            }
+        } catch (error: any) {
+              errorMessage.value = error as string;
+              ElNotification({
+                  title: 'Error',
+                  message: errorMessage.value,
+                  type: 'error',
+              });
           }
+}
 
           const updateJobTitleRequest = async (id: number, newName: string) => {
             try {
@@ -85,15 +88,14 @@ export const useJobTitleStore = defineStore("jobTitle", () => {
               });
           
               await fetchJobTitles(); 
-            } catch (error) {
-              ElNotification({
-                title: "Error",
-                message: "No se pudo actualizar el cargo",
-                type: "error",
-              });
-            } finally {
-              isLoading.value = false;
-            }
+           } catch (error: any) {
+                 errorMessage.value = error as string;
+                 ElNotification({
+                     title: 'Error',
+                     message: errorMessage.value,
+                     type: 'error',
+                 });
+             }
           }; 
   return {
     isLoading,

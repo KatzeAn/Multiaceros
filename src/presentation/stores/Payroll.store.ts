@@ -1,7 +1,11 @@
 import { PayrollPaymentModel } from "@/database/Payroll/Payroll.model";
+import { ElNotification } from "element-plus";
 import { defineStore } from "pinia";
+import { ref } from "vue";
 
 export const usePayrollPaymentStore = defineStore("payrollPayment", () => {
+  const errorMessage = ref<string | null | undefined>(null);
+  
   const fetchPayrollPayments = async () => {
     try {
       const payrollService = new PayrollPaymentModel();
@@ -28,8 +32,13 @@ export const usePayrollPaymentStore = defineStore("payrollPayment", () => {
       document.body.removeChild(link);
   
       window.URL.revokeObjectURL(url);
-    } catch (error) {
-      throw error;
+    } catch (error: any) {
+            errorMessage.value = error as string;
+            ElNotification({
+              title: 'Error',
+              message: errorMessage.value,
+              type: 'error',
+       });
     }
   };
   
@@ -43,12 +52,14 @@ export const usePayrollPaymentStore = defineStore("payrollPayment", () => {
       result.loading = true;
       const payrollService = new PayrollPaymentModel();
       result.payrollSlip = await payrollService.downloadPayrollSlip();
-    } catch (error) {
-      console.error("Error fetching payroll slip:", error);
-      result.payrollSlip = null;
-    } finally {
-      result.loading = false;
-    }
+   } catch (error: any) {
+                 errorMessage.value = error as string;
+                 ElNotification({
+                     title: 'Error',
+                     message: errorMessage.value,
+                     type: 'error',
+                 });
+             }
 
     return result;
   };
@@ -63,12 +74,14 @@ export const usePayrollPaymentStore = defineStore("payrollPayment", () => {
       result.loading = true;
       const payrollService = new PayrollPaymentModel();
       result.severancePayFile = await payrollService.getSeverancePayAndInterest();
-    } catch (error) {
-      console.error("Error fetching severance pay and interest:", error);
-      result.severancePayFile = null;
-    } finally {
-      result.loading = false;
-    }
+   } catch (error: any) {
+                 errorMessage.value = error as string;
+                 ElNotification({
+                     title: 'Error',
+                     message: errorMessage.value,
+                     type: 'error',
+                 });
+             }
   
     return result;
   };

@@ -8,8 +8,11 @@ import { useUserStore } from "./user.store";
 export const useFamilyCompensationFundStore = defineStore(
   "familyCompensationFund",
   () => {
+    
     const familyCompensationFunds = ref<FamilyCompensationFunds[]>([]);
     const isLoading = ref(false);
+    const errorMessage = ref<string | null | undefined>(null);
+    
 
     const fetchFamilyCompensationFund = async (isActive: boolean = false) => {
       try {
@@ -40,11 +43,19 @@ export const useFamilyCompensationFundStore = defineStore(
         const familyCompensationFundModel = new FamilyCompesationFundsModel();
         await familyCompensationFundModel.createFamilyCompesationFunds(data);
         await fetchFamilyCompensationFund(); // Recargar lista después de crear
-      } catch (error) {
-        throw error;
-      } finally {
-        isLoading.value = false;
-      }
+        ElNotification({
+          title: "Éxito",
+          message: "Fondo de compensación creado con éxito.",
+          type: "success",
+        })
+      } catch (error: any) {
+              errorMessage.value = error as string;
+              ElNotification({
+                  title: 'Error',
+                  message: errorMessage.value,
+                  type: 'error',
+              });
+          }
     };
 
     const deleteFamilyCompesationRequest = async (compesationfundsID: number) => {
@@ -63,15 +74,14 @@ export const useFamilyCompensationFundStore = defineStore(
           });
 
           await fetchFamilyCompensationFund();
-          } catch (error) {
-            ElNotification ({
-              title: "Error",
-              message: "No se pudo eliminar el fondo de compensación familiar",
-              type: "error",
-              });
-            }finally {
-              isLoading.value = false;
-            }
+          } catch (error: any) {
+                  errorMessage.value = error as string;
+                  ElNotification({
+                      title: 'Error',
+                      message: errorMessage.value,
+                      type: 'error',
+                  });
+              }
         
         }
         const updateFamilyCompensationFundsRequest = async (id: number, compensationFundName: string) => {
@@ -90,15 +100,14 @@ export const useFamilyCompensationFundStore = defineStore(
             });
         
             await fetchFamilyCompensationFund();
-          } catch (error) {
+          } catch (error: any) {
+            errorMessage.value = error as string;
             ElNotification({
-              title: "Error",
-              message: "No se pudo actualizar el fondo de compensación.",
-              type: "error",
+                title: 'Error',
+                message: errorMessage.value,
+                type: 'error',
             });
-          } finally {
-            isLoading.value = false;
-          }
+        }
         };
         
 

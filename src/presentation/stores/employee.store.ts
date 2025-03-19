@@ -8,7 +8,8 @@ import { useUserStore  } from "@/presentation/stores/user.store"
 
 export const useEmployeeStore = defineStore("employee", () => {
   const isLoading = ref(false);
-
+  const errorMessage = ref<string | null | undefined>(null);
+  
   const fetchEmployee = async () => {
     try {
       isLoading.value = true;
@@ -33,11 +34,14 @@ export const useEmployeeStore = defineStore("employee", () => {
       const employeeModel = new EmployeeModel();
       await employeeModel.createEmployee(data);
       await fetchEmployee(); // Recargar lista después de crear
-    } catch (error) {
-      throw error;
-    } finally {
-      isLoading.value = false;
-    }
+    } catch (error: any) {
+      errorMessage.value = error as string;
+      ElNotification({
+          title: 'Error',
+          message: errorMessage.value,
+          type: 'error',
+      });
+  }
   };
 
 
@@ -56,20 +60,15 @@ export const useEmployeeStore = defineStore("employee", () => {
         type: "success",
       });
       await fetchEmployee(); 
-    } catch (error) {
+    } catch (error: any) {
+      errorMessage.value = error as string;
       ElNotification({
-        title: "Error",
-        message: "No se pudo desactivar al empleado. Verifique los datos.",
-        type: "error",
+          title: 'Error',
+          message: errorMessage.value,
+          type: 'error',
       });
-    } finally {
-      isLoading.value = false;
-    }
+  }
   };
-
-  
-
-  
 
   return {
     isLoading,
