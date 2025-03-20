@@ -54,8 +54,14 @@
         </div>
 
         <el-form-item label="Años de Experiencia" prop="experienceLevel">
-          <el-input-number v-model="jobPosting.experienceLevel" :min="1" class="w-full" />
+          <el-input-number 
+            v-model="jobPosting.experienceLevel" 
+            :min="1" 
+            :max="30" 
+            class="w-full" 
+          />
         </el-form-item>
+
 
         <el-form-item label="Área" prop="area">
           <el-select v-model="jobPosting.divisionId" class="w-full">
@@ -203,8 +209,14 @@
       </div>
 
       <el-form-item label="Años de Experiencia" prop="experienceLevel">
-        <el-input-number v-model="selectedJobPosting.experienceLevel" :min="1" class="w-full" />
-      </el-form-item>
+  <el-input-number 
+    v-model="selectedJobPosting.experienceLevel" 
+    :min="1" 
+    :max="30" 
+    class="w-full" 
+  />
+</el-form-item>
+
 
       <el-form-item label="Área" prop="area">
         <el-select v-model="selectedJobPosting.divisionId" class="w-full">
