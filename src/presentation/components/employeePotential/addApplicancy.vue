@@ -1,10 +1,11 @@
 <template>
-  <el-dialog
-    :model-value="dialog"
-    @update:model-value="$emit('update:dialog', $event)"
-    title="Candidato"
-    top="6vh"
-  >
+<el-dialog
+  :model-value="dialog"
+  @update:model-value="$emit('update:dialog', $event)"
+  :title="`Puesto a referir: ${employeePotentialForm.jobPostingId}`"
+  top="6vh"
+>
+
     <el-form
       ref="ruleFormRef"
       :model="employeePotentialForm"
@@ -65,21 +66,6 @@
             placeholder="Celular"
             v-model="employeePotentialForm.cellPhone"
           />
-        </el-form-item>
-
-        <el-form-item prop="jobPostingId" label="Puesto a referir">
-          <el-select
-            v-model="employeePotentialForm.jobPostingId"
-            placeholder="Seleccione el puesto a referir"
-            disabled
-          >
-            <el-option
-              v-for="jobPosting in jobPostingList"
-              :key="jobPosting.id"
-              :label="jobPosting.title"
-              :value="jobPosting.id"
-            />
-          </el-select>
         </el-form-item>
       </div>
 

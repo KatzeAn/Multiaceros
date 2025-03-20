@@ -22,7 +22,11 @@
         </el-form-item>
 
         <el-form-item label="Rango Salarial" prop="salaryRange">
-          <el-input v-model="jobPosting.salaryRange" class="w-full" />
+          <el-input 
+            v-model="jobPosting.salaryRange"
+            @input="formatSalaryInput('create')"
+            class="w-full"
+          />
         </el-form-item>
 
         <div class="flex flex-col md:flex-row gap-4">
@@ -113,8 +117,11 @@
     </template>
   </el-table-column>
 
-  <el-table-column label="Salario" prop="salaryRange" />
-
+  <el-table-column label="Salario" >
+<template #default="{ row }">
+  {{ formatSalary(row.salaryRange) }}
+</template>
+</el-table-column>
   <el-table-column label="Tipo de Contrato">
     <template #default="{ row }">
       {{ getContractType(row.contractType) }}
@@ -163,8 +170,13 @@
       </el-form-item>
 
       <el-form-item label="Rango Salarial" prop="salaryRange">
-        <el-input v-model="selectedJobPosting.salaryRange" class="w-full" />
-      </el-form-item>
+  <el-input 
+    v-model="selectedJobPosting.salaryRange"
+    @input="formatSalaryInput('edit')"
+    class="w-full"
+  />
+</el-form-item>
+
 
       <div class="flex flex-col md:flex-row gap-4">
         <el-form-item label="Nuevo Requerimiento" class="w-full md:w-4/5">
@@ -255,6 +267,23 @@ import { useContracTypeStore } from "@/presentation/stores/contractType.store";
 import type { ContractType } from "@/domain/Interfaces/Contract/contractType.interface";
 import { useJobTitleStore } from "@/presentation/stores/jobTitle.store";
 import { useDivisionStore } from "@/presentation/stores/division.store";
+
+const formatSalary = (salary) => {
+  if (!salary) return 'No especificado';
+  return new Intl.NumberFormat('es-CO').format(salary);
+};
+const formatSalaryInput = (type) => {
+  let target = type === "create" ? jobPosting : selectedJobPosting;
+
+  let numericValue = target.value.salaryRange.replace(/\D/g, "");
+
+  if (!numericValue) {
+    target.value.salaryRange = "";
+    return;
+  }
+
+  target.value.salaryRange = new Intl.NumberFormat("es-CO").format(parseInt(numericValue, 10));
+};
 
 const isAddModalOpen = ref(false);
 const isEditModalOpen = ref(false);

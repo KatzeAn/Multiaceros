@@ -28,13 +28,13 @@ export const useCertifiedStore = defineStore("certified", () => {
       window.URL.revokeObjectURL(url);
     } catch (error) {
       console.error("Error creating absence request:", error);
-      ElNotification({
+            ElNotification({
         title: "Error",
         message: "An error occurred while saving the form",
         type: "error",
-      });
+            });
       throw error;
-    }
+        }
   };
 
   return {

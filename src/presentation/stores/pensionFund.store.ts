@@ -8,6 +8,8 @@ import { useUserStore } from "./user.store";
 export const usePensionFundStore = defineStore("pensionFund", () => {
   const pensionFunds = ref<PensionFunds[]>([]);
   const isLoading = ref(false);
+  const errorMessage = ref<string | null | undefined>(null);
+  
 
   const fetchPensionFund = async (isActive: boolean = false) => {
     try {
@@ -36,11 +38,14 @@ export const usePensionFundStore = defineStore("pensionFund", () => {
       const pensionFundModel = new PensionFundsModel();
       await pensionFundModel.createPensionFund(data);
       await fetchPensionFund(); // Recargar lista después de crear
-    } catch (error) {
-      throw error;
-    } finally {
-      isLoading.value = false;
-    }
+    } catch (error: any) {
+          errorMessage.value = error as string;
+          ElNotification({
+              title: 'Error',
+              message: errorMessage.value,
+              type: 'error',
+          });
+      }
   };
 
   const deletePensionFundRequest = async (pensionFundId: number) => {
@@ -59,14 +64,13 @@ export const usePensionFundStore = defineStore("pensionFund", () => {
       });
 
       await fetchPensionFund();
-    } catch (error) {
-      ElNotification({
-        title: "Error",
-        message: "No se pudo eliminar el fondo de pensión",
-        type: "error",
-      });
-    } finally {
-      isLoading.value = false;
+  } catch (error: any) {
+        errorMessage.value = error as string;
+        ElNotification({
+            title: 'Error',
+            message: errorMessage.value,
+            type: 'error',
+        });
     }
   };
 
@@ -86,15 +90,14 @@ export const usePensionFundStore = defineStore("pensionFund", () => {
         });
 
         await fetchPensionFund();
-        } catch (error) {
-          ElNotification({
-            title: "Error",
-            message: "No se pudo actualizar el fondo de pensión",
-            type: "error",
-      });
-    } finally {
-      isLoading.value = false;
-      }
+       } catch (error: any) {
+             errorMessage.value = error as string;
+             ElNotification({
+                 title: 'Error',
+                 message: errorMessage.value,
+                 type: 'error',
+             });
+         }
   }
   return {
     isLoading,

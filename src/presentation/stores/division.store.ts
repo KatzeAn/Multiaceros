@@ -11,7 +11,8 @@ export const useDivisionStore = defineStore("division", () => {
   const divisions = ref<Division[]>([]);
   const isLoading = ref(false);
   const userStore = useUserStore();
-
+  const errorMessage = ref<string | null | undefined>(null);
+  
   const fetchDivision = async (isActive: boolean = false) => {
     try {
       isLoading.value = true;
@@ -39,11 +40,14 @@ export const useDivisionStore = defineStore("division", () => {
       const divisionModel = new DivisionModel();
       await divisionModel.createDivision(data.name, data.createdBy ?? "");
       await fetchDivision(); // Recargar lista después de crear
-    } catch (error) {
-      throw error;
-    } finally {
-      isLoading.value = false;
-    }
+    } catch (error: any) {
+          errorMessage.value = error as string;
+          ElNotification({
+              title: 'Error',
+              message: errorMessage.value,
+              type: 'error',
+          });
+      }
   };
 
   const fetchMyTeammate = async () => {
@@ -63,12 +67,14 @@ export const useDivisionStore = defineStore("division", () => {
       const divisionService = new DivisionModel();
       const response: Teammate[] = await divisionService.getTeammates(userId);
       result.teammateList = response;
-    } catch (error) {
-      console.error("Error fetching teammates:", error);
-      result.teammateList = [];
-    } finally {
-      result.loading = false;
-    }
+    } catch (error: any) {
+          errorMessage.value = error as string;
+          ElNotification({
+              title: 'Error',
+              message: errorMessage.value,
+              type: 'error',
+          });
+      }
 
     return result;
   };
@@ -86,15 +92,14 @@ export const useDivisionStore = defineStore("division", () => {
         type: "success",
       });
       await fetchDivision();
-    } catch (error) {
+    } catch (error: any) {
+      errorMessage.value = error as string;
       ElNotification({
-        title: "Error",
-        message: "No se pudo desactivar el departamento.",
-        type: "error",
+          title: 'Error',
+          message: errorMessage.value,
+          type: 'error',
       });
-    } finally {
-      isLoading.value = false;
-    }
+  }
   };
 
   const updateDivisionRequest = async (id: number, newName: string) => {
@@ -113,15 +118,14 @@ export const useDivisionStore = defineStore("division", () => {
       });
 
       await fetchDivision();
-    } catch (error) {
+    } catch (error: any) {
+      errorMessage.value = error as string;
       ElNotification({
-        title: "Error",
-        message: "No se pudo actualizar el departamento.",
-        type: "error",
+          title: 'Error',
+          message: errorMessage.value,
+          type: 'error',
       });
-    } finally {
-      isLoading.value = false;
-    }
+  }
   };
 
   return {

@@ -8,7 +8,8 @@ import { useUserStore } from "./user.store";
 export const useBenefitStore = defineStore("Benefit", () => {
   const benefits = ref<Benefits[]>([]);
   const isLoading = ref(false);
-
+  const errorMessage = ref<string | null | undefined>(null);
+  
   const fetchBenefit = async (isActive: boolean = false) => {
     try {
       isLoading.value = true;
@@ -27,7 +28,7 @@ export const useBenefitStore = defineStore("Benefit", () => {
       return [];
     } finally {
       isLoading.value = false;
-    }
+    } 
   };
   
   const createBenefitRequest = async (data: Benefits) => {
@@ -35,12 +36,20 @@ export const useBenefitStore = defineStore("Benefit", () => {
       isLoading.value = true;
       const benefitModel = new BenefitModel();
       await benefitModel.createBenefit(data);
+      ElNotification({
+        title: "Éxito",
+        message: "Beneficio creado con éxito",
+        type: "success",
+      });
       await fetchBenefit();
-    } catch (error) {
-      throw error;
-    } finally {
-      isLoading.value = false;
-    }
+     } catch (error: any) {
+            errorMessage.value = error as string;
+            ElNotification({
+                title: 'Error',
+                message: errorMessage.value,
+                type: 'error',
+            });
+        }
   };
 
   const deleteBenefitRequest = async (benefitID: number) => {
@@ -58,15 +67,14 @@ export const useBenefitStore = defineStore("Benefit", () => {
         type: "success",
         });
         await fetchBenefit();
-        } catch (error) {
-          ElNotification({
-            title: "Error",
-            message: "No se pudo eliminar el beneficio",
-            type: "error",
-            });
-            } finally {
-              isLoading.value = false;
-              }
+      } catch (error: any) {
+        errorMessage.value = error as string;
+        ElNotification({
+            title: 'Error',
+            message: errorMessage.value,
+            type: 'error',
+        });
+    }
               
   }
 
@@ -84,17 +92,15 @@ export const useBenefitStore = defineStore("Benefit", () => {
         message: "Beneficio actualizado con éxito.",
         type: "success",
       });
-  
       await fetchBenefit();
-    } catch (error) {
+    } catch (error: any) {
+      errorMessage.value = error as string;
       ElNotification({
-        title: "Error",
-        message: "No se pudo actualizar el beneficio.",
-        type: "error",
+          title: 'Error',
+          message: errorMessage.value,
+          type: 'error',
       });
-    } finally {
-      isLoading.value = false;
-    }
+  }
   };
   
 

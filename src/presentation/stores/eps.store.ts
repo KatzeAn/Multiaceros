@@ -8,6 +8,7 @@ import { useUserStore } from "./user.store";
 export const useEpsStore = defineStore("eps", () => {
   const epsList = ref<Eps[]>([]);
   const isLoading = ref(false);
+  const errorMessage = ref<string | null | undefined>(null);
 
   const fetchEps = async (isActive: boolean = false) => {
     try {
@@ -36,11 +37,14 @@ export const useEpsStore = defineStore("eps", () => {
       const epsModel = new EpsModel();
       await epsModel.createEps(eps);
       await fetchEps(); // Recargar lista después de crear
-    } catch (error) {
-      throw error;
-    } finally {
-      isLoading.value = false;
-    }
+    } catch (error: any) {
+      errorMessage.value = error as string;
+      ElNotification({
+          title: 'Error',
+          message: errorMessage.value,
+          type: 'error',
+      });
+  }
   };
   const deleteEpsRequest = async (id: number) => {
     try {
@@ -58,14 +62,13 @@ export const useEpsStore = defineStore("eps", () => {
         });
 
         await fetchEps();
-    } catch (error) {
+      } catch (error: any) {
+        errorMessage.value = error as string;
         ElNotification({
-            title: "Error",
-            message: "No se pudo eliminar la EPS.",
-            type: "error",
+            title: 'Error',
+            message: errorMessage.value,
+            type: 'error',
         });
-    } finally {
-        isLoading.value = false;
     }
 };
  const updateEpsRequest = async (id: number, epsName: string) => {
@@ -80,16 +83,15 @@ export const useEpsStore = defineStore("eps", () => {
       type: "success",
     });
     await fetchEps();
-    } catch (error) {
-      ElNotification({
-        title: "Error",
-        message: "No se pudo actualizar la EPS.",
-        type: "error",
-        });
-        } finally {
-          isLoading.value = false;
-          }
-          };
+  } catch (error: any) {
+    errorMessage.value = error as string;
+    ElNotification({
+        title: 'Error',
+        message: errorMessage.value,
+        type: 'error',
+    });
+  }
+};
 
 
   return {

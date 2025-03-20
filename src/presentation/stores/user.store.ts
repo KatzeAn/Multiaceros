@@ -51,7 +51,7 @@ export const useUserStore = defineStore('user', () => {
         try {
             result.loading = true;
             const userService = new UserModel();
-            const usersResponse: User[] = await userService.getUsers();
+            const usersResponse = (await userService.getUsers()) as unknown as User[];
             result.users = usersResponse;
         } catch (error) {
             result.users = [];
@@ -85,9 +85,12 @@ export const useUserStore = defineStore('user', () => {
 
     const heartbeat = async () => {
         try {
-            const userId = getUserId.value;
-            const userService = new UserModel();
-            return await userService.heartbeat(userId);
+            console.log("s", isAuthenticated)
+            if(isAuthenticated){
+                const userId = getUserId.value;
+                const userService = new UserModel();
+                return await userService.heartbeat(userId);
+            }
         } catch (error) {
             console.error(error);
             return "";

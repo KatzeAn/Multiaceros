@@ -8,6 +8,7 @@ import { useUserStore } from "./user.store";
 export const useSeveranceFundStore = defineStore("severanceFund", () => {
   const severanceFunds = ref<SeveranceFund[]>([]);
   const isLoading = ref(false);
+  const errorMessage = ref<string | null | undefined>(null);
 
   const fetchSeveranceFund = async (isActive: boolean = false) => {
     try {
@@ -36,11 +37,14 @@ export const useSeveranceFundStore = defineStore("severanceFund", () => {
       const severanceFundModel = new SeveranceFundModel();
       await severanceFundModel.createSeveranceFund(data);
       await fetchSeveranceFund(); // Recargar lista después de crear
-    } catch (error) {
-      throw error;
-    } finally {
-      isLoading.value = false;
-    }
+    } catch (error: any) {
+      errorMessage.value = error as string;
+      ElNotification({
+          title: 'Error',
+          message: errorMessage.value,
+          type: 'error',
+      });
+  }
   };
 
   const deleteSeveranceFundsRequest = async (severanceFundId: number) => {
@@ -59,15 +63,14 @@ export const useSeveranceFundStore = defineStore("severanceFund", () => {
             });
 
             await fetchSeveranceFund();
-            } catch (error) {
-              ElNotification ({
-                title: "Error",
-                message: "No se pudo eliminar el fondo de compensación familiar",
-                type: "error",
-                });
-              }finally {
-                isLoading.value = false;
-              }
+          } catch (error: any) {
+            errorMessage.value = error as string;
+            ElNotification({
+                title: 'Error',
+                message: errorMessage.value,
+                type: 'error',
+            });
+        }
           
           }
 
@@ -87,15 +90,14 @@ export const useSeveranceFundStore = defineStore("severanceFund", () => {
                 });
 
                 await fetchSeveranceFund();
-                } catch (error) {
-                  ElNotification({
-                    title: "Error",
-                    message: "No se pudo actualizar el fondo de compensación familiar",
-                    type: "error",
-              });
-          } finally {
-            isLoading.value = false;
-          }
+              } catch (error: any) {
+                errorMessage.value = error as string;
+                ElNotification({
+                    title: 'Error',
+                    message: errorMessage.value,
+                    type: 'error',
+                });
+            }
         };
 
   return {

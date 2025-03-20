@@ -7,6 +7,7 @@ import { useUserStore } from "./user.store";
 
 const jobPostingModel = new JobPostingModel();
 const isLoading = ref(false);
+const errorMessage = ref<string | null | undefined>(null);
 
 export const useJobPostingStore = defineStore("jobPosting", () => {
   const jobPostings = ref<JobPosting[]>([]);
@@ -31,10 +32,14 @@ export const useJobPostingStore = defineStore("jobPosting", () => {
       const newJob = await jobPostingModel.createJobPosting(job);
       jobPostings.value.push(newJob);
       return newJob;
-    } catch (error) {
-      console.error("Error creating job posting:", error);
-      throw error;
-    }
+    } catch (error: any) {
+                errorMessage.value = error as string;
+                ElNotification({
+                    title: 'Error',
+                    message: errorMessage.value,
+                    type: 'error',
+                });
+            }
   };
 
   const updateJobPosting = async (id: number, job: JobPosting) => {
@@ -47,16 +52,14 @@ export const useJobPostingStore = defineStore("jobPosting", () => {
         message: "Oferta de trabajo actualizada correctamente",
         type: "success",
       });
-    } catch (error) {
+    } catch (error: any) {
+      errorMessage.value = error as string;
       ElNotification({
-        title: "Error",
-        message: "No se pudo actualizar la oferta de trabajo",
-        type: "error",
+          title: 'Error',
+          message: errorMessage.value,
+          type: 'error',
       });
-      throw error;
-    } finally {
-      isLoading.value = false;
-    }
+  }
   };
 
   const deleteJobPosting = async (id: number) => {
@@ -74,15 +77,14 @@ export const useJobPostingStore = defineStore("jobPosting", () => {
       });
 
       await fetchJobPostingsCopy();
-    } catch (error) {
+    } catch (error: any) {
+      errorMessage.value = error as string;
       ElNotification({
-        title: "Error",
-        message: "No se pudo eliminar la oferta de trabajo",
-        type: "error",
+          title: 'Error',
+          message: errorMessage.value,
+          type: 'error',
       });
-    } finally {
-      isLoading.value = false;
-    }
+  }
   };
 
   return {

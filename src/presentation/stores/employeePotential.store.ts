@@ -8,6 +8,7 @@ export const useEmployeePotentialStore = defineStore(
   "employeePotential",
   () => {
     const isLoading = ref(false);
+    const errorMessage = ref<string | null | undefined>(null);
 
     const fetchEmployeePotential = async () => {
       try {
@@ -52,19 +53,17 @@ export const useEmployeePotentialStore = defineStore(
         await employeePotentialModel.createEmployeePotential(data, file);
         ElNotification({
           title: "Éxito",
-          message: "Empleado potencial creado correctamente",
+          message: "Su solicitud ha sido enviada exitosamente",
           type: "success",
         });
-      } catch (error) {
+      } catch (error: any) {
+        errorMessage.value = error as string;
         ElNotification({
-          title: "Error",
-          message: "No se pudo crear el empleado potencial",
-          type: "error",
+            title: 'Error',
+            message: errorMessage.value,
+            type: 'error',
         });
-        throw error;
-      } finally {
-        isLoading.value = false;
-      }
+    }
     };
 
     return {

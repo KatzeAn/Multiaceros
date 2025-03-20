@@ -68,21 +68,8 @@ export function useBenefitViewModel() {
       benefitForm.createdBy = "Fe";
       await benefitStore.createBenefitRequest(benefitForm);
       await loadBenefit();
-
-      ElNotification({
-        title: "Éxito",
-        message: "Beneficio creado correctamente",
-        type: "success",
-      });
-
       benefitForm.nameBenefit = "";
     } catch (error) {
-      const errorMessage = error as string;
-      ElNotification({
-        title: "Error",
-        message: errorMessage,
-        type: "error",
-      });
     }
   };
 

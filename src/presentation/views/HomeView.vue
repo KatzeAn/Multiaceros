@@ -220,7 +220,7 @@ const download = async () => {
             </span>
           </div>
         </template>
-        <MyTeam></MyTeam>
+         <!-- <MyTeam></MyTeam>--> 
         <!-- <div class="flex flex-row gap-40">
           <div class="flex flex-col items-center">
             <el-avatar shape="square" :size="80" :src="state.squareUrl" />
@@ -243,7 +243,7 @@ const download = async () => {
         </div> -->
       </el-card>
 
-      <!-- Card para enlaces -->
+      <!-- Card para enlaces c
       <el-card class="col-[1/-1] md:col-span-2 lg:col-span-2" shadow="hover">
         <template #header>
           <div class="card-header">

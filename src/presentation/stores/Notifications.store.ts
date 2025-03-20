@@ -7,7 +7,8 @@ import { ElNotification } from "element-plus";
 export const useNotificationConfigStore = defineStore("notificationConfig", () => {
     const notificationConfigs = ref<NotificationConfig[]>([]);
     const isLoading = ref(false);
-
+    const errorMessage = ref<string | null | undefined>(null);
+    
     const fetchNotificationConfigs = async (isActive: boolean) => {
         try {
             isLoading.value = true;
@@ -40,15 +41,14 @@ export const useNotificationConfigStore = defineStore("notificationConfig", () =
                 type: "success",
             });
             await fetchNotificationConfigs(true);
-        } catch (error) {
-            ElNotification({
-                title: "Error",
-                message: "No se pudo actualizar la configuración",
-                type: "error",
-            });
-        } finally {
-            isLoading.value = false;
-        }
+        } catch (error: any) {
+              errorMessage.value = error as string;
+              ElNotification({
+                  title: 'Error',
+                  message: errorMessage.value,
+                  type: 'error',
+              });
+          }
     };
 
     return {
