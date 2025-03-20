@@ -22,8 +22,13 @@
         </el-form-item>
 
         <el-form-item label="Rango Salarial" prop="salaryRange">
-          <el-input v-model="jobPosting.salaryRange" class="w-full" />
+          <el-input 
+            v-model="jobPosting.salaryRange"
+            @input="formatSalary"
+            class="w-full"
+          />
         </el-form-item>
+
 
         <div class="flex flex-col md:flex-row gap-4">
           <el-form-item label="Nuevo Requerimiento" class="w-full md:w-4/5">
@@ -113,8 +118,11 @@
     </template>
   </el-table-column>
 
-  <el-table-column label="Salario" prop="salaryRange" />
-
+  <el-table-column label="Salario" >
+<template #default="{ row }">
+  {{ formatSalary(row.salaryRange) }}
+</template>
+</el-table-column>
   <el-table-column label="Tipo de Contrato">
     <template #default="{ row }">
       {{ getContractType(row.contractType) }}
@@ -256,6 +264,10 @@ import type { ContractType } from "@/domain/Interfaces/Contract/contractType.int
 import { useJobTitleStore } from "@/presentation/stores/jobTitle.store";
 import { useDivisionStore } from "@/presentation/stores/division.store";
 
+const formatSalary = (salary) => {
+  if (!salary) return 'No especificado';
+  return new Intl.NumberFormat('es-CO').format(salary);
+};
 const isAddModalOpen = ref(false);
 const isEditModalOpen = ref(false);
 const jobPostingStore = useJobPostingStore();

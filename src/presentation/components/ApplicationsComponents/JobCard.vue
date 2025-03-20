@@ -17,7 +17,7 @@
         </div>
       </template>
       <div class="card-content text-sm text-gray-600">
-        <p><strong>Salario:</strong> {{ job.salaryRange }}</p>
+        <p><strong>Salario:</strong> {{ formatSalary(job.salaryRange) }}</p>
         <p><strong>Descripción:</strong></p>
         <p v-if="job.description.length <= 100">{{ job.description }}</p>
         <p v-else>
@@ -44,6 +44,12 @@
 import { ref, onMounted, reactive } from "vue";
 import { useJobPostingStore } from "@/presentation/stores/jobPostings.store";
 import AddApplicancy from "../employeePotential/addApplicancy.vue";
+import { computed } from 'vue';
+
+const formatSalary = (salary) => {
+  if (!salary) return 'No especificado';
+  return new Intl.NumberFormat('es-CO').format(salary);
+};
 
 const jobStore = useJobPostingStore();
 const isAddModalOpen = ref(false);
