@@ -60,7 +60,7 @@
       </el-table-column>
     </el-table>
 
-    <el-dialog v-model="isEditModalVisible" title="Editar Fondo de Cesantías" :width="isSmallScreen ? '90%' : '500px'" :style="{ maxWidth: '800px' }">
+    <el-dialog v-model="isEditModalVisible" title="Editar Fondo de Cesantías"  top="6vh" width="90%" :style="{ maxWidth: '800px', maxHeight: '80vh', overflowY: 'auto' }">
       <el-form :label-position="isSmallScreen ? 'top' : 'left'">
         <el-form-item label="Nuevo Nombre">
           <el-input v-model="editForm.name" />

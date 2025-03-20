@@ -1,13 +1,20 @@
 <template>
   <!-- MODAL PARA AÑADIR EMPLEADO -->
-  <el-dialog v-model="isAddModalOpen" title="Añadir Nuevo Empleado" top="6vh">
-    <AddEmployee
-      @close-form="closeForm"
-      @employee-saved="handleEmployeeSaved"
-    />
-  </el-dialog>
+  <el-dialog
+  v-model="isAddModalOpen"
+  title="Añadir Nuevo Empleado"
+  top="6vh"
+  width="90%"
+  :style="{ maxWidth: '800px', maxHeight: '80vh', overflowY: 'auto' }"
+>
+  <AddEmployee
+    @close-form="closeForm"
+    @employee-saved="handleEmployeeSaved"
+  />
+</el-dialog>
+
   <!-- MODAL PARA EDITAR EMPLEADO -->
-  <el-dialog v-model="isEditModalOpen" title="Editar Empleado" top="6vh" >
+  <el-dialog v-model="isEditModalOpen" title="Editar Empleado" top="6vh" width="90%" :style="{ maxWidth: '800px', maxHeight: '80vh', overflowY: 'auto' }">
     <EditEmployee
       v-if="selectedEmployee"
       :employee="selectedEmployee"
