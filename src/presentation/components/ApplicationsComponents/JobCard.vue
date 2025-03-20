@@ -18,7 +18,14 @@
       </template>
       <div class="card-content text-sm text-gray-600">
         <p><strong>Salario:</strong> {{ job.salaryRange }}</p>
-        <p><strong>Descripción:</strong> {{ job.description }}</p>
+        <p><strong>Descripción:</strong></p>
+        <p v-if="job.description.length <= 100">{{ job.description }}</p>
+        <p v-else>
+          {{ expandedDescriptions[job.id] ? job.description : job.description.slice(0, 100) + '...' }}
+          <el-button text @click="toggleDescription(job.id)">
+            {{ expandedDescriptions[job.id] ? 'Ver menos' : 'Ver más' }}
+          </el-button>
+        </p>
         <p><strong>Requerimientos:</strong></p>
         <ul>
           <li v-for="(requirement, index) in job.requirements" :key="index">- {{ requirement }}</li>
@@ -34,19 +41,24 @@
 </template>
 
 <script lang="ts" setup>
-import { ref, onMounted } from "vue";
+import { ref, onMounted, reactive } from "vue";
 import { useJobPostingStore } from "@/presentation/stores/jobPostings.store";
 import AddApplicancy from "../employeePotential/addApplicancy.vue";
 
 const jobStore = useJobPostingStore();
 const isAddModalOpen = ref(false);
 const jobPostingId = ref<number | null>(null);
+const expandedDescriptions = reactive<Record<number, boolean>>({});
 
 const openAddModal = (idJobPosting: number) => {
   if (idJobPosting >= 0) {
     jobPostingId.value = idJobPosting;
     isAddModalOpen.value = true;
   }
+};
+
+const toggleDescription = (id: number) => {
+  expandedDescriptions[id] = !expandedDescriptions[id];
 };
 
 const handleEmployeeSaved = () => {
@@ -64,12 +76,19 @@ onMounted(async () => {
 .job-list {
   display: grid;
   grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+  grid-auto-rows: min-content; 
   gap: 20px;
   padding: 20px;
+  align-items: start;
 }
 
 .job-card {
-  max-width: 100%;
+  display: flex;
+  flex-direction: column;
+  align-items: stretch;
+  width: 100%;
+  max-width: 300px; 
+  height: auto; 
   box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
   border-radius: 10px;
   overflow: hidden;

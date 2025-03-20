@@ -53,7 +53,7 @@ export const useEmployeePotentialStore = defineStore(
         await employeePotentialModel.createEmployeePotential(data, file);
         ElNotification({
           title: "Éxito",
-          message: "Empleado potencial creado correctamente",
+          message: "Su solicitud ha sido enviada exitosamente",
           type: "success",
         });
       } catch (error: any) {
