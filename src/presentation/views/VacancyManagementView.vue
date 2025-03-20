@@ -24,11 +24,10 @@
         <el-form-item label="Rango Salarial" prop="salaryRange">
           <el-input 
             v-model="jobPosting.salaryRange"
-            @input="formatSalary"
+            @input="formatSalaryInput('create')"
             class="w-full"
           />
         </el-form-item>
-
 
         <div class="flex flex-col md:flex-row gap-4">
           <el-form-item label="Nuevo Requerimiento" class="w-full md:w-4/5">
@@ -171,8 +170,13 @@
       </el-form-item>
 
       <el-form-item label="Rango Salarial" prop="salaryRange">
-        <el-input v-model="selectedJobPosting.salaryRange" class="w-full" />
-      </el-form-item>
+  <el-input 
+    v-model="selectedJobPosting.salaryRange"
+    @input="formatSalaryInput('edit')"
+    class="w-full"
+  />
+</el-form-item>
+
 
       <div class="flex flex-col md:flex-row gap-4">
         <el-form-item label="Nuevo Requerimiento" class="w-full md:w-4/5">
@@ -268,6 +272,19 @@ const formatSalary = (salary) => {
   if (!salary) return 'No especificado';
   return new Intl.NumberFormat('es-CO').format(salary);
 };
+const formatSalaryInput = (type) => {
+  let target = type === "create" ? jobPosting : selectedJobPosting;
+
+  let numericValue = target.value.salaryRange.replace(/\D/g, "");
+
+  if (!numericValue) {
+    target.value.salaryRange = "";
+    return;
+  }
+
+  target.value.salaryRange = new Intl.NumberFormat("es-CO").format(parseInt(numericValue, 10));
+};
+
 const isAddModalOpen = ref(false);
 const isEditModalOpen = ref(false);
 const jobPostingStore = useJobPostingStore();
