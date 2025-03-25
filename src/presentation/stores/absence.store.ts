@@ -4,8 +4,10 @@ import { defineStore } from "pinia";
 import { reactive, ref } from "vue";
 import { useUserStore } from "@/presentation/stores/user.store";
 import { AbsenceModel } from "@/database/absence/absences.model";
+import { useI18n } from "vue-i18n";
 
 export const useAbsenceStore = defineStore("absence", () => {
+  const { t } = useI18n();
   const errorMessage = ref<string | null | undefined>(null);
   const absenceRequestForm = reactive<AbsenceRequest>({
     StartDate: "",
@@ -52,30 +54,37 @@ export const useAbsenceStore = defineStore("absence", () => {
   const fetchRejectedAbsences = () => fetchAbsences("getRejectedAbsences");
   const fetchAbsenceTypes = async (isActive: boolean) => {return fetchAbsences("getAbsenceTypes", isActive);};
   
+  const notifySuccess = (messageKey: string) => {
+    ElNotification({
+      title: t("notifications.success.title"),
+      message: t(messageKey),
+      type: "success",
+    });
+  };
+
+  const notifyError = (error: any) => {
+    errorMessage.value = error as string;
+    ElNotification({
+      title: t("notifications.error.title"),
+      message: errorMessage.value,
+      type: "error",
+    });
+  };
+
   const approveAbsence = async (absenceId: number) => { 
     try {
       const absenceService = new AbsenceModel();
       await absenceService.approveAbsenceRequest(absenceId); 
-      ElNotification({
-        title: 'Éxito',
-        message: 'La ausencia ha sido aprobada correctamente.',
-        type: 'success',
-    });
+      notifySuccess("notifications.success.approve");
     } catch (error: any) {
-        errorMessage.value = error as string;
-        ElNotification({
-            title: 'Error',
-            message: errorMessage.value,
-            type: 'error',
-        });
+      notifyError(error);
     }
-};
+  };
 
   const createAbsenceRequest = async () => {
     try {
       const absenceService = new AbsenceModel();
       const userId = useUserStore().getUserId;
-
       await absenceService.createAbsenceRequest(
         absenceRequestForm.StartDate,
         absenceRequestForm.EndDate,
@@ -84,25 +93,16 @@ export const useAbsenceStore = defineStore("absence", () => {
         absenceRequestForm.Comment,
         userId
       );
-      ElNotification({
-        title: 'Éxito',
-        message: 'La ausencia ha sido creada',
-        type: 'success',
-    });
+      notifySuccess("notifications.success.create");
     } catch (error: any) {
-      errorMessage.value = error as string;
-      ElNotification({
-          title: 'Error',
-          message: errorMessage.value,
-          type: 'error',
-      });
-  }
+      notifyError(error);
+    }
   };
+
   const updateAbsenceRequest = async (absenceId: number) => {
     try {
       const absenceService = new AbsenceModel();
       const userId = useUserStore().getUserId;
-  
       await absenceService.updateAbsenceRequest(
         absenceId,
         absenceRequestForm.StartDate,
@@ -112,60 +112,32 @@ export const useAbsenceStore = defineStore("absence", () => {
         absenceRequestForm.Comment,
         userId
       );
-  
-      ElNotification({
-        title: "Éxito",
-        message: "La ausencia ha sido actualizada",
-        type: "success",
-      });
+      notifySuccess("notifications.success.update");
     } catch (error: any) {
-      errorMessage.value = error as string;
-      ElNotification({
-          title: 'Error',
-          message: errorMessage.value,
-          type: 'error',
-      });
-  }
+      notifyError(error);
+    }
   };
+
   const deleteAbsenceRequest = async (absenceId: number) => {
     try {
       const absenceService = new AbsenceModel();
       await absenceService.deleteAbsenceRequest(absenceId);
-  
-      ElNotification({
-        title: "Éxito",
-        message: "La ausencia ha sido eliminada",
-        type: "success",
-      });
+      notifySuccess("notifications.success.delete");
     } catch (error: any) {
-      errorMessage.value = error as string;
-      ElNotification({
-          title: 'Error',
-          message: errorMessage.value,
-          type: 'error',
-      });
-  }
+      notifyError(error);
+    }
   };
 
   const rejectAbsence = async (absenceId: number) => {
     try {
       const absenceService = new AbsenceModel();
       await absenceService.rejectAbsenceRequest(absenceId);
-
-      ElNotification({
-        title: "Éxito",
-        message: "La ausencia ha sido rechazada",
-        type: "success",
-      });
-     } catch (error: any) {
-      errorMessage.value = error as string;
-      ElNotification({
-          title: 'Error',
-          message: errorMessage.value,
-          type: 'error',
-      });
-  }
+      notifySuccess("notifications.success.reject");
+    } catch (error: any) {
+      notifyError(error);
+    }
   };
+
   return {
     updateAbsenceRequest,
     deleteAbsenceRequest,
@@ -180,5 +152,5 @@ export const useAbsenceStore = defineStore("absence", () => {
     fetchApprovedAbsences,
     fetchRejectedAbsences,
     fetchAbsenceTypes,
-    };
+  };
 });

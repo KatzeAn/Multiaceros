@@ -159,5 +159,4 @@ const deactivateDivision = async (id: number) => {
   }
 };
 
-onMounted(loadDivision); 
 </script>

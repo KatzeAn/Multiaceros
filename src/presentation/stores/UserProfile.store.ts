@@ -4,10 +4,14 @@ import type { UserProfile } from "@/domain/Interfaces/user/UserProfile.interface
 import { ElNotification } from "element-plus";
 import { defineStore } from "pinia";
 import { ref } from "vue";
+import { useI18n } from "vue-i18n"; 
+
 
 export const useUserProfileStore = defineStore('userProfile', () => {
+    const { t } = useI18n();
     const userProfile = ref<UserProfile | null>(null);
     const loading = ref<boolean>(false);
+    const errorMessage = ref<string | null | undefined>(null);
 
     const fetchUserProfile = async (userId: string) => {
         loading.value = true;
@@ -16,7 +20,6 @@ export const useUserProfileStore = defineStore('userProfile', () => {
             const userProfileResponse: UserProfile = await userServices.getUserProfile(userId);
             userProfile.value = userProfileResponse; 
         } catch (error) {
-            console.error('Error fetching user profile:', error);
             userProfile.value = null;
         } finally {
             loading.value = false;
@@ -39,17 +42,18 @@ export const useUserProfileStore = defineStore('userProfile', () => {
 
                 localStorage.setItem('user', JSON.stringify(userData));
                 ElNotification({
-                    title: 'Éxito',
-                    message: 'Perfil actualizado correctamente',
-                    type: 'success',
-                });
+                    title: t("notifications.success.title"),
+                    message: t("notifications.success.profileUpdated"),
+                    type: "success",
+                  });
             }
-        } catch (error) {
+        } catch (error: any) {
+            errorMessage.value = error as string;
             ElNotification({
-                title: 'Error',
-                message: 'No se pudo actualizar el perfil. Inténtalo de nuevo.',
-                type: 'error',
-            });
+                title: t("notifications.error.title"),
+                message: errorMessage.value,
+                type: "error",
+              });
         }
     };
 

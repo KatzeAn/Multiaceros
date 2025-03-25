@@ -2,10 +2,13 @@ import { PayrollPaymentModel } from "@/database/Payroll/Payroll.model";
 import { ElNotification } from "element-plus";
 import { defineStore } from "pinia";
 import { ref } from "vue";
+import { useI18n } from "vue-i18n";
+
 
 export const usePayrollPaymentStore = defineStore("payrollPayment", () => {
   const errorMessage = ref<string | null | undefined>(null);
-  
+  const { t } = useI18n();
+
   const fetchPayrollPayments = async () => {
     try {
       const payrollService = new PayrollPaymentModel();
@@ -35,7 +38,7 @@ export const usePayrollPaymentStore = defineStore("payrollPayment", () => {
     } catch (error: any) {
             errorMessage.value = error as string;
             ElNotification({
-              title: 'Error',
+              title: t("notifications.error.title"),
               message: errorMessage.value,
               type: 'error',
        });
@@ -55,7 +58,7 @@ export const usePayrollPaymentStore = defineStore("payrollPayment", () => {
    } catch (error: any) {
                  errorMessage.value = error as string;
                  ElNotification({
-                     title: 'Error',
+                  title: t("notifications.error.title"),
                      message: errorMessage.value,
                      type: 'error',
                  });
@@ -77,7 +80,7 @@ export const usePayrollPaymentStore = defineStore("payrollPayment", () => {
    } catch (error: any) {
                  errorMessage.value = error as string;
                  ElNotification({
-                     title: 'Error',
+                  title: t("notifications.error.title"),
                      message: errorMessage.value,
                      type: 'error',
                  });

@@ -153,5 +153,4 @@ const deleteFamilyFund = async (id: number) => {
   }
 };
 
-onMounted(loadFamilyCompensationFund)
 </script>

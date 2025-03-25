@@ -147,5 +147,4 @@ const deleteEps = async (id: number) => {
   }
 };
 
-onMounted(loadEps); 
 </script>

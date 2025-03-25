@@ -1,6 +1,6 @@
 import { ref, computed, reactive, watch, onMounted } from "vue";
 import { useDivisionStore } from "../stores/division.store";
-import { ElNotification, type FormInstance } from "element-plus";
+import {  type FormInstance } from "element-plus";
 import type { Division } from "@/domain/Interfaces/Division/division.interface";
 
 export function useDepartmentViewModel() {
@@ -69,20 +69,8 @@ const filterTableData = computed(() =>
       await divisionStore.createDivisionRequest(divisionForm);
       await loadDivision();
 
-      ElNotification({
-        title: "Éxito",
-        message: "EPS creado correctamente",
-        type: "success",
-      });
-
       divisionForm.name = "";
     } catch (error) {
-      const errorMessage = error as string;
-      ElNotification({
-        title: "Error",
-        message: errorMessage,
-        type: "error",
-      });
     }
   };
 

@@ -1,10 +1,12 @@
 import { defineStore } from "pinia";
 import { ref } from "vue";
+import { useI18n } from "vue-i18n";
 import { NotificationConfigModel } from "@/database/Notifications/Notifications.model";
 import type { NotificationConfig } from "@/domain/Interfaces/Notifications/Notifications.interface";
 import { ElNotification } from "element-plus";
 
 export const useNotificationConfigStore = defineStore("notificationConfig", () => {
+    const { t } = useI18n();
     const notificationConfigs = ref<NotificationConfig[]>([]);
     const isLoading = ref(false);
     const errorMessage = ref<string | null | undefined>(null);
@@ -20,8 +22,8 @@ export const useNotificationConfigStore = defineStore("notificationConfig", () =
             console.error(error);
             notificationConfigs.value = [];
             ElNotification({
-                title: "Error",
-                message: "No se pudieron cargar las  notificaciónes",
+                title: t("notifications.error.title"),
+                message: t("notifications.error.notificationLoad"),
                 type: "error",
             });
             return [];
@@ -36,19 +38,19 @@ export const useNotificationConfigStore = defineStore("notificationConfig", () =
             const notificationConfigModel = new NotificationConfigModel();
             await notificationConfigModel.updateNotificationConfig(id, data);
             ElNotification({
-                title: "Éxito",
-                message: "Configuración  actualizada con éxito",
+                title: t("notifications.success.title"),
+                message: t("notifications.success.notificationUpdated"),
                 type: "success",
             });
             await fetchNotificationConfigs(true);
         } catch (error: any) {
-              errorMessage.value = error as string;
-              ElNotification({
-                  title: 'Error',
-                  message: errorMessage.value,
-                  type: 'error',
-              });
-          }
+            errorMessage.value = error as string;
+            ElNotification({
+                title: t("notifications.error.title"),
+                message: t("notifications.error.notificationUpdate"),
+                type: "error",
+            });
+        }
     };
 
     return {

@@ -68,20 +68,9 @@ export function useArlViewModel() {
       await arlStore.createArlRequest(arlForm);
       await loadArl();
 
-      ElNotification({
-        title: "Éxito",
-        message: "ARL creado correctamente",
-        type: "success",
-      });
 
       arlForm.nameArl = "";
     } catch (error) {
-      const errorMessage = error as string;
-      ElNotification({
-        title: "Error",
-        message: errorMessage,
-        type: "error",
-      });
     }
   };
 

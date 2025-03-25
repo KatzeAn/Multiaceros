@@ -51,6 +51,10 @@ import frlogin from '@/i18n/locales/fr/login.json'
 import eslogin from '@/i18n/locales/es/login.json'
 import enlogin from '@/i18n/locales/en/login.json'
 
+import frnotifications from '@/i18n/locales/fr/notifications.json'
+import esnotifications from '@/i18n/locales/es/notifications.json'
+import ennotifications from '@/i18n/locales/en/notifications.json'
+
 
 const savedLanguage = localStorage.getItem('lang') || 'es'; 
 const i18n = createI18n({
@@ -72,6 +76,7 @@ const i18n = createI18n({
       ...esdashboardView,
       ...esApplications,
       ...eslogin,
+      ...esnotifications,
     },
     en: {
       ...enpayroll,
@@ -87,6 +92,7 @@ const i18n = createI18n({
       ...endashboardView,
       ...enApplications,
       ...enlogin,
+      ...ennotifications,
     },
     fr: {
       ...frpayroll,
@@ -102,6 +108,7 @@ const i18n = createI18n({
       ...frdashboardView,
       ...frApplications,
       ...frlogin,
+      ...frnotifications,
     }
   }
 });

@@ -151,5 +151,4 @@ const fetchBenefit = async () => {
   }
 };
 
-onMounted(fetchBenefit);
 </script>

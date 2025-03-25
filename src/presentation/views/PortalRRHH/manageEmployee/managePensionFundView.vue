@@ -129,5 +129,4 @@ const deleteFund = async (id: number) => {
   }
 };
 
-onMounted(loadPensionFund)
 </script>

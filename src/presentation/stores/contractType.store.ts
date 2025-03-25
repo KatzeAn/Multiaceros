@@ -14,7 +14,6 @@ export const useContracTypeStore = defineStore("contractType", () => {
       const response: ContractType[] = await contractTypeModel.getContracts(isActive);
       contractTypeList.value = Array.isArray(response) ? [...response] : [];
     } catch (error) {
-      console.error("Error fetching contract types:", error);
       contractTypeList.value = [];
     } finally {
       loading.value = false;

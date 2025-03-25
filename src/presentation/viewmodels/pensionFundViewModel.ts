@@ -68,20 +68,8 @@ export function usePensionFundViewModel() {
       await pensionFundStore.createPensionFundRequest(pensionFundForm);
       await loadPensionFund();
 
-      ElNotification({
-        title: "Éxito",
-        message: "Fondo de pensión creado correctamente",
-        type: "success",
-      });
-
       pensionFundForm.pensionFundName = "";
     } catch (error) {
-      const errorMessage = error as string;
-      ElNotification({
-        title: "Error",
-        message: errorMessage,
-        type: "error",
-      });
     }
   };
 

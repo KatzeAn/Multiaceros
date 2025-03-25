@@ -68,21 +68,8 @@ export function useEpsViewModel() {
     try {
       await epsStore.createEpsRequest(epsForm);
       await loadEps();
-
-      ElNotification({
-        title: "Éxito",
-        message: "EPS creado correctamente",
-        type: "success",
-      });
-
       epsForm.epsName = "";
-    } catch (error) {
-      const errorMessage = error as string;
-      ElNotification({
-        title: "Error",
-        message: errorMessage,
-        type: "error",
-      });
+    } catch (error) { 
     }
   };
 

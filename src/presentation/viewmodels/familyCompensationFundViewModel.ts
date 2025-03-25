@@ -74,20 +74,10 @@ export function useFamilyCompensationFundViewModel() {
       );
       await loadFamilyCompensationFund();
 
-      ElNotification({
-        title: "Éxito",
-        message: "FamilyCompensationFund creado correctamente",
-        type: "success",
-      });
+     
 
       familyCompensationFundForm.compensationFundName = "";
     } catch (error) {
-      const errorMessage = error as string;
-      ElNotification({
-        title: "Error",
-        message: errorMessage,
-        type: "error",
-      });
     }
   };
 

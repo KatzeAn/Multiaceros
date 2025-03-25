@@ -161,5 +161,4 @@ const deleteJob = async (id: number) => {
   }
 };
 
-onMounted(loadJobTitles)
 </script>

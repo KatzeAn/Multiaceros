@@ -1,6 +1,7 @@
 import { defineStore } from "pinia";
 import { ElNotification } from "element-plus";
 import { ref } from "vue";
+import { useI18n } from "vue-i18n";
 import { EmployeePotentialModel } from "@/database/employeePotential/employeePotential.model";
 import type { EmployeePotential } from "@/domain/Interfaces/EmployeePotential/EmployeePotential.interface";
 
@@ -9,6 +10,7 @@ export const useEmployeePotentialStore = defineStore(
   () => {
     const isLoading = ref(false);
     const errorMessage = ref<string | null | undefined>(null);
+    const { t } = useI18n();
 
     const fetchEmployeePotential = async () => {
       try {
@@ -18,8 +20,8 @@ export const useEmployeePotentialStore = defineStore(
         return Array.isArray(data) ? data : [];
       } catch (error) {
         ElNotification({
-          title: "Error",
-          message: "No se pudieron cargar los empleados potenciales",
+          title: t("notifications.error.title"),
+          message: t("notifications.error.employeePotentialLoad"),
           type: "error",
         });
         return [];
@@ -36,8 +38,8 @@ export const useEmployeePotentialStore = defineStore(
         return data;
       } catch (error) {
         ElNotification({
-          title: "Error",
-          message: "No se pudo cargar el candidato",
+          title: t("notifications.error.title"),
+          message: t("notifications.error.candidateLoad"),
           type: "error",
         });
         return null;
@@ -52,25 +54,25 @@ export const useEmployeePotentialStore = defineStore(
         const employeePotentialModel = new EmployeePotentialModel();
         await employeePotentialModel.createEmployeePotential(data, file);
         ElNotification({
-          title: "Éxito",
-          message: "Su solicitud ha sido enviada exitosamente",
+          title: t("notifications.success.title"),
+          message: t("notifications.success.requestSent"),
           type: "success",
         });
       } catch (error: any) {
         errorMessage.value = error as string;
         ElNotification({
-            title: 'Error',
-            message: errorMessage.value,
-            type: 'error',
+          title: t("notifications.error.title"),
+          message: errorMessage.value,
+          type: "error",
         });
-    }
+      }
     };
 
     return {
       isLoading,
       fetchEmployeePotential,
       createEmployeePotentialRequest,
-      fetchEmployeePotentialByDocument
+      fetchEmployeePotentialByDocument,
     };
   }
 );

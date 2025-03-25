@@ -132,5 +132,4 @@ const deleteARL = async (id: number) => {
   }
 };
 
-onMounted(loadArl)
 </script>
