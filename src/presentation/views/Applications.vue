@@ -4,10 +4,10 @@
     <div class="flex-1 flex flex-col"> 
       <NavbarApplications @navigate="setCurrentSection" />
       <div v-show="currentSection === 'vacantes'" id="vacantes" class="vacantes-section mt-10">
-        <h1 class="text-center text-3xl font-bold">Vacantes Disponibles</h1>
-        <p class="text-center mt-2 text-gray-600">
-          Encuentra la oportunidad ideal para unirte a nuestro equipo.
-        </p>
+        <h1 class="text-center text-3xl font-bold">{{ t('vacanciesAvailable') }}</h1>
+          <p class="text-center mt-2 text-gray-600">
+            {{ t('findOpportunity') }}
+          </p>
         <div class="job-list grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 mt-6">
           <JobCard/>
         </div>
@@ -25,6 +25,9 @@ import NavbarApplications from '../components/ApplicationsComponents/NavbarAppli
 import JobCard from '../components/ApplicationsComponents/JobCard.vue';
 import { ref } from 'vue';
 import AboutUs from '../components/ApplicationsComponents/AboutUs.vue';
+import { useI18n } from "vue-i18n";
+
+const { t } = useI18n()
 
 const currentSection = ref('vacantes');
 

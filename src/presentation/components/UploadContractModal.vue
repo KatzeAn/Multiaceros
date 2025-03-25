@@ -1,7 +1,7 @@
 <template>
   <el-card class="max-w-md mx-auto shadow-lg">
     <template #header>
-      <div class="text-lg font-semibold">Subir Contrato Laboral</div>
+      <div class="text-lg font-semibold">{{ t("uploadLaborContract") }}</div>
     </template>
 
     <div
@@ -11,7 +11,7 @@
       @drop.prevent="onDrop"
       @click="seleccionarArchivo"
     >
-      <div v-if="!archivo" class="text-gray-600">Arrastra y suelta un archivo aquí o haz clic para seleccionar</div>
+      <div v-if="!archivo" class="text-gray-600">{{ t("dragDropFile") }}</div>
       <div v-else class="flex justify-between items-center bg-gray-200 p-2 rounded">
         <span class="text-gray-500">{{ archivo.name }}</span>
         <el-icon class="cursor-pointer text-red-500" @click.stop="eliminarArchivo"><Close /></el-icon>
@@ -23,12 +23,12 @@
     <el-progress v-if="subiendo" :percentage="progreso" status="success" class="mt-4" />
 
     <el-button type="primary" class="w-full mt-4" :disabled="!archivo || subiendo" @click="subirArchivo">
-      Subir Contrato
+      {{ t("uploadContract") }}
     </el-button>
 
     <el-card v-if="errores.length" shadow="never" class="bg-red-100 border border-red-500 mt-4">
       <template #header>
-        <span class="text-red-600 font-semibold">Errores encontrados:</span>
+        <span class="text-red-600 font-semibold">{{ t("errorsFound") }}</span>
       </template>
       <ul class="list-disc pl-4 text-red-700">
         <li v-for="(error, index) in errores" :key="index">{{ error }}</li>
@@ -37,7 +37,7 @@
 
     <el-card v-if="mensaje" shadow="never" class="bg-green-100 border border-green-500 mt-4">
       <template #header>
-        <span class="text-green-600 font-semibold">Éxito</span>
+        <span class="text-green-600 font-semibold">{{ t("success") }}</span>
       </template>
       <p class="text-green-700">{{ mensaje }}</p>
     </el-card>
@@ -47,12 +47,14 @@
 <script>
 import { ref } from "vue";
 import { Close } from "@element-plus/icons-vue";
+import { useI18n } from "vue-i18n";
 
 export default {
   components: {
     Close,
   },
   setup() {
+    const { t } = useI18n();
     const archivo = ref(null);
     const fileInput = ref(null);
     const mensaje = ref("");
@@ -108,7 +110,7 @@ export default {
         if (progreso.value >= 100) {
           clearInterval(interval);
           subiendo.value = false;
-          mensaje.value = `Archivo "${archivo.value.name}" subido exitosamente`;
+          mensaje.value = t("upload.successMessage", { fileName: archivo.value.name });
           archivo.value = null;
         } else {
           progreso.value += 10;
@@ -120,7 +122,7 @@ export default {
       archivo.value = null;
     };
 
-    return { archivo, fileInput, mensaje, errores, subiendo, progreso, onDragOver, onDragLeave, onDrop, onFileChange, seleccionarArchivo, subirArchivo, eliminarArchivo };
+    return { t, archivo, fileInput, mensaje, errores, subiendo, progreso, onDragOver, onDragLeave, onDrop, onFileChange, seleccionarArchivo, subirArchivo, eliminarArchivo };
   },
 };
 </script>

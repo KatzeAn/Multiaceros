@@ -1,11 +1,11 @@
 <template>
-  <div class=" grid-cols-2  p-6 justify-center flex flex-col gap-6 items-center">
+  <div class="grid-cols-2 p-6 justify-center flex flex-col gap-6 items-center">
     <!-- Sección izquierda (Descargas) -->
     <div class="flex flex-col gap-6">
       <!-- Descarga de Nómina -->
       <div class="card flex flex-col items-center justify-center max-w-[600px] w-full p-6 bg-gray-50 rounded-lg shadow-md border border-gray-200">
-        <h2 class="text-2xl font-bold text-gray-700 mb-4">Descarga de Nómina</h2>
-        <p class="text-gray-600 mb-6 text-center">Descarga el archivo Excel con la información de la nómina de manera rápida y sencilla.</p>
+        <h2 class="text-2xl font-bold text-gray-700 mb-4">{{ $t("payrollDownload") }}</h2>
+        <p class="text-gray-600 mb-6 text-center">{{ $t("payrollDownloadDescription") }}</p>
 
         <el-skeleton :loading="loading" animated>
           <template #template>
@@ -14,17 +14,17 @@
           </template>
           <template #default>
             <el-button type="primary" size="large" :loading="loading" @click="handleDownloadPayrollSlip">
-              <el-icon class="mr-2"><Download /></el-icon> Descargar Excel
+              <el-icon class="mr-2"><Download /></el-icon> {{ $t("downloadExcel") }}
             </el-button>
           </template>
         </el-skeleton>
-        <p v-if="loading" class="text-sm text-gray-500 mt-4">Generando archivo, por favor espera...</p>
+        <p v-if="loading" class="text-sm text-gray-500 mt-4">{{ $t("generatingFile") }}</p>
       </div>
 
       <!-- Descarga de Cesantías e Intereses -->
       <div class="card flex flex-col items-center justify-center max-w-[600px] w-full p-6 bg-gray-50 rounded-lg shadow-md border border-gray-200">
-        <h2 class="text-2xl font-bold text-gray-700 mb-4">Descarga de Cesantías e Intereses</h2>
-        <p class="text-gray-600 mb-6 text-center">Descarga el archivo Excel con la información de cesantías e intereses fácilmente.</p>
+        <h2 class="text-2xl font-bold text-gray-700 mb-4">{{ $t("severanceDownload") }}</h2>
+        <p class="text-gray-600 mb-6 text-center">{{ $t("severanceDownloadDescription") }}</p>
 
         <el-skeleton :loading="loadingSeverance" animated>
           <template #template>
@@ -33,16 +33,18 @@
           </template>
           <template #default>
             <el-button type="primary" size="large" :loading="loadingSeverance" @click="handleDownloadSeverancePay">
-              <el-icon class="mr-2"><Download /></el-icon> Descargar Excel
+              <el-icon class="mr-2"><Download /></el-icon> {{ $t("downloadExcel") }}
             </el-button>
           </template>
         </el-skeleton>
-        <p v-if="loadingSeverance" class="text-sm text-gray-500 mt-4">Generando archivo, por favor espera...</p>
+        <p v-if="loadingSeverance" class="text-sm text-gray-500 mt-4">{{ $t("generatingFile") }}</p>
       </div>
     </div>
+    
+    <!-- Sección derecha (Gráfico de distribución de salarios) -->
     <div class="flex flex-col gap-6 items-center">
       <div class="card flex flex-col items-center justify-center p-6 bg-gray-50 rounded-lg shadow-md border border-gray-200">
-        <h2 class="text-2xl font-bold text-gray-700 mb-4">Distribución de Salarios</h2>
+        <h2 class="text-2xl font-bold text-gray-700 mb-4">{{ $t("salaryDistribution") }}</h2>
         <GraficSalary />
       </div>
     </div>
@@ -50,11 +52,16 @@
 </template>
 
 
+
 <script setup>
 import { ref } from "vue";
 import { usePayrollPaymentStore } from "@/presentation/stores/Payroll.store";
 import { Download } from "@element-plus/icons-vue";
 import GraficSalary from "@/presentation/components/graficSalary.vue";
+import { useI18n } from "vue-i18n";
+
+const { t } = useI18n()
+
 
 const payrollStore = usePayrollPaymentStore();
 const loading = ref(false);

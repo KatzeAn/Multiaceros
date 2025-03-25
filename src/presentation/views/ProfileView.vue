@@ -26,10 +26,13 @@
       <el-col :span="24">
         <el-card body-style="background-color: var(--gray-color)">
           <el-tabs v-model="activeName">
-            <el-tab-pane label="Información Personal" name="informacion-personal"></el-tab-pane>
-            <el-tab-pane label="Información Profesional" name="informacion-profesional" disabled></el-tab-pane>
-            <el-tab-pane label="Información Salarial" name="informacion-salarial" disabled></el-tab-pane>
-            <el-tab-pane label="Tiempo Libre" name="tiempo-libre" disabled></el-tab-pane>
+            <el-tabs v-model="activeTab">
+              <el-tab-pane :label="t('personalInformation')" name="informacion-personal"></el-tab-pane>
+              <el-tab-pane :label="t('professionalInformation')" name="informacion-profesional" disabled></el-tab-pane>
+              <el-tab-pane :label="t('salaryInformation')" name="informacion-salarial" disabled></el-tab-pane>
+              <el-tab-pane :label="t('freeTime')" name="tiempo-libre" disabled></el-tab-pane>
+            </el-tabs>
+
           </el-tabs>
 
           <router-view />
@@ -45,6 +48,9 @@ import { useRoute, useRouter } from 'vue-router';
 import { useUserProfileStore } from "../stores/UserProfile.store";
 import { useUserStore } from "../stores/user.store";
 import mujer from '@/presentation/assets/hombre2.jpg';
+import { useI18n } from "vue-i18n";
+
+const { t } = useI18n()
 
 const route = useRoute();
 const router = useRouter();

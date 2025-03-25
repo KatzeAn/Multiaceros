@@ -3,67 +3,64 @@
     <template #header>
       <div style="display: flex; align-items: center;">
         <el-icon><Bell /></el-icon>
-        <h2 class="text-xl text-gray-700 font-semibold" style="margin-left: 8px;">Configuración de Notificaciones</h2>
+        <h2 class="text-xl text-gray-700 font-semibold" style="margin-left: 8px;">
+          {{ t('notificationSettings') }}
+        </h2>
       </div>
-      <el-checkbox v-model="showInactive" class="mt-2">Mostrar Inactivos</el-checkbox>
+      <el-checkbox v-model="showInactive" class="mt-2">{{ t('showInactive') }}</el-checkbox>
     </template>
 
     <el-table :data="paginatedData" border class="w-full min-h-96 mb-4" stripe>
-      <el-table-column prop="name" label="Nombre" width="150" />
-      <el-table-column prop="description" label="Descripción" align="center" width="200" />
-      <el-table-column label="Días Antes" align="center" width="100">
+      <el-table-column prop="name" :label="t('name')" width="150" />
+      <el-table-column prop="description" :label="t('description')" align="center" width="200" />
+      <el-table-column :label="t('daysBefore')" align="center" width="100">
         <template #default="{ row }">
           <span v-if="row.id !== 2">{{ row.daysBefore }}</span>
         </template>
       </el-table-column>
-      <el-table-column prop="isActive" label="Estado" align="center">
+      <el-table-column prop="isActive" :label="$t('status')" align="center">
         <template #default="{ row }">
           <el-tag :type="row.isActive ? 'success' : 'danger'">
-            {{ row.isActive ? "Activo" : "Inactivo" }}
+            {{ row.isActive ? t('active') : t('inactive') }}
           </el-tag>
         </template>
       </el-table-column>
-      <el-table-column label="Acciones" align="center" width="150">
+      <el-table-column :label="t('actions')" align="center" width="150">
         <template #default="{ row }">
-          <el-button size="small" @click="openEditDrawer(row)">Editar</el-button>
-          <el-button
-            :loading="isLoading"
-            size="small"
-            type="danger"
-            @click="toggleStatus(row)"
-          >
-            {{ row.isActive ? "Desactivar" : "Activar" }}
+          <el-button size="small" @click="openEditDrawer(row)">{{ t('edit') }}</el-button>
+          <el-button :loading="isLoading" size="small" type="danger" @click="toggleStatus(row)">
+            {{ row.isActive ? t('deactivate') : t('activate') }}
           </el-button>
         </template>
       </el-table-column>
     </el-table>
 
-    <el-drawer v-model="isDrawerVisible" title="Editar Notificación" :fullscreen="isSmallScreen" :size="isSmallScreen ? '100%' : '40%'"  >
+    <el-drawer v-model="isDrawerVisible" :title="t('editNotification')" :fullscreen="isSmallScreen" :size="isSmallScreen ? '100%' : '40%'"  >
       <el-form :model="editForm" label-width="auto" style="padding: 20px;">
-        <el-form-item label="Nombre">
+        <el-form-item :label="t('name')">
           <el-input v-model="editForm.name" disabled />
         </el-form-item>
 
-        <el-form-item v-if="editForm.id !== 2" label="Días Antes">
-          <el-select v-model="editForm.daysBefore" placeholder="Seleccione un período">
-            <el-option label="60 días" value="60" />
-            <el-option label="30 días" value="30" />
-            <el-option label="15 días" value="15" />
-            <el-option label="5 días" value="5" />
+        <el-form-item v-if="editForm.id !== 2" :label="$t('daysBefore')">
+          <el-select v-model="editForm.daysBefore" :placeholder="$t('selectPeriod')">
+            <el-option :label="t('days60')" value="60" />
+            <el-option :label="t('days30')" value="30" />
+            <el-option :label="t('days15')" value="15" />
+            <el-option :label="t('days5')" value="5" />
           </el-select>
         </el-form-item>
 
-        <el-form-item v-if="editForm.id === 2" label="Días de Vacaciones Excedentes" class="el-form-item--medium">
+        <el-form-item v-if="editForm.id === 2" :label="t('excessVacationDays')" class="el-form-item--medium">
           <el-input v-model="editForm.excessVacationDays" type="number" min="0" />
         </el-form-item>
 
-        <el-form-item label="Descripción" class="el-form-item--medium">
+        <el-form-item :label="t('description')" class="el-form-item--medium">
           <el-input v-model="editForm.description" type="textarea" :rows="4" />
         </el-form-item>
 
         <el-form-item>
-          <el-button type="primary" @click="saveChanges">Guardar</el-button>
-          <el-button @click="isDrawerVisible = false">Cancelar</el-button>
+          <el-button type="primary" @click="saveChanges">{{ t('save') }}</el-button>
+          <el-button @click="isDrawerVisible = false">{{ t('cancel') }}</el-button>
         </el-form-item>
       </el-form>
     </el-drawer>
@@ -84,7 +81,9 @@ import { ref, onMounted, onBeforeUnmount, computed } from "vue";
 import { useNotificationConfigStore } from "@/presentation/stores/Notifications.store";
 import { useNotificationConfigViewModel } from "@/presentation/viewmodels/NotificationsViewModel";
 import { Bell } from "@element-plus/icons-vue";
+import { useI18n } from "vue-i18n";
 
+const { t } = useI18n()
 const screenWidth = ref(window.innerWidth);
 
 const updateScreenWidth = () => {

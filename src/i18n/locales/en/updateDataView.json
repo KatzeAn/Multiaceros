@@ -1,0 +1,21 @@
+{
+    "updateData": "Update Data",
+    "newEmail": "New Email",
+    "enterNewEmail": "Enter your new email",
+    "titlesCertifications": "Titles or certifications",
+    "enterTitles": "Enter your obtained titles",
+    "lastEducationLevel": "Last education level",
+    "enterEducationLevel": "Enter your education level",
+    "educationalInstitution": "Educational institution",
+    "enterInstitution": "Enter your educational institution",
+    "nationality": "Nationality",
+    "enterNationality": "Enter your nationality",
+    "requestReason": "Request Reason",
+    "explainReason": "Explain why you want to update this information",
+    "sendRequest": "Send Request",
+    "changePassword": "Change Password",
+    "newPassword": "New Password",
+    "enterNewPassword": "Enter the new password",
+    "confirmPassword": "Confirm Password",
+    "confirmNewPassword": "Confirm the new password"
+  }

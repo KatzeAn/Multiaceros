@@ -64,6 +64,7 @@ import { ref, onMounted } from "vue";
 import { usePayrollPaymentStore } from "@/presentation/stores/Payroll.store";
 import { useUserStore } from "@/presentation/stores/user.store";
 
+
 const payrollStore = usePayrollPaymentStore();
 const userStore = useUserStore();
 const loading = ref(false);

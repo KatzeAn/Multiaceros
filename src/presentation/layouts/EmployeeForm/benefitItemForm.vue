@@ -1,16 +1,16 @@
 <template>
   <div class="flex items-center my-6">
     <div class="flex-grow border-t border-gray-300"></div>
-    <span class="mx-4 font-bold">Beneficios</span>
+    <span class="mx-4 font-bold">{{ t("benefits") }}</span>
     <div class="flex-grow border-t border-gray-300"></div>
   </div>
 
   <el-row :gutter="30">
     <el-col :xs="24" :sm="12" :md="10">
-      <el-form-item label="Beneficios" prop="benefits">
+      <el-form-item :label="t('benefits')" prop="benefits">
         <el-select
           v-model="newBenefit.id"
-          placeholder="Seleccione el beneficio"
+          :placeholder="t('selectBenefit')"
         >
           <el-option
             v-for="benefit in benefitList"
@@ -23,7 +23,7 @@
     </el-col>
 
     <el-col :xs="24" :sm="12" :md="10">
-      <el-form-item label="Valor" prop="benefits">
+      <el-form-item :label="t('value')" prop="benefits">
         <el-input
           type="number"
           style="width: 100%"
@@ -35,7 +35,7 @@
     <el-col :xs="24" :sm="24" :md="4">
       <div class="h-full flex items-center justify-start m-1">
         <el-button type="primary" class="w-full" @click="addBenefit">
-          Agregar
+          {{ t("add") }}
         </el-button>
       </div>
     </el-col>
@@ -58,7 +58,7 @@
             @click="removeBenefit(index)"
             class="text-red-500"
           >
-            Eliminar
+            {{ t("remove") }}
           </button>
         </li>
       </ul>
@@ -66,12 +66,16 @@
   </el-row>
 </template>
 
+
 <script lang="ts" setup>
 import { onMounted, ref } from "vue";
 import { useBenefitViewModel } from "@/presentation/viewmodels/benefitViewModel";
 import { ElNotification } from "element-plus";
 
 import type { EmployeeRequest } from "@/domain/Interfaces/Employee/EmployeeRequest.interface";
+import { useI18n } from "vue-i18n";
+
+const { t } = useI18n()
 
 const props = defineProps<{ employeeRequestForm: EmployeeRequest }>();
 

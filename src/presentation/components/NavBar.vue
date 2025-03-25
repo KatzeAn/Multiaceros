@@ -2,7 +2,10 @@
 import { onMounted, onUnmounted, ref } from "vue";
 import mujer from '@/presentation/assets/hombre2.jpg';
 import { useRouter } from "vue-router";
-import { useAuthStore } from "../stores/auth.store"; 
+import { useAuthStore } from "../stores/auth.store";
+import { useI18n } from "vue-i18n";
+
+const { t } = useI18n(); 
 const useAuth = useAuthStore();
 const router = useRouter();
 const navigateAndReload = () => {
@@ -67,7 +70,7 @@ onUnmounted(() => {
     <ul class="flex items-center text-sm ml-4">
       <li class="mr-2">
         <a href="#" class="text-gray-600 hover:text-gray-600 font-medium">
-          <router-link to="/home" @click.prevent="navigateAndReload">Inicio</router-link>
+          <router-link to="/home" @click.prevent="navigateAndReload">{{ t('home') }}</router-link>
         </a>
       </li>
     </ul>

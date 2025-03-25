@@ -1,0 +1,30 @@
+{
+    "greeting": "Hello",
+    "todayIs": "Today is  ",
+    "portal": "Portal",
+    "freeTime": "Free Time",
+    "vacations": "Vacations",
+    "medicalAppointments": "Medical appointments",
+    "requestFreeTime": "Request Free Time",
+    "certifications": "Certifications",
+    "workLetter": "Work Letter",
+    "personalFile": "Personal File",
+    "moreCertificates": "More Certificates",
+    "announcementsCommunity": "Announcements - Community",
+    "newPublication": "New Publication",
+    "allPublications": "All publications",
+    "team": "Team",
+    "companyLinks": "Company Links",
+    "birthdays": "Birthdays",
+    "daysOfWeek": {
+    "sunday": "Sunday",
+    "monday": "Monday",
+    "tuesday": "Tuesday",
+    "wednesday": "Wednesday",
+    "thursday": "Thursday",
+    "friday": "Friday",
+    "saturday": "Saturday"
+  },
+    "noBirthdays": "No birthdays found",
+    "happyBirthday": "Happy Birthday!"
+}

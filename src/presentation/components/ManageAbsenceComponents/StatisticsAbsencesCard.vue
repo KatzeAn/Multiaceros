@@ -1,237 +1,216 @@
 <template>
-  <el-row class="" :gutter="16" >
-     <el-col :span="24">
-       <span class="font-bold text-2xl ">Estadística mensual</span>
-     </el-col>
-     <el-col 
-     :xs="24" 
-     :sm="12" 
-     :md="8" 
-     :lg="8"
-     class="mb-4 sm:mb-0">
-       <div class="statistic-card bg-[var(--success-alt-color)]">
-         <el-statistic :value="0">
-           <template #title>
-             <div style="display: inline-flex; align-items: center">
-               Ausencias Aprobadas
-               <el-tooltip
-                 effect="dark"
-                 content="Número de ausencias aprobadas este mes"
-                 placement="top"
-               >
-                 <el-icon style="margin-left: 4px" :size="12">
-                   <Warning />
-                 </el-icon>
-               </el-tooltip>
-             </div>
-           </template>
-         </el-statistic>
-       </div>
-     </el-col>
-     <el-col 
-     :xs="24" 
-     :sm="12" 
-     :md="8" 
-     :lg="8"
-     class="mb-4 sm:mb-0">
-       <div class="statistic-card bg-[var(--primary-alt-color)]">
-         <el-statistic :value="0">
-           <template #title>
-             <div style="display: inline-flex; align-items: center">
-               Ausencias Rechazadas
-               <el-tooltip
-                 effect="dark"
-                 content="Número de ausencias rechazadas este mes"
-                 placement="top"
-               >
-                 <el-icon style="margin-left: 4px" :size="12">
-                   <Warning />
-                 </el-icon>
-               </el-tooltip>
-             </div>
-           </template>
-         </el-statistic>
-       </div>
-     </el-col>
-     <el-col 
-     :xs="24" 
-     :sm="12" 
-     :md="8" 
-     :lg="8"
-     class="mb-4 sm:mb-0">
-       <div class="statistic-card bg-[var(--info-alt-color)]">
-         <el-statistic :value="0">
-           <template #title>
-             <div style="display: inline-flex; align-items: center">
-               Total de Ausencias
-               <el-tooltip
-                 effect="dark"
-                 content="Total de ausencias creadas este mes"
-                 placement="top"
-               >
-                 <el-icon style="margin-left: 4px" :size="12">
-                   <Warning />
-                 </el-icon>
-               </el-tooltip>
-             </div>
-           </template>
-         </el-statistic>
-       </div>
-     </el-col>
-   </el-row> 
-   <el-tabs v-model="activeTab">
-    <el-tab-pane label="Pendientes" name="pending">
-      <el-table :data="pendingAbsences" class="custom-table" style="margin-bottom: 80px;">
-        <el-table-column prop="employeeFullName" label="Nombre" width="150" />
-        <el-table-column prop="startDate" label="Desde" width="180">
-            <template #default="{ row }">
-              {{ formatDate(row.startDate) }}
-            </template>
-          </el-table-column>
+ <el-row :gutter="16">
+  <el-col :span="24">
+    <span class="font-bold text-2xl">{{ t('monthlyStatistics') }}</span>
+  </el-col>
 
-          <el-table-column prop="endDate" label="Hasta" width="180">
-            <template #default="{ row }">
-              {{ formatDate(row.endDate) }}
-            </template>
-          </el-table-column>
-        <el-table-column label="Total de Días" width="120">
-          <template #default="scope">
-            <span>{{ getTotalDays(scope.row.startDate, scope.row.endDate) }}</span>
-          </template>
-        </el-table-column>
-        <el-table-column label="Tipo de Ausencia" width="200">
+  <el-col :xs="24" :sm="12" :md="8" :lg="8" class="mb-4 sm:mb-0">
+    <div class="statistic-card bg-[var(--success-alt-color)]">
+      <el-statistic :value="0">
+        <template #title>
+          <div style="display: inline-flex; align-items: center">
+            {{ t('approvedAbsences') }}
+            <el-tooltip effect="dark" :content="t('approvedAbsencesTooltip')" placement="top">
+              <el-icon style="margin-left: 4px" :size="12">
+                <Warning />
+              </el-icon>
+            </el-tooltip>
+          </div>
+        </template>
+      </el-statistic>
+    </div>
+  </el-col>
+
+  <el-col :xs="24" :sm="12" :md="8" :lg="8" class="mb-4 sm:mb-0">
+    <div class="statistic-card bg-[var(--primary-alt-color)]">
+      <el-statistic :value="0">
+        <template #title>
+          <div style="display: inline-flex; align-items: center">
+            {{ t('rejectedAbsences') }}
+            <el-tooltip effect="dark" :content="t('rejectedAbsencesTooltip')" placement="top">
+              <el-icon style="margin-left: 4px" :size="12">
+                <Warning />
+              </el-icon>
+            </el-tooltip>
+          </div>
+        </template>
+      </el-statistic>
+    </div>
+  </el-col>
+
+  <el-col :xs="24" :sm="12" :md="8" :lg="8" class="mb-4 sm:mb-0">
+    <div class="statistic-card bg-[var(--info-alt-color)]">
+      <el-statistic :value="0">
+        <template #title>
+          <div style="display: inline-flex; align-items: center">
+            {{ t('totalAbsences') }}
+            <el-tooltip effect="dark" :content="t('totalAbsencesTooltip')" placement="top">
+              <el-icon style="margin-left: 4px" :size="12">
+                <Warning />
+              </el-icon>
+            </el-tooltip>
+          </div>
+        </template>
+      </el-statistic>
+    </div>
+  </el-col>
+</el-row>
+<el-tabs v-model="activeTab">
+  <el-tab-pane :label="t('pending')" name="pending">
+    <el-table :data="pendingAbsences" class="custom-table" style="margin-bottom: 80px;">
+      <el-table-column prop="employeeFullName" :label="t('name')" width="150" />
+      <el-table-column prop="startDate" :label="t('from')" width="180">
           <template #default="{ row }">
-            {{ getAbsenceTypeName(row.absenceTypeId) }}
+            {{ formatDate(row.startDate) }}
           </template>
         </el-table-column>
-        <el-table-column prop="comment" label="Comentario" width="200" />
-        <el-table-column prop="status" label="Estado" width="150">
-          <template #default="scope">
-            <el-tag :type="getStatusType(scope.row.status)">
-              {{ getStatusName(scope.row.status) }}
-            </el-tag>
-          </template>
-        </el-table-column>
-        <el-table-column label="Acciones" width="200">
-          <template #default="scope">
-            <div class="action-buttons">
-              <el-button class="approve-btn" @click="approveAbsence(scope.row.id)">Aprobar</el-button>
-              <el-button class="reject-btn" @click="rejectAbsence(scope.row.id)">Rechazar</el-button>
-            </div>
-          </template>
-        </el-table-column>
-      </el-table>
-    </el-tab-pane>
 
-    <el-tab-pane label="Aprobadas" name="approved" style="margin-bottom: 80px;">
-      <el-table :data="approvedAbsences" class="custom-table">
-        <el-table-column prop="employeeFullName" label="Nombre" width="150" />
-        <el-table-column prop="startDate" label="Desde" width="180">
-                <template #default="{ row }">
-                  {{ formatDate(row.startDate) }}
-                </template>
-              </el-table-column>
-
-              <el-table-column prop="endDate" label="Hasta" width="180">
-                <template #default="{ row }">
-                  {{ formatDate(row.endDate) }}
-                </template>
-              </el-table-column>
-        <el-table-column label="Total de Días" width="120">
-          <template #default="scope">
-            <span>{{ getTotalDays(scope.row.startDate, scope.row.endDate) }}</span>
-          </template>
-        </el-table-column>
-        <el-table-column label="Tipo de Ausencia" width="200">
+        <el-table-column prop="endDate" :label="t('to')" width="180">
           <template #default="{ row }">
-            {{ getAbsenceTypeName(row.absenceTypeId) }}
+            {{ formatDate(row.endDate) }}
           </template>
         </el-table-column>
-        <el-table-column prop="comment" label="Comentario" width="200" />
-        <el-table-column prop="status" label="Estado" width="150">
-          <template #default="scope">
-            <el-tag :type="getStatusType(scope.row.status)">
-              {{ getStatusName(scope.row.status) }}
-            </el-tag>
-          </template>
-        </el-table-column>
-      </el-table>
-    </el-tab-pane>
-
-    <el-tab-pane label="Rechazadas" name="rejected" style="margin-bottom: 80px;">
-      <el-table :data="rejectedAbsences" class="custom-table">
-        <el-table-column prop="employeeFullName" label="Nombre" width="150" />
-        <el-table-column prop="startDate" label="Desde" width="180">
+      <el-table-column :label="t('totalDays')" width="120">
+        <template #default="scope">
+          <span>{{ getTotalDays(scope.row.startDate, scope.row.endDate) }}</span>
+        </template>
+      </el-table-column>
+      <el-table-column :label="t('absenceType')" width="200">
         <template #default="{ row }">
-                  {{ formatDate(row.startDate) }}
-              </template>
-          </el-table-column>
-              <el-table-column prop="endDate" label="Hasta" width="180">
-                <template #default="{ row }">
-                  {{ formatDate(row.endDate) }}
-                </template>
-              </el-table-column>
-        <el-table-column label="Total de Días" width="120">
-          <template #default="scope">
-            <span>{{ getTotalDays(scope.row.startDate, scope.row.endDate) }}</span>
-          </template>
-        </el-table-column>
-        <el-table-column label="Tipo de Ausencia" width="200">
-          <template #default="{ row }">
-            {{ getAbsenceTypeName(row.absenceTypeId) }}
-          </template>
-        </el-table-column>
-        <el-table-column prop="comment" label="Comentario" width="200" />
-        <el-table-column prop="status" label="Estado" width="150">
-          <template #default="scope">
-            <el-tag :type="getStatusType(scope.row.status)">
-              {{ getStatusName(scope.row.status) }}
-            </el-tag>
-          </template>
-        </el-table-column>
-      </el-table>
-    </el-tab-pane>
+          {{ getAbsenceTypeName(row.absenceTypeId) }}
+        </template>
+      </el-table-column>
+      <el-table-column prop="comment" :label="t('comment')" width="200" />
+      <el-table-column prop="status" :label="t('status')" width="150">
+        <template #default="scope">
+          <el-tag :type="getStatusType(scope.row.status)">
+            {{ getStatusName(scope.row.status) }}
+          </el-tag>
+        </template>
+      </el-table-column>
+      <el-table-column :label="t('actions')" width="200">
+        <template #default="scope">
+          <div class="action-buttons">
+            <el-button class="approve-btn" @click="approveAbsence(scope.row.id)">{{ t('approve') }}</el-button>
+            <el-button class="reject-btn" @click="rejectAbsence(scope.row.id)">{{ t('reject') }}</el-button>
+          </div>
+        </template>
+      </el-table-column>
+    </el-table>
+  </el-tab-pane>
 
-    <el-tab-pane label="Historial" name="all" style="margin-bottom: 80px;">
-      <el-table :data="allAbsences" class="custom-table">
-        <el-table-column prop="employeeFullName" label="Nombre" width="150" />
-        <el-table-column prop="startDate" label="Desde" width="180">
+  <el-tab-pane :label="t('approved')" name="approved" style="margin-bottom: 80px;">
+    <el-table :data="approvedAbsences" class="custom-table">
+      <el-table-column prop="employeeFullName" :label="t('name')" width="150" />
+      <el-table-column prop="startDate" :label="t('from')" width="180">
               <template #default="{ row }">
                 {{ formatDate(row.startDate) }}
               </template>
             </el-table-column>
 
-            <el-table-column prop="endDate" label="Hasta" width="180">
+            <el-table-column prop="endDate" :label="t('to')" width="180">
               <template #default="{ row }">
                 {{ formatDate(row.endDate) }}
               </template>
             </el-table-column>
-        <el-table-column label="Total de Días" width="120">
-          <template #default="scope">
-            <span>{{ getTotalDays(scope.row.startDate, scope.row.endDate) }}</span>
-          </template>
+      <el-table-column :label="t('totalDays')" width="120">
+        <template #default="scope">
+          <span>{{ getTotalDays(scope.row.startDate, scope.row.endDate) }}</span>
+        </template>
+      </el-table-column>
+      <el-table-column :label="t('absenceType')" width="200">
+        <template #default="{ row }">
+          {{ getAbsenceTypeName(row.absenceTypeId) }}
+        </template>
+      </el-table-column>
+      <el-table-column prop="comment" :label="t('comment')" width="200" />
+      <el-table-column prop="status" :label="t('status')" width="150">
+        <template #default="scope">
+          <el-tag :type="getStatusType(scope.row.status)">
+            {{ getStatusName(scope.row.status) }}
+          </el-tag>
+        </template>
+      </el-table-column>
+    </el-table>
+  </el-tab-pane>
+
+  <el-tab-pane :label="t('rejected')" name="rejected" style="margin-bottom: 80px;">
+    <el-table :data="rejectedAbsences" class="custom-table">
+      <el-table-column prop="employeeFullName" :label="t('name')" width="150" />
+      <el-table-column prop="startDate" :label="t('from')" width="180">
+      <template #default="{ row }">
+                {{ formatDate(row.startDate) }}
+            </template>
         </el-table-column>
-        <el-table-column label="Tipo de Ausencia" width="200">
-          <template #default="{ row }">
-            {{ getAbsenceTypeName(row.absenceTypeId) }}
-          </template>
-        </el-table-column>
-        <el-table-column prop="comment" label="Comentario" width="200" />
-        <el-table-column prop="status" label="Estado" width="150">
-          <template #default="scope">
-            <el-tag :type="getStatusType(scope.row.status)">
-              {{ getStatusName(scope.row.status) }}
-            </el-tag>
-          </template>
-        </el-table-column>
-      </el-table>
-    </el-tab-pane>
-  </el-tabs>
+            <el-table-column prop="endDate" :label="t('to')" width="180">
+              <template #default="{ row }">
+                {{ formatDate(row.endDate) }}
+              </template>
+            </el-table-column>
+      <el-table-column :label="t('totalDays')" width="120">
+        <template #default="scope">
+          <span>{{ getTotalDays(scope.row.startDate, scope.row.endDate) }}</span>
+        </template>
+      </el-table-column>
+      <el-table-column :label="t('absenceType')" width="200">
+        <template #default="{ row }">
+          {{ getAbsenceTypeName(row.absenceTypeId) }}
+        </template>
+      </el-table-column>
+      <el-table-column prop="comment" :label="t('comment')" width="200" />
+      <el-table-column prop="status" :label="t('status')" width="150">
+        <template #default="scope">
+          <el-tag :type="getStatusType(scope.row.status)">
+            {{ getStatusName(scope.row.status) }}
+          </el-tag>
+        </template>
+      </el-table-column>
+    </el-table>
+  </el-tab-pane>
+
+  <el-tab-pane :label="t('history')" name="all" style="margin-bottom: 80px;">
+    <el-table :data="allAbsences" class="custom-table">
+      <el-table-column prop="employeeFullName" :label="t('name')" width="150" />
+      <el-table-column prop="startDate" :label="t('from')" width="180">
+            <template #default="{ row }">
+              {{ formatDate(row.startDate) }}
+            </template>
+          </el-table-column>
+
+          <el-table-column prop="endDate" :label="t('to')" width="180">
+            <template #default="{ row }">
+              {{ formatDate(row.endDate) }}
+            </template>
+          </el-table-column>
+      <el-table-column :label="t('totalDays')" width="120">
+        <template #default="scope">
+          <span>{{ getTotalDays(scope.row.startDate, scope.row.endDate) }}</span>
+        </template>
+      </el-table-column>
+      <el-table-column :label="t('absenceType')" width="200">
+        <template #default="{ row }">
+          {{ getAbsenceTypeName(row.absenceTypeId) }}
+        </template>
+      </el-table-column>
+      <el-table-column prop="comment" :label="t('comment')" width="200" />
+      <el-table-column prop="status" :label="t('status')" width="150">
+        <template #default="scope">
+          <el-tag :type="getStatusType(scope.row.status)">
+            {{ getStatusName(scope.row.status) }}
+          </el-tag>
+        </template>
+      </el-table-column>
+    </el-table>
+  </el-tab-pane>
+</el-tabs>
 </template>
 
 <script lang="ts" setup>
 import { ref, onMounted, watch } from 'vue';
 import { useAbsenceStore } from '@/presentation/stores/absence.store';
+import { useI18n } from "vue-i18n";
+
+const { t } = useI18n()
 
 const activeTab = ref('pending'); 
 const allAbsences = ref<Absence[]>([]); 
@@ -253,10 +232,10 @@ const getStatusType = (status: number) => {
 
 const getStatusName = (status: number) => {
   switch (status) {
-    case 1: return 'Pendiente';
-    case 2: return 'Aprobado';
-    case 3: return 'Rechazado';
-    default: return 'Desconocido';
+    case 1: return t('pendings'); 
+    case 2: return t('approveds'); 
+    case 3: return t('rejecteds');
+    default: return '';
   }
 };
 

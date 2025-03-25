@@ -8,10 +8,10 @@
     <template #header>
       <div class="flex flex-wrap justify-between">
         <h2 class="text-xl text-gray-700 font-semibold">
-          Todos los candidatos
+          {{ t('allCandidates') }}
         </h2>
         <el-button type="primary" icon="Plus" @click="openAddModal">
-          Referir candidato
+          {{ t('referCandidate') }}
         </el-button>
       </div>
     </template>
@@ -24,30 +24,26 @@
       @row-click="handleRowClick"
       row-class-name="cursor-pointer"
     >
-      <el-table-column label="Nombre">
+      <el-table-column :label="t('name')">
         <template #default="{ row }">
           {{ `${row.firstName} ${row.surName}` }}
         </template>
       </el-table-column>
-      <el-table-column prop="jobPostingTitle" label="Cargo aplicado" width="150" />
-          <!-- <el-table-column label="Etapa">  -->
-        <!-- <template #default="{ row }"> -->
-          <!-- {{ EmployeePotentialStatusEnum[row.status] }} -->
-        <!-- </template> -->
-      <!-- </el-table-column> -->
-      <el-table-column prop="email" label="Correo electrónico" width="150" />
-      <el-table-column prop="cellPhone" label="Celular" width="150" />
-      <el-table-column label="Acciones" width="150">
-  <template #default="scope">
-    <div class="flex flex-wrap items-center  gap-2">
-      <el-button size="small"  @click="handleRowClick"> Detalles </el-button>
-      <el-button disabled size="small" type="danger">
-        Desactivar
-      </el-button>
-    </div>
-  </template>
-</el-table-column>
-
+      <el-table-column prop="jobPostingTitle" :label="t('appliedJob')" width="150" />
+      <el-table-column prop="email" :label="t('email')" width="150" />
+      <el-table-column prop="cellPhone" :label="t('cellphone')" width="150" />
+      <el-table-column :label="t('actions')" width="150">
+        <template #default="scope">
+          <div class="flex flex-wrap items-center gap-2">
+            <el-button size="small" @click="handleRowClick">
+              {{ t('details') }}
+            </el-button>
+            <el-button disabled size="small" type="danger">
+              {{ t('deactivate') }}
+            </el-button>
+          </div>
+        </template>
+      </el-table-column>
     </el-table>
 
     <!-- Paginación -->
@@ -77,6 +73,9 @@ import addEmployeePotential from "@/presentation/components/employeePotential/ad
 import { useEmployeePotentialViewModel } from "@/presentation/viewmodels/employeePotentialViewModel";
 import { ElMessageBox } from "element-plus";
 import { onMounted, ref } from "vue";
+import { useI18n } from "vue-i18n";
+
+const { t } = useI18n()
 
 const openAddModal = () => {
   isAddModalOpen.value = true;

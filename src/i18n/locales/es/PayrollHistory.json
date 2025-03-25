@@ -1,0 +1,33 @@
+{
+    "title": "Descargar Historial de Nómina",
+    "select_year": "Selecciona el año",
+    "year_placeholder": "Año",
+    "select_month": "Selecciona el mes",
+    "month_placeholder": "Mes",
+    "download_button": "Descargar Nómina",
+    "error_title": "Error",
+    "error_message": "Debes seleccionar el año y el mes antes de descargar",
+    "notification_error": "Ocurrió un error al descargar la nómina",
+    "months": {
+      "1": "Enero",
+      "2": "Febrero",
+      "3": "Marzo",
+      "4": "Abril",
+      "5": "Mayo",
+      "6": "Junio",
+      "7": "Julio",
+      "8": "Agosto",
+      "9": "Septiembre",
+      "10": "Octubre",
+      "11": "Noviembre",
+      "12": "Diciembre"
+    },
+    "payrollDownload": "Descarga de Nómina",
+  "payrollDownloadDescription": "Descarga el archivo Excel con la información de la nómina de manera rápida y sencilla.",
+  "downloadExcel": "Descargar Excel",
+  "generatingFile": "Generando archivo, por favor espera...",
+  "severanceDownload": "Descarga de Cesantías e Intereses",
+  "severanceDownloadDescription": "Descarga el archivo Excel con la información de cesantías e intereses fácilmente.",
+  "salaryDistribution": "Distribución de Salarios"
+  }
+  

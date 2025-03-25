@@ -1,0 +1,35 @@
+{
+    "title": "Download Payroll History",
+    "select_year": "Select the year",
+    "year_placeholder": "Year",
+    "select_month": "Select the month",
+    "month_placeholder": "Month",
+    "download_button": "Download Payroll",
+    "error_title": "Error",
+    "error_message": "You must select the year and month before downloading",
+    "notification_error": "An error occurred while downloading the payroll",
+    "months": {
+      "1": "January",
+      "2": "February",
+      "3": "March",
+      "4": "April",
+      "5": "May",
+      "6": "June",
+      "7": "July",
+      "8": "August",
+      "9": "September",
+      "10": "October",
+      "11": "November",
+      "12": "December"
+    },
+    "payrollDownload": "Payroll Download",
+    "payrollDownloadDescription": "Download the Excel file with the payroll information quickly and easily.",
+    "downloadExcel": "Download Excel",
+    "generatingFile": "Generating file, please wait...",
+    "severanceDownload": "Severance and Interest Download",
+    "severanceDownloadDescription": "Download the Excel file with severance and interest information easily.",
+    "salaryDistribution": "Salary Distribution"
+  }
+  
+  
+  

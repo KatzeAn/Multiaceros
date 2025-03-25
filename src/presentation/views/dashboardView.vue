@@ -1,82 +1,81 @@
 <template>
   <div class="p-6">
-    <h1 class="text-2xl font-bold mb-4">Panel de Gestión Administrativa</h1>
+    <h1 class="text-2xl font-bold mb-4">{{ t('admin_panel') }}</h1>
 
     <div class="grid md:grid-cols-2 gap-4">
       <div class="bg-white h-40 rounded-xl shadow-lg flex items-center border border-gray-200 w-80">
         <el-icon :size="50" class="text-3xl ml-3"><Avatar /></el-icon>
         <div class="ml-6 w-full md:w-96">
-          <p class="text-gray-500 text-sm uppercase font-medium">Usuarios Conectados</p>
+          <p class="text-gray-500 text-sm uppercase font-medium">{{ t('connected_users') }}</p>
           <p class="text-2xl font-semibold text-gray-900">{{ connectedUsersCount }}</p>
         </div>
       </div>
 
       <div class="bg-white p-4 rounded-lg" v-if="isGraphVisible"> 
-        <h2 class="text-lg font-semibold mb-2">Conexiones por Hora</h2>
+        <h2 class="text-lg font-semibold mb-2">{{ t('connections_per_hour') }}</h2>
         <graficConnection />
       </div>
     </div>
 
     <el-tabs v-model="activeTab">
-      <el-tab-pane label="Lista de Usuarios" name="users">
+      <el-tab-pane :label="t('user_list')" name="users">
         <div class="mt-6 bg-white p-6 rounded-xl shadow-lg">
-        <h2 class="text-lg font-semibold mb-4">Lista de Usuarios</h2>
-          <el-input v-model="searchQuery" placeholder="Buscar usuario..." clearable class="mb-4 w-1/3"/>
-        <el-table :data="filteredUsers" style="width: 100%" border stripe>
-          <el-table-column label="Nombre" prop="userFirstName" />
-          <el-table-column label="Apellido" prop="surName" />
-          <el-table-column label="Estado">
-            <template #default="{ row }">
-              <el-tag :type="row.isActive ? 'success' : 'danger'">
-                {{ row.isActive ? "Activo" : "Inactivo" }}
-              </el-tag>
-            </template>
-          </el-table-column>
-          <el-table-column label="Correo Electrónico" prop="userEmail" />
-          <el-table-column label="Acciones" align="center" width="150">
-            <template #default="scope">
-              <el-button size="small" @click="openRoleChangeDialog(scope.row)">
-                Cambiar Rol
-              </el-button>
-            </template>
-          </el-table-column>
-        </el-table>
+          <h2 class="text-lg font-semibold mb-4">{{ t('user_list') }}</h2>
+          <el-input v-model="searchQuery" :placeholder="t('search_user')" clearable class="mb-4 w-1/3"/>
+          <el-table :data="filteredUsers" style="width: 100%" border stripe>
+            <el-table-column :label="t('name')" prop="userFirstName" />
+            <el-table-column :label="t('surname')" prop="surName" />
+            <el-table-column :label="t('status')">
+              <template #default="{ row }">
+                <el-tag :type="row.isActive ? 'success' : 'danger'">
+                  {{ row.isActive ? t('active') : t('inactive') }}
+                </el-tag>
+              </template>
+            </el-table-column>
+            <el-table-column :label="t('email')" prop="userEmail" />
+            <el-table-column :label="t('actions')" align="center" width="150">
+              <template #default="scope">
+                <el-button size="small" @click="openRoleChangeDialog(scope.row)">
+                  {{ t('change_role') }}
+                </el-button>
+              </template>
+            </el-table-column>
+          </el-table>
         </div>
       </el-tab-pane>
       
-      <el-tab-pane label="Usuarios Conectados" name="connectedUsers">
+      <el-tab-pane :label="t('connected_users')" name="connectedUsers">
         <loggedUsers :connectedUsers="users" />
       </el-tab-pane>
 
-      <el-tab-pane label="Gestión de Notificaciones" name="notifications">
+      <el-tab-pane :label="t('manage_notifications')" name="notifications">
         <ManageNotificacions :notifications="notifications" />
       </el-tab-pane>
       
-      <el-tab-pane label="Gestión de Contratos" name="contracts">
+      <el-tab-pane :label="t('manage_contracts')" name="contracts">
         <ManageContracts />
       </el-tab-pane>
 
-      <el-tab-pane label="Subir  Contratos" name="contractsUpload">
+      <el-tab-pane :label="t('upload_contracts')" name="contractsUpload">
         <UploadContracts/>
       </el-tab-pane>
 
-      <el-tab-pane label="Carga de empleados" name="employe">
+      <el-tab-pane :label="t('employee_upload')" name="employe">
         <EmployeeLoad/>
       </el-tab-pane>
-
     </el-tabs>
 
-    <el-dialog v-model="isDialogVisible"  title="Cambiar Rol" >
-    <el-select v-model="selectedRoleId"  placeholder="Selecciona un rol"  style="width: 100%;"  >
-      <el-option v-for="role in availableRoles" :key="role.id" :label="role.name"  :value="role.id" />
-    </el-select>
-    <template #footer>
-      <div :style="isSmallScreen ? 'display: flex; flex-direction: column; gap: 10px;' : ''">
-        <el-button @click="isDialogVisible = false" :size="isSmallScreen ? 'small' : 'default'">Cancelar</el-button>
-        <el-button type="primary" @click="confirmRoleChange" :size="isSmallScreen ? 'small' : 'default'">Confirmar</el-button>
-      </div>
-    </template>
-  </el-dialog>
+    <el-dialog v-model="isDialogVisible" :title="t('change_role')">
+      <el-select v-model="selectedRoleId" :placeholder="t('select_role')" style="width: 100%;">
+        <el-option v-for="role in availableRoles" :key="role.id" :label="role.name" :value="role.id" />
+      </el-select>
+      <template #footer>
+        <div :style="isSmallScreen ? 'display: flex; flex-direction: column; gap: 10px;' : ''">
+          <el-button @click="isDialogVisible = false" :size="isSmallScreen ? 'small' : 'default'">{{ t('cancel') }}</el-button>
+          <el-button type="primary" @click="confirmRoleChange" :size="isSmallScreen ? 'small' : 'default'">{{ t('confirm') }}</el-button>
+        </div>
+      </template>
+    </el-dialog>
   </div>
 </template>
 
@@ -91,6 +90,9 @@ import ManageContracts from "@/presentation/components/ManageContracts.vue";
 import graficConnection from "@/presentation/components/graficConnection.vue";
 import UploadContracts from "@/presentation/components/UploadContracts.vue";
 import EmployeeLoad from "@/presentation/components/EmployeeLoad.vue";
+import { useI18n } from "vue-i18n";
+
+const { t } = useI18n()
 
 const isSmallScreen = computed(() => window.innerWidth < 800);
 const isGraphVisible = ref(window.innerWidth >= 800); 

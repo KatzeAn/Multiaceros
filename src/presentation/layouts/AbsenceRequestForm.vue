@@ -1,79 +1,105 @@
 <template>
   <el-col class="mb-4">
-  <div class="bg-[var(--secondary-color)] p-6 rounded-lg shadow-lg flex justify-between">
-    <el-statistic 
-      :value="15"
-      :value-style="{ color: 'white'}">
-      <template #title>
-        <div class="flex items-center gap-2 text-lg font-semibold text-white">
-          Días de vacaciones disponibles 
-          <el-icon :size="18">
-            <Warning />
-          </el-icon>
-        </div>
-      </template>
-    </el-statistic>
-  </div>
-</el-col>
+    <div class="bg-[var(--secondary-color)] p-6 rounded-lg shadow-lg flex justify-between">
+      <el-statistic :value="15" :value-style="{ color: 'white' }">
+        <template #title>
+          <div class="flex items-center gap-2 text-lg font-semibold text-white">
+            {{ t("availableVacationDays") }}
+            <el-icon :size="18">
+              <Warning />
+            </el-icon>
+          </div>
+        </template>
+      </el-statistic>
+    </div>
+  </el-col>
 
   <el-card>
-      <span class="text-2xl font-bold text-[var(--secondary-color)]">Solicitar Ausencia</span>
+    <span class="text-2xl font-bold text-[var(--secondary-color)]">{{ t("requestAbsence") }}</span>
 
-      <el-form label-position="top" ref="ruleFormRef" style="max-width: 600px" :model="absenceRequestForm" :rules="rules"
-          label-width="auto" class="mt-6" :size="formSize" status-icon>
-
-          <el-row :gutter="12">
-              <el-col :span="12">
-                  <el-form-item label="Desde" prop="StartDate">
-                      <el-date-picker v-model="absenceRequestForm.StartDate" type="date" aria-label="Selecciona una fecha"
-                      placeholder="Selecciona una fecha" style="width: 100%"  :disabled-date="disabledDate"/>
-                  </el-form-item>
-              </el-col>
-              <el-col :span="12">
-                  <el-form-item label="Hasta" prop="EndDate">
-                      <el-date-picker v-model="absenceRequestForm.EndDate" type="date" aria-label="Selecciona una fecha"
-                          placeholder="Selecciona una fecha" style="width: 100%" :disabled-date="disabledDate"/>
-                  </el-form-item>
-              </el-col>
-          </el-row>
-
-          <el-form-item label="Tipo de ausencia" prop="AbsenceTypeId">
-          <el-select v-model="absenceRequestForm.AbsenceTypeId" placeholder="Tipo de ausencia">
-            <el-option v-for="type in absenceTypes" :key="type.value"  :label="type.label"  :value="type.value" />
-          </el-select>
-        </el-form-item>
-
-
-          <el-form-item label="Comentario" prop="Comment">
-              <el-input v-model="absenceRequestForm.Comment" type="textarea" />
+    <el-form
+      label-position="top"
+      ref="ruleFormRef"
+      style="max-width: 600px"
+      :model="absenceRequestForm"
+      :rules="rules"
+      label-width="auto"
+      class="mt-6"
+      :size="formSize"
+      status-icon
+    >
+      <el-row :gutter="12">
+        <el-col :span="12">
+          <el-form-item :label="t('from')" prop="StartDate">
+            <el-date-picker
+              v-model="absenceRequestForm.StartDate"
+              type="date"
+              :aria-label="t('selectDate')"
+              :placeholder="t('selectDate')"
+              style="width: 100%"
+              :disabled-date="disabledDate"
+            />
           </el-form-item>
-
-          <el-form-item>
-              <el-upload v-model:file-list="fileList" class="upload-demo"
-                  action="https://run.mocky.io/v3/9d059bf9-4660-45f2-925d-ce80ad6c4d15" multiple
-                  :on-preview="handlePreview" :on-remove="handleRemove" :before-remove="beforeRemove" :limit="3"
-                  :on-exceed="handleExceed">
-                  <el-button type="primary">Adjuntar evidencia</el-button>
-                  <template #tip>
-                      <div class="el-upload__tip">
-                          <!-- pdf & png/jpg files with a size menos de 2MB. -->
-                      </div>
-                  </template>
-              </el-upload>
+        </el-col>
+        <el-col :span="12">
+          <el-form-item :label="t('to')" prop="EndDate">
+            <el-date-picker
+              v-model="absenceRequestForm.EndDate"
+              type="date"
+              :aria-label="t('selectDate')"
+              :placeholder="t('selectDate')"
+              style="width: 100%"
+              :disabled-date="disabledDate"
+            />
           </el-form-item>
+        </el-col>
+      </el-row>
 
-            <el-form-item>
-                <el-button :loading="isLoading" class="mt-6" size="large" color="var(--secondary-color)" round
-                    @click="submitForm(ruleFormRef)">
-                    Enviar Solicitud
-                </el-button>
-                <el-button class="mt-6" size="large" @click="resetForm(ruleFormRef)" round>
-                    Cancelar
-                </el-button>
-            </el-form-item>
-        </el-form>
-    </el-card>
+      <el-form-item :label="t('absenceType')" prop="AbsenceTypeId">
+        <el-select v-model="absenceRequestForm.AbsenceTypeId" :placeholder="t('absenceType')">
+          <el-option v-for="type in absenceTypes" :key="type.value" :label="type.label" :value="type.value" />
+        </el-select>
+      </el-form-item>
+
+      <el-form-item :label="t('comment')" prop="Comment">
+        <el-input v-model="absenceRequestForm.Comment" type="textarea" />
+      </el-form-item>
+
+      <el-form-item>
+        <el-upload
+          v-model:file-list="fileList"
+          class="upload-demo"
+          action="https://run.mocky.io/v3/9d059bf9-4660-45f2-925d-ce80ad6c4d15"
+          multiple
+          :on-preview="handlePreview"
+          :on-remove="handleRemove"
+          :before-remove="beforeRemove"
+          :limit="3"
+          :on-exceed="handleExceed"
+        >
+          <el-button type="primary">{{ t("attachEvidence") }}</el-button>
+        </el-upload>
+      </el-form-item>
+
+      <el-form-item>
+        <el-button
+          :loading="isLoading"
+          class="mt-6"
+          size="large"
+          color="var(--secondary-color)"
+          round
+          @click="submitForm(ruleFormRef)"
+        >
+          {{ t("sendRequest") }}
+        </el-button>
+        <el-button class="mt-6" size="large" @click="resetForm(ruleFormRef)" round>
+          {{ t("cancel") }}
+        </el-button>
+      </el-form-item>
+    </el-form>
+  </el-card>
 </template>
+
 
 <script lang="ts" setup>
 import { onMounted, ref, reactive } from 'vue';
@@ -81,6 +107,9 @@ import type { ComponentSize, FormInstance, FormRules, UploadProps, UploadUserFil
 import { ElMessage, ElMessageBox } from 'element-plus';
 import type { AbsenceRequest } from '@/domain/Interfaces/Absence/AbsenceRequest.interface';
 import { useAbsenceStore } from '../stores/absence.store';
+import { useI18n } from "vue-i18n";
+
+const { t } = useI18n()
 
 const formSize = ref<ComponentSize>('default');
 const ruleFormRef = ref<FormInstance>();

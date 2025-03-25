@@ -1,62 +1,61 @@
 <template>
   <el-card shadow="never">
     <template #header>
-      <h2 class="text-xl text-gray-700 font-semibold">Gestionar Fondos de pensión</h2>
+      <h2 class="text-xl text-gray-700 font-semibold">{{ t('managePensionFunds') }}</h2>
     </template>
 
     <el-card shadow="never" class="mb-6">
       <el-form ref="ruleFormRef" :rules="rules" :model="pensionFundForm" class="flex flex-wrap items-center">
         <div class="flex flex-col items-center gap-4 mb-2 md:mb-0">
-          <el-form-item prop="pensionFundName" label="Nombre">
-            <el-input v-model="pensionFundForm.pensionFundName" placeholder="Nombre" clearable  style="width: 150px;"/>
+          <el-form-item prop="pensionFundName" :label="t('name')">
+            <el-input v-model="pensionFundForm.pensionFundName" :placeholder="t('name')" clearable style="width: 150px;"/>
           </el-form-item>
           <el-form-item>
             <el-button :loading="isLoading" type="primary" @click="submitForm(ruleFormRef)">
-              Crear fondo
+              {{ t('createPensionFund') }}
             </el-button>
           </el-form-item>
         </div>
         <div class="w-full md:w-auto mt-2 md:mt-0 md:ml-auto">
-          <el-checkbox v-model="showInactive">Mostrar Inactivos</el-checkbox>
+          <el-checkbox v-model="showInactive">{{ t('showInactive') }}</el-checkbox>
         </div>
       </el-form>
     </el-card>
 
     <el-table :data="paginatedData" border class="w-full min-h-96 mb-4" stripe>
-      <el-table-column prop="id" label="ID" />
-      <el-table-column prop="pensionFundName" label="Nombre" align="center" />
-      <el-table-column prop="isActive" label="Estado" align="center">
+      <el-table-column prop="id" :label="t('id')" />
+      <el-table-column prop="pensionFundName" :label="t('name')" align="center" />
+      <el-table-column prop="isActive" :label="t('status')" align="center">
         <template #default="{ row }">
           <el-tag :type="row.isActive ? 'success' : 'danger'">
-            {{ row.isActive ? "Activo" : "Inactivo" }}
+            {{ row.isActive ? t('active') : t('inactive') }}
           </el-tag>
         </template>
       </el-table-column>
-      <el-table-column label="Acciones" align="center" width="150">
+      <el-table-column :label="t('actions')" align="center" width="150">
         <template #default="scope">
           <el-button size="small" @click="openEditModal(scope.row)">
-            Editar
+            {{ t('edit') }}
           </el-button>
           <el-button :loading="isLoading" size="small" type="danger" :disabled="!scope.row.isActive" @click="deleteFund(scope.row.id)">
-            Desactivar
+            {{ t('deactivate') }}
           </el-button>
         </template>
       </el-table-column>
     </el-table>
 
-    <el-dialog v-model="isEditModalVisible" title="Editar Fondo de Pension"  top="6vh" width="90%" :style="{ maxWidth: '800px', maxHeight: '80vh', overflowY: 'auto' }">
+    <el-dialog v-model="isEditModalVisible" :title="t('editPensionFund')" top="6vh" width="90%" :style="{ maxWidth: '800px', maxHeight: '80vh', overflowY: 'auto' }">
       <el-form :label-position="isSmallScreen ? 'top' : 'left'">
-        <el-form-item label="Nuevo Nombre">
+        <el-form-item :label="t('newName')">
           <el-input v-model="editForm.name" />
         </el-form-item>
       </el-form>
       <template #footer>
-        <el-button @click="isEditModalVisible = false" :size="isSmallScreen ? 'small' : 'default'">Cancelar</el-button>
-        <el-button type="primary" @click="editPensionFund" :size="isSmallScreen ? 'small' : 'default'">Guardar Cambios</el-button>
+        <el-button @click="isEditModalVisible = false" :size="isSmallScreen ? 'small' : 'default'">{{ t('cancel') }}</el-button>
+        <el-button type="primary" @click="editPensionFund" :size="isSmallScreen ? 'small' : 'default'">{{ t('saveChanges') }}</el-button>
       </template>
     </el-dialog>
 
-    <el-pagination v-model:current-page="currentPage" :page-size="pageSize" :page-sizes="[10, 20, 50]" layout="total, sizes, prev, pager, next" :total="pensionFundList.length" @size-change="handleSizeChange" @current-change="handlePageChange" />
     <!-- Paginación -->
     <el-pagination
       v-model:current-page="currentPage"
@@ -75,6 +74,9 @@
 import { ref, onMounted, computed } from "vue";
 import { usePensionFundViewModel } from "@/presentation/viewmodels/pensionFundViewModel";
 import { usePensionFundStore } from "@/presentation/stores/pensionFund.store";
+import { useI18n } from "vue-i18n";
+
+const { t } = useI18n()
 
 const isSmallScreen = computed(() => window.innerWidth < 800);
 const pensionFundStore = usePensionFundStore();

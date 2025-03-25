@@ -1,13 +1,13 @@
 <template>
   <div class="flex items-center my-6">
     <div class="flex-grow border-t border-gray-300"></div>
-    <span class="mx-4 font-bold">Información laboral</span>
+    <span class="mx-4 font-bold">{{ t("laborInfo") }}</span>
     <div class="flex-grow border-t border-gray-300"></div>
   </div>
 
   <el-row :gutter="30">
     <el-col :xs="24" :sm="12" :md="8">
-      <el-form-item label="Salario" prop="salary">
+      <el-form-item :label="t('salary')" prop="salary">
         <el-input-number
           style="width: 100%"
           :min="1300000"
@@ -18,11 +18,8 @@
     </el-col>
 
     <el-col :xs="24" :sm="12" :md="8">
-      <el-form-item label="Departamento" prop="divisionId">
-        <el-select
-          v-model="employeeRequestForm.divisionId"
-          placeholder="Seleccione el departamento"
-        >
+      <el-form-item :label="t('department')" prop="divisionId">
+        <el-select v-model="employeeRequestForm.divisionId" :placeholder="t('selectDepartment')">
           <el-option
             v-for="division in divisionList"
             :key="division.id"
@@ -34,11 +31,8 @@
     </el-col>
 
     <el-col :xs="24" :sm="12" :md="8">
-      <el-form-item label="Cargo" prop="jobTitleId">
-        <el-select
-          v-model="employeeRequestForm.jobTitleId"
-          placeholder="Seleccione el cargo"
-        >
+      <el-form-item :label="t('jobTitle')" prop="jobTitleId">
+        <el-select v-model="employeeRequestForm.jobTitleId" :placeholder="t('selectJobTitle')">
           <el-option
             v-for="jobTitle in jobTitles"
             :key="jobTitle.id"
@@ -50,11 +44,8 @@
     </el-col>
 
     <el-col :xs="24" :sm="12" :md="8">
-      <el-form-item label="Tipo de contrato" prop="contractData.contractTypeId">
-        <el-select
-          v-model="employeeRequestForm.contractData.contractTypeId"
-          placeholder="Seleccione el tipo de contrato"
-        >
+      <el-form-item :label="t('contractType')" prop="contractData.contractTypeId">
+        <el-select v-model="employeeRequestForm.contractData.contractTypeId" :placeholder="t('selectContractType')">
           <el-option
             v-for="contractType in contractTypeOptions"
             :key="contractType.id"
@@ -66,27 +57,22 @@
     </el-col>
 
     <el-col :xs="24" :sm="12" :md="8">
-      <el-form-item
-        label="Fecha de inicio"
-        prop="contractData.contractStartDate"
-      >
+      <el-form-item :label="t('startDate')" prop="contractData.contractStartDate">
         <el-date-picker
           v-model="employeeRequestForm.contractData.contractStartDate"
           type="date"
-          aria-label="Seleccione una fecha"
-          placeholder="Seleccione una fecha"
+          :placeholder="t('selectDate')"
           style="width: 100%"
         />
       </el-form-item>
     </el-col>
 
     <el-col :xs="24" :sm="12" :md="8">
-      <el-form-item label="Fecha de fin" prop="contractData.contractEndDate">
+      <el-form-item :label="t('endDate')" prop="contractData.contractEndDate">
         <el-date-picker
           v-model="employeeRequestForm.contractData.contractEndDate"
           type="date"
-          aria-label="Seleccione una fecha"
-          placeholder="Seleccione una fecha"
+          :placeholder="t('selectDate')"
           style="width: 100%"
         />
       </el-form-item>
@@ -102,6 +88,10 @@ import { useDepartmentViewModel } from "@/presentation/viewmodels/departmentView
 import { useJobTitleViewModel } from "@/presentation/viewmodels/jobTitleViewModel";
 
 import type { EmployeeRequest } from "@/domain/Interfaces/Employee/EmployeeRequest.interface";
+
+import { useI18n } from "vue-i18n";
+
+const { t } = useI18n()
 
 const props = defineProps<{
   employeeRequestForm: EmployeeRequest;

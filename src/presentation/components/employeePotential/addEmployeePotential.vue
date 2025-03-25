@@ -2,7 +2,7 @@
   <el-dialog
     :model-value="dialog"
     @update:model-value="$emit('update:dialog', $event)"
-    title="Candidato"
+    :title="t('candidate')"
     top="6vh"
     width="90%" 
     :style="{ maxWidth: '800px' }"
@@ -18,58 +18,58 @@
       status-icon
     >
       <div class="grid grid-cols-1 md:grid-cols-2 gap-6 space-y-2">
-        <el-form-item prop="numberDocument" label="Número de documento">
+        <el-form-item prop="numberDocument" :label="t('documentNumber')">
           <el-input
-            placeholder="Documento"
+            :placeholder="t('document')"
             v-model="employeePotentialForm.numberDocument"
           />
         </el-form-item>
 
-        <el-form-item prop="firstName" label="Primer Nombre">
+        <el-form-item prop="firstName" :label="t('firstName')">
           <el-input
-            placeholder="Primer nombre"
+            :placeholder="t('firstName')"
             v-model="employeePotentialForm.firstName"
           />
         </el-form-item>
 
-        <el-form-item label="Segundo Nombre">
+        <el-form-item :label="t('middleName')">
           <el-input
-            placeholder="Segundo nombre"
+            :placeholder="t('middleName')"
             v-model="employeePotentialForm.middleName"
           />
         </el-form-item>
 
-        <el-form-item prop="surName" label="Apellido">
+        <el-form-item prop="surName" :label="t('lastName')">
           <el-input
-            placeholder="Apellido"
+            :placeholder="t('lastName')"
             v-model="employeePotentialForm.surName"
           />
         </el-form-item>
 
-        <el-form-item prop="dateOfBirth" label="Fecha de nacimiento">
+        <el-form-item prop="dateOfBirth" :label="t('dateOfBirth')">
           <el-date-picker
             v-model="employeePotentialForm.dateOfBirth"
             type="date"
-            placeholder="Seleccione una fecha"
+            :placeholder="t('selectDate')"
             style="width: 100%"
           />
         </el-form-item>
 
-        <el-form-item prop="email" label="Correo electrónico">
+        <el-form-item prop="email" :label="t('email')">
           <el-input
-            placeholder="Correo electrónico"
+            :placeholder="t('email')"
             v-model="employeePotentialForm.email"
           />
         </el-form-item>
 
-        <el-form-item prop="cellPhone" label="Celular">
+        <el-form-item prop="cellPhone" :label="t('cellphone')">
           <el-input
-            placeholder="Celular"
+            :placeholder="t('cellphone')"
             v-model="employeePotentialForm.cellPhone"
           />
         </el-form-item>
 
-        <el-form-item label="Adjuntar archivo">
+        <el-form-item :label="t('attachFile')">
           <el-upload
             action=""
             :auto-upload="false"
@@ -78,28 +78,28 @@
             accept=".pdf,.doc,.docx"
             @change="handleFileChange"
           >
-            <el-button type="primary">Seleccionar archivo</el-button>
+            <el-button type="primary">{{ t('selectFile') }}</el-button>
           </el-upload>
         </el-form-item>
 
-        <el-form-item prop="jobPostingId" label="Puesto a referir">
+        <el-form-item prop="jobPostingId" :label="t('referJob')">
           <el-select
             v-model="employeePotentialForm.jobPostingId"
-            placeholder="Seleccione el puesto a referir"
+            :placeholder="t('selectReferJob')"
           >
-              <el-option
-                 v-for="jobPosting in jobPostingList"
-                 :key="jobPosting.id"
-                 :label="jobPosting.title"
-                 :value="jobPosting.id"
-              />
-            </el-select>
+            <el-option
+              v-for="jobPosting in jobPostingList"
+              :key="jobPosting.id"
+              :label="jobPosting.title"
+              :value="jobPosting.id"
+            />
+          </el-select>
         </el-form-item>
       </div>
 
       <el-form-item class="mt-12">
         <el-button :loading="isLoading" type="success" @click="handleSubmit">
-          Enviar Solicitud
+          {{ t('sendRequest') }}
         </el-button>
       </el-form-item>
     </el-form>
@@ -112,6 +112,10 @@ import { useJobPostingViewModel } from "@/presentation/viewmodels/jobPostingView
 import { ElNotification } from "element-plus";
 import { onMounted, ref, watch } from "vue";
 import type { UploadFile } from "element-plus";
+import { useI18n } from "vue-i18n";
+
+const { t } = useI18n()
+
 
 const props = defineProps<{
   dialog: boolean;

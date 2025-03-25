@@ -7,7 +7,7 @@
           <div class="flex flex-col">
             <span class="font-medium">{{ user.fullName }}</span>
             <span class="text-sm text-gray-400">
-              {{ new Date(user.birthday).toLocaleString('es-ES', { year: 'numeric', month: 'long', day: 'numeric' }) }} - ¡Feliz cumpleaños!
+              {{ new Date(user.birthday).toLocaleString($i18n.locale, { year: 'numeric', month: 'long', day: 'numeric' }) }} - {{ t("happyBirthday") }}
             </span>
           </div>
         </div>
@@ -15,14 +15,18 @@
       </div>
     </template>
     <template v-else>
-      <el-empty description="No birthdays found" />
+      <el-empty :description="$t('noBirthdays')" />
     </template>
   </div>
 </template>
 
+
 <script setup lang="ts">
 import { ref, onMounted, reactive } from 'vue';
 import { useUserStore } from '../stores/user.store';
+import { useI18n } from "vue-i18n";
+
+const { t } = useI18n();
 
 const state = reactive({
   avatars: [

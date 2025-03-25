@@ -1,0 +1,30 @@
+{
+    "greeting": "Hola",
+    "todayIs": "Hoy es ",
+    "portal": "Portal",
+    "freeTime": "Tiempo Libre",
+    "vacations": "Vacaciones",
+    "medicalAppointments": "Citas médicas",
+    "requestFreeTime": "Solicitar Tiempo Libre",
+    "certifications": "Certificaciones",
+    "workLetter": "Carta Laboral",
+    "personalFile": "Ficha Personal",
+    "moreCertificates": "Más Certificados",
+    "announcementsCommunity": "Anuncios - Comunidad",
+    "newPublication": "Nueva Publicación",
+    "allPublications": "Todas las publicaciones",
+    "team": "Equipo",
+    "companyLinks": "Enlaces de la Empresa",
+    "birthdays": "Cumpleaños",
+    "daysOfWeek": {
+    "sunday": "domingo",
+    "monday": "lunes",
+    "tuesday": "martes",
+    "wednesday": "miércoles",
+    "thursday": "jueves",
+    "friday": "viernes",
+    "saturday": "sábado"
+  },
+   "noBirthdays": "No se encontraron cumpleaños",
+  "happyBirthday": "¡Feliz cumpleaños!"
+}

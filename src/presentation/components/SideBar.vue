@@ -26,10 +26,9 @@
       <input
         type="text"
         class="w-full rounded px-4 py-2.5 text-sm font-light bg-gray-800 text-gray-400 placeholder-gray-500"
-        placeholder="Buscar"
-      />
+        :placeholder="t('search')"
+      /> 
     </div>
-
     <div class="px-6 pt-4"><hr class="border-gray-700" /></div>
 
     <el-scrollbar height="calc(100vh - 250px)">
@@ -45,7 +44,7 @@
                 <span class="material-symbols-outlined pr-2"
                   >space_dashboard</span
                 >
-                Inicio
+                {{ t('home') }}
               </router-link>
             </div>
           </li>
@@ -119,7 +118,7 @@
                 @click.prevent
               >
                 <span class="material-symbols-outlined pr-2">work_alert</span>
-                Bolsa de trabajo
+                {{ t('jobBoard') }}
               </router-link>
             </div>
           </li>
@@ -137,8 +136,8 @@
                 class="flex item-center w-full pl-2 pr-4 py-2 rounded"
                 @click.prevent
               >
-                <span class="material-symbols-outlined pr-2">support</span>
-                Soporte y ayuda
+              <span class="material-symbols-outlined pr-2">support</span>
+                {{ t('support') }}
               </router-link>
             </div>
           </li>
@@ -161,7 +160,7 @@
                   <span class="material-symbols-outlined pr-2"
                     >admin_panel_settings</span
                   >
-                  Recursos humanos
+                   {{ t('humanResources') }}
                   <!-- Título fijo -->
           </div>
           <span
@@ -205,7 +204,7 @@
     <li>
       <router-link to="/portal-rrhh/gestion-administrativa" class="text-gray-500 hover:text-white flex items-center pl-2 pr-4 py-2 hover:bg-gray-800 rounded">
         <span class="material-symbols-outlined pr-2">bar_chart</span>
-        Gestión Administrativa
+        {{ t('administrativeManagement') }}
       </router-link>
     </li>
   </ul>
@@ -221,7 +220,7 @@
               class="flex items-center w-full pl-2 pr-4 py-2 rounded"
             >
               <span class="material-symbols-outlined pr-2">settings</span>
-              Configuraciones
+              {{ t('settings') }}
             </router-link>
           </div>
         </li>
@@ -331,7 +330,9 @@ import { ref } from "vue";
 import { useUserStore } from "@/presentation/stores/user.store";
 import mujer from "@/presentation/assets/hombre2.jpg";
 import { useCertifiedStore } from "../stores/certified.store";
+import { useI18n } from "vue-i18n";
 
+const { t } = useI18n();
 const certifiedStore = useCertifiedStore();
 const { downloadCertificate } = certifiedStore;
 const userStore = useUserStore();
@@ -356,11 +357,11 @@ const { getUsername, getUserEmail } = useUserStore();
 // Lista de elementos del menú
 const menuItems = ref([
   {
-    title: "Mi Perfil",
+    title: t('miPerfil'),
     icon: "person",
     subItems: [
       {
-        title: "Información personal",
+        title: t('informacionPersonal'),
         route: "/perfil/informacion-personal",
       },
       // {
@@ -378,25 +379,25 @@ const menuItems = ref([
     ],
   },
   {
-    title: "Nómina",
+    title: t('nomina'),
     icon: "payments",
     subItems: [
       {
-        title: "Comprobantes de pago",
+        title: t('comprobantesPago'),
         route: "/nomina/comprobante",
       },
       {
-        title: "Mi Historial de pago",
+        title: t('historialPago'),
         route: "/nomina/historial",
       },
     ],
   },
   {
-    title: "Tiempo Libre",
+    title: t('tiempoLibre'),
     icon: "travel",
     subItems: [
       {
-        title: "Crear una ausencia",
+        title: t('crearAusencia'),
         route: "/ausencias/solicitar-ausencia",
       },
       // {
@@ -425,16 +426,16 @@ const menuItems = ref([
    // ],
   //},
   {
-    title: "Solicitudes  y trámites",
+    title: t('solicitudesTramites'),
     icon: "procedure",
     subItems: [
       {
-        title: "Carta laboral",
+        title: t('cartaLaboral'),
         route: "",
         action: downloadLetter,
       },
       {
-        title: "Actualización de datos",
+        title: t('actualizacionDatos'),
         route: "/solicitud/actualizacion-datos",
       },
     ],
@@ -444,27 +445,27 @@ const menuItems = ref([
 // Subitems para Recursos Humanos
 const recursosHumanosSubItems = ref([
   {
-    title: "Gestión de empleados",
+    title: t('gestionEmpleados'),
     route: "/portal-rrhh/empleados",
   },
   {
-    title: "Gestión de vacantes",
+    title: t('gestionVacantes'),
     route: "/portal-rrhh/aplicaciones",
   },
   {
-    title: "Control de asistencia",
+    title: t('controlAsistencia'),
     route: "/portal-rrhh/gestionar-ausencias",
   },
   {
-    title: "Nómina y compensacion",
+    title: t('nominaCompensacion'),
     route: "/portal-rrhh/gestionar-nomina",
   },
   {
-    title: "Pausas activas",
+    title: t('pausasActivas'),
     route: "/portal-rrhh/gestion-pausas",
   },
   {
-    title: "Trámites",
+    title: t('tramites'),
     route: "/portal-rrhh/trámites",
   },
   //{
@@ -476,6 +477,7 @@ const recursosHumanosSubItems = ref([
     //route: "#",
   //},
 ]);
+
 const openMenus = ref<boolean[]>(Array(menuItems.value.length).fill(false));
 
 // Alternar la visibilidad del menú

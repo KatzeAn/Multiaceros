@@ -1,0 +1,12 @@
+{
+    "availableVacationDays": "Available vacation days",
+    "requestAbsence": "Request Absence",
+    "from": "From",
+    "to": "To",
+    "selectDate": "Select a date",
+    "absenceType": "Absence type",
+    "comment": "Comment",
+    "attachEvidence": "Attach evidence",
+    "sendRequest": "Send Request",
+    "cancel": "Cancel"
+  }

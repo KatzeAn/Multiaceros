@@ -1,6 +1,9 @@
 <script setup lang="ts">
 import { useUserStore } from "../stores/user.store";
 import { useCertifiedStore } from "../stores/certified.store";
+import { useI18n } from "vue-i18n";
+
+const { t } = useI18n();
 
 import Card from "../components/Card.vue";
 import BirthdayList from "../components/BirthdayList.vue";
@@ -32,10 +35,10 @@ const download = async () => {
         <div class="flex flex-wrap gap-6 content-center w-full sm:w-1/2">
           <div>
             <img :src="mujer" alt="Perfil" class="w-[5rem] h-[5rem] rounded-full object-cover" />          </div>
-          <div class="self-center">
-            <p class="text-xl font-bold">Hola, {{ getUsername }}</p>
-            <p class="text-base">Hoy es {{ dayName }}, {{ date }}</p>
-          </div>
+            <div class="self-center">
+              <p class="text-xl font-bold">{{ t('greeting') }}, {{ getUsername }}</p>
+              <p class="text-base">{{ t('todayIs') }} {{ dayName }}, {{ date }}</p>
+            </div>
         </div>
         <div
           class="self-center flex flex-col sm:flex-row justify-end sm:w-1/2 gap-6 mt-4 sm:mt-0"
@@ -45,19 +48,19 @@ const download = async () => {
             class="bg-blue-500 text-white px-4 py-2 rounded flex items-center justify-center gap-2 hover:bg-blue-600"
           >
             <span class="material-symbols-outlined">person</span>
-            Mi perfil
+            {{ t('miPerfil') }}
           </router-link>
           <button
             class="bg-white border border-gray-300 text-gray-700 px-4 py-2 rounded flex items-center justify-center gap-2 hover:bg-gray-100"
           >
             <span class="material-symbols-outlined">settings</span>
-            Configuraciones
+            {{ t('settings') }}
           </button>
         </div>
       </div>
     </Card>
 
-    <h2 class="text-2xl font-bold">Portal</h2>
+    <h2 class="text-2xl font-bold">{{t('portal')}}</h2>
     <el-divider />
 
     <div class="grid grid-cols-3 gap-6">
@@ -70,7 +73,7 @@ const download = async () => {
                 ><el-icon>
                   <Calendar />
                 </el-icon>
-                Tiempo Libre
+                {{t('freeTime')}}
               </span>
             </div>
           </template>
@@ -82,7 +85,7 @@ const download = async () => {
                 >
                   beach_access
                 </span>
-                <span class="text-[var(--secondary-color)]">Vacaciones</span>
+                <span class="text-[var(--secondary-color)]">{{t('vacations')}}</span>
               </div>
               <div class="flex flex-col items-center">
                 <span
@@ -90,7 +93,7 @@ const download = async () => {
                 >
                   healing
                 </span>
-                <span class="text-[var(--secondary-color)]">Citas médicas</span>
+                <span class="text-[var(--secondary-color)]">{{t('medicalAppointments')}}</span>
               </div>
             </div>
             <div class="flex flex-row items-center gap-5">
@@ -103,7 +106,7 @@ const download = async () => {
                   size="small"
                   color="var(--secondary-color)"
                   round
-                  >Solicitar Tiempo Libre</el-button
+                  >{{t('requestFreeTime')}}</el-button
                 ></router-link
               >
             </div>
@@ -118,7 +121,7 @@ const download = async () => {
                 ><el-icon>
                   <Document />
                 </el-icon>
-                Certificaciones</span
+                {{t('certifications')}}</span
               >
             </div>
           </template>
@@ -134,7 +137,7 @@ const download = async () => {
                 >
                   docs
                 </span>
-                <span class="text-[var(--secondary-color)]">Carta Laboral</span>
+                <span class="text-[var(--secondary-color)]">{{t('workLetter')}}</span>
               </div>
               <div
                 class="flex flex-col items-center cursor-pointer p-3 rounded-lg hover:bg-[var(--info-alt-color)]"
@@ -145,7 +148,7 @@ const download = async () => {
                   shield_person
                 </span>
                 <span class="text-[var(--secondary-color)]"
-                  >Ficha Personal</span
+                  >{{t('personalFile')}}</span
                 >
               </div>
             </div>
@@ -155,7 +158,7 @@ const download = async () => {
               size="large"
               color="var(--secondary-color)"
               round
-              >Más Certificados</el-button
+              >{{t('moreCertificates')}}</el-button
             >
           </div>
         </el-card>
@@ -169,16 +172,17 @@ const download = async () => {
         <el-icon>
           <Comment />
         </el-icon>
-        Anuncios - Comunidad
+        {{t('announcementsCommunity')}}
       </span>
     </div>
   </template>
 
   <div class="flex flex-row gap-6">
-    <el-button icon="Plus">Nueva Publicación</el-button>
-    <el-select disabled placeholder="Todas las publicaciones">
-      <el-option />
-    </el-select>
+    <el-button icon="Plus">{{t('newPublication')}}</el-button>
+    <el-select disabled :placeholder="t('allPublications')">
+  <el-option />
+</el-select>
+
   </div>
 
   <el-divider />
@@ -216,7 +220,7 @@ const download = async () => {
               <el-icon>
                 <Menu />
               </el-icon>
-              Equipo
+              {{t('team')}}
             </span>
           </div>
         </template>
@@ -265,7 +269,7 @@ const download = async () => {
               <el-icon>
                 <Bell />
               </el-icon>
-              Cumpleaños
+              {{t('birthdays')}}
             </span>
           </div>
         </template>
@@ -310,21 +314,26 @@ export default {
     };
   },
   mounted() {
-    const daysOfWeek = [
-      "domingo",
-      "lunes",
-      "martes",
-      "miércoles",
-      "jueves",
-      "viernes",
-      "sábado",
-    ];
+    const { t, locale } = useI18n();
+
+    const daysOfWeek = {
+      sunday: "daysOfWeek.sunday",
+      monday: "daysOfWeek.monday",
+      tuesday: "daysOfWeek.tuesday",
+      wednesday: "daysOfWeek.wednesday",
+      thursday: "daysOfWeek.thursday",
+      friday: "daysOfWeek.friday",
+      saturday: "daysOfWeek.saturday",
+    };
+
     const today = new Date();
-    this.dayName = daysOfWeek[today.getDay()];
-    this.date = today.toLocaleDateString("es-ES", {
+    const dayKey = Object.keys(daysOfWeek)[today.getDay()];
+    
+    this.dayName = t(daysOfWeek[dayKey]);
+    this.date = today.toLocaleDateString(locale.value, {
       day: "numeric",
       month: "long",
     });
   },
-};
+}
 </script>
