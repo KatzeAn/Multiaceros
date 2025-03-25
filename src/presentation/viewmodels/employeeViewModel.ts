@@ -386,18 +386,8 @@ const filterTableData = computed(() =>
     try {
       await employeeStore.createEmployeeRequest(employeeRequestForm.value);
       resetForm(ruleFormRef.value);
-      ElNotification({
-        title: "Éxito",
-        message: "Empleado creado correctamente",
-        type: "success",
-      });
       emit("employee-saved");
     } catch (error) {
-      ElNotification({
-        title: "Error",
-        message: (error as string) || "Error desconocido",
-        type: "error",
-      });
     }
   };
 

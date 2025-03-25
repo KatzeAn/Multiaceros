@@ -1,95 +1,125 @@
 <template>
   <el-card>
-    <el-button color="var(--secondary-color)" @click="dialogVisible = true">Agregar Pausa Activa</el-button>
+    <el-button color="var(--secondary-color)" @click="dialogVisible = true">
+      {{ t("addActiveBreak") }}
+    </el-button>
 
     <el-dialog
-        v-model="dialogVisible"
-        title="Pausa Activa"
-        width="500"
-        :before-close="handleClose"
+      v-model="dialogVisible"
+      :title="t('activeBreak')"
+      width="500"
+      :before-close="handleClose"
     >
-
-        <el-form label-position="top" ref="ruleFormRef" style="max-width: 600px" :model="AbsenceRequestForm"
-                        label-width="auto" class="mt-6" :size="formSize" status-icon>
-
-            <el-row :gutter="12">
-                <el-col :span="12">
-                    <el-form-item label="Fecha" prop="from">
-                        <el-date-picker v-model="AbsenceRequestForm.from" type="date" aria-label="Selecciona una fecha"
-                                        placeholder="Selecciona una fecha" style="width: 100%" />
-                    </el-form-item>
-                </el-col>
-                <el-col :span="12">
-                    <el-form-item label="Hora" prop="to">
-                        <el-time-picker v-model="AbsenceRequestForm.to" value-format="HH:mm:ss" placeholder="Seleccione una hora"></el-time-picker>
-                    </el-form-item>
-                </el-col>
-            </el-row>
-                        
-            <el-form-item label="Descripción" prop="comment">
-                <el-input v-model="AbsenceRequestForm.comment" type="textarea" />
+      <el-form
+        label-position="top"
+        ref="ruleFormRef"
+        style="max-width: 600px"
+        :model="AbsenceRequestForm"
+        label-width="auto"
+        class="mt-6"
+        :size="formSize"
+        status-icon
+      >
+        <el-row :gutter="12">
+          <el-col :span="12">
+            <el-form-item :label="t('date')" prop="from">
+              <el-date-picker
+                v-model="AbsenceRequestForm.from"
+                type="date"
+                :aria-label="t('selectDate')"
+                :placeholder="t('selectDate')"
+                style="width: 100%"
+              />
             </el-form-item>
+          </el-col>
+          <el-col :span="12">
+            <el-form-item :label="t('time')" prop="to">
+              <el-time-picker
+                v-model="AbsenceRequestForm.to"
+                value-format="HH:mm:ss"
+                :placeholder="t('selectTime')"
+              />
+            </el-form-item>
+          </el-col>
+        </el-row>
 
-        </el-form>
+        <el-form-item :label="t('description')" prop="comment">
+          <el-input v-model="AbsenceRequestForm.comment" type="textarea" />
+        </el-form-item>
+      </el-form>
 
-        <template #footer>
+      <template #footer>
         <div class="dialog-footer">
-            <el-button @click="dialogVisible = false">Cancelar</el-button>
-            <el-button type="primary" @click="dialogVisible = false">
-            Agregar
-            </el-button>
+          <el-button @click="dialogVisible = false">{{ t("cancel") }}</el-button>
+          <el-button type="primary" @click="dialogVisible = false">
+            {{ t("add") }}
+          </el-button>
         </div>
-        </template>
+      </template>
     </el-dialog>
 
     <el-table :data="tableData" stripe style="margin-top: 2rem; width: 100%">
-        <el-table-column prop="date" label="Fecha" width="180" />
-        <el-table-column prop="name" label="Hora" width="180" />
-        <el-table-column prop="address" label="Descripción" />
-        <el-table-column prop="address" label="Acciones" width="150">
-            <el-button type="primary" @click="dialogVisible2 = true">Editar</el-button>
-            <el-button type="danger" @click="">Eliminar</el-button>
-        </el-table-column>
+      <el-table-column prop="date" :label="t('date')" width="180" />
+      <el-table-column prop="name" :label="t('time')" width="180" />
+      <el-table-column prop="address" :label="t('description')" />
+      <el-table-column prop="address" :label="t('actions')" width="150">
+        <el-button type="primary" @click="dialogVisible2 = true">{{ t("edit") }}</el-button>
+        <el-button type="danger" @click="">{{ t("delete") }}</el-button>
+      </el-table-column>
     </el-table>
 
     <el-dialog
-        v-model="dialogVisible2"
-        title="Pausa Activa"
-        width="500"
-        :before-close="handleClose"
+      v-model="dialogVisible2"
+      :title="t('activeBreak')"
+      width="500"
+      :before-close="handleClose"
     >
-
-        <el-form label-position="top" ref="ruleFormRef" style="max-width: 600px" :model="AbsenceRequestForm"
-                        label-width="auto" class="mt-6" :size="formSize" status-icon>
-
-            <el-row :gutter="12">
-                <el-col :span="12">
-                    <el-form-item label="Fecha" prop="from">
-                        <el-date-picker v-model="AbsenceRequestForm.from" type="date" aria-label="Selecciona una fecha"
-                                        placeholder="Selecciona una fecha" style="width: 100%" />
-                    </el-form-item>
-                </el-col>
-                <el-col :span="12">
-                    <el-form-item label="Hora" prop="to">
-                        <el-time-picker v-model="AbsenceRequestForm.to" value-format="HH:mm:ss" placeholder="Seleccione una hora"></el-time-picker>
-                    </el-form-item>
-                </el-col>
-            </el-row>
-                        
-            <el-form-item label="Descripción" prop="comment">
-                <el-input v-model="AbsenceRequestForm.comment" type="textarea" />
+      <el-form
+        label-position="top"
+        ref="ruleFormRef"
+        style="max-width: 600px"
+        :model="AbsenceRequestForm"
+        label-width="auto"
+        class="mt-6"
+        :size="formSize"
+        status-icon
+      >
+        <el-row :gutter="12">
+          <el-col :span="12">
+            <el-form-item :label="t('date')" prop="from">
+              <el-date-picker
+                v-model="AbsenceRequestForm.from"
+                type="date"
+                :aria-label="t('selectDate')"
+                :placeholder="t('selectDate')"
+                style="width: 100%"
+              />
             </el-form-item>
+          </el-col>
+          <el-col :span="12">
+            <el-form-item :label="t('time')" prop="to">
+              <el-time-picker
+                v-model="AbsenceRequestForm.to"
+                value-format="HH:mm:ss"
+                :placeholder="t('selectTime')"
+              />
+            </el-form-item>
+          </el-col>
+        </el-row>
 
-        </el-form>
+        <el-form-item :label="t('description')" prop="comment">
+          <el-input v-model="AbsenceRequestForm.comment" type="textarea" />
+        </el-form-item>
+      </el-form>
 
-        <template #footer>
+      <template #footer>
         <div class="dialog-footer">
-            <el-button @click="dialogVisible2 = false">Cancelar</el-button>
-            <el-button type="primary" @click="dialogVisible2 = false">
-            Agregar
-            </el-button>
+          <el-button @click="dialogVisible2 = false">{{ t("cancel") }}</el-button>
+          <el-button type="primary" @click="dialogVisible2 = false">
+            {{ t("add") }}
+          </el-button>
         </div>
-        </template>
+      </template>
     </el-dialog>
   </el-card>
 </template>
@@ -100,6 +130,9 @@ import { ref } from 'vue';
 import { ElMessage, ElMessageBox } from 'element-plus'
 import { useUserStore } from '../../stores/user.store';
 import type { ComponentSize, FormInstance, FormRules, UploadProps, UploadUserFile } from 'element-plus'
+import { useI18n } from "vue-i18n";
+
+const { t } = useI18n()
 
 const { AbsenceRequestForm, CreateAbsenceRequest } = useUserStore();
 

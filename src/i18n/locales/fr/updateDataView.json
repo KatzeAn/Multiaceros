@@ -1,0 +1,21 @@
+{
+    "updateData": "Mettre à jour les données",
+    "newEmail": "Nouvel e-mail",
+    "enterNewEmail": "Entrez votre nouvel e-mail",
+    "titlesCertifications": "Titres ou certifications",
+    "enterTitles": "Entrez vos titres obtenus",
+    "lastEducationLevel": "Dernier niveau d'études",
+    "enterEducationLevel": "Entrez votre niveau d'études",
+    "educationalInstitution": "Établissement d'enseignement",
+    "enterInstitution": "Entrez votre établissement d'enseignement",
+    "nationality": "Nationalité",
+    "enterNationality": "Entrez votre nationalité",
+    "requestReason": "Motif de la demande",
+    "explainReason": "Expliquez pourquoi vous souhaitez mettre à jour ces informations",
+    "sendRequest": "Envoyer la demande",
+    "changePassword": "Changer le mot de passe",
+    "newPassword": "Nouveau mot de passe",
+    "enterNewPassword": "Entrez le nouveau mot de passe",
+    "confirmPassword": "Confirmer le mot de passe",
+    "confirmNewPassword": "Confirmez le nouveau mot de passe"
+  }

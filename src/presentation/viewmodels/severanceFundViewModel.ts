@@ -72,20 +72,9 @@ export function useSeveranceFundViewModel() {
       await severanceFundStore.createSeveranceFundRequest(severanceFundForm);
       await loadSeveranceFund();
 
-      ElNotification({
-        title: "Éxito",
-        message: "Fondo de cesantías creado correctamente",
-        type: "success",
-      });
 
       severanceFundForm.severanceFundName = "";
     } catch (error) {
-      const errorMessage = error as string;
-      ElNotification({
-        title: "Error",
-        message: errorMessage,
-        type: "error",
-      });
     }
   };
 

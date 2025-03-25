@@ -1,161 +1,13 @@
 <template>
-  <el-button type="primary" icon="Plus" @click="isAddModalOpen = true">
-    Agregar Puesto de Trabajo
-  </el-button>
+ <el-button type="primary" icon="Plus" @click="isAddModalOpen = true">
+  {{ t('addJobPosting') }}
+</el-button>
 
-  <el-dialog v-model="isAddModalOpen" title="Añadir Nuevo Puesto de Trabajo" width="90%" :style="{ maxWidth: '800px' }">
-    <el-form ref="formRef" :model="jobPosting" label-position="top">
-      <div class="grid grid-cols-1 gap-4">
-        <el-form-item label="Título" prop="title">
-          <el-select v-model="jobPosting.jobTitleId" class="w-full">
-            <el-option
-              v-for="jobTitle in jobTitleList"
-              :key="jobTitle.id"
-              :label="jobTitle.name"
-              :value="jobTitle.id"
-            />
-          </el-select>
-        </el-form-item>
-
-        <el-form-item label="Descripción" prop="description">
-          <el-input v-model="jobPosting.description" type="textarea" class="w-full" />
-        </el-form-item>
-
-        <el-form-item label="Rango Salarial" prop="salaryRange">
-          <el-input 
-            v-model="jobPosting.salaryRange"
-            @input="formatSalaryInput('create')"
-            class="w-full"
-          />
-        </el-form-item>
-
-        <div class="flex flex-col md:flex-row gap-4">
-          <el-form-item label="Nuevo Requerimiento" class="w-full md:w-4/5">
-            <el-input v-model="newRequirement" placeholder="Ingrese un requerimiento" class="w-full" />
-          </el-form-item>
-          <div class="flex items-center justify-start md:w-1/5">
-            <el-button type="primary" class="w-full" @click="addRequirement">Agregar</el-button>
-          </div>
-        </div>
-
-        <div>
-          <ul>
-            <li
-              v-for="(requirement, index) in jobPosting.requirements"
-              :key="index"
-              class="flex justify-between items-center py-2 border-b"
-            >
-              <span>{{ requirement }}</span>
-              <button type="button" @click="removeRequirement(index)" class="text-red-500">
-                Eliminar
-              </button>
-            </li>
-          </ul>
-        </div>
-
-        <el-form-item label="Años de Experiencia" prop="experienceLevel">
-          <el-input-number v-model="jobPosting.experienceLevel" :min="1" class="w-full" />
-        </el-form-item>
-
-        <el-form-item label="Área" prop="area">
-          <el-select v-model="jobPosting.divisionId" class="w-full">
-            <el-option
-              v-for="division in divisionList"
-              :key="division.id"
-              :label="division.name"
-              :value="division.id"
-            />
-          </el-select>
-        </el-form-item>
-
-        <el-form-item label="Modalidad" prop="modality">
-          <el-select v-model="jobPosting.modality" class="w-full">
-            <el-option label="Presencial" :value="1" />
-            <el-option label="Remoto" :value="2" />
-            <el-option label="Híbrido" :value="3" />
-          </el-select>
-        </el-form-item>
-
-        <el-form-item label="Tipo de Contrato" prop="contractType">
-          <el-select v-model="jobPosting.contractType" class="w-full">
-            <el-option
-              v-for="contractType in contractTypeList"
-              :key="contractType.id"
-              :label="contractType.typeOfContract"
-              :value="contractType.id"
-            />
-          </el-select>
-        </el-form-item>
-
-        <el-form-item label="Nivel de Prioridad" prop="priority">
-          <el-input-number v-model="jobPosting.priority" :min="1" class="w-full" />
-        </el-form-item>
-      </div>
-
-      <el-form-item>
-        <el-button type="primary" @click="submitJobPosting">Confirmar</el-button>
-      </el-form-item>
-    </el-form>
-  </el-dialog>
-
-  <!-- Tabla de Puestos de Trabajo -->
-  <div class="flex justify-between items-center mb-4">
-  <h2 class="text-lg font-semibold">Puestos de trabajo</h2>
-  <el-checkbox v-model="showInactive">Mostrar Inactivos</el-checkbox>
-</div>
-
-<el-table :data="paginatedData" border class="w-full min-h-96 mb-4" stripe>
-  <el-table-column prop="title" label="Título">
-    <template #default="{ row }">
-      {{ getJobTitle(row.jobTitleId) }}
-    </template>
-  </el-table-column>
-
-  <el-table-column prop="area" label="Área">
-    <template #default="{ row }">
-      {{ getDivision(row.divisionId) }}
-    </template>
-  </el-table-column>
-
-  <el-table-column label="Salario" >
-<template #default="{ row }">
-  {{ formatSalary(row.salaryRange) }}
-</template>
-</el-table-column>
-  <el-table-column label="Tipo de Contrato">
-    <template #default="{ row }">
-      {{ getContractType(row.contractType) }}
-    </template>
-  </el-table-column>
-
-  <el-table-column label="Nivel de Prioridad" prop="priorityText" />
-
-  <el-table-column prop="isActive" label="Estado" align="center"> 
-    <template #default="{ row }">
-      <el-tag :type="row.isActive ? 'success' : 'danger'">
-        {{ row.isActive ? "Activo" : "Inactivo" }}
-      </el-tag>
-    </template>
-  </el-table-column>
-
-  <el-table-column label="Acciones" width="150">
-    <template #default="scope">
-      <div class="flex space-x-2">
-        <el-button size="small" @click="openEditModal(scope.row)">Editar</el-button>
-        <el-button :loading="isLoading" size="small" type="danger" :disabled="!scope.row.isActive" @click="deleteJobTitle(scope.row.id)">
-          Desactivar
-        </el-button>
-      </div>
-    </template>
-  </el-table-column>
-</el-table>
-
-
-  <!-- Modal para editar puesto -->
-  <el-dialog v-model="isEditModalOpen" title="Editar Puesto de Trabajo" width="90%" :style="{ maxWidth: '800px' }">
-    <el-form ref="editFormRef" :model="selectedJobPosting">
-      <el-form-item label="Título" prop="title">
-        <el-select v-model="selectedJobPosting.jobTitleId" class="w-full">
+<el-dialog v-model="isAddModalOpen" :title="t('addNewJobPosting')" width="90%" :style="{ maxWidth: '800px' }">
+  <el-form ref="formRef" :model="jobPosting" label-position="top">
+    <div class="grid grid-cols-1 gap-4">
+      <el-form-item :label="t('title')" prop="title">
+        <el-select v-model="jobPosting.jobTitleId" class="w-full">
           <el-option
             v-for="jobTitle in jobTitleList"
             :key="jobTitle.id"
@@ -165,49 +17,53 @@
         </el-select>
       </el-form-item>
 
-      <el-form-item label="Descripción" prop="description">
-        <el-input v-model="selectedJobPosting.description" type="textarea" class="w-full" />
+      <el-form-item :label="t('description')" prop="description">
+        <el-input v-model="jobPosting.description" type="textarea" class="w-full" />
       </el-form-item>
 
-      <el-form-item label="Rango Salarial" prop="salaryRange">
-  <el-input 
-    v-model="selectedJobPosting.salaryRange"
-    @input="formatSalaryInput('edit')"
-    class="w-full"
-  />
-</el-form-item>
-
+      <el-form-item :label="t('salaryRange')" prop="salaryRange">
+        <el-input 
+          v-model="jobPosting.salaryRange"
+          @input="formatSalaryInput('create')"
+          class="w-full"
+        />
+      </el-form-item>
 
       <div class="flex flex-col md:flex-row gap-4">
-        <el-form-item label="Nuevo Requerimiento" class="w-full md:w-4/5">
-          <el-input v-model="newRequirement" placeholder="Ingrese un requerimiento" class="w-full" />
+        <el-form-item :label="t('newRequirement')" class="w-full md:w-4/5">
+          <el-input v-model="newRequirement" :placeholder="t('enterRequirement')" class="w-full" />
         </el-form-item>
         <div class="flex items-center justify-start md:w-1/5">
-          <el-button type="primary" class="w-full" @click="addRequirement">Agregar</el-button>
+          <el-button type="primary" class="w-full" @click="addRequirement">{{ t('add') }}</el-button>
         </div>
       </div>
 
       <div>
         <ul>
           <li
-            v-for="(requirement, index) in selectedJobPosting.requirements"
+            v-for="(requirement, index) in jobPosting.requirements"
             :key="index"
             class="flex justify-between items-center py-2 border-b"
           >
             <span>{{ requirement }}</span>
             <button type="button" @click="removeRequirement(index)" class="text-red-500">
-              Eliminar
+              {{ t('delete') }}
             </button>
           </li>
         </ul>
       </div>
 
-      <el-form-item label="Años de Experiencia" prop="experienceLevel">
-        <el-input-number v-model="selectedJobPosting.experienceLevel" :min="1" class="w-full" />
+      <el-form-item :label="t('yearsOfExperience')" prop="experienceLevel">
+        <el-input-number 
+          v-model="jobPosting.experienceLevel" 
+          :min="1" 
+          :max="30" 
+          class="w-full" 
+        />
       </el-form-item>
 
-      <el-form-item label="Área" prop="area">
-        <el-select v-model="selectedJobPosting.divisionId" class="w-full">
+      <el-form-item :label="t('area')" prop="area">
+        <el-select v-model="jobPosting.divisionId" class="w-full">
           <el-option
             v-for="division in divisionList"
             :key="division.id"
@@ -217,16 +73,16 @@
         </el-select>
       </el-form-item>
 
-      <el-form-item label="Modalidad" prop="modality">
-        <el-select v-model="selectedJobPosting.modality" class="w-full">
-          <el-option label="Presencial" :value="1" />
-          <el-option label="Remoto" :value="2" />
-          <el-option label="Híbrido" :value="3" />
+      <el-form-item :label="t('modality')" prop="modality">
+        <el-select v-model="jobPosting.modality" class="w-full">
+          <el-option :label="t('onsite')" :value="1" />
+          <el-option :label="t('remote')" :value="2" />
+          <el-option :label="t('hybrid')" :value="3" />
         </el-select>
       </el-form-item>
 
-      <el-form-item label="Tipo de Contrato" prop="contractType">
-        <el-select v-model="selectedJobPosting.contractType" class="w-full">
+      <el-form-item :label="t('contractType')" prop="contractType">
+        <el-select v-model="jobPosting.contractType" class="w-full">
           <el-option
             v-for="contractType in contractTypeList"
             :key="contractType.id"
@@ -236,16 +92,168 @@
         </el-select>
       </el-form-item>
 
-      <el-form-item label="Nivel de Prioridad" prop="priority">
-        <el-input-number v-model="selectedJobPosting.priority" class="w-full" />
+      <el-form-item :label="t('priorityLevel')" prop="priority">
+        <el-input-number v-model="jobPosting.priority" :min="1" class="w-full" />
       </el-form-item>
+    </div>
 
-      <el-form-item>
-        <el-button type="primary" @click="updateJobPosting">Guardar Cambios</el-button>
-      </el-form-item>
-    </el-form>
-  </el-dialog>
+    <el-form-item>
+      <el-button type="primary" @click="submitJobPosting">{{ t('confirm') }}</el-button>
+    </el-form-item>
+  </el-form>
+</el-dialog>
 
+  <!-- Tabla de Puestos de Trabajo -->
+  <div class="flex justify-between items-center mb-4">
+  <h2 class="text-lg font-semibold">{{ t('jobPostings') }}</h2>
+  <el-checkbox v-model="showInactive">{{ t('showInactive') }}</el-checkbox>
+</div>
+
+<el-table :data="paginatedData" border class="w-full min-h-96 mb-4" stripe>
+  <el-table-column prop="title" :label="t('title')">
+    <template #default="{ row }"> 
+      {{ getJobTitle(row.jobTitleId) }}
+    </template>
+  </el-table-column>
+
+  <el-table-column prop="area" :label="t('area')">
+    <template #default="{ row }">
+      {{ getDivision(row.divisionId) }}
+    </template>
+  </el-table-column>
+
+  <el-table-column :label="t('salary')">
+    <template #default="{ row }">
+      {{ formatSalary(row.salaryRange) }}
+    </template>
+  </el-table-column>
+
+  <el-table-column :label="t('contractType')">
+    <template #default="{ row }">
+      {{ getContractType(row.contractType) }}
+    </template>
+  </el-table-column>
+
+  <el-table-column :label="t('priorityLevel')" prop="priorityText" />
+
+  <el-table-column prop="isActive" :label="t('status')" align="center"> 
+    <template #default="{ row }">
+      <el-tag :type="row.isActive ? 'success' : 'danger'">
+        {{ row.isActive ? t('active') : t('inactive') }}
+      </el-tag>
+    </template>
+  </el-table-column>
+
+  <el-table-column :label="t('actions')" width="150">
+    <template #default="scope">
+      <div class="flex space-x-2">
+        <el-button size="small" @click="openEditModal(scope.row)">{{ t('edit') }}</el-button>
+        <el-button :loading="isLoading" size="small" type="danger" :disabled="!scope.row.isActive" @click="deleteJobTitle(scope.row.id)">
+          {{ t('deactivate') }}
+        </el-button>
+      </div>
+    </template>
+  </el-table-column>
+</el-table>
+
+  <!-- Modal para editar puesto -->
+  <el-dialog v-model="isEditModalOpen" title="Editar Puesto de Trabajo" width="90%" :style="{ maxWidth: '800px' }">
+    <el-form  ref="editFormRef" :model="selectedJobPosting">
+  <el-form-item :label="t('title')" prop="title">
+    <el-select v-model="selectedJobPosting.jobTitleId" class="w-full">
+      <el-option
+        v-for="jobTitle in jobTitleList"
+        :key="jobTitle.id"
+        :label="jobTitle.name"
+        :value="jobTitle.id"
+      />
+    </el-select>
+  </el-form-item>
+
+  <el-form-item :label="t('description')" prop="description">
+    <el-input v-model="selectedJobPosting.description" type="textarea" class="w-full" />
+  </el-form-item>
+
+  <el-form-item :label="t('salaryRange')" prop="salaryRange">
+    <el-input 
+      v-model="selectedJobPosting.salaryRange"
+      @input="formatSalaryInput('edit')"
+      class="w-full"
+    />
+  </el-form-item>
+
+  <div class="flex flex-col md:flex-row gap-4">
+    <el-form-item :label="t('newRequirement')" class="w-full md:w-4/5">
+      <el-input v-model="newRequirement" :placeholder="t('enterRequirement')" class="w-full" />
+    </el-form-item>
+    <div class="flex items-center justify-start md:w-1/5">
+      <el-button type="primary" class="w-full" @click="addRequirement">{{ t('add') }}</el-button>
+    </div>
+  </div>
+
+  <div>
+    <ul>
+      <li
+        v-for="(requirement, index) in selectedJobPosting.requirements"
+        :key="index"
+        class="flex justify-between items-center py-2 border-b"
+      >
+        <span>{{ requirement }}</span>
+        <button type="button" @click="removeRequirement(index)" class="text-red-500">
+          {{ t('delete') }}
+        </button>
+      </li>
+    </ul>
+  </div>
+
+  <el-form-item :label="t('yearsOfExperience')" prop="experienceLevel">
+    <el-input-number 
+      v-model="selectedJobPosting.experienceLevel" 
+      :min="1" 
+      :max="30" 
+      class="w-full" 
+    />
+  </el-form-item>
+
+  <el-form-item :label="t('area')" prop="area">
+    <el-select v-model="selectedJobPosting.divisionId" class="w-full">
+      <el-option
+        v-for="division in divisionList"
+        :key="division.id"
+        :label="division.name"
+        :value="division.id"
+      />
+    </el-select>
+  </el-form-item>
+
+  <el-form-item :label="t('modality')" prop="modality">
+    <el-select v-model="selectedJobPosting.modality" class="w-full">
+      <el-option :label="t('onsite')" :value="1" />
+      <el-option :label="t('remote')" :value="2" />
+      <el-option :label="t('hybrid')" :value="3" />
+    </el-select>
+  </el-form-item>
+
+  <el-form-item :label="t('contractType')" prop="contractType">
+    <el-select v-model="selectedJobPosting.contractType" class="w-full">
+      <el-option
+        v-for="contractType in contractTypeList"
+        :key="contractType.id"
+        :label="contractType.typeOfContract"
+        :value="contractType.id"
+      />
+    </el-select>
+  </el-form-item>
+
+  <el-form-item :label="t('priorityLevel')" prop="priority">
+    <el-input-number v-model="selectedJobPosting.priority" class="w-full" />
+  </el-form-item>
+
+  <el-form-item>
+    <el-button type="primary" @click="updateJobPosting">{{ t('saveChanges') }}</el-button>
+  </el-form-item>
+</el-form>
+</el-dialog>
 
   <!-- Paginación -->
   <el-pagination
@@ -267,6 +275,9 @@ import { useContracTypeStore } from "@/presentation/stores/contractType.store";
 import type { ContractType } from "@/domain/Interfaces/Contract/contractType.interface";
 import { useJobTitleStore } from "@/presentation/stores/jobTitle.store";
 import { useDivisionStore } from "@/presentation/stores/division.store";
+import { useI18n } from "vue-i18n";
+
+const { t } = useI18n()
 
 const formatSalary = (salary) => {
   if (!salary) return 'No especificado';

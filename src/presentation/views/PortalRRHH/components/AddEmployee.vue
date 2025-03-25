@@ -29,7 +29,7 @@
 
     <el-form-item class="mt-6">
       <el-button :loading="isLoading" type="success" @click="handleSubmit">
-        Enviar Solicitud
+        {{ t("sendRequest") }}
       </el-button>
     </el-form-item>
   </el-form>
@@ -43,6 +43,9 @@ import LaboralInformationItemForm from "@/presentation/layouts/EmployeeForm/labo
 import SocialSecurityItemForm from "@/presentation/layouts/EmployeeForm/socialSecurityItemForm.vue";
 import BonificationItemForm from "@/presentation/layouts/EmployeeForm/bonificationItemForm.vue";
 import BenefitItemForm from "@/presentation/layouts/EmployeeForm/benefitItemForm.vue";
+import { useI18n } from "vue-i18n";
+
+const { t } = useI18n()
 
 const { isLoading, ruleFormRef, rules, submitForm, employeeRequestForm } =
   useEmployeeViewModel();

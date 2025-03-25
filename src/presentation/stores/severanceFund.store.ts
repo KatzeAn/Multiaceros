@@ -4,8 +4,10 @@ import { ref } from "vue";
 import { SeveranceFundModel } from "@/database/severanceFund/severanceFund.model";
 import type { SeveranceFund } from "@/domain/Interfaces/severanceFund/severanceFund.interface";
 import { useUserStore } from "./user.store";
+import { useI18n } from "vue-i18n";
 
 export const useSeveranceFundStore = defineStore("severanceFund", () => {
+  const { t } = useI18n();
   const severanceFunds = ref<SeveranceFund[]>([]);
   const isLoading = ref(false);
   const errorMessage = ref<string | null | undefined>(null);
@@ -21,8 +23,8 @@ export const useSeveranceFundStore = defineStore("severanceFund", () => {
       console.error(error);
       severanceFunds.value = [];
       ElNotification({
-        title: "Error",
-        message: "No se pudieron cargar los fondos de cesantías",
+        title: t("notifications.error.title"),
+        message: t("notifications.error.severanceFundFetch"),
         type: "error",
       });
       return [];
@@ -40,65 +42,64 @@ export const useSeveranceFundStore = defineStore("severanceFund", () => {
     } catch (error: any) {
       errorMessage.value = error as string;
       ElNotification({
-          title: 'Error',
-          message: errorMessage.value,
-          type: 'error',
+        title: t("notifications.error.title"),
+        message: errorMessage.value,
+        type: "error",
       });
-  }
+    }
   };
 
   const deleteSeveranceFundsRequest = async (severanceFundId: number) => {
-        try {
-          isLoading.value = true;
-          const severanceFundModel = new SeveranceFundModel();
+    try {
+      isLoading.value = true;
+      const severanceFundModel = new SeveranceFundModel();
 
-          const userStore = useUserStore();
-          const userId = userStore.getUserId;
-          await severanceFundModel.deleteSeveranceFund(severanceFundId, userId);
+      const userStore = useUserStore();
+      const userId = userStore.getUserId;
+      await severanceFundModel.deleteSeveranceFund(severanceFundId, userId);
 
-          ElNotification ({
-            title: "Exito",
-            message: "Fondo de cesantias eliminado con éxito",
-            type: "success",
-            });
+      ElNotification({
+        title: t("notifications.success.title"),
+        message: t("notifications.success.severanceFundDeleted"),
+        type: "success",
+      });
 
-            await fetchSeveranceFund();
-          } catch (error: any) {
-            errorMessage.value = error as string;
-            ElNotification({
-                title: 'Error',
-                message: errorMessage.value,
-                type: 'error',
-            });
-        }
-          
-          }
+      await fetchSeveranceFund();
+    } catch (error: any) {
+      errorMessage.value = error as string;
+      ElNotification({
+        title: t("notifications.error.title"),
+        message: errorMessage.value,
+        type: "error",
+      });
+    }
+  };
 
-          const updateSeveranceFundRequest = async (id: number, severanceFundName: string) => {
-            try {
-              isLoading.value = true;
-              const severanceFundModel = new SeveranceFundModel();
-              const userStore = useUserStore(); 
-              const userId = userStore.getUserId;
-        
-              await severanceFundModel.updateSeveranceFund(id, severanceFundName, userId);
+  const updateSeveranceFundRequest = async (id: number, severanceFundName: string) => {
+    try {
+      isLoading.value = true;
+      const severanceFundModel = new SeveranceFundModel();
+      const userStore = useUserStore();
+      const userId = userStore.getUserId;
 
-              ElNotification({
-                title: "Exito",
-                message: "Fondo de cesantias actualizado con éxito",
-                type: "success",
-                });
+      await severanceFundModel.updateSeveranceFund(id, severanceFundName, userId);
 
-                await fetchSeveranceFund();
-              } catch (error: any) {
-                errorMessage.value = error as string;
-                ElNotification({
-                    title: 'Error',
-                    message: errorMessage.value,
-                    type: 'error',
-                });
-            }
-        };
+      ElNotification({
+        title: t("notifications.success.title"),
+        message: t("notifications.success.severanceFundUpdated"),
+        type: "success",
+      });
+
+      await fetchSeveranceFund();
+    } catch (error: any) {
+      errorMessage.value = error as string;
+      ElNotification({
+        title: t("notifications.error.title"),
+        message: errorMessage.value,
+        type: "error",
+      });
+    }
+  };
 
   return {
     isLoading,

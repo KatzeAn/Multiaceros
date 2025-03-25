@@ -70,20 +70,8 @@ export function useJobTitleViewModel() {
       await jobTitleStore.createJobTitleRequest(jobTitleForm);
       await loadJobTitles();
 
-      ElNotification({
-        title: "Éxito",
-        message: "Cargo creado correctamente",
-        type: "success",
-      });
-
       jobTitleForm.name = "";
     } catch (error) {
-      const errorMessage = error as string;
-      ElNotification({
-        title: "Error",
-        message: errorMessage,
-        type: "error",
-      });
     }
   };
 

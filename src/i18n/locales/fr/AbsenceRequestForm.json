@@ -1,0 +1,12 @@
+{
+    "availableVacationDays": "Jours de vacances disponibles",
+    "requestAbsence": "Demander une Absence",
+    "from": "De",
+    "to": "À",
+    "selectDate": "Sélectionner une date",
+    "absenceType": "Type d'absence",
+    "comment": "Commentaire",
+    "attachEvidence": "Joindre une preuve",
+    "sendRequest": "Envoyer la Demande",
+    "cancel": "Annuler"
+  }

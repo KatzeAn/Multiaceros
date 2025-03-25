@@ -17,23 +17,23 @@
         </div>
       </template>
       <div class="card-content text-sm text-gray-600">
-        <p><strong>Salario:</strong> {{ formatSalary(job.salaryRange) }}</p>
-        <p><strong>Descripción:</strong></p>
+        <p><strong>{{ t('salario') }}:</strong> {{ formatSalary(job.salaryRange) }}</p>
+        <p><strong>{{ t('descripcion') }}:</strong></p>
         <p v-if="job.description.length <= 100">{{ job.description }}</p>
         <p v-else>
           {{ expandedDescriptions[job.id] ? job.description : job.description.slice(0, 100) + '...' }}
           <el-button text @click="toggleDescription(job.id)">
-            {{ expandedDescriptions[job.id] ? 'Ver menos' : 'Ver más' }}
+            {{ expandedDescriptions[job.id] ? t('verMenos') : t('verMas') }}
           </el-button>
         </p>
-        <p><strong>Requerimientos:</strong></p>
+        <p><strong>{{ t('requerimientos') }}:</strong></p>
         <ul>
           <li v-for="(requirement, index) in job.requirements" :key="index">- {{ requirement }}</li>
         </ul>
       </div>
       <template #footer>
         <el-button type="primary" @click="openAddModal(job.id || 0)">
-          Aplicar ahora
+          {{ t('aplicarAhora') }}
         </el-button>
       </template>
     </el-card>
@@ -45,6 +45,9 @@ import { ref, onMounted, reactive } from "vue";
 import { useJobPostingStore } from "@/presentation/stores/jobPostings.store";
 import AddApplicancy from "../employeePotential/addApplicancy.vue";
 import { computed } from 'vue';
+import { useI18n } from "vue-i18n";
+
+const { t } = useI18n()
 
 const formatSalary = (salary) => {
   if (!salary) return 'No especificado';

@@ -4,8 +4,10 @@ import { EpsModel } from "@/database/eps/eps.model";
 import type { Eps } from "@/domain/Interfaces/Eps/eps.interface";
 import { ref } from "vue";
 import { useUserStore } from "./user.store";
+import { useI18n } from "vue-i18n"; 
 
 export const useEpsStore = defineStore("eps", () => {
+  const { t } = useI18n();
   const epsList = ref<Eps[]>([]);
   const isLoading = ref(false);
   const errorMessage = ref<string | null | undefined>(null);
@@ -21,8 +23,8 @@ export const useEpsStore = defineStore("eps", () => {
       console.error(error);
       epsList.value = [];
       ElNotification({
-        title: "Error",
-        message: "No se pudieron cargar los EPS",
+        title: t("notifications.error.title"),
+        message: t("notifications.error.epsLoad"),
         type: "error",
       });
       return [];
@@ -40,59 +42,60 @@ export const useEpsStore = defineStore("eps", () => {
     } catch (error: any) {
       errorMessage.value = error as string;
       ElNotification({
-          title: 'Error',
-          message: errorMessage.value,
-          type: 'error',
+        title: t("notifications.error.title"),
+        message: errorMessage.value,
+        type: "error",
       });
-  }
+    }
   };
+
   const deleteEpsRequest = async (id: number) => {
     try {
-        isLoading.value = true;
-        const epsModel = new EpsModel();
+      isLoading.value = true;
+      const epsModel = new EpsModel();
+      const userStore = useUserStore();
+      const userId = userStore.getUserId;
+      await epsModel.deleteEps(id, userId);
 
-        const userStore = useUserStore();
-        const userId = userStore.getUserId; 
-        await epsModel.deleteEps(id, userId);
+      ElNotification({
+        title: t("notifications.success.title"),
+        message: t("notifications.success.epsDeleted"),
+        type: "success",
+      });
 
-        ElNotification({
-            title: "Éxito",
-            message: "EPS eliminada con éxito.",
-            type: "success",
-        });
-
-        await fetchEps();
-      } catch (error: any) {
-        errorMessage.value = error as string;
-        ElNotification({
-            title: 'Error',
-            message: errorMessage.value,
-            type: 'error',
-        });
-    }
-};
- const updateEpsRequest = async (id: number, epsName: string) => {
-  try {
-    isLoading.value = true;
-    const epsModel = new EpsModel();
-    await epsModel.updateEps(id, epsName);
-
-    ElNotification({
-      title: "Éxito",
-      message: "EPS actualizada con éxito.",
-      type: "success",
-    });
-    await fetchEps();
-  } catch (error: any) {
-    errorMessage.value = error as string;
-    ElNotification({
-        title: 'Error',
+      await fetchEps();
+    } catch (error: any) {
+      errorMessage.value = error as string;
+      ElNotification({
+        title: t("notifications.error.title"),
         message: errorMessage.value,
-        type: 'error',
-    });
-  }
-};
+        type: "error",
+      });
+    }
+  };
 
+  const updateEpsRequest = async (id: number, epsName: string) => {
+    try {
+      isLoading.value = true;
+      const epsModel = new EpsModel();
+      await epsModel.updateEps(id, epsName);
+
+      ElNotification({
+        title: t("notifications.success.title"),
+        message: t("notifications.success.epsUpdated"),
+        type: "success",
+      });
+
+      await fetchEps();
+    } catch (error: any) {
+      errorMessage.value = error as string;
+      ElNotification({
+        title: t("notifications.error.title"),
+        message: errorMessage.value,
+        type: "error",
+      });
+    }
+  };
 
   return {
     isLoading,

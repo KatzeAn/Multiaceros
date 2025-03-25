@@ -4,8 +4,10 @@ import { ref } from "vue";
 import { ArlModel } from "@/database/arl/arl.model";
 import type { Arl } from "@/domain/Interfaces/Arl/Arl.interface";
 import { useUserStore } from "./user.store";
+import { useI18n } from "vue-i18n";
 
 export const useArlStore = defineStore("arl", () => {
+  const { t } = useI18n();
   const arlList = ref<Arl[]>([]);
   const isLoading = ref(false);
   const errorMessage = ref<string | null | undefined>(null);
@@ -21,8 +23,8 @@ export const useArlStore = defineStore("arl", () => {
       console.error(error);
       arlList.value = [];
       ElNotification({
-        title: "Error",
-        message: "No se pudieron cargar las ARL",
+        title: t("notifications.error.title"),
+        message: t("notifications.error.arlLoad"),
         type: "error",
       });
       return [];
@@ -37,65 +39,66 @@ export const useArlStore = defineStore("arl", () => {
       const arlModel = new ArlModel();
       await arlModel.create(data.nameArl);
       await fetchArl();
+      ElNotification({
+        title: t("notifications.success.title"),
+        message: t("notifications.success.create"),
+        type: "success",
+      });
     } catch (error: any) {
       errorMessage.value = error as string;
       ElNotification({
-          title: 'Error',
-          message: errorMessage.value,
-          type: 'error',
+        title: t("notifications.error.title"),
+        message: errorMessage.value,
+        type: "error",
       });
-  }
+    }
   };
+
   const deleteArlRequest = async (id: number) => {
     try {
       isLoading.value = true;
       const arlModel = new ArlModel();
-
       const userStore = useUserStore();
-      const userId = userStore.getUserId; 
+      const userId = userStore.getUserId;
       await arlModel.delete(id, userId);
-
       ElNotification({
-        title: "Éxito",
-        message: "ARL eliminada con éxito.",
+        title: t("notifications.success.title"),
+        message: t("notifications.success.delete"),
         type: "success",
-    });
-      await fetchArl(); 
-    } catch (error: any) {
-      errorMessage.value = error as string;
-      ElNotification({
-          title: 'Error',
-          message: errorMessage.value,
-          type: 'error',
-      });
-  }
-};
-
-const updateArlRequest = async (id: number, nameArl: string) => {
-  try {
-    isLoading.value = true;
-    const arlModel = new ArlModel();
-    const userStore = useUserStore(); 
-    const userId = userStore.getUserId;
-
-    await arlModel.update(id, nameArl, userId);
-
-    ElNotification({
-      title: "Éxito",
-      message: "ARL actualizada con éxito.",
-      type: "success",
       });
       await fetchArl();
     } catch (error: any) {
       errorMessage.value = error as string;
       ElNotification({
-          title: 'Error',
-          message: errorMessage.value,
-          type: 'error',
+        title: t("notifications.error.title"),
+        message: errorMessage.value,
+        type: "error",
       });
-  }
-};
+    }
+  };
 
+  const updateArlRequest = async (id: number, nameArl: string) => {
+    try {
+      isLoading.value = true;
+      const arlModel = new ArlModel();
+      const userStore = useUserStore();
+      const userId = userStore.getUserId;
+      await arlModel.update(id, nameArl, userId);
+      ElNotification({
+        title: t("notifications.success.title"),
+        message: t("notifications.success.update"),
+        type: "success",
+      });
+      await fetchArl();
+    } catch (error: any) {
+      errorMessage.value = error as string;
+      ElNotification({
+        title: t("notifications.error.title"),
+        message: errorMessage.value,
+        type: "error",
+      });
+    }
+  };
 
   return {
     isLoading,

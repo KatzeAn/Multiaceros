@@ -1,6 +1,7 @@
 import { defineStore } from "pinia";
 import { ElNotification } from "element-plus";
 import { ref } from "vue";
+import { useI18n } from "vue-i18n";
 import { DivisionModel } from "@/database/division/division.model";
 import type { Division } from "@/domain/Interfaces/Division/division.interface";
 import { stringToNumber } from "../common/helper/stringTonumber.helper";
@@ -8,6 +9,7 @@ import { useUserStore } from "./user.store";
 import type { Teammate } from "@/domain/Interfaces/Division/teammate.interface";
 
 export const useDivisionStore = defineStore("division", () => {
+  const { t } = useI18n();
   const divisions = ref<Division[]>([]);
   const isLoading = ref(false);
   const userStore = useUserStore();
@@ -24,8 +26,8 @@ export const useDivisionStore = defineStore("division", () => {
       console.error(error);
       divisions.value = [];
       ElNotification({
-        title: "Error",
-        message: "No se pudieron cargar los departamentos",
+        title: t("notifications.error.title"),
+        message: t("notifications.error.divisionLoad"),
         type: "error",
       });
       return [];
@@ -41,13 +43,13 @@ export const useDivisionStore = defineStore("division", () => {
       await divisionModel.createDivision(data.name, data.createdBy ?? "");
       await fetchDivision(); // Recargar lista después de crear
     } catch (error: any) {
-          errorMessage.value = error as string;
-          ElNotification({
-              title: 'Error',
-              message: errorMessage.value,
-              type: 'error',
-          });
-      }
+      errorMessage.value = error as string;
+      ElNotification({
+        title: t("notifications.error.title"),
+        message: errorMessage.value,
+        type: "error",
+      });
+    }
   };
 
   const fetchMyTeammate = async () => {
@@ -68,13 +70,13 @@ export const useDivisionStore = defineStore("division", () => {
       const response: Teammate[] = await divisionService.getTeammates(userId);
       result.teammateList = response;
     } catch (error: any) {
-          errorMessage.value = error as string;
-          ElNotification({
-              title: 'Error',
-              message: errorMessage.value,
-              type: 'error',
-          });
-      }
+      errorMessage.value = error as string;
+      ElNotification({
+        title: t("notifications.error.title"),
+        message: errorMessage.value,
+        type: "error",
+      });
+    }
 
     return result;
   };
@@ -87,33 +89,32 @@ export const useDivisionStore = defineStore("division", () => {
       await divisionModel.deleteDivision(id, userId);
       
       ElNotification({
-        title: "Éxito",
-        message: "Departamento desactivado con éxito.",
+        title: t("notifications.success.title"),
+        message: t("notifications.success.delete"),
         type: "success",
       });
       await fetchDivision();
     } catch (error: any) {
       errorMessage.value = error as string;
       ElNotification({
-          title: 'Error',
-          message: errorMessage.value,
-          type: 'error',
+        title: t("notifications.error.title"),
+        message: t("notifications.error.divisionDelete"),
+        type: "error",
       });
-  }
+    }
   };
 
   const updateDivisionRequest = async (id: number, newName: string) => {
     try {
       isLoading.value = true;
       const divisionModel = new DivisionModel();
-      const userStore = useUserStore(); 
       const userId = userStore.getUserId;
 
       await divisionModel.updateDivision(id, newName, userId);
 
       ElNotification({
-        title: "Éxito",
-        message: "Departamento actualizado con éxito.",
+        title: t("notifications.success.title"),
+        message: t("notifications.success.divisionUpdated"),
         type: "success",
       });
 
@@ -121,11 +122,11 @@ export const useDivisionStore = defineStore("division", () => {
     } catch (error: any) {
       errorMessage.value = error as string;
       ElNotification({
-          title: 'Error',
-          message: errorMessage.value,
-          type: 'error',
+        title: t("notifications.error.title"),
+        message: t("notifications.error.divisionUpdate"),
+        type: "error",
       });
-  }
+    }
   };
 
   return {
@@ -137,3 +138,4 @@ export const useDivisionStore = defineStore("division", () => {
     updateDivisionRequest, 
   };
 });
+

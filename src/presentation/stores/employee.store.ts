@@ -1,15 +1,16 @@
 import { defineStore } from "pinia";
 import { ElNotification } from "element-plus";
 import { ref } from "vue";
+import { useI18n } from "vue-i18n";
 import { EmployeeModel } from "@/database/employee/employee.model";
 import type { EmployeeRequest } from "@/domain/Interfaces/Employee/EmployeeRequest.interface";
-import { useUserStore  } from "@/presentation/stores/user.store"
-
+import { useUserStore } from "@/presentation/stores/user.store";
 
 export const useEmployeeStore = defineStore("employee", () => {
+  const { t } = useI18n(); 
   const isLoading = ref(false);
   const errorMessage = ref<string | null | undefined>(null);
-  
+
   const fetchEmployee = async () => {
     try {
       isLoading.value = true;
@@ -18,8 +19,8 @@ export const useEmployeeStore = defineStore("employee", () => {
       return Array.isArray(data) ? data : [];
     } catch (error) {
       ElNotification({
-        title: "Error",
-        message: "No se pudieron cargar los empleados",
+        title: t("notifications.error.title"),
+        message: t("notifications.error.employeeLoad"),
         type: "error",
       });
       return [];
@@ -33,41 +34,48 @@ export const useEmployeeStore = defineStore("employee", () => {
       isLoading.value = true;
       const employeeModel = new EmployeeModel();
       await employeeModel.createEmployee(data);
+      
+      ElNotification({
+        title: t("notifications.success.title"),
+        message: t("notifications.success.employeeCreated"),
+        type: "success",
+      });
+
       await fetchEmployee(); // Recargar lista después de crear
     } catch (error: any) {
       errorMessage.value = error as string;
       ElNotification({
-          title: 'Error',
-          message: errorMessage.value,
-          type: 'error',
+        title: t("notifications.error.title"),
+        message: errorMessage.value,
+        type: "error",
       });
-  }
+    }
   };
-
 
   const deactivateEmployee = async (id: number) => {
     try {
       isLoading.value = true;
       const employeeModel = new EmployeeModel();
-      
       const userStore = useUserStore();
       const userId = userStore.getUserId;
+      
       await employeeModel.deleteEmployee(id, userId);
       
       ElNotification({
-        title: "Éxito",
-        message: "Empleado desactivado correctamente",
+        title: t("notifications.success.title"),
+        message: t("notifications.success.employeeDeactivated"),
         type: "success",
       });
-      await fetchEmployee(); 
+
+      await fetchEmployee();
     } catch (error: any) {
       errorMessage.value = error as string;
       ElNotification({
-          title: 'Error',
-          message: errorMessage.value,
-          type: 'error',
+        title: t("notifications.error.title"),
+        message: errorMessage.value,
+        type: "error",
       });
-  }
+    }
   };
 
   return {

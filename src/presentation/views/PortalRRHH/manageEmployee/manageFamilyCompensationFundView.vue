@@ -2,7 +2,7 @@
   <el-card shadow="never">
     <template #header>
       <h2 class="text-xl text-gray-700 font-semibold">
-        Gestionar Fondos de Compensación Familiar
+        {{ t("manageFamilyCompensationFunds") }}
       </h2>
     </template>
 
@@ -15,37 +15,37 @@
         class="flex flex-wrap items-center justify-between"
       >
         <div class="flex flex-col items-center gap-4">
-          <el-form-item prop="compensationFundName" label="Nombre">
+          <el-form-item prop="compensationFundName" :label="$t('name')">
             <el-input
               v-model="familyCompensationFundForm.compensationFundName"
-              placeholder="Nombre"
+              :placeholder="t('newName')"
               clearable
             />
           </el-form-item>
           <el-form-item>
             <el-button :loading="isLoading" type="primary" @click="submitForm(ruleFormRef)">
-              Crear fondo
+              {{ t("createPensionFund") }}
             </el-button>
           </el-form-item>
         </div>
-        <el-checkbox v-model="showInactive">Mostrar Inactivos</el-checkbox>
+        <el-checkbox v-model="showInactive"> {{ t("showInactive") }} </el-checkbox>
       </el-form>
     </el-card>
 
     <el-table :data="paginatedData" border class="w-full min-h-96 mb-4" stripe>
       <el-table-column prop="id" label="ID" />
-      <el-table-column prop="compensationFundName" label="Nombre" />
-      <el-table-column prop="isActive" label="Estado" align="center">
+      <el-table-column prop="compensationFundName" :label="t('newName')" />
+      <el-table-column prop="isActive" :label="t('status')" align="center">
         <template #default="{ row }">
           <el-tag :type="row.isActive ? 'success' : 'danger'">
-            {{ row.isActive ? "Activo" : "Inactivo" }}
+            {{ row.isActive ? t('active') : t('inactive') }}
           </el-tag>
         </template>
       </el-table-column>
-      <el-table-column label="Acciones" align="center" width="150">
+      <el-table-column :label="t('actions')" align="center" width="150">
         <template #default="scope">
           <el-button size="small" @click="openEditModal(scope.row)">
-            Editar
+            {{ t("edit") }}
           </el-button>
           <el-button
             :loading="isLoading"
@@ -61,16 +61,18 @@
     </el-table>
 
     <!-- Modal para editar fondo de compensación -->
-    <el-dialog v-model="isEditModalVisible" title="Editar Fondo de Compensación" :width="isSmallScreen ? '90%' : '500px'" :style="{ maxWidth: '800px' }">
+    <el-dialog v-model="isEditModalVisible" :title="t('editFamilyCompensationFund')" top="6vh" width="90%" :style="{ maxWidth: '800px', maxHeight: '80vh', overflowY: 'auto' }">
       <el-form label-position="isSmallScreen ? 'top' : 'left'">
-        <el-form-item label="Nuevo Nombre">
+        <el-form-item :label="t('newName')">
           <el-input v-model="editForm.name" />
         </el-form-item>
       </el-form>
       <template #footer>
-        <el-button @click="isEditModalVisible = false" :size="isSmallScreen ? 'small' : 'default'">Cancelar</el-button>
+        <el-button @click="isEditModalVisible = false" :size="isSmallScreen ? 'small' : 'default'">
+          {{ t("cancel") }}
+        </el-button>
         <el-button type="primary" @click="editFamilyCompensationFund" :size="isSmallScreen ? 'small' : 'default'">
-          Guardar Cambios
+          {{ t("saveChanges") }}
         </el-button>
       </template>
     </el-dialog>
@@ -88,10 +90,14 @@
   </el-card>
 </template>
 
+
 <script lang="ts" setup>
 import { ref, onMounted, computed } from "vue";
 import { useFamilyCompensationFundViewModel } from "@/presentation/viewmodels/familyCompensationFundViewModel";
 import { useFamilyCompensationFundStore } from "@/presentation/stores/familyCompensationFund.store";
+import { useI18n } from "vue-i18n";
+
+const { t } = useI18n()
 
 const isSmallScreen = computed(() => window.innerWidth < 800);
 const familyCompensationFundStore = useFamilyCompensationFundStore();
@@ -147,5 +153,4 @@ const deleteFamilyFund = async (id: number) => {
   }
 };
 
-onMounted(loadFamilyCompensationFund)
 </script>

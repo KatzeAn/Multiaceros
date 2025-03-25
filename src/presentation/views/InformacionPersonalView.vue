@@ -2,6 +2,7 @@
   <el-row :gutter="30">
     <el-col>
       <div class="flex flex-col gap-8">
+        <!-- Información Básica -->
         <el-card>
           <template #header>
             <div class="card-header">
@@ -9,7 +10,7 @@
                 <el-icon>
                   <Calendar />
                 </el-icon>
-                Información básica
+                {{ t("basicInformation") }}
               </span>
             </div>
           </template>
@@ -17,33 +18,36 @@
           <el-form :model="basicInformationForm" ref="formRef" label-width="120px" size="default" label-position="top">
             <el-row :gutter="30">
               <el-col :xs="24" :sm="12" :md="8">
-                <el-form-item label="Primer nombre" prop="firstName">
-                  <el-input v-model="basicInformationForm.firstName" placeholder="Enter first name" />
+                <el-form-item :label="t('firstName')" prop="firstName">
+                  <el-input v-model="basicInformationForm.firstName" :placeholder="t('enterFirstName')" />
                 </el-form-item>
               </el-col>
               <el-col :xs="24" :sm="12" :md="8">
-                <el-form-item label="Segundo nombre" prop="middleName">
-                  <el-input v-model="basicInformationForm.middleName" placeholder="Enter middle name" />
+                <el-form-item :label="t('middleName')" prop="middleName">
+                  <el-input v-model="basicInformationForm.middleName" :placeholder="t('enterMiddleName')" />
                 </el-form-item>
               </el-col>
               <el-col :xs="24" :sm="12" :md="8">
-                <el-form-item label="Primer apellido" prop="lastName">
-                  <el-input v-model="basicInformationForm.lastName" placeholder="Enter last name" />
+                <el-form-item :label="t('lastName')" prop="lastName">
+                  <el-input v-model="basicInformationForm.lastName" :placeholder="t('enterLastName')" />
                 </el-form-item>
               </el-col>
             </el-row>
 
             <el-row>
               <el-col :xs="24" :sm="12" :md="8">
-                <el-form-item label="Fecha de nacimiento" prop="birthDate">
-                  <el-date-picker v-model="basicInformationForm.birthDate" type="date" placeholder="Pick a date" />
+                <el-form-item :label="t('birthDate')" prop="birthDate">
+                  <el-date-picker v-model="basicInformationForm.birthDate" type="date" :placeholder="t('pickDate')" />
                 </el-form-item>
-                <span v-if="basicInformationForm.age" style="margin-left: 120px">Edad: {{ basicInformationForm.age }}</span>
+                <span v-if="basicInformationForm.age" style="margin-left: 120px">
+                  {{ t("age") }} {{ basicInformationForm.age }}
+                </span>
               </el-col>
             </el-row>
           </el-form>
         </el-card>
 
+        <!-- Información de Residencia -->
         <el-card>
           <template #header>
             <div class="card-header">
@@ -51,7 +55,7 @@
                 <el-icon>
                   <Calendar />
                 </el-icon>
-                Información de Residencia
+                {{ t("residenceInformation") }}
               </span>
             </div>
           </template>
@@ -59,32 +63,33 @@
           <el-form :model="addressInformationForm" ref="formRef" label-width="120px" size="default" label-position="top">
             <el-row>
               <el-col :xs="24" :sm="12" :md="8">
-                <el-form-item label="Dirección" prop="address">
-                  <el-input v-model="addressInformationForm.address" placeholder="Enter an address" />
+                <el-form-item :label="t('address')" prop="address">
+                  <el-input v-model="addressInformationForm.address" :placeholder="t('enterAddress')" />
                 </el-form-item>
               </el-col>
             </el-row>
 
             <el-row :gutter="30">
               <el-col :xs="24" :sm="12" :md="8">
-                <el-form-item label="Ciudad" prop="city">
-                  <el-input v-model="addressInformationForm.city" placeholder="Enter a city" disabled />
+                <el-form-item :label="t('city')" prop="city">
+                  <el-input v-model="addressInformationForm.city" :placeholder="t('enterCity')" disabled />
                 </el-form-item>
               </el-col>
               <el-col :xs="24" :sm="12" :md="8">
-                <el-form-item label="Departamento/Estado" prop="state">
-                  <el-input v-model="addressInformationForm.state" placeholder="Enter a state" disabled />
+                <el-form-item :label="t('state')" prop="state">
+                  <el-input v-model="addressInformationForm.state" :placeholder="t('enterState')" disabled />
                 </el-form-item>
               </el-col>
               <el-col :xs="24" :sm="12" :md="8">
-                <el-form-item label="País" prop="country">
-                  <el-input v-model="addressInformationForm.country" placeholder="Enter a country" disabled />
+                <el-form-item :label="t('country')" prop="country">
+                  <el-input v-model="addressInformationForm.country" :placeholder="t('enterCountry')" disabled />
                 </el-form-item>
               </el-col>
             </el-row>
           </el-form>
         </el-card>
 
+        <!-- Información de Contacto -->
         <el-card>
           <template #header>
             <div class="card-header">
@@ -92,7 +97,7 @@
                 <el-icon>
                   <Calendar />
                 </el-icon>
-                Información de Contacto
+                {{ t("contactInformation") }}
               </span>
             </div>
           </template>
@@ -100,16 +105,16 @@
           <el-form :model="contactInformationForm" ref="formRef" label-width="120px" size="default" label-position="top">
             <el-row>
               <el-col :xs="24" :sm="12" :md="8">
-                <el-form-item label="Celular" prop="phone">
-                  <el-input v-model="contactInformationForm.phone" placeholder="Enter a cellphone" />
+                <el-form-item :label="t('phone')" prop="phone">
+                  <el-input v-model="contactInformationForm.phone" :placeholder="t('enterCellphone')" />
                 </el-form-item>
               </el-col>
             </el-row>
 
             <el-row>
               <el-col :xs="24" :sm="12" :md="8">
-                <el-form-item label="Correo electrónico" prop="email">
-                  <el-input v-model="contactInformationForm.email" placeholder="Enter an email" disabled />
+                <el-form-item :label="t('email')" prop="email">
+                  <el-input v-model="contactInformationForm.email" :placeholder="t('enterEmail')" disabled />
                 </el-form-item>
               </el-col>
             </el-row>
@@ -119,14 +124,20 @@
     </el-col>
   </el-row>
 
-  <el-button class="floating" type="primary" @click="submitForm">Actualizar</el-button>
+  <el-button class="floating" type="primary" @click="submitForm">
+    {{ t("update") }}
+  </el-button>
 </template>
+
 <script lang="ts" setup>
 import { ref, reactive, onMounted } from "vue";
 import type { FormInstance } from "element-plus";
 import { useUserProfileStore } from "../stores/UserProfile.store";
 import { useUserStore } from "../stores/user.store";
 import type { UserProfile } from "@/domain/Interfaces/user/UserProfile.interface";
+import { useI18n } from "vue-i18n";
+
+const { t } = useI18n();
 
 // Interfaz para el formulario
 interface BasicInformationForm {

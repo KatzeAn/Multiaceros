@@ -10,23 +10,31 @@
   >
     <el-menu-item index="0" class="logo">
       <img :src="logo" alt="Logo" class="logo-img" />
-        </el-menu-item>
-
-    <el-menu-item index="1" @click="navigateTo('vacantes')">
-      <el-icon><Briefcase /></el-icon> vacantes
     </el-menu-item>
 
+    <el-menu-item index="1" @click="navigateTo('vacantes')">
+      <el-icon><Briefcase /></el-icon> {{ t('vacantes') }}
+    </el-menu-item>
 
     <el-menu-item index="2" @click="navigateTo('sobreNosotros')">
-      <el-icon><InfoFilled /></el-icon> Sobre Nosotros
+      <el-icon><InfoFilled /></el-icon> {{ t('sobreNosotros') }}
+    </el-menu-item>
+
+    <el-menu-item index="3">
+      <LanguageSwitcher />
     </el-menu-item>
   </el-menu>
 </template>
+
 
 <script setup>
 import { ref } from "vue";
 import { Briefcase, InfoFilled } from "@element-plus/icons-vue";
 import logo from "@/presentation/assets/vertical.png";
+import LanguageSwitcher from "@/presentation/components/LanguageSwitcher.vue"
+import { useI18n } from "vue-i18n";
+
+const { t } = useI18n()
 
 const activeIndex = ref("1");
 const emit = defineEmits(["navigate"]);

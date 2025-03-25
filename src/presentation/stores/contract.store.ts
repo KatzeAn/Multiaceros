@@ -3,8 +3,10 @@ import { defineStore } from "pinia";
 import { ref } from "vue";
 import type { Contract } from "@/domain/Interfaces/Contract/contract.interface";
 import { ElNotification } from "element-plus";
+import { useI18n } from "vue-i18n";
 
 export const useContractDaysStore = defineStore("contractDays", () => {
+  const { t } = useI18n(); 
   const loading = ref(false);
   const errorMessage = ref<string | null | undefined>(null);
 
@@ -16,35 +18,35 @@ export const useContractDaysStore = defineStore("contractDays", () => {
     } catch (error: any) {
       errorMessage.value = error as string;
       ElNotification({
-          title: 'Error',
-          message: errorMessage.value,
-          type: 'error',
+        title: t("notifications.error.title"),
+        message: t("notifications.error.contractLoad"),
+        type: "error",
       });
-  }
+    }
   };
 
-const updateContract = async (id: number, contract: Contract) => {
-  loading.value = true;
-  try {
-    const contractTypeModel = new ContractModel();
-    await contractTypeModel.updateContract(id, contract);
+  const updateContract = async (id: number, contract: Contract) => {
+    loading.value = true;
+    try {
+      const contractTypeModel = new ContractModel();
+      await contractTypeModel.updateContract(id, contract);
 
-    ElNotification({
-      title: "Éxito",
-      message: "El contrato ha sido actualizado correctamente.",
-      type: "success",
-    });
+      ElNotification({
+        title: t("notifications.success.title"),
+        message: t("notifications.success.contractUpdated"),
+        type: "success",
+      });
 
-    return true;
-  } catch (error: any) {
-    errorMessage.value = error as string;
-    ElNotification({
-        title: 'Error',
+      return true;
+    } catch (error: any) {
+      errorMessage.value = error as string;
+      ElNotification({
+        title: t("notifications.error.title"),
         message: errorMessage.value,
-        type: 'error',
-    });
-}
-};
+        type: "error",
+      });
+    }
+  };
 
   return {
     loading,

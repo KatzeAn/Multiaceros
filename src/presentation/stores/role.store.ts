@@ -4,8 +4,10 @@ import { RoleModel } from "@/database/role/role.model";
 import type { Role } from "@/domain/Interfaces/role/role.interface";
 import type { RoleRequest } from "@/domain/Interfaces/role/roleRequest.interface";
 import { ElNotification } from "element-plus";
+import { useI18n } from "vue-i18n";
 
 export const useRoleStore = defineStore("role", () => {
+    const { t } = useI18n();
     const roles = ref<Role[]>([]);
     const isLoading = ref(false);
     const roleModel = new RoleModel();
@@ -17,32 +19,31 @@ export const useRoleStore = defineStore("role", () => {
             const response = await roleModel.getRoles(isActive);
             roles.value = Array.isArray(response) ? [...response] : [];
         } catch (error) {
-            console.error("Error al obtener roles:", error);
+            console.error(t("notifications.error.roleFetch"), error);
             roles.value = [];
         } finally {
             isLoading.value = false;
         }
     };
 
-const assignUserRole = async (userId: number, roleData: RoleRequest) => {
-    try {
-        const response = await roleModel.assignRole(userId, roleData);
-        ElNotification({
-            title: "Éxito",
-            message: "El rol se ha cambiado exitosamente.",
-            type: "success",
-        });
-        return response;
-    } catch (error: any) {
-          errorMessage.value = error as string;
-          ElNotification({
-              title: 'Error',
-              message: errorMessage.value,
-              type: 'error',
-          });
-      }
-};
-
+    const assignUserRole = async (userId: number, roleData: RoleRequest) => {
+        try {
+            const response = await roleModel.assignRole(userId, roleData);
+            ElNotification({
+                title: t("notifications.success.title"),
+                message: t("notifications.success.roleAssigned"),
+                type: "success",
+            });
+            return response;
+        } catch (error: any) {
+            errorMessage.value = error as string;
+            ElNotification({
+                title: t("notifications.error.title"),
+                message: errorMessage.value,
+                type: "error",
+            });
+        }
+    };
 
     return {
         roles,
