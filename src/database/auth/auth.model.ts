@@ -1,8 +1,4 @@
-import type { ApiErrorResponse } from "@/domain/Interfaces/ApiErrorResponse.interface";
-import {
-  AuthRepository,
-  type AuthResponse,
-} from "@/domain/repository/auth/auth.repository";
+import {AuthRepository, type AuthResponse } from "@/domain/repository/auth/auth.repository";
 import { apiRequest } from "@/presentation/api/axiosInstance";
 
 import axios from "axios";
@@ -18,6 +14,38 @@ export class AuthModel extends AuthRepository {
     return apiRequest("post", "/Auth/forgot-password", { UserEmail: email });
   }
   private apiUrl = import.meta.env.VITE_API_URL + "/Auth/login";
+
+  async signInWithGoogle(): Promise<void> {
+    try {
+      window.location.href = import.meta.env.VITE_API_URL + "/Auth/loginGoogle";
+    } catch (error) {
+      console.error(error);
+    }
+  }
+  
+  async handleGoogleCallback(code: string): Promise<AuthResponse> {
+    try {
+      console.log("Codigo", code);
+  
+      const encodedCode = encodeURIComponent(code);
+      console.log("Código codificado:", encodedCode);
+      const response = await axios.get<AuthResponse>(
+        import.meta.env.VITE_API_URL + "/Auth/google/callback?code=" + encodedCode
+      );
+      
+      console.log("Respuesta del back", response.data);
+      return response.data;
+    } catch (error: any) {
+  
+      if (error.response) {
+        console.error("Error status:", error.response.status);
+        console.error("Error data:", error.response.data);
+      }
+  
+      throw new Error("Error al procesar la autenticación con Google.");
+    }
+  }
+  
 
   async signInWithEmailAndPassword(
     email: string, 

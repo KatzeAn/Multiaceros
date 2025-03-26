@@ -132,6 +132,45 @@ export const useAuthStore = defineStore("auth", () => {
     { deep: true }
   );
 
+  const signInWithGoogle = async () => {
+    try {
+      const authService = new AuthModel();
+      await authService.signInWithGoogle();
+    } catch (error) {
+      errorMessage.value = error as string;
+      throw errorMessage;
+    }
+  };
+
+  const handleGoogleCallback = async (code: string) => {
+    try {
+      const authService = new AuthModel();
+      const authResponse = await authService.handleGoogleCallback(code);
+  
+      if (authResponse.status !== "Success") {
+        throw new Error(authResponse.message || "Error en la autenticación");
+      }
+  
+      localStorage.setItem("token", authResponse.tokenInfo.accessToken);
+      
+      user.value = new User(
+        authResponse.userInfo.id,
+        authResponse.userInfo.firstName,
+        authResponse.userInfo.lastName,
+        authResponse.userInfo.email,
+        authResponse.tokenInfo.accessToken,
+        authResponse.userInfo.role.roleName
+      );
+  
+      startInactivityTimer();
+      return user.value;
+    } catch (error) {
+      errorMessage.value = error as string;
+      throw errorMessage;
+    }
+  };
+  
+
   return {
     isLoading,
     user,
@@ -142,6 +181,8 @@ export const useAuthStore = defineStore("auth", () => {
     resetLoginForm,
     resetPassword,
     confirmResetPassword,
-    resetInactivityTimer
+    resetInactivityTimer,
+    signInWithGoogle, // Agregado
+    handleGoogleCallback, // Agregado
   };
 });

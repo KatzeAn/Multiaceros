@@ -51,13 +51,13 @@
           {{ t("logIn") }}
         </button>
         <button 
-          @click="loginWithGoogle" 
-          type="button"
-          class="flex items-center justify-center gap-2 py-3 rounded-xl border border-gray-300 text-gray-700 text-lg font-medium hover:bg-gray-100 transition-all"
-        >
-          <font-awesome-icon :icon="['fab', 'google']" class="text-blue-900 text-xl" />
-          {{ t("google") }}
-        </button>
+            @click="signInWithGoogle"
+            type="button"
+            class="flex items-center justify-center gap-2 py-3 rounded-xl border border-gray-300 text-gray-700 text-lg font-medium hover:bg-gray-100 transition-all"
+          >
+            <font-awesome-icon :icon="['fab', 'google']" class="text-blue-900 text-xl" />
+            {{ t("google") }}
+          </button>
       </div>
     </div>
     <p class="ml-2 font-medium text-base">
@@ -100,7 +100,7 @@ import { useAuthStore } from "../stores/auth.store";
 import { useI18n } from "vue-i18n";
 
 const { t } = useI18n()
-const { loginWithEmailAndPassword, loginForm, resetLoginForm, resetPassword } = useAuthStore();
+const { loginWithEmailAndPassword, loginForm, resetLoginForm, resetPassword, handleGoogleCallback, signInWithGoogle } = useAuthStore();
 
 const router = useRouter();
 const isLoading = ref(false);
