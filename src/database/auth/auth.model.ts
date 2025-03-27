@@ -25,15 +25,10 @@ export class AuthModel extends AuthRepository {
   
   async handleGoogleCallback(code: string): Promise<AuthResponse> {
     try {
-      console.log("Codigo", code);
-  
       const encodedCode = encodeURIComponent(code);
-      console.log("Código codificado:", encodedCode);
       const response = await axios.get<AuthResponse>(
         import.meta.env.VITE_API_URL + "/Auth/google/callback?code=" + encodedCode
       );
-      
-      console.log("Respuesta del back", response.data);
       return response.data;
     } catch (error: any) {
   
