@@ -50,6 +50,14 @@
         >
           {{ t("logIn") }}
         </button>
+        <button 
+            @click="signInWithGoogle"
+            type="button"
+            class="flex items-center justify-center gap-2 py-3 rounded-xl border border-gray-300 text-gray-700 text-lg font-medium hover:bg-gray-100 transition-all"
+          >
+            <font-awesome-icon :icon="['fab', 'google']" class="text-blue-900 text-xl" />
+            {{ t("google") }}
+          </button>
       </div>
     </div>
     <p class="ml-2 font-medium text-base">
@@ -92,7 +100,7 @@ import { useAuthStore } from "../stores/auth.store";
 import { useI18n } from "vue-i18n";
 
 const { t } = useI18n()
-const { loginWithEmailAndPassword, loginForm, resetLoginForm, resetPassword } = useAuthStore();
+const { loginWithEmailAndPassword, loginForm, resetLoginForm, resetPassword, handleGoogleCallback, signInWithGoogle } = useAuthStore();
 
 const router = useRouter();
 const isLoading = ref(false);
@@ -112,18 +120,20 @@ const form = reactive({
 });
 
 const login = async () => {
-  isLoading.value = true; // Activar estado de carga
+  isLoading.value = true;
   try {
     const user = await loginWithEmailAndPassword();
-    if (user) {
+    if (user && user.token) {
       window.location.href = "/home";
+    } else {
+      throw new Error("Token de acceso no recibido.");
     }
   } catch (error) {
-    const errorMessage = error as string;
+    const errorMessage = error instanceof Error ? error.message : String(error);
     console.error(errorMessage);
 
     ElNotification({
-      title: "Failed authentication",
+      title: "Error de autenticación",
       message: errorMessage,
       type: "error",
     });

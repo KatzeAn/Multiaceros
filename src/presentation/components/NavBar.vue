@@ -4,6 +4,7 @@ import mujer from '@/presentation/assets/hombre2.jpg';
 import { useRouter } from "vue-router";
 import { useAuthStore } from "../stores/auth.store";
 import { useI18n } from "vue-i18n";
+import LanguageSwitcher from "@/presentation/components/LanguageSwitcher.vue"
 
 const { t } = useI18n(); 
 const useAuth = useAuthStore();
@@ -66,6 +67,7 @@ onUnmounted(() => {
     class="w-full py-2 px-6 bg-neutral-50 flex items-center shadow-md shadow-black/5 sticky top-0 left-0 z-30"
   >
     <button type="button" class="text-lg text-gray-600 sidebar-toggle"></button>
+    
 
     <ul class="flex items-center text-sm ml-4">
       <li class="mr-2">
@@ -74,7 +76,9 @@ onUnmounted(() => {
         </a>
       </li>
     </ul>
-    <ul class="ml-auto flex items-center">
+    <ul class="ml-auto flex items-center"><div class="ml-4">
+  <LanguageSwitcher />
+</div>
       <!-- Dropdown de notificaciones -->
       <li class="dropdown ml-3 relative notifications-dropdown">
         <el-badge :value="12" :show-zero="false" badge-class="mt-1 mr-2">

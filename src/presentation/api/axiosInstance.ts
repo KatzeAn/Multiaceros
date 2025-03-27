@@ -7,11 +7,14 @@ const axiosInstance = axios.create({
 
 axiosInstance.interceptors.request.use(
   (config) => {
-    const user = JSON.parse(localStorage.getItem("user") || "{}");
-    const token = user?.token;
+    const userString = localStorage.getItem("user");
+    if (userString) {
+      const user = JSON.parse(userString);
+      const token = user.token;
 
-    if (token) {
-      config.headers.Authorization = `Bearer ${token}`;
+      if (token) {
+        config.headers.Authorization = `Bearer ${token}`;
+      }
     }
 
     return config;
@@ -37,6 +40,7 @@ export async function apiRequest<T>(
       data,
       ...config, // Permite agregar headers u otras opciones
     });
+
     return response.data as T;
   } catch (error) {
     if (axios.isAxiosError(error)) {

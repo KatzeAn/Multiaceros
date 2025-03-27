@@ -6,7 +6,6 @@ import ChatComponent from "@/presentation/components/chatBot.vue";
 import { computed, onMounted, onUnmounted, ref } from "vue";
 import {useUserStore} from "@/presentation/stores/user.store";
 import { useAuthStore } from "./presentation/stores/auth.store";
-import LanguageSwitcher from "@/presentation/components/LanguageSwitcher.vue"
 
 const isSmallScreen = ref(window.innerWidth < 800);
 
@@ -73,7 +72,6 @@ onUnmounted(() => {
     <el-container>
       <el-header height="60px" class="no-margin-padding" v-if="!$route.meta.hideNavbar">
         <NavBar />
-        <LanguageSwitcher/>
       </el-header>
       <el-main class="prueba no-margin-padding">
         <RouterView v-if="!$route.meta.hideNavbar" class="p-7"></RouterView>

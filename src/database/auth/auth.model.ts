@@ -1,13 +1,9 @@
-import type { ApiErrorResponse } from "@/domain/Interfaces/ApiErrorResponse.interface";
-import {
-  AuthRepository,
-  type AuthResponse,
-} from "@/domain/repository/auth/auth.repository";
+import {AuthRepository, type AuthResponse } from "@/domain/repository/auth/auth.repository";
 import { apiRequest } from "@/presentation/api/axiosInstance";
 
 import axios from "axios";
+export class AuthModel extends AuthRepository {   
 
-export class AuthModel extends AuthRepository {
   confirmPasswordReset(token: string, newPassword: string): Promise<string> {
     return apiRequest("post", "/Auth/password-reset", {
       token: token,
@@ -18,6 +14,28 @@ export class AuthModel extends AuthRepository {
     return apiRequest("post", "/Auth/forgot-password", { UserEmail: email });
   }
   private apiUrl = import.meta.env.VITE_API_URL + "/Auth/login";
+
+  async signInWithGoogle(): Promise<void> {
+    try {
+      window.location.href = import.meta.env.VITE_API_URL + "/Auth/loginGoogle";
+    } catch (error) {
+      console.error(error);
+    }
+  }
+  
+  async handleGoogleCallback(code: string): Promise<AuthResponse> {
+    try {
+      const encodedCode = encodeURIComponent(code);
+      const response = await axios.get<AuthResponse>(
+        import.meta.env.VITE_API_URL + "/Auth/google/callback?code=" + encodedCode
+      );
+      return response.data;
+    } catch (error: any) {
+      throw error;
+    }
+  }
+  
+  
 
   async signInWithEmailAndPassword(
     email: string, 
