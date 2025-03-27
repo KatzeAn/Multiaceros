@@ -4,6 +4,7 @@ import type { AuthResponse } from "@/domain/repository/auth/auth.repository";
 import { ElNotification } from "element-plus";
 import { defineStore } from "pinia";
 import { reactive, ref, watch, onMounted, onUnmounted } from "vue";
+import jwtDecode from 'jwt-decode';
 
 const loginFormInitialState = {
   email: "",
@@ -58,13 +59,14 @@ export const useAuthStore = defineStore("auth", () => {
       // Verificar si la respuesta contiene el token y no hay errores
       if (authResponse && authResponse.accessToken) {
         const token = authResponse.accessToken;
+        const decodedToken = jwtDecode(token);
         user.value = new User(
+          decodedToken.sub, 
           null,
           null,
-          null,
-          loginForm.email,
+          decodedToken.email, 
           token,
-          null
+          decodedToken.role 
         );
   
         startInactivityTimer();
