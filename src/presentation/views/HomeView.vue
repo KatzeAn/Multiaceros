@@ -2,12 +2,12 @@
 import { useUserStore } from "../stores/user.store";
 import { useCertifiedStore } from "../stores/certified.store";
 import { useI18n } from "vue-i18n";
-
-const { t } = useI18n();
-
 import Card from "../components/Card.vue";
 import BirthdayList from "../components/BirthdayList.vue";
 import mujer from '@/presentation/assets/hombre2.jpg';
+
+const { t } = useI18n();
+
 const { getUsername, getUserId } = useUserStore();
 
 const certifiedStore = useCertifiedStore();
