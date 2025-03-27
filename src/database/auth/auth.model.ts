@@ -2,8 +2,8 @@ import {AuthRepository, type AuthResponse } from "@/domain/repository/auth/auth.
 import { apiRequest } from "@/presentation/api/axiosInstance";
 
 import axios from "axios";
+export class AuthModel extends AuthRepository {   
 
-export class AuthModel extends AuthRepository {
   confirmPasswordReset(token: string, newPassword: string): Promise<string> {
     return apiRequest("post", "/Auth/password-reset", {
       token: token,
@@ -31,13 +31,10 @@ export class AuthModel extends AuthRepository {
       );
       return response.data;
     } catch (error: any) {
-  
-      if (error.response) {
-        console.error(error);
-      }
-      throw new Error();
+      throw error;
     }
   }
+  
   
 
   async signInWithEmailAndPassword(
