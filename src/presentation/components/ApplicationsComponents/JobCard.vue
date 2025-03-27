@@ -13,7 +13,7 @@
     >
       <template #header>
         <div class="card-header flex justify-between">
-          <span class="font-semibold">{{ job.jobTitleId }}</span>
+          <span class="font-semibold">{{ job.jobTitleName }}</span>
         </div>
       </template>
       <div class="card-content text-sm text-gray-600">

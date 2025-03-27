@@ -1,6 +1,7 @@
 export interface JobPosting {
   id?: number;
   jobTitleId: number; 
+  jobTitleName: string;
   description: string;
   salaryRange: string;
   experienceLevel: number;
