@@ -51,35 +51,36 @@ export const useAuthStore = defineStore("auth", () => {
           loginForm.email,
           loginForm.password
         );
-
-      if (authResponse.status !== "Success") {
-        throw new Error(authResponse.message || "Error en la autenticación");
-      }
-
-      if (!authResponse.userInfo || !authResponse.tokenInfo) {
-        throw new Error(
-          "La información del usuario o el token están ausentes."
+  
+      // Agregar console.log para verificar la respuesta del servidor
+      console.log("Respuesta del servidor:", authResponse);
+  
+      // Verificar si la respuesta contiene el token y no hay errores
+      if (authResponse && authResponse.accessToken) {
+        const token = authResponse.accessToken;
+        user.value = new User(
+          null,
+          null,
+          null,
+          loginForm.email,
+          token,
+          null
         );
+  
+        startInactivityTimer();
+  
+        return user.value;
+      } else {
+        // Si no hay token o hay un error, lanzar un error
+        throw new Error("Error en la autenticación: respuesta del servidor inválida.");
       }
-
-      user.value = new User(
-        authResponse.userInfo.id,
-        authResponse.userInfo.firstName,
-        authResponse.userInfo.lastName,
-        authResponse.userInfo.email,
-        authResponse.tokenInfo.accessToken,
-        authResponse.userInfo.role.roleName
-      );
-
-      startInactivityTimer();
-
-      return user.value;
     } catch (error) {
-      errorMessage.value = error as string;
+      errorMessage.value = error instanceof Error ? error.message : String(error);
       resetLoginForm();
-      throw errorMessage;
+      throw new Error(errorMessage.value);
     }
   };
+
 
   const logout = () => {
     user.value = null;

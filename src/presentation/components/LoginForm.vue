@@ -120,18 +120,20 @@ const form = reactive({
 });
 
 const login = async () => {
-  isLoading.value = true; // Activar estado de carga
+  isLoading.value = true;
   try {
     const user = await loginWithEmailAndPassword();
-    if (user) {
+    if (user && user.token) {
       window.location.href = "/home";
+    } else {
+      throw new Error("Token de acceso no recibido.");
     }
   } catch (error) {
-    const errorMessage = error as string;
+    const errorMessage = error instanceof Error ? error.message : String(error);
     console.error(errorMessage);
 
     ElNotification({
-      title: "Failed authentication",
+      title: "Error de autenticación",
       message: errorMessage,
       type: "error",
     });
