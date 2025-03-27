@@ -1,5 +1,6 @@
 import { createRouter, createWebHistory } from "vue-router";
 import { useUserStore } from "../stores/user.store";
+import { useAuthStore } from "../stores/auth.store";
 
 const router = createRouter({
   history: createWebHistory(import.meta.env.BASE_URL),
@@ -252,20 +253,30 @@ const router = createRouter({
   ],
 });
 
-router.beforeEach((to, from, next) => {
+router.beforeEach(async (to, from, next) => {
   const userStore = useUserStore();
+  const authStore = useAuthStore(); // Obtiene la instancia de authStore
 
-  // Si la ruta requiere autenticación y el usuario no está autenticado, redirigir al login
-  if (to.meta.requiresAuth && !userStore.isAuthenticated) {
-    next({ name: "login" });
-  } 
-  // Si el usuario ya está autenticado e intenta ir a login, redirigirlo al home
-  else if (to.name === "login" && userStore.isAuthenticated) {
-    next({ name: "home" }); // Asegúrate de que el nombre de la ruta "home" sea correcto
-  } 
-  // En cualquier otro caso, permitir la navegación
-  else {
-    next();
+  if (to.name === "GoogleCallback") {
+      const code = to.query.code;
+      if (code && typeof code === "string") {
+          try {
+              const newUser = await authStore.handleGoogleCallback(code);
+              userStore.setUser(newUser); // Actualiza el estado del usuario en userStore
+              next({ name: "home" });
+          } catch (error) {
+              console.error("Error en la autenticación con Google:", error);
+              next({ name: "login" });
+          }
+      } else {
+          next({ name: "login" });
+      }
+  } else if (to.meta.requiresAuth && !userStore.isAuthenticated) {
+      next({ name: "login" });
+  } else if (to.name === "login" && userStore.isAuthenticated) {
+      next({ name: "home" });
+  } else {
+      next();
   }
 });
 export default router;

@@ -5,6 +5,8 @@ import { ElNotification } from "element-plus";
 import { defineStore } from "pinia";
 import { reactive, ref, watch, onMounted, onUnmounted } from "vue";
 import jwtDecode from 'jwt-decode';
+import { useI18n } from "vue-i18n"; 
+
 
 const loginFormInitialState = {
   email: "",
@@ -12,6 +14,7 @@ const loginFormInitialState = {
 };
 
 export const useAuthStore = defineStore("auth", () => {
+    const { t } = useI18n();
   const isLoading = ref(false);
   const user = ref<User | null>(null);
   const errorMessage = ref<string | null | undefined>(null);
@@ -53,10 +56,6 @@ export const useAuthStore = defineStore("auth", () => {
           loginForm.password
         );
   
-      // Agregar console.log para verificar la respuesta del servidor
-      console.log("Respuesta del servidor:", authResponse);
-  
-      // Verificar si la respuesta contiene el token y no hay errores
       if (authResponse && authResponse.accessToken) {
         const token = authResponse.accessToken;
         const decodedToken = jwtDecode(token);
@@ -73,7 +72,6 @@ export const useAuthStore = defineStore("auth", () => {
   
         return user.value;
       } else {
-        // Si no hay token o hay un error, lanzar un error
         throw new Error("Error en la autenticación: respuesta del servidor inválida.");
       }
     } catch (error) {
@@ -89,7 +87,7 @@ export const useAuthStore = defineStore("auth", () => {
     localStorage.removeItem("user");
     if (inactivityTimeout) clearTimeout(inactivityTimeout);
     window.location.replace("/");
-  };
+};
 
   const startInactivityTimer = () => {
     if (inactivityTimeout) clearTimeout(inactivityTimeout);
@@ -149,30 +147,32 @@ export const useAuthStore = defineStore("auth", () => {
     try {
       const authService = new AuthModel();
       const authResponse = await authService.handleGoogleCallback(code);
-  
-      if (authResponse.status !== "Success") {
-        throw new Error(authResponse.message || "Error en la autenticación");
-      }
-  
-      localStorage.setItem("token", authResponse.tokenInfo.accessToken);
-      
+
+      const token = authResponse.accessToken;
+      const decodedToken = jwtDecode(token);
+
       user.value = new User(
-        authResponse.userInfo.id,
-        authResponse.userInfo.firstName,
-        authResponse.userInfo.lastName,
-        authResponse.userInfo.email,
-        authResponse.tokenInfo.accessToken,
-        authResponse.userInfo.role.roleName
+        decodedToken.sub, 
+        null,
+        null,
+        decodedToken.email,
+        token,
+        decodedToken.role 
       );
-  
+
+      localStorage.setItem("user", JSON.stringify(user.value)); 
       startInactivityTimer();
       return user.value;
     } catch (error) {
       errorMessage.value = error as string;
-      throw errorMessage;
+      ElNotification({
+        title: t("notifications.error.title"),
+        message: errorMessage.value,
+        type: "error",
+      });
     }
   };
-  
+
 
   return {
     isLoading,
@@ -185,7 +185,7 @@ export const useAuthStore = defineStore("auth", () => {
     resetPassword,
     confirmResetPassword,
     resetInactivityTimer,
-    signInWithGoogle, // Agregado
-    handleGoogleCallback, // Agregado
+    signInWithGoogle, 
+    handleGoogleCallback, 
   };
 });

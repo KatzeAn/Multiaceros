@@ -33,11 +33,9 @@ export class AuthModel extends AuthRepository {
     } catch (error: any) {
   
       if (error.response) {
-        console.error("Error status:", error.response.status);
-        console.error("Error data:", error.response.data);
+        console.error(error);
       }
-  
-      throw new Error("Error al procesar la autenticación con Google.");
+      throw new Error();
     }
   }
   

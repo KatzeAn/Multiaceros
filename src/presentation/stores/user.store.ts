@@ -8,6 +8,15 @@ export const useUserStore = defineStore('user', () => {
     const users = ref<User[]>([]);
     const loadingUsers = ref(false);
 
+    const setUser = (newUser: User | null) => {
+        user.value = newUser;
+        if (newUser) {
+            localStorage.setItem('user', JSON.stringify(newUser));
+        } else {
+            localStorage.removeItem('user');
+        }
+    };
+
     const loadFromLocalStorage = () => {
         const storedUser = localStorage.getItem('user');
     
@@ -117,5 +126,6 @@ export const useUserStore = defineStore('user', () => {
         fetchBirthdaysOfMonth,
         heartbeat,
         getUserCount,
+        setUser
     };
 });
