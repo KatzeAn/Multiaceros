@@ -42,6 +42,10 @@
   "dragDropFile": "Drag and drop a file here or click to select",
   "errorsFound": "Errors found:",
   "success": "Success",
+  "uploadWithErrors": "{count} employees uploaded, {errors} errors detected.",
+  "error.fileSize": "The file exceeds the maximum size of 2MB.",
+"error.invalidFormat": "Invalid format. Only PDF or DOCX are allowed.",
+"error.singleFile": "Only one file is allowed at a time.",
   "upload": {
   "successMessage": "File \"{fileName}\" uploaded successfully"
 },
@@ -54,8 +58,7 @@
     "uploads": {
       "dragAndDrop": "Drag and drop a file here or click to select",
       "invalidFormat": "Invalid file format",
-      "uploadSuccess": "{count} employees successfully uploaded.",
-      "uploadWithErrors": "{count} employees uploaded, {errors} errors detected."
+      "uploadSuccess": "{count} employees successfully uploaded."
     },
     "table": {
       "id": "ID",

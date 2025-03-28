@@ -42,6 +42,11 @@
   "dragDropFile": "Glissez-déposez un fichier ici ou cliquez pour sélectionner",
   "errorsFound": "Erreurs trouvées :",
   "success": "Succès",
+  "uploadWithErrors": "{count} employés téléchargés, {errors} erreurs détectées.",
+  "error.fileSize": "Le fichier dépasse la taille maximale de 2 Mo.",
+  "error.invalidFormat": "Format non autorisé. Seuls les fichiers PDF ou DOCX sont acceptés.",
+  "error.singleFile": "Un seul fichier est autorisé à la fois.",
+  
   "upload": {
   "successMessage": "Archive \"{fileName}\" téléchargé avec succès"
 },
@@ -54,8 +59,7 @@
     "uploads": {
       "dragAndDrop": "Glissez-déposez un fichier ici ou cliquez pour sélectionner",
       "invalidFormat": "Format de fichier non valide",
-      "uploadSuccess": "{count} employés téléchargés avec succès.",
-      "uploadWithErrors": "{count} employés téléchargés, {errors} erreurs détectées."
+      "uploadSuccess": "{count} employés téléchargés avec succès."
     },
     "table": {
       "id": "ID",
