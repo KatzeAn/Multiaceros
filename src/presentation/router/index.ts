@@ -255,14 +255,14 @@ const router = createRouter({
 
 router.beforeEach(async (to, from, next) => {
   const userStore = useUserStore();
-  const authStore = useAuthStore(); // Obtiene la instancia de authStore
+  const authStore = useAuthStore(); 
 
   if (to.name === "GoogleCallback") {
       const code = to.query.code;
       if (code && typeof code === "string") {
           try {
               const newUser = await authStore.handleGoogleCallback(code);
-              userStore.setUser(newUser); // Actualiza el estado del usuario en userStore
+              userStore.setUser(newUser); 
               next({ name: "home" });
           } catch (error) {
               console.error("Error en la autenticación con Google:", error);
