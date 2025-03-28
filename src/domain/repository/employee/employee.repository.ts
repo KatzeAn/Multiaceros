@@ -10,4 +10,6 @@ export abstract class EmployeeRepository {
   abstract updateEmployee(employee: Employee): Promise<Employee>;
   abstract deleteEmployee(id: number, modifiedBy: string): Promise<Employee>;
   abstract SearchEmployeeByDocument(numberDocument: number): Promise<Employee[]>;
+  abstract uploadEmployeeFile(file: File): Promise<void>;
+  abstract downloadEmployeeTemplate(): Promise<Blob>;
 }

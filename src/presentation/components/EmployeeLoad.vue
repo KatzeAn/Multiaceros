@@ -1,6 +1,6 @@
 <template> 
   <div class="p-6 space-y-6">
-    <el-button type="primary" @click="descargarPlantilla">
+    <el-button type="primary"  @click="downloadEmployeeFile">
       <el-icon><Download /></el-icon>
       {{ t("buttons.downloadTemplate") }}
     </el-button>
@@ -56,89 +56,91 @@
 
   
   <script>
-  import { ref, computed } from "vue";
-  import { Upload, Download, Close } from "@element-plus/icons-vue";
-  import { useI18n } from "vue-i18n";
+ import { ref } from "vue";
+import { Upload, Download, Close } from "@element-plus/icons-vue";
+import { useI18n } from "vue-i18n";
+import { useEmployeeStore } from "@/presentation/stores/employee.store";
 
-  export default {
-    components: { Upload, Download, Close },
-    setup() {
-      const { t } = useI18n();
+export default {
+  components: { Upload, Download, Close },
+  setup() {
+    const { t } = useI18n();
+    const employeeStore = useEmployeeStore();
 
-      const subiendo = ref(false);
-      const progreso = ref(0);
-      const cargaFinalizada = ref(false);
-      const empleados = ref([]);
-      const errores = ref([]);
-      const verEmpleados = ref(false);
-      const verErrores = ref(false);
-      const archivo = ref(null);
-      const mensaje = ref("");
+    const subiendo = ref(false);
+    const progreso = ref(0);
+    const cargaFinalizada = ref(false);
+    const empleados = ref([]);
+    const errores = ref([]);
+    const verEmpleados = ref(false);
+    const verErrores = ref(false);
+    const archivo = ref(null);
+    const mensaje = ref("");
 
-      const beforeUpload = (file) => {
-        if (file.type !== "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet") {
-          alert(t("uploads.invalidFormat"));
-          return false;
+    const beforeUpload = (file) => {
+      if (file.type !== "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet") {
+        alert(t("uploads.invalidFormat"));
+        return false;
+      }
+      return true;
+    };
+
+    const handleFileChange = (file) => {
+      archivo.value = file.raw;
+    };
+
+    const quitarArchivo = () => {
+      archivo.value = null;
+    };
+
+    const subirArchivo = () => {
+      if (!archivo.value) return;
+
+      subiendo.value = true;
+      progreso.value = 0;
+
+      const interval = setInterval(() => {
+        progreso.value += 10;
+        if (progreso.value >= 100) {
+          clearInterval(interval);
+          subiendo.value = false;
+          cargaFinalizada.value = true;
+          empleados.value = [
+            { id: 1, nombre: "Juan Pérez", correo: "juan@example.com" },
+            { id: 2, nombre: "María Gómez", correo: "maria@example.com" },
+          ];
+          errores.value = [{ fila: 3, mensaje: t("upload.invalidFormat") }];
+
+          mensaje.value = errores.value.length > 0
+            ? t("uploads.uploadWithErrors", { count: empleados.value.length, errors: errores.value.length })
+            : t("uploads.uploadSuccess", { count: empleados.value.length });
         }
-        return true;
-      };
+      }, 300);
+    };
 
-      const handleFileChange = (file) => {
-        archivo.value = file.raw;
-      };
+    const downloadEmployeeFile = async () => {
+      await employeeStore.downloadEmployeeTemplate();
+    };
 
-      const quitarArchivo = () => {
-        archivo.value = null;
-      };
-
-      const subirArchivo = () => {
-        if (!archivo.value) return;
-
-        subiendo.value = true;
-        progreso.value = 0;
-
-        const interval = setInterval(() => {
-          progreso.value += 10;
-          if (progreso.value >= 100) {
-            clearInterval(interval);
-            subiendo.value = false;
-            cargaFinalizada.value = true;
-            empleados.value = [
-              { id: 1, nombre: "Juan Pérez", correo: "juan@example.com" },
-              { id: 2, nombre: "María Gómez", correo: "maria@example.com" },
-            ];
-            errores.value = [{ fila: 3, mensaje: t("upload.invalidFormat") }];
-
-            mensaje.value = errores.value.length > 0
-              ? t("uploads.uploadWithErrors", { count: empleados.value.length, errors: errores.value.length })
-              : t("uploads.uploadSuccess", { count: empleados.value.length });
-          }
-        }, 300);
-      };
-
-      const descargarPlantilla = () => {
-        window.location.href = "/plantilla.xlsx";
-      };
-
-      return {
-        t,
-        subiendo,
-        progreso,
-        cargaFinalizada,
-        empleados,
-        errores,
-        verEmpleados,
-        verErrores,
-        archivo,
-        mensaje,
-        beforeUpload,
-        handleFileChange,
-        quitarArchivo,
-        subirArchivo,
-        descargarPlantilla,
-      };
-    },
-  };
+    return {
+      t,
+      subiendo,
+      progreso,
+      cargaFinalizada,
+      empleados,
+      errores,
+      verEmpleados,
+      verErrores,
+      archivo,
+      mensaje,
+      beforeUpload,
+      handleFileChange,
+      quitarArchivo,
+      subirArchivo,
+      downloadEmployeeFile,
+    };
+  },
+};
 </script>
   
   <style scoped>

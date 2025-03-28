@@ -92,6 +92,7 @@ import UploadContracts from "@/presentation/components/UploadContracts.vue";
 import EmployeeLoad from "@/presentation/components/EmployeeLoad.vue";
 import { useI18n } from "vue-i18n";
 
+
 const { t } = useI18n()
 
 const isSmallScreen = computed(() => window.innerWidth < 800);
