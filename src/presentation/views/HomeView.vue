@@ -36,7 +36,7 @@ const download = async () => {
           <div>
             <img :src="mujer" alt="Perfil" class="w-[5rem] h-[5rem] rounded-full object-cover" />          </div>
             <div class="self-center">
-              <p class="text-xl font-bold">{{ t('greeting') }}, {{ getUsername }}</p>
+              <p class="text-xl font-bold">{{ t('greeting') }}, Angela salamanca </p>
               <p class="text-base">{{ t('todayIs') }} {{ dayName }}, {{ date }}</p>
             </div>
         </div>

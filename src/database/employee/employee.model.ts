@@ -78,4 +78,15 @@ export class EmployeeModel implements EmployeeRepository {
   SearchEmployeeByDocument(numberDocument: number): Promise<Employee[]> {
     return apiRequest<Employee[]>("get", `Employee/search/${numberDocument}`);
   }
+  uploadEmployeeFile(file: File): Promise<void> {
+    const formData = new FormData();
+    formData.append("file", file);
+    return apiRequest<void>("post", "Employee/upload", formData, {
+      headers: { "Content-Type": "multipart/form-data" },
+    });
+  }
+  downloadEmployeeTemplate(): Promise<Blob> {
+    return apiRequest<Blob>("get", "Employee/download-template", undefined, { responseType: "blob" });
+  }
 }
+

@@ -78,10 +78,66 @@ export const useEmployeeStore = defineStore("employee", () => {
     }
   };
 
+  const uploadEmployeeFile = async (file: File) => {
+    try {
+      isLoading.value = true;
+      const employeeModel = new EmployeeModel();
+      await employeeModel.uploadEmployeeFile(file);
+      
+      ElNotification({
+        title: t("notifications.success.title"),
+        message: t("uploads.uploadSuccess"),
+        type: "success",
+      });
+    } catch (error: any) {
+      errorMessage.value = error as string;
+      ElNotification({
+        title: t("notifications.error.title"),
+        message: errorMessage.value,
+        type: "error",
+      });
+    } finally {
+      isLoading.value = false;
+    }
+  };
+
+  const downloadEmployeeTemplate = async () => {
+    try {
+      isLoading.value = true;
+      const employeeModel = new EmployeeModel();
+      const blob = await employeeModel.downloadEmployeeTemplate();
+      
+      const url = window.URL.createObjectURL(blob);
+      const a = document.createElement("a");
+      a.href = url;
+      a.download = "employee_template.xlsx";
+      document.body.appendChild(a);
+      a.click();
+      document.body.removeChild(a);
+      
+      ElNotification({
+        title: t("notifications.success.title"),
+        message: t("notifications.success.fileDownloaded"),
+        type: "success",
+      });
+    } catch (error: any) {
+      errorMessage.value = error as string;
+      ElNotification({
+        title: t("notifications.error.title"),
+        message: errorMessage.value,
+        type: "error",
+      });
+    } finally {
+      isLoading.value = false;
+    }
+  };
+
   return {
     isLoading,
     fetchEmployee,
     createEmployeeRequest,
     deactivateEmployee,
+    uploadEmployeeFile,
+    downloadEmployeeTemplate,
   };
 });

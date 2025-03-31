@@ -20,11 +20,11 @@
 
     <input type="file" ref="fileInput" accept=".pdf,.docx" @change="onFileChange" hidden />
 
-    <el-progress v-if="subiendo" :percentage="progreso" status="success" class="mt-4" />
-
     <el-button type="primary" class="w-full mt-4" :disabled="!archivo || subiendo" @click="subirArchivo">
       {{ t("uploadContract") }}
     </el-button>
+
+    <el-progress v-if="subiendo" :percentage="progreso" status="success" class="mt-4" />
 
     <el-card v-if="errores.length" shadow="never" class="bg-red-100 border border-red-500 mt-4">
       <template #header>
@@ -67,16 +67,19 @@ export default {
 
     const onDrop = (event) => {
       event.currentTarget.classList.remove("bg-gray-200");
-      const archivos = event.dataTransfer.files;
-      if (archivos.length) {
-        validarArchivo(archivos[0]);
+      if (event.dataTransfer.files.length !== 1) {
+        errores.value = [t("error.singleFile")];
+        return;
       }
+      validarArchivo(event.dataTransfer.files[0]);
     };
 
     const onFileChange = (event) => {
-      if (event.target.files.length) {
-        validarArchivo(event.target.files[0]);
+      if (event.target.files.length !== 1) {
+        errores.value = [t("error.singleFile")];
+        return;
       }
+      validarArchivo(event.target.files[0]);
     };
 
     const seleccionarArchivo = () => fileInput.value.click();
@@ -86,17 +89,13 @@ export default {
       const formatosPermitidos = ["application/pdf", "application/vnd.openxmlformats-officedocument.wordprocessingml.document"];
 
       if (!formatosPermitidos.includes(file.type)) {
-        errores.value.push("Formato no permitido. Solo PDF o DOCX.");
+        errores.value.push(t("error.invalidFormat"));
       }
-      if (file.size > 5 * 1024 * 1024) {
-        errores.value.push("El archivo excede el tamaño máximo de 5MB.");
+      if (file.size > 2 * 1024 * 1024) {
+        errores.value.push(t("error.fileSize"));
       }
 
-      if (errores.value.length === 0) {
-        archivo.value = file;
-      } else {
-        archivo.value = null;
-      }
+      archivo.value = errores.value.length === 0 ? file : null;
     };
 
     const subirArchivo = () => {
@@ -126,6 +125,3 @@ export default {
   },
 };
 </script>
-
-<style scoped>
-</style>

@@ -1,10 +1,10 @@
 <template>
-  <el-dialog
-    :model-value="dialog"
-    @update:model-value="$emit('update:dialog', $event)"
-    :title="`${t('referJob')}: ${employeePotentialForm.jobPostingId}`"
-    top="6vh"
-  >
+<el-dialog
+  :model-value="dialog"
+  @update:model-value="$emit('update:dialog', $event)"
+  :title="`${t('referJob')}: ${jobPostingName}`"
+  top="6vh"
+>
     <el-form
       ref="ruleFormRef"
       :model="employeePotentialForm"
@@ -103,6 +103,19 @@ const props = defineProps<{
   dialog: boolean;
   idJobPosting: number | null;
 }>();
+const jobPostingName = ref("");
+
+watch(
+  () => props.idJobPosting,
+  async (newValue) => {
+    if (newValue != null) {
+      employeePotentialForm.jobPostingId = newValue;
+      const jobPosting = jobPostingList.value.find(job => job.id === newValue);
+      jobPostingName.value = jobPosting ? jobPosting.jobTitleName : "";
+    }
+  },
+  { immediate: true }
+);
 
 const { jobPostingList } = useJobPostingViewModel();
 

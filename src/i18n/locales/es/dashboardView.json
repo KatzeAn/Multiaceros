@@ -42,6 +42,9 @@
   "dragDropFile": "Arrastra y suelta un archivo aquí o haz clic para seleccionar",
   "errorsFound": "Errores encontrados:",
   "success": "Éxito",
+  "error.fileSize": "El archivo excede el tamaño máximo de 2MB.",
+  "error.invalidFormat": "Formato no permitido. Solo PDF o DOCX.",
+  "error.singleFile": "Solo se permite un archivo a la vez.",
   "upload": {
   "successMessage": "Archivo \"{fileName}\" subido exitosamente"
 },

@@ -81,16 +81,17 @@
         </el-select>
       </el-form-item>
 
-      <el-form-item :label="t('contractType')" prop="contractType">
-        <el-select v-model="jobPosting.contractType" class="w-full">
-          <el-option
-            v-for="contractType in contractTypeList"
-            :key="contractType.id"
-            :label="contractType.typeOfContract"
-            :value="contractType.id"
-          />
-        </el-select>
-      </el-form-item>
+      <el-form-item :label="t('contractType')" prop="contractTypeId">
+      <el-select v-model="jobPosting.contractType" class="w-full">
+        <el-option
+          v-for="contractType in contractTypeList"
+          :key="contractType.id"
+          :label="contractType.typeOfContract"
+          :value="contractType.id"
+        />
+          </el-select>
+    </el-form-item>
+
 
       <el-form-item :label="t('priorityLevel')" prop="priority">
         <el-input-number v-model="jobPosting.priority" :min="1" class="w-full" />
@@ -130,8 +131,8 @@
 
   <el-table-column :label="t('contractType')">
     <template #default="{ row }">
-      {{ getContractType(row.contractType) }}
-    </template>
+  {{ row.contractTypeName }}
+</template>
   </el-table-column>
 
   <el-table-column :label="t('priorityLevel')" prop="priorityText" />
@@ -234,16 +235,17 @@
     </el-select>
   </el-form-item>
 
-  <el-form-item :label="t('contractType')" prop="contractType">
-    <el-select v-model="selectedJobPosting.contractType" class="w-full">
-      <el-option
-        v-for="contractType in contractTypeList"
-        :key="contractType.id"
-        :label="contractType.typeOfContract"
-        :value="contractType.id"
-      />
-    </el-select>
-  </el-form-item>
+  <el-form-item :label="t('contractType')" prop="contractTypeId">
+  <el-select v-model="selectedJobPosting.contractTypeId" class="w-full">
+    <el-option
+      v-for="contractType in contractTypeList"
+      :key="contractType.id"
+      :label="contractType.typeOfContract"
+      :value="contractType.id"
+    />
+  </el-select>
+</el-form-item>
+
 
   <el-form-item :label="t('priorityLevel')" prop="priority">
     <el-input-number v-model="selectedJobPosting.priority" class="w-full" />
@@ -319,7 +321,7 @@ const jobPosting = ref<JobPosting>({
   divisionId: 1,
   requirements: [] as string[],
   modality: 1,
-  contractType: 1,
+  contractTypeId: 1,
   contractDuration: "",
   publicationDate: new Date().toISOString(),
   closingDate: new Date().toISOString(),
@@ -335,7 +337,7 @@ const selectedJobPosting = ref<JobPosting>({
   divisionId: 1,
   requirements: [] as string[],
    modality: 1,
-  contractType: 1,
+   contractTypeId: 1,
   contractDuration: "",
   publicationDate: new Date().toISOString(),
   closingDate: new Date().toISOString(),
