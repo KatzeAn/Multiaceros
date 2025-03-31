@@ -241,9 +241,7 @@
         </div>
         <div class="flex flex-col pl-3">
           <div class="text-sm text-gray-50">{{ getUsername }}</div>
-          <span class="text-xs text-[#acacb0] font-light tracking-tight">{{
-            getUserEmail
-          }}</span>
+          <span class="text-xs text-[#acacb0] font-light tracking-tight"></span>
         </div>
       </div>
       <button>
@@ -352,7 +350,7 @@ const downloadLetter = async () => {
   }
 };
 
-const { getUsername, getUserEmail } = useUserStore();
+const { getUsername } = useUserStore();
 
 // Lista de elementos del menú
 const menuItems = ref([
