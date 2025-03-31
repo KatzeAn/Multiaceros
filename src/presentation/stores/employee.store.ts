@@ -86,7 +86,7 @@ export const useEmployeeStore = defineStore("employee", () => {
       
       ElNotification({
         title: t("notifications.success.title"),
-        message: t("notifications.success.fileUploaded"),
+        message: t("uploads.uploadSuccess"),
         type: "success",
       });
     } catch (error: any) {

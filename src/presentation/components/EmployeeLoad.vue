@@ -55,7 +55,7 @@
 </template>
 
   
-  <script>
+<script>
 import { ref } from "vue";
 import { Upload, Download, Close } from "@element-plus/icons-vue";
 import { useI18n } from "vue-i18n";
@@ -75,14 +75,9 @@ export default {
     const verEmpleados = ref(false);
     const verErrores = ref(false);
     const archivo = ref(null);
-    const mensaje = ref("");
 
     const beforeUpload = (file) => {
-      if (file.type !== "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet") {
-        alert(t("uploads.invalidFormat"));
-        return false;
-      }
-      return true;
+      return file.type === "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet";
     };
 
     const handleFileChange = (file) => {
@@ -102,9 +97,6 @@ export default {
       try {
         await employeeStore.uploadEmployeeFile(archivo.value);
         cargaFinalizada.value = true;
-        mensaje.value = t("uploads.uploadSuccess");
-      } catch (error) {
-        mensaje.value = t("uploads.uploadError");
       } finally {
         subiendo.value = false;
         archivo.value = null;
@@ -125,7 +117,6 @@ export default {
       verEmpleados,
       verErrores,
       archivo,
-      mensaje,
       beforeUpload,
       handleFileChange,
       quitarArchivo,
@@ -134,7 +125,6 @@ export default {
     };
   },
 };
-
 </script>
   
   <style scoped>
