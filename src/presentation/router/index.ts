@@ -14,7 +14,8 @@ const router = createRouter({
     {
       path: "/googlecallback",
       name: "GoogleCallback",
-      component: () => import("@/GoogleCallback.vue")
+      component: () => import("../views/GoogleCallback.vue"),
+      meta: { hideNavbar: true, hideSidebar: true }
     },
     {
       path: "/resetpassword",
