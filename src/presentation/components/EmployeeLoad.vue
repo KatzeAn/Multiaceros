@@ -56,7 +56,7 @@
 
   
   <script>
- import { ref } from "vue";
+import { ref } from "vue";
 import { Upload, Download, Close } from "@element-plus/icons-vue";
 import { useI18n } from "vue-i18n";
 import { useEmployeeStore } from "@/presentation/stores/employee.store";
@@ -93,29 +93,22 @@ export default {
       archivo.value = null;
     };
 
-    const subirArchivo = () => {
+    const subirArchivo = async () => {
       if (!archivo.value) return;
 
       subiendo.value = true;
       progreso.value = 0;
 
-      const interval = setInterval(() => {
-        progreso.value += 10;
-        if (progreso.value >= 100) {
-          clearInterval(interval);
-          subiendo.value = false;
-          cargaFinalizada.value = true;
-          empleados.value = [
-            { id: 1, nombre: "Juan Pérez", correo: "juan@example.com" },
-            { id: 2, nombre: "María Gómez", correo: "maria@example.com" },
-          ];
-          errores.value = [{ fila: 3, mensaje: t("upload.invalidFormat") }];
-
-          mensaje.value = errores.value.length > 0
-            ? t("uploads.uploadWithErrors", { count: empleados.value.length, errors: errores.value.length })
-            : t("uploads.uploadSuccess", { count: empleados.value.length });
-        }
-      }, 300);
+      try {
+        await employeeStore.uploadEmployeeFile(archivo.value);
+        cargaFinalizada.value = true;
+        mensaje.value = t("uploads.uploadSuccess");
+      } catch (error) {
+        mensaje.value = t("uploads.uploadError");
+      } finally {
+        subiendo.value = false;
+        archivo.value = null;
+      }
     };
 
     const downloadEmployeeFile = async () => {
@@ -141,6 +134,7 @@ export default {
     };
   },
 };
+
 </script>
   
   <style scoped>
