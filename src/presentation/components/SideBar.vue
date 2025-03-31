@@ -150,8 +150,8 @@
       <!-- Recursos humanos -->
       <div class="px-6 pt-4">
   <ul class="flex flex-col space-y-2">
-    <li>
-      <div class="text-gray-500 hover:text-white">
+    <li v-if="userRole === 'SuperAdmin' || userRole === 'Admin'">
+            <div class="text-gray-500 hover:text-white">
         <div
           class="flex justify-between w-full pl-2 pr-4 py-2 hover:bg-gray-800 rounded cursor-pointer"
           @click="toggleMenu(menuItems.length)"
@@ -201,20 +201,21 @@
 <div class="px-6 pt-4"><hr class="border-gray-700" /></div>
 <div class="px-6 pt-4">
   <ul class="flex flex-col space-y-2">
-    <li>
-      <router-link to="/portal-rrhh/gestion-administrativa" class="text-gray-500 hover:text-white flex items-center pl-2 pr-4 py-2 hover:bg-gray-800 rounded">
-        <span class="material-symbols-outlined pr-2">bar_chart</span>
-        {{ t('administrativeManagement') }}
-      </router-link>
-    </li>
+    <li v-if="userRole === 'SuperAdmin' || userRole === 'Admin'">
+        <router-link to="/portal-rrhh/gestion-administrativa" class="text-gray-500 hover:text-white flex items-center pl-2 pr-4 py-2 hover:bg-gray-800 rounded">
+    <span class="material-symbols-outlined pr-2">bar_chart</span>
+    {{ t('administrativeManagement') }}
+  </router-link>
+</li>
+
   </ul>
 </div>
 
       <div class="px-6 pt-4">
         <ul class="flex flex-col space-y-2">
           <!-- Configuraciones -->
-        <li>
-          <div class="text-gray-500 hover:text-white hover:bg-gray-800">
+          <li v-if="userRole === 'SuperAdmin' || userRole === 'Admin'">
+            <div class="text-gray-500 hover:text-white hover:bg-gray-800">
             <router-link
               to="/configuraciones"
               class="flex items-center w-full pl-2 pr-4 py-2 rounded"
@@ -330,6 +331,20 @@ import mujer from "@/presentation/assets/hombre2.jpg";
 import { useCertifiedStore } from "../stores/certified.store";
 import { useI18n } from "vue-i18n";
 
+const getUserRoleFromStorage = () => {
+  const user = localStorage.getItem("user");
+  if (user) {
+    return JSON.parse(user).role;  
+  }
+  return null;
+};
+const userRole = getUserRoleFromStorage();
+if (userRole === "SuperAdmin") {
+  // Mostrar submenú de recursos humanos
+} else {
+  // No mostrar el submenú
+}
+
 const { t } = useI18n();
 const certifiedStore = useCertifiedStore();
 const { downloadCertificate } = certifiedStore;
@@ -441,40 +456,19 @@ const menuItems = ref([
 ]);
 
 // Subitems para Recursos Humanos
-const recursosHumanosSubItems = ref([
-  {
-    title: t('gestionEmpleados'),
-    route: "/portal-rrhh/empleados",
-  },
-  {
-    title: t('gestionVacantes'),
-    route: "/portal-rrhh/aplicaciones",
-  },
-  {
-    title: t('controlAsistencia'),
-    route: "/portal-rrhh/gestionar-ausencias",
-  },
-  {
-    title: t('nominaCompensacion'),
-    route: "/portal-rrhh/gestionar-nomina",
-  },
-  {
-    title: t('pausasActivas'),
-    route: "/portal-rrhh/gestion-pausas",
-  },
-  {
-    title: t('tramites'),
-    route: "/portal-rrhh/trámites",
-  },
-  //{
-   // title: "Reporte y análisis",
-    //route: "#",
-  //},
-  //{
-   // title: "Políticas y procedimientos",
-    //route: "#",
-  //},
-]);
+const recursosHumanosSubItems = ref(
+  userRole === "SuperAdmin" || userRole === "Admin"
+    ? [
+        { title: t('gestionEmpleados'), route: "/portal-rrhh/empleados" },
+        { title: t('gestionVacantes'), route: "/portal-rrhh/aplicaciones" },
+        { title: t('controlAsistencia'), route: "/portal-rrhh/gestionar-ausencias" },
+        { title: t('nominaCompensacion'), route: "/portal-rrhh/gestionar-nomina" },
+        { title: t('pausasActivas'), route: "/portal-rrhh/gestion-pausas" },
+        { title: t('tramites'), route: "/portal-rrhh/trámites" },
+      ]
+    : []
+);
+
 
 const openMenus = ref<boolean[]>(Array(menuItems.value.length).fill(false));
 
