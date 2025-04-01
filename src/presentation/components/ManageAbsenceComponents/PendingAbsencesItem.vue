@@ -16,7 +16,7 @@
       </el-row>
       <el-row class="mt-3" :gutter="0">
         <el-col :span="24">
-          <el-button :loading="loading" @click="prueba(absence.id)" color="var(--success-color)">Aprobar</el-button>
+          <el-button :loading="loading" @click="(absence.id)" color="var(--success-color)">Aprobar</el-button>
           <el-button color="var(--error-color)">Rechazar</el-button>
         </el-col>
       </el-row>
@@ -42,11 +42,7 @@ const loadData = async () => {
   absenceList.value = absences;
 };
 
-const prueba = async (absenceId: number) => {
-  const { loading: isLoading } = await useAbsenceStore().ApproveAbsence(absenceId);
-  loading.value = isLoading;
-  loadData();
-}
+
 
 onMounted(() => {
   loadData();

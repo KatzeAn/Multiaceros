@@ -21,9 +21,9 @@
         <p><strong>{{ t('descripcion') }}:</strong></p>
         <p v-if="job.description.length <= 100">{{ job.description }}</p>
         <p v-else>
-          {{ expandedDescriptions[job.id] ? job.description : job.description.slice(0, 100) + '...' }}
-          <el-button text @click="toggleDescription(job.id)">
-            {{ expandedDescriptions[job.id] ? t('verMenos') : t('verMas') }}
+          {{ job.id !== undefined && expandedDescriptions[job.id] ? job.description : job.description.slice(0, 100) + '...' }}
+          <el-button text @click="job.id !== undefined && toggleDescription(job.id)">
+            {{ job.id !== undefined && expandedDescriptions[job.id] ? t('verMenos') : t('verMas') }}
           </el-button>
         </p>
         <p><strong>{{ t('requerimientos') }}:</strong></p>
@@ -49,9 +49,9 @@ import { useI18n } from "vue-i18n";
 
 const { t } = useI18n()
 
-const formatSalary = (salary) => {
+const formatSalary = (salary: string | number) => {
   if (!salary) return 'No especificado';
-  return new Intl.NumberFormat('es-CO').format(salary);
+  return new Intl.NumberFormat('es-CO').format(Number(salary));
 };
 
 const jobStore = useJobPostingStore();

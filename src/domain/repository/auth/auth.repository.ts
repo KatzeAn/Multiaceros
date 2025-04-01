@@ -22,6 +22,8 @@ export interface AuthResponse {
   message: string;
   userInfo: UserInfo; 
   tokenInfo: TokenInfo;
+  accessToken: string;
+  userName: string;
 }
 
 export abstract class AuthRepository {

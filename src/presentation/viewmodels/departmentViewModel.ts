@@ -14,6 +14,7 @@ export function useDepartmentViewModel() {
   const ruleFormRef = ref<FormInstance>();
 
   const divisionForm = reactive<Division>({
+    id: 0,
     name: "",
   });
 

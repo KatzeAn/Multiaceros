@@ -4,35 +4,35 @@
             <el-card>
                 <span class="text-2xl font-bold text-[var(--secondary-color)]">Registrar Certificado</span>
 
-                <el-form label-position="top" ref="ruleFormRef" style="max-width: 600px" :model="AbsenceRequestForm"
+                <el-form label-position="top" ref="ruleFormRef" style="max-width: 600px" :model="absenceRequestForm"
                     label-width="auto" class="mt-6" :size="formSize" status-icon>
 
                     <el-form-item label="Nombre del certificado" prop="comment">
-                        <el-input v-model="AbsenceRequestForm.comment" type="text" />
+                        <el-input v-model="absenceRequestForm" type="text" />
                     </el-form-item>
 
                     
                     <el-form-item label="Descripción" prop="comment">
-                        <el-input v-model="AbsenceRequestForm.comment" type="textarea" />
+                        <el-input v-model="absenceRequestForm" type="textarea" />
                     </el-form-item>
 
                     <el-row :gutter="12">
                         <el-col :span="12">
                             <el-form-item label="Fecha de Creación" prop="from">
-                                <el-date-picker v-model="AbsenceRequestForm.from" type="date" aria-label="Selecciona una fecha"
+                                <el-date-picker v-model="absenceRequestForm" type="date" aria-label="Selecciona una fecha"
                                     placeholder="Selecciona una fecha" style="width: 100%" />
                             </el-form-item>
                         </el-col>
                         <el-col :span="12">
                             <el-form-item label="Fecha de Expiración" prop="to">
-                                <el-date-picker v-model="AbsenceRequestForm.to" type="date" aria-label="Selecciona una fecha"
+                                <el-date-picker v-model="absenceRequestForm" type="date" aria-label="Selecciona una fecha"
                                     placeholder="Selecciona una fecha" style="width: 100%" />
                             </el-form-item>
                         </el-col>
                     </el-row>
 
                     <el-form-item label="Código de Certificación" prop="comment">
-                        <el-input v-model="AbsenceRequestForm.comment" type="text" />
+                        <el-input v-model="absenceRequestForm" type="text" />
                     </el-form-item>
 
                     <el-form-item>
@@ -50,7 +50,7 @@
                     </el-form-item>
 
                     <el-form-item label="Empleado" prop="type">
-                        <el-select v-model="AbsenceRequestForm.type" placeholder="Seleccionar empleado">
+                        <el-select v-model="absenceRequestForm" placeholder="Seleccionar empleado">
                             <el-option label="Wilmar Alfaro" value="Wilmar Alfaro" />
                             <el-option label="Lorena Yara" value="Lorena Yara" />
                             <el-option label="Jhon Alfaro" value="Jhon Alfaro" />
@@ -194,13 +194,12 @@
 import { reactive, ref } from 'vue'
 import type { ComponentSize, FormInstance, FormRules, UploadProps, UploadUserFile } from 'element-plus'
 import { ElMessage, ElMessageBox } from 'element-plus'
-import type { AbsenceRequest } from '@/domain/Interfaces/Absence/AbsenceRequest.interface';
-import { useUserStore } from '../../stores/user.store';
+import { useAbsenceStore } from '@/presentation/stores/absence.store';
 
 const formSize = ref<ComponentSize>('default')
 const ruleFormRef = ref<FormInstance>();
 
-const { AbsenceRequestForm, CreateAbsenceRequest } = useUserStore();
+const { absenceRequestForm } = useAbsenceStore();
 const isLoading = ref(false);
 
 const value = ref('')

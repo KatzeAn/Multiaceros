@@ -26,7 +26,7 @@
       <el-col :span="24">
         <el-card body-style="background-color: var(--gray-color)">
           <el-tabs v-model="activeName">
-            <el-tabs v-model="activeTab">
+            <el-tabs >
               <el-tab-pane :label="t('personalInformation')" name="informacion-personal"></el-tab-pane>
               <el-tab-pane :label="t('professionalInformation')" name="informacion-profesional" disabled></el-tab-pane>
               <el-tab-pane :label="t('salaryInformation')" name="informacion-salarial" disabled></el-tab-pane>
