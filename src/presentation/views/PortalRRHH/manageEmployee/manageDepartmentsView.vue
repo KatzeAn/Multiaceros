@@ -104,7 +104,7 @@
 <script lang="ts" setup>
 import { ref, onMounted, computed } from "vue";
 import { useDivisionStore } from "@/presentation/stores/division.store";
-
+import type { Division } from "@/domain/Interfaces/Division/division.interface";
 import { useDepartmentViewModel } from "@/presentation/viewmodels/departmentViewModel";
 import { useI18n } from "vue-i18n";
 
@@ -128,11 +128,11 @@ const {
 } = useDepartmentViewModel();
 
 const isEditModalVisible = ref(false);
-const editForm = ref({ id: null, name: "" });
-const originalEditForm = ref({ id: null, name: "" });
+const editForm = ref<{ id: number | null; name: string }>({ id: null, name: "" });
+const originalEditForm = ref<{ id: number | null; name: string }>({ id: null, name: "" });
 
-const openEditModal = (division) => {
-  editForm.value.id = division.id;
+const openEditModal = (division: Division) => { 
+  editForm.value.id = division.id ?? null;
   editForm.value.name = division.name;
   originalEditForm.value = { ...editForm.value };
   isEditModalVisible.value = true;

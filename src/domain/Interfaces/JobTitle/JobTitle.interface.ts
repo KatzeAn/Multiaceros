@@ -1,5 +1,5 @@
 export interface JobTitle {
-  id?: number;
+  id: number;
   name: string;
   createdBy?: string;
   modifiedBy?: string;

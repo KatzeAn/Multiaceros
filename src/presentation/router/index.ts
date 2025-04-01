@@ -14,7 +14,8 @@ const router = createRouter({
     {
       path: "/googlecallback",
       name: "GoogleCallback",
-      component: () => import("@/GoogleCallback.vue")
+      component: () => import("../views/GoogleCallback.vue"),
+      meta: { hideNavbar: true, hideSidebar: true }
     },
     {
       path: "/resetpassword",
@@ -262,10 +263,14 @@ router.beforeEach(async (to, from, next) => {
       if (code && typeof code === "string") {
           try {
               const newUser = await authStore.handleGoogleCallback(code);
-              userStore.setUser(newUser); 
-              next({ name: "home" });
+              if (newUser !== undefined) {
+                userStore.setUser(newUser);
+                next({ name: "home" });
+              } else {
+                next({ name: "login" });
+              }
+                next({ name: "home" });
           } catch (error) {
-              console.error("Error en la autenticación con Google:", error);
               next({ name: "login" });
           }
       } else {

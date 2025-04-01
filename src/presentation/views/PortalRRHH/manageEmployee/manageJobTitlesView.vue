@@ -107,6 +107,7 @@ import { ref, onMounted, computed } from "vue";
 import { useJobTitleViewModel } from "@/presentation/viewmodels/jobTitleViewModel";
 import {useJobTitleStore} from "@/presentation/stores/jobTitle.store";
 import { useI18n } from "vue-i18n";
+import type { JobTitle } from "@/domain/Interfaces/JobTitle/JobTitle.interface";
 
 const { t } = useI18n()
 
@@ -129,11 +130,11 @@ const {
 } = useJobTitleViewModel();
 
 const isEditModalVisible = ref(false);
-const editForm = ref({ id: null, name: "" });
-const originalEditForm = ref({ id: null, name: "" });
+const editForm = ref<{ id: number | null; name: string }>({ id: null, name: "" });
+const originalEditForm = ref<{ id: number | null; name: string }>({ id: null, name: "" });
 
-const openEditModal = (jobtitle) => {
-  editForm.value.id = jobtitle.id;
+const openEditModal = (jobtitle: JobTitle ) => {
+  editForm.value.id = jobtitle.id ?? null;
   editForm.value.name = jobtitle.name;
   originalEditForm.value = {...editForm.value}; 
   isEditModalVisible.value = true;

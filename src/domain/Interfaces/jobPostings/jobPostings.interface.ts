@@ -15,4 +15,5 @@ export interface JobPosting {
   priority: number;
   priorityText: string;
   isActive: boolean;
+  contractTypeId: number; 
 }

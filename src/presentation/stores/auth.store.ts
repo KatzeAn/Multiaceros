@@ -59,15 +59,20 @@ export const useAuthStore = defineStore("auth", () => {
       if (authResponse && authResponse.accessToken) {
         const token = authResponse.accessToken;
         const decodedToken = jwtDecode(token);
+        const fullName = authResponse.userName || ""; 
+        const nameParts = fullName.split(" ");
+        const firstName = nameParts[0] || null;
+        const lastName = nameParts.slice(1).join(" ") || null;
+        
         user.value = new User(
           decodedToken.sub, 
-          null,
-          null,
+          firstName, 
+          lastName, 
           decodedToken.email, 
-          token,
-          decodedToken.role 
+          token, 
+          decodedToken.role
         );
-  
+        
         startInactivityTimer();
   
         return user.value;
@@ -150,15 +155,19 @@ export const useAuthStore = defineStore("auth", () => {
 
       const token = authResponse.accessToken;
       const decodedToken = jwtDecode(token);
-
-      user.value = new User(
-        decodedToken.sub, 
-        null,
-        null,
-        decodedToken.email,
-        token,
-        decodedToken.role 
-      );
+      const fullName = authResponse.userName || ""; 
+        const nameParts = fullName.split(" ");
+        const firstName = nameParts[0] || null;
+        const lastName = nameParts.slice(1).join(" ") || null;
+        
+        user.value = new User(
+          decodedToken.sub, 
+          firstName, 
+          lastName, 
+          decodedToken.email, 
+          token, 
+          decodedToken.role
+        );
 
       localStorage.setItem("user", JSON.stringify(user.value)); 
       startInactivityTimer();

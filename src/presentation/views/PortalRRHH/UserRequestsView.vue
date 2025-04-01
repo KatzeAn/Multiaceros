@@ -48,7 +48,7 @@
           <el-table-column prop="department" :label="t('department')" />
           <el-table-column :label="t('actions')" width="200">
             <template #default="{ row }">
-                <el-button type="primary" @click="openReviewModal(row)">{{ t('review') }}</el-button>
+                <el-button type="primary" @click="(row)">{{ t('review') }}</el-button>
             </template>
           </el-table-column>
         </el-table>
@@ -93,8 +93,8 @@
     </el-form>
     <template #footer>
         <el-button @click="isReviewModalVisible = false">{{ t('close') }}</el-button>
-        <el-button type="danger" @click="rejectRequest">{{ t('reject') }}</el-button>
-        <el-button type="success" @click="approveRequest">{{ t('approve') }}</el-button>
+        <el-button type="danger" @click="">{{ t('reject') }}</el-button>
+        <el-button type="success" @click="">{{ t('approve') }}</el-button>
     </template>
   </el-dialog>
 </template>
@@ -122,20 +122,6 @@ const { t } = useI18n()
   const approvedRequests = computed(() => requests.value.filter(r => r.status === "approved"));
   const rejectedRequests = computed(() => requests.value.filter(r => r.status === "rejected"));
   
-  const openReviewModal = (request) => {
-    selectedRequest.value = { ...request };
-    isReviewModalVisible.value = true;
-  };
-  
-  const approveRequest = () => {
-    selectedRequest.value.status = "approved";
-    isReviewModalVisible.value = false;
-  };
-  
-  const rejectRequest = () => {
-    selectedRequest.value.status = "rejected";
-    isReviewModalVisible.value = false;
-  };
   </script>
   
   <style scoped>

@@ -14,7 +14,7 @@
         label-position="top"
         ref="ruleFormRef"
         style="max-width: 600px"
-        :model="AbsenceRequestForm"
+        :model="absenceRequestForm"
         label-width="auto"
         class="mt-6"
         :size="formSize"
@@ -24,7 +24,7 @@
           <el-col :span="12">
             <el-form-item :label="t('date')" prop="from">
               <el-date-picker
-                v-model="AbsenceRequestForm.from"
+                v-model="absenceRequestForm.StartDate"
                 type="date"
                 :aria-label="t('selectDate')"
                 :placeholder="t('selectDate')"
@@ -35,7 +35,7 @@
           <el-col :span="12">
             <el-form-item :label="t('time')" prop="to">
               <el-time-picker
-                v-model="AbsenceRequestForm.to"
+                v-model="absenceRequestForm.EndDate"
                 value-format="HH:mm:ss"
                 :placeholder="t('selectTime')"
               />
@@ -44,7 +44,7 @@
         </el-row>
 
         <el-form-item :label="t('description')" prop="comment">
-          <el-input v-model="AbsenceRequestForm.comment" type="textarea" />
+          <el-input v-model="absenceRequestForm.Comment" type="textarea" />
         </el-form-item>
       </el-form>
 
@@ -78,7 +78,7 @@
         label-position="top"
         ref="ruleFormRef"
         style="max-width: 600px"
-        :model="AbsenceRequestForm"
+        :model="absenceRequestForm"
         label-width="auto"
         class="mt-6"
         :size="formSize"
@@ -88,7 +88,7 @@
           <el-col :span="12">
             <el-form-item :label="t('date')" prop="from">
               <el-date-picker
-                v-model="AbsenceRequestForm.from"
+                v-model="absenceRequestForm.StartDate"
                 type="date"
                 :aria-label="t('selectDate')"
                 :placeholder="t('selectDate')"
@@ -99,7 +99,7 @@
           <el-col :span="12">
             <el-form-item :label="t('time')" prop="to">
               <el-time-picker
-                v-model="AbsenceRequestForm.to"
+                v-model="absenceRequestForm.EndDate"
                 value-format="HH:mm:ss"
                 :placeholder="t('selectTime')"
               />
@@ -108,7 +108,7 @@
         </el-row>
 
         <el-form-item :label="t('description')" prop="comment">
-          <el-input v-model="AbsenceRequestForm.comment" type="textarea" />
+          <el-input v-model="absenceRequestForm.Comment" type="textarea" />
         </el-form-item>
       </el-form>
 
@@ -128,18 +128,17 @@
 
 import { ref } from 'vue';
 import { ElMessage, ElMessageBox } from 'element-plus'
-import { useUserStore } from '../../stores/user.store';
-import type { ComponentSize, FormInstance, FormRules, UploadProps, UploadUserFile } from 'element-plus'
+import type { ComponentSize, FormInstance,  UploadProps, UploadUserFile } from 'element-plus'
 import { useI18n } from "vue-i18n";
+import { useAbsenceStore } from '@/presentation/stores/absence.store';
 
 const { t } = useI18n()
 
-const { AbsenceRequestForm, CreateAbsenceRequest } = useUserStore();
+const { absenceRequestForm } = useAbsenceStore();
 
 const dialogVisible = ref(false)
 const dialogVisible2 = ref(false)
 
-const isLoading = ref(false);
 const formSize = ref<ComponentSize>('default')
 const ruleFormRef = ref<FormInstance>();
 

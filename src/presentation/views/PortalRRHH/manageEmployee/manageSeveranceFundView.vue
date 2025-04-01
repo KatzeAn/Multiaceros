@@ -91,10 +91,11 @@
 
 
 <script lang="ts" setup>
-import { ref, onMounted, computed } from "vue";
+import { ref,  computed } from "vue";
 import { useSeveranceFundViewModel } from "@/presentation/viewmodels/severanceFundViewModel";
 import {useSeveranceFundStore} from "@/presentation/stores/severanceFund.store"
 import { useI18n } from "vue-i18n";
+import type { SeveranceFund } from "@/domain/Interfaces/severanceFund/severanceFund.interface";
 
 const { t } = useI18n()
 
@@ -118,11 +119,12 @@ const {
 } = useSeveranceFundViewModel();
 
 const isEditModalVisible = ref(false);
-const editForm = ref({ id: null, name: "" });
-const originalEditForm = ref({ id: null, name: "" });
+const editForm = ref<{ id: number | null; name: string }>({ id: null, name: "" });
+const originalEditForm = ref<{ id: number | null; name: string }>({ id: null, name: "" });
 
-const openEditModal = (severanceFund) => {
-  editForm.value = { id: severanceFund.id, name: severanceFund.severanceFundName };
+const openEditModal = (severanceFund: SeveranceFund) => {
+  editForm.value.id = severanceFund.id ?? null;
+  editForm.value.name = severanceFund.severanceFundName;
   originalEditForm.value = { ...editForm.value };
   isEditModalVisible.value = true;
 };

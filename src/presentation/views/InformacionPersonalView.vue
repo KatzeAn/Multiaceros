@@ -151,7 +151,7 @@ interface BasicInformationForm {
 
 // Datos del formulario
 const basicInformationForm = reactive<BasicInformationForm>({
-  firstName:  "",
+  firstName: "",
   middleName: "",
   lastName: "",
   birthDate: new Date(2002, 5, 29),
@@ -192,13 +192,13 @@ const updateUserProfile = async (userid: number) => {
     const userProfileStore = useUserProfileStore();
     const userProfile: UserProfile = {
       userId: userid,
-      userFirstName: basicInformationForm.firstName,
-      userMiddleName: basicInformationForm.middleName,
-      surName: basicInformationForm.lastName,
-      birthday: basicInformationForm.birthDate?.toISOString(),
-      address: addressInformationForm.address,
-      cellPhone: contactInformationForm.phone,
-      userEmail: contactInformationForm.email,
+      userFirstName: basicInformationForm.firstName ?? "",
+      userMiddleName: basicInformationForm.middleName ?? "",
+      surName: basicInformationForm.lastName ?? "",
+      birthday: basicInformationForm.birthDate? basicInformationForm.birthDate.toISOString().split("T")[0]: "", 
+      address: addressInformationForm.address ?? "",
+      cellPhone: contactInformationForm.phone ?? "",
+      userEmail: contactInformationForm.email ?? "",
     };
     await userProfileStore.updateUserProfile(userProfile);
     console.log("User profile updated successfully");
@@ -224,8 +224,6 @@ const submitForm = async () => {
   });
 };
 
-
-
 const loadData = async () => {
   const userId = Number(userStore.getUserId);
   if (!userId || userId <= 0) {
@@ -233,22 +231,23 @@ const loadData = async () => {
     return;
   }
 
-const userProfileStore = useUserProfileStore();
-await userProfileStore.fetchUserProfile(userId);
-const UserProfile = userProfileStore.userProfile;
+  const userProfileStore = useUserProfileStore();
+  await userProfileStore.fetchUserProfile(userId.toString());
+  const UserProfile = userProfileStore.userProfile;
 
-  
   if (!UserProfile) return;
 
-  basicInformationForm.firstName = UserProfile.userFirstName;
-  basicInformationForm.middleName = UserProfile.userMiddleName;
-  basicInformationForm.lastName = UserProfile.surName;
-  basicInformationForm.birthDate = UserProfile.birthday ? new Date(UserProfile.birthday) : new Date();
-  addressInformationForm.address = UserProfile.address || "";
-  contactInformationForm.email = UserProfile.userEmail;
-  contactInformationForm.phone = UserProfile.cellPhone;
-
+  basicInformationForm.firstName = UserProfile.userFirstName ?? "";
+  basicInformationForm.middleName = UserProfile.userMiddleName ?? "";
+  basicInformationForm.lastName = UserProfile.surName ?? "";
+  basicInformationForm.birthDate = UserProfile.birthday
+    ? new Date(UserProfile.birthday)
+    : new Date();
+  addressInformationForm.address = UserProfile.address ?? "";
+  contactInformationForm.email = UserProfile.userEmail ?? "";
+  contactInformationForm.phone = UserProfile.cellPhone ?? "";
 };
+
 onMounted(() => {
     loadData()
 });

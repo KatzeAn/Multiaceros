@@ -135,16 +135,16 @@ export function useEmployeePotentialViewModel() {
     if (!isValid) return;
     try {
       const formattedDate = employeePotentialForm.dateOfBirth
-        ? new Date(employeePotentialForm.dateOfBirth).toISOString().split("T")[0]
-        : null;
+      ? new Date(employeePotentialForm.dateOfBirth).toISOString().split("T")[0]
+      : "";
       const employeeData = {
         ...employeePotentialForm,
         dateOfBirth: formattedDate,
       };
       await employeePotentialStore.createEmployeePotentialRequest(
         employeeData,
-        uploadedFile.value
-      );
+        uploadedFile.value ?? new File([], "") 
+      );      
       emit("employee-saved");
       resetForm();
     } catch (error) {

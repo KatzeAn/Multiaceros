@@ -74,10 +74,11 @@
 </template>
 
 <script lang="ts" setup>
-import { computed, onMounted, ref } from "vue";
+import { computed,  ref } from "vue";
 import { useArlViewModel } from "@/presentation/viewmodels/arlViewModel";
 import { useArlStore } from "@/presentation/stores/arl.store";
 import { useI18n } from "vue-i18n";
+import type { Arl } from "@/domain/Interfaces/Arl/Arl.interface";
 
 const { t } = useI18n()
 const isSmallScreen = computed(() => window.innerWidth < 800);
@@ -100,11 +101,11 @@ const {
 } = useArlViewModel();
 
 const isEditModalVisible = ref(false);
-const editForm = ref({ id: null, name: "" });
-const originalEditForm = ref({ id: null, name: "" });
+const editForm = ref<{ id: number | null; name: string }>({ id: null, name: "" });
+const originalEditForm = ref<{ id: number | null; name: string }>({ id: null, name: "" });
 
-const openEditModal = (Arl) => {
-  editForm.value.id = Arl.id;
+const openEditModal = (Arl: Arl) => {
+  editForm.value.id = Arl.id ?? null;
   editForm.value.name = Arl.nameArl;
   originalEditForm.value = { ...editForm.value };
   isEditModalVisible.value = true;

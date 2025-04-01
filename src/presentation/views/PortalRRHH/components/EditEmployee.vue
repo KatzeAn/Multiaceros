@@ -221,13 +221,11 @@ const { familyCompensationFundList } = useFamilyCompensationFundViewModel();
 const loading = ref(false);
   
 const loadData = async () => {
-  const [{ bloodTypeList }, { contractTypeList }] = await Promise.all([
-    fetchBloodType(),
-    fetchContractType()
-  ]);
-  
-  bloodTypeOptions.value = bloodTypeList;
-  contractTypeOptions.value = contractTypeList;
+  await fetchBloodType();
+  await fetchContractType();
+
+  bloodTypeOptions.value = useBloodTypeStore().bloodTypeList;
+  contractTypeOptions.value = useContracTypeStore().contractTypeList;
 };
   
 onMounted(() => {

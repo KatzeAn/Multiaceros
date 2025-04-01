@@ -17,6 +17,7 @@ export const useAbsenceStore = defineStore("absence", () => {
     EvidenceFilePath: "c://file.pdf",
     UserId: "",
     name: "",
+    isActive: true,
   });
 
   const fetchAbsences = async (type: keyof AbsenceModel, isActive?: boolean) => {
