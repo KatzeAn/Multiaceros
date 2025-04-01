@@ -16,15 +16,16 @@ export const useUserProfileStore = defineStore('userProfile', () => {
     const fetchUserProfile = async (userId: string) => {
         loading.value = true;
         try {
-            const userServices = new UserProfileModel();
-            const userProfileResponse: UserProfile = await userServices.getUserProfile(userId);
-            userProfile.value = userProfileResponse; 
+          const userServices = new UserProfileModel();
+          const userProfileResponse: UserProfile = await userServices.getUserProfile(Number(userId));
+          userProfile.value = userProfileResponse;
         } catch (error) {
-            userProfile.value = null;
+          userProfile.value = null;
         } finally {
-            loading.value = false;
+          loading.value = false;
         }
-    };
+      };
+      
 
     const updateUserProfile = async (updatedProfile: UserProfile) => {
         try {

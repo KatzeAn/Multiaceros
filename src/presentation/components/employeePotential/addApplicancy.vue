@@ -96,6 +96,7 @@ import { useJobPostingViewModel } from "@/presentation/viewmodels/jobPostingView
 import { ElNotification } from "element-plus";
 import { watch, ref } from "vue";
 import { useI18n } from "vue-i18n";
+import type { UploadFile } from "element-plus";
 
 const { t } = useI18n()
 
@@ -132,13 +133,15 @@ const handleSubmit = () => {
   submitForm(ruleFormRef.value, (event) => emit(event as "employee-saved"));
 };
 
-const { ruleFormRef, rules, submitForm, isLoading, employeePotentialForm, uploadedFile } =
+const { ruleFormRef, rules, submitForm, isLoading, employeePotentialForm, uploadedFile} =
   useEmployeePotentialViewModel();
+  const fileList = ref<UploadFile[]>([]);
 
-const fileList = ref([]);
-const handleFileChange = (file) => {
-  fileList.value = [file];
-  uploadedFile.value = file.raw;
+const handleFileChange = (file: UploadFile) => {
+  if (file.raw) {
+    fileList.value = [file]; 
+    uploadedFile.value = file.raw;
+  }
 };
 watch(
   () => props.idJobPosting,

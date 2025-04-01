@@ -142,7 +142,7 @@ const { ruleFormRef, rules, submitForm, isLoading, employeePotentialForm, upload
 
 const handleFileChange = (file: UploadFile) => {
   if (file.raw) {
-    fileList.value = [file]; // Ahora no dará error
+    fileList.value = [file]; 
     uploadedFile.value = file.raw;
   }
 };

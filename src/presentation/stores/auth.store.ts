@@ -7,6 +7,12 @@ import { reactive, ref, watch, onMounted, onUnmounted } from "vue";
 import jwtDecode from 'jwt-decode';
 import { useI18n } from "vue-i18n"; 
 
+interface DecodedToken {
+  sub: string;
+  email: string;
+  role: string;
+  [key: string]: any; // Para cualquier campo adicional que puedas esperar
+}
 
 const loginFormInitialState = {
   email: "",
@@ -14,7 +20,7 @@ const loginFormInitialState = {
 };
 
 export const useAuthStore = defineStore("auth", () => {
-    const { t } = useI18n();
+  const { t } = useI18n();
   const isLoading = ref(false);
   const user = ref<User | null>(null);
   const errorMessage = ref<string | null | undefined>(null);
@@ -58,11 +64,11 @@ export const useAuthStore = defineStore("auth", () => {
   
       if (authResponse && authResponse.accessToken) {
         const token = authResponse.accessToken;
-        const decodedToken = jwtDecode(token);
+        const decodedToken = jwtDecode<DecodedToken>(token);
         const fullName = authResponse.userName || ""; 
         const nameParts = fullName.split(" ");
-        const firstName = nameParts[0] || null;
-        const lastName = nameParts.slice(1).join(" ") || null;
+        const firstName = nameParts[0] || "";
+        const lastName = nameParts.slice(1).join(" ") || ""; 
         
         user.value = new User(
           decodedToken.sub, 
@@ -86,13 +92,12 @@ export const useAuthStore = defineStore("auth", () => {
     }
   };
 
-
   const logout = () => {
     user.value = null;
     localStorage.removeItem("user");
     if (inactivityTimeout) clearTimeout(inactivityTimeout);
     window.location.replace("/");
-};
+  };
 
   const startInactivityTimer = () => {
     if (inactivityTimeout) clearTimeout(inactivityTimeout);
@@ -154,11 +159,11 @@ export const useAuthStore = defineStore("auth", () => {
       const authResponse = await authService.handleGoogleCallback(code);
 
       const token = authResponse.accessToken;
-      const decodedToken = jwtDecode(token);
+      const decodedToken = jwtDecode<DecodedToken>(token);
       const fullName = authResponse.userName || ""; 
         const nameParts = fullName.split(" ");
-        const firstName = nameParts[0] || null;
-        const lastName = nameParts.slice(1).join(" ") || null;
+        const firstName = nameParts[0] || ""; 
+        const lastName = nameParts.slice(1).join(" ") || "";
         
         user.value = new User(
           decodedToken.sub, 
@@ -181,7 +186,6 @@ export const useAuthStore = defineStore("auth", () => {
       });
     }
   };
-
 
   return {
     isLoading,
