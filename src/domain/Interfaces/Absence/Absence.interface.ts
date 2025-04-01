@@ -8,6 +8,7 @@ interface Absence {
     requestedById: number;
     fullName: string;
     id: number;
+    name: string;
     createdBy: string;
     createdDate: string;
     modifiedBy?: string | null;

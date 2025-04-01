@@ -90,7 +90,7 @@
             <el-option
               v-for="jobPosting in jobPostingList"
               :key="jobPosting.id"
-              :label="jobPosting.title"
+              :label="jobPosting.jobTitleName"
               :value="jobPosting.id"
             />
           </el-select>

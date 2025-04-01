@@ -122,11 +122,6 @@ const { t } = useI18n()
   const approvedRequests = computed(() => requests.value.filter(r => r.status === "approved"));
   const rejectedRequests = computed(() => requests.value.filter(r => r.status === "rejected"));
   
- 
-  
-
-  
-
   </script>
   
   <style scoped>

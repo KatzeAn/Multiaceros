@@ -281,11 +281,12 @@ import { useI18n } from "vue-i18n";
 
 const { t } = useI18n()
 
-const formatSalary = (salary) => {
+const formatSalary = (salary: string | number) => {
   if (!salary) return 'No especificado';
-  return new Intl.NumberFormat('es-CO').format(salary);
+  return new Intl.NumberFormat('es-CO').format(Number(salary));
 };
-const formatSalaryInput = (type) => {
+
+const formatSalaryInput = (type: string) => {
   let target = type === "create" ? jobPosting : selectedJobPosting;
 
   let numericValue = target.value.salaryRange.replace(/\D/g, "");
@@ -315,6 +316,7 @@ const isLoadingDivisions = ref(false);
 
 const jobPosting = ref<JobPosting>({
   jobTitleId: 1,
+  jobTitleName: "", 
   description: "",
   salaryRange: "",
   experienceLevel: 1,
@@ -322,38 +324,47 @@ const jobPosting = ref<JobPosting>({
   requirements: [] as string[],
   modality: 1,
   contractTypeId: 1,
+  contractType: 1,
   contractDuration: "",
   publicationDate: new Date().toISOString(),
   closingDate: new Date().toISOString(),
   priority: 1,
-  priorityText: ""
+  priorityText: "",
+  isActive: true, 
 });
 
 const selectedJobPosting = ref<JobPosting>({
   jobTitleId: 1,
+  jobTitleName: "", 
   description: "",
   salaryRange: "",
   experienceLevel: 1,
   divisionId: 1,
   requirements: [] as string[],
-   modality: 1,
-   contractTypeId: 1,
+  modality: 1,
+  contractTypeId: 1,
+  contractType: 1,
   contractDuration: "",
   publicationDate: new Date().toISOString(),
   closingDate: new Date().toISOString(),
   priority: 1,
-  priorityText: ""
+  priorityText: "",
+  isActive: true, 
 });
 
 const showInactive = ref(false);
 
+const isLoading = ref(false); 
+
 const submitJobPosting = async () => {
   try {
+    isLoading.value = true;
     await jobPostingStore.createJobPosting(jobPosting.value);
     await jobPostingStore.fetchJobPostingsCopy();
     isAddModalOpen.value = false;
   } catch (error) {
-    console.error("Error al crear el puesto de trabajo:", error);
+  } finally {
+    isLoading.value = false;
   }
 };
 
@@ -403,10 +414,7 @@ onMounted(() => {
   loadData();
 });
 
-const getContractType = (contractTypeId: number) => {
-  const contractType = contractTypeList.value.find((type) => type.id === contractTypeId);
-  return contractType ? contractType.typeOfContract : "Desconocido";
-};
+
 
 const getJobTitle = (jobTitleId: number) => {
   const jobTitle = jobTitleList.value.find((title) => title.id === jobTitleId);
@@ -452,7 +460,10 @@ const updateJobPosting = async () => {
     return;
   }
   try {
-    await jobPostingStore.updateJobPosting(selectedJobPosting.value.id, selectedJobPosting.value);
+    if (selectedJobPosting.value.id !== undefined) {
+  await jobPostingStore.updateJobPosting(selectedJobPosting.value.id, selectedJobPosting.value);
+} else {
+}
     await jobPostingStore.fetchJobPostingsCopy();
     isEditModalOpen.value = false;
   } catch (error) {

@@ -75,6 +75,7 @@ import { ref, onMounted, computed } from "vue";
 import { usePensionFundViewModel } from "@/presentation/viewmodels/pensionFundViewModel";
 import { usePensionFundStore } from "@/presentation/stores/pensionFund.store";
 import { useI18n } from "vue-i18n";
+import type { PensionFunds } from "@/domain/Interfaces/PensionFunds/pensionFunds.interface";
 
 const { t } = useI18n()
 
@@ -97,11 +98,11 @@ const {
 } = usePensionFundViewModel();
 
 const isEditModalVisible = ref(false);
-const editForm = ref({ id: null, name: "" });
-const originalEditForm = ref({ id: null, name: "" });
+const editForm =ref<{ id: number | null; name: string }>({ id: null, name: "" });
+const originalEditForm = ref<{ id: number | null; name: string }>({ id: null, name: "" });
 
-const openEditModal = (pensionFund) => {
-  editForm.value.id = pensionFund.id;
+const openEditModal = (pensionFund: PensionFunds) => {
+  editForm.value.id = pensionFund.id ?? null;
   editForm.value.name = pensionFund.pensionFundName;
   originalEditForm.value = {...editForm.value}
   isEditModalVisible.value = true;

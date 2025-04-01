@@ -96,6 +96,7 @@ import { ref, onMounted, computed } from "vue";
 import { useFamilyCompensationFundViewModel } from "@/presentation/viewmodels/familyCompensationFundViewModel";
 import { useFamilyCompensationFundStore } from "@/presentation/stores/familyCompensationFund.store";
 import { useI18n } from "vue-i18n";
+import type { FamilyCompesationFunds } from "@/domain/Interfaces/FamilyCompesationFunds/FamilyCompesationFunds.interface";
 
 const { t } = useI18n()
 
@@ -118,11 +119,11 @@ const {
 } = useFamilyCompensationFundViewModel();
 
 const isEditModalVisible = ref(false);
-const editForm = ref({ id: null, name: "" });
-const originalEditForm = ref({ id: null, name: "" });
+const editForm = ref<{ id: number | null; name: string }>({ id: null, name: "" });
+const originalEditForm = ref<{ id: number | null; name: string }>({ id: null, name: "" });
 
-const openEditModal = (fund) => {
-  editForm.value.id = fund.id;
+const openEditModal = (fund: FamilyCompesationFunds) => {
+  editForm.value.id = fund.id ?? null;
   editForm.value.name = fund.compensationFundName;
   originalEditForm.value = { ...editForm.value };
   isEditModalVisible.value = true;

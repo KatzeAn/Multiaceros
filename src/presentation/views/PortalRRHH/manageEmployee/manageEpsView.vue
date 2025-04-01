@@ -94,6 +94,7 @@ import { ref, onMounted, computed } from "vue";
 import { useEpsStore } from "@/presentation/stores/eps.store";
 import { useEpsViewModel } from "@/presentation/viewmodels/epsViewModel";
 import { useI18n } from "vue-i18n";
+import type { Eps } from "@/domain/Interfaces/Eps/eps.interface";
 
 const { t } = useI18n()
 
@@ -117,10 +118,10 @@ const {
 } = useEpsViewModel();
 
 const isEditModalVisible = ref(false);
-const editForm = ref({ id: null, name: "" });
+const editForm = ref<{ id: number | null; name: string }>({ id: null, name: "" });
 
-const openEditModal = (EPS) => {
-  editForm.value.id = EPS.id;
+const openEditModal = (EPS: Eps) => {
+  editForm.value.id = EPS.id ?? null;
   editForm.value.name = EPS.epsName;
   isEditModalVisible.value = true;
 };

@@ -88,6 +88,7 @@ import { ref, onMounted, computed } from "vue";
 import { useBenefitViewModel } from "@/presentation/viewmodels/benefitViewModel";
 import { useBenefitStore } from "@/presentation/stores/benefit.store";
 import { useI18n } from "vue-i18n";
+import type { Benefits } from "@/domain/Interfaces/Benefits/Benefits.interface";
 
 const { t } = useI18n()
 
@@ -110,11 +111,12 @@ const {
 } = useBenefitViewModel();
 
 const isEditModalVisible = ref(false);
-const editForm = ref({ id: null, name: "" });
-const originalEditForm = ref({ id: null, name: "" });
+const editForm = ref<{ id: number | null; name: string }>({ id: null, name: "" });
+const originalEditForm = ref<{ id: number | null; name: string }>({ id: null, name: "" });
 
-const openEditModal = (row) => {
-  editForm.value = { id: row.id, name: row.nameBenefit };
+const openEditModal = (row: Benefits) => {
+  editForm.value.id = row.id ?? null;
+  editForm.value.name = row.nameBenefit;
   originalEditForm.value = { ...editForm.value };
   isEditModalVisible.value = true;
 };

@@ -90,7 +90,7 @@ export const useDivisionStore = defineStore("division", () => {
       
       ElNotification({
         title: t("notifications.success.title"),
-        message: t("notifications.success.delete"),
+        message: t("notifications.success.divisionDeleted"),
         type: "success",
       });
       await fetchDivision();
