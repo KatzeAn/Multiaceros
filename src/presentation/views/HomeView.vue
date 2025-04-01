@@ -316,7 +316,7 @@ export default {
   mounted() {
     const { t, locale } = useI18n();
 
-    const daysOfWeek = {
+    const daysOfWeek: Record<string, string> = {
       sunday: "daysOfWeek.sunday",
       monday: "daysOfWeek.monday",
       tuesday: "daysOfWeek.tuesday",
