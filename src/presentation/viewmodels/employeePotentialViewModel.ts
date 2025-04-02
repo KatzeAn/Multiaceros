@@ -2,12 +2,14 @@ import { ref, computed, reactive, watch, onMounted } from "vue";
 import { type FormInstance } from "element-plus";
 import { useEmployeePotentialStore } from "../stores/employeePotential.store";
 import type { EmployeePotential } from "@/domain/Interfaces/EmployeePotential/EmployeePotential.interface";
+import { useI18n } from "vue-i18n";
 
 export function useEmployeePotentialViewModel() {
   const employeePotentialStore = useEmployeePotentialStore();
   const employeePotentialList = ref<EmployeePotential[]>([]);
   const employeePotential = ref<EmployeePotential | null>();
   const isLoading = computed(() => employeePotentialStore.isLoading);
+  const { t } = useI18n()
 
   const search = ref("");
   const currentPage = ref(1);
@@ -31,63 +33,62 @@ export function useEmployeePotentialViewModel() {
     firstName: [
       {
         required: true,
-        message: "El primer nombre es obligatorio",
+        message: t("firstName_required"),
         trigger: "blur",
       },
       {
         pattern: /^[a-zA-ZÁáÉéÍíÓóÚúÑñ\s]+$/,
-        message: "Solo se permiten letras y espacios",
+        message: t("firstName_pattern"),
         trigger: "blur",
       },
     ],
     numberDocument: [
       {
         required: true,
-        message: "El número de documento es obligatorio",
+        message: t("doc_required"),
         trigger: "blur",
       },
       {
         pattern: /^\d{4,11}$/,
-        message: "El documento debe tener entre 4 y 11 dígitos numéricos",
+        message: t("doc_pattern"),
         trigger: "blur",
       },
     ],
     surName: [
       {
         required: true,
-        message: "El primer apellido es obligatorio",
+        message: t("lastName_required"),
         trigger: "blur",
       },
     ],
     dateOfBirth: [
       {
         required: true,
-        message: "La fecha de nacimiento es obligatoria",
+        message: t("dob_required"),
         trigger: "blur",
       },
     ],
     email: [
-      { required: true, message: "El correo es obligatorio", trigger: "blur" },
-      { type: "email", message: "Formato de correo inválido", trigger: "blur" },
+      { required: true, message: t("email_required"), trigger: "blur" },
+      { type: "email", message: t("email_pattern"), trigger: "blur" },
     ],
     cellPhone: [
-      { required: true, message: "El celular es obligatorio", trigger: "blur" },
+      { required: true, message: t("phone_required"), trigger: "blur" },
       {
         pattern: /^\+?[0-9]{7,15}$/,
-        message:
-          "Número inválido. Debe contener entre 7 y 15 dígitos y puede empezar con '+'",
+        message: t("phone_pattern"),
         trigger: "blur",
       },
     ],
     jobPostingId: [
       {
         required: true,
-        message: "Debe seleccionar un puesto",
+        message: t("job_required"),
         trigger: "change",
       },
     ],
   });
-
+  
   const filterTableData = computed(() =>
     employeePotentialList.value.filter(
       (data) =>

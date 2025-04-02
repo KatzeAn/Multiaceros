@@ -134,36 +134,38 @@ onMounted(async () => {
   }
 });
 
-
-
 const rules = reactive<FormRules<AbsenceRequest>>({
   StartDate: [
     {
-      type: 'date',
+      type: "date",
       required: true,
-      message: 'Por favor selecciona una fecha',
-      trigger: 'change',
+      message: t("date_required"),
+      trigger: "change",
     },
   ],
   EndDate: [
     {
-      type: 'date',
+      type: "date",
       required: true,
-      message: 'Por favor selecciona una fecha',
-      trigger: 'change',
+      message: t("date_required"),
+      trigger: "change",
     },
   ],
   AbsenceTypeId: [
     {
       required: true,
-      message: 'Por favor selecciona un tipo de ausencia',
-      trigger: 'change',
+      message: t("absence_type_required"),
+      trigger: "change",
     },
   ],
   Comment: [
-    { required: true, message: 'Por favor ingrese un comentario', trigger: 'blur' },
+    {
+      required: true,
+      message: t("comment_required"),
+      trigger: "blur",
+    },
   ],
-})
+});
 
 const submitForm = async (formEl: FormInstance | undefined) => {
   if (!formEl) return;

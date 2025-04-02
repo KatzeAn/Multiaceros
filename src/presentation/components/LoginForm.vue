@@ -101,6 +101,7 @@ import { useI18n } from "vue-i18n";
 
 const { t } = useI18n()
 const { loginWithEmailAndPassword, loginForm, resetLoginForm, resetPassword, handleGoogleCallback, signInWithGoogle } = useAuthStore();
+const errorMessage = ref<string | null | undefined>(null);
 
 const router = useRouter();
 const isLoading = ref(false);
@@ -147,20 +148,19 @@ const resetPasswordHandler = async () => {
     const response = await resetPassword(email);
     
     ElNotification({
-      title: "Éxito",
-      message: `Correo de recuperación enviado a ${email}`,
+      title: t("notifications.success.title"),
+      message: t("notifications.success.recovery_email_sent"),
       type: "success",
     });
     dialogFormVisible.value = false; 
-  } catch (error) {
-    console.log(error)
-    console.error("Error al enviar el correo de recuperación", error);
-    ElNotification({
-      title: "Error",
-      message: "No se pudo enviar el correo de recuperación.",
-      type: "error",
-    });
-  }
+ } catch (error: any) {
+       errorMessage.value = error as string;
+       ElNotification({
+         title: t("notifications.error.title"),
+         message: errorMessage.value,
+         type: "error",
+       });
+     }
 };
 
 onMounted(() => {

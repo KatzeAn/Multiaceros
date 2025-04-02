@@ -2,11 +2,13 @@ import { ref, computed, reactive, watch, onMounted } from "vue";
 import { useEpsStore } from "../stores/eps.store";
 import { ElNotification, type FormInstance } from "element-plus";
 import type { Eps } from "@/domain/Interfaces/Eps/eps.interface";
+import { useI18n } from "vue-i18n";
 
 export function useEpsViewModel() {
   const epsStore = useEpsStore();
   const epsList = ref<Eps[]>([]);
   const isLoading = computed(() => epsStore.isLoading);
+  const { t } = useI18n()
 
   const search = ref("");
   const currentPage = ref(1);
@@ -20,10 +22,10 @@ export function useEpsViewModel() {
 
   const rules = reactive({
     epsName: [
-      { required: true, message: "El nombre es obligatorio", trigger: "blur" },
+      { required: true, message: t("name_required"), trigger: "blur" },
       {
         pattern: /^[a-zA-ZÁáÉéÍíÓóÚúÑñ\s]+$/,
-        message: "Solo letras y espacios",
+        message: t("name_pattern"),
         trigger: "blur",
       },
     ],

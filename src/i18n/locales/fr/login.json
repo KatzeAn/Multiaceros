@@ -12,6 +12,22 @@
     "resetPassword": "Réinitialiser le mot de passe",
     "emailAddress": "Adresse e-mail",
     "cancel": "Annuler",
-    "confirm": "Confirmer"
+    "confirm": "Confirmer",
+    "password_reset": {
+    "title": "Changez votre mot de passe",
+    "subtitle": "Entrez un nouveau mot de passe ci-dessous pour changer votre mot de passe",
+    "form": {
+      "new_password": "Nouveau mot de passe",
+      "confirm_password": "Confirmez le mot de passe",
+      "submit_button": "Changer le mot de passe"
+    },
+    "validation": {
+      "required_new_password": "Veuillez entrer un nouveau mot de passe",
+      "length": "Le mot de passe doit comporter entre 4 et 64 caractères",
+      "pattern": "Le mot de passe doit contenir au moins une lettre majuscule, un chiffre et un caractère spécial",
+      "required_confirm_password": "Veuillez confirmer votre nouveau mot de passe",
+      "passwords_mismatch": "Les mots de passe ne correspondent pas"
+    }
+  }
   }
   

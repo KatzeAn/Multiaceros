@@ -12,6 +12,22 @@
     "resetPassword": "Reset password",
     "emailAddress": "Email address",
     "cancel": "Cancel",
-    "confirm": "Confirm"
+    "confirm": "Confirm",
+    "password_reset": {
+    "title": "Change your password",
+    "subtitle": "Enter a new password below to change your password",
+    "form": {
+      "new_password": "New password",
+      "confirm_password": "Confirm password",
+      "submit_button": "Change password"
+    },
+    "validation": {
+        "required_new_password": "Please enter a new password",
+        "length": "The password must be between 4 and 64 characters",
+        "pattern": "The password must contain at least one uppercase letter, one number, and one special character",
+        "required_confirm_password": "Please confirm your new password",
+        "passwords_mismatch": "Passwords do not match"
+      }
+  }
   }
   

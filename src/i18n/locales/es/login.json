@@ -12,6 +12,22 @@
     "resetPassword": "Restablecer contraseña",
     "emailAddress": "Correo electrónico",
     "cancel": "Cancelar",
-    "confirm": "Confirmar"
+    "confirm": "Confirmar",
+    "password_reset": {
+      "title": "Cambie su contraseña",
+      "subtitle": "Ingrese una nueva contraseña a continuación para cambiar su contraseña",
+      "form": {
+        "new_password": "Nueva contraseña",
+        "confirm_password": "Confirmar contraseña",
+        "submit_button": "Cambiar contraseña"
+      },
+      "validation": {
+        "required_new_password": "Por favor ingresa una nueva contraseña",
+        "length": "La contraseña debe tener entre 4 y 64 caracteres",
+        "pattern": "La contraseña debe contener al menos una letra mayúscula, un número y un carácter especial",
+        "required_confirm_password": "Por favor confirma tu nueva contraseña",
+        "passwords_mismatch": "Las contraseñas no coinciden"
+      }
+    }
   }
   

@@ -35,7 +35,9 @@
         "roleAssigned": "El rol se ha cambiado exitosamente.",
          "severanceFundDeleted": "Fondo de cesantías eliminado con éxito.",
       "severanceFundUpdated": "Fondo de cesantías actualizado con éxito.",
-      "profileUpdated": "Perfil actualizado correctamente"
+      "profileUpdated": "Perfil actualizado correctamente",
+       "recovery_email_sent": "Correo de recuperación enviado",
+       "password_set": "Contraseña restablecida correctamente"
       },
       "error": {
         "title": "Error",
@@ -64,7 +66,8 @@
       "pensionUpdate": "No se pudo actualizar el fondo de pensión",
       "pensionDelete": "No se pudo eliminar el fondo de pensión",
         "roleFetch": "Error al obtener roles.",
-        "severanceFundFetch": "No se pudieron cargar los fondos de cesantías."
+        "severanceFundFetch": "No se pudieron cargar los fondos de cesantías.",
+        "file_required": "Debe adjuntar un archivo antes de enviar el formulario."
       }
     }
   }  

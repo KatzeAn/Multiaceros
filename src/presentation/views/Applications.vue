@@ -1,8 +1,8 @@
 <template>
   <div id="app" class="app flex h-screen">  
     <SidebarApplications class="w-64" />
-    <div class="flex-1 flex flex-col"> 
-      <NavbarApplications @navigate="setCurrentSection" />
+    <div class="flex-1 flex flex-col "> 
+        <NavbarApplications @navigate="setCurrentSection" />
       <div v-show="currentSection === 'vacantes'" id="vacantes" class="vacantes-section mt-10">
         <h1 class="text-center text-3xl font-bold">{{ t('vacanciesAvailable') }}</h1>
           <p class="text-center mt-2 text-gray-600">
