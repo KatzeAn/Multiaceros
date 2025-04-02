@@ -35,7 +35,9 @@
         "roleAssigned": "The role has been successfully changed.",
          "severanceFundDeleted": "Severance fund successfully deleted.",
       "severanceFundUpdated": "Severance fund successfully updated.",
-      "profileUpdated": "Profile updated successfully"
+      "profileUpdated": "Profile updated successfully",
+      "recovery_email_sent": "Recovery email sent",
+      "password_set" :"Password successfully reset"
       },
       "error": {
         "title": "Error",
@@ -64,7 +66,8 @@
       "pensionUpdate": "Failed to update pension fund",
       "pensionDelete": "Failed to delete pension fund",
        "roleFetch": "Error fetching roles.",
-        "severanceFundFetch": "Failed to load severance funds."
+        "severanceFundFetch": "Failed to load severance funds.",
+         "file_required": "You must attach a file before submitting the form."
           }
     }
   }

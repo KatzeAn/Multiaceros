@@ -35,7 +35,9 @@
      "roleAssigned": "Le rôle a été modifié avec succès.",
       "severanceFundDeleted": "Fonds de licenciement supprimé avec succès.",
       "severanceFundUpdated": "Fonds de licenciement mis à jour avec succès.",
-      "profileUpdated": "Profil mis à jour avec succès"
+      "profileUpdated": "Profil mis à jour avec succès",
+      "recovery_email_sent": "E-mail de récupération envoyé ",
+      "password_set": "Mot de passe réinitialisé avec succès"
       },
       "error": {
         "title": "Erreur",
@@ -64,7 +66,8 @@
       "pensionUpdate": "Échec de la mise à jour du fonds de pension",
       "pensionDelete": "Échec de la suppression du fonds de pension",
       "roleFetch": "Erreur lors de la récupération des rôles.",
-      "severanceFundFetch": "Échec du chargement des fonds de licenciement."
+      "severanceFundFetch": "Échec du chargement des fonds de licenciement.",
+       "file_required": "Vous devez joindre un fichier avant de soumettre le formulaire."
       }
     }
   }

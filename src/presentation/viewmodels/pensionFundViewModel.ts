@@ -2,11 +2,13 @@ import { ref, computed, reactive, watch, onMounted } from "vue";
 import { usePensionFundStore } from "../stores/pensionFund.store";
 import { ElNotification, type FormInstance } from "element-plus";
 import type { PensionFunds } from "@/domain/Interfaces/PensionFunds/pensionFunds.interface";
+import { useI18n } from "vue-i18n";
 
 export function usePensionFundViewModel() {
   const pensionFundStore = usePensionFundStore();
   const pensionFundList = ref<PensionFunds[]>([]);
   const isLoading = computed(() => pensionFundStore.isLoading);
+  const { t } = useI18n()
 
   const search = ref("");
   const currentPage = ref(1);
@@ -19,10 +21,10 @@ export function usePensionFundViewModel() {
 
   const rules = reactive({
     pensionFundName: [
-      { required: true, message: "El nombre es obligatorio", trigger: "blur" },
+      { required: true, message: t("name_required"), trigger: "blur" },
       {
         pattern: /^[a-zA-ZÁáÉéÍíÓóÚúÑñ\s]+$/,
-        message: "Solo letras y espacios",
+        message: t("name_pattern"),
         trigger: "blur",
       },
     ],

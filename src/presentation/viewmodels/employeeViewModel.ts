@@ -8,11 +8,13 @@ import {
 } from "element-plus";
 import type { BasicEmployee } from "@/domain/Interfaces/Employee/basicEmployee.interface";
 import type { EmployeeRequest } from "@/domain/Interfaces/Employee/EmployeeRequest.interface";
+import { useI18n } from "vue-i18n";
 
 export function useEmployeeViewModel() {
   const employeeStore = useEmployeeStore();
   const employeeList = ref<BasicEmployee[]>([]);
   const isLoading = computed(() => employeeStore.isLoading);
+  const { t } = useI18n()
 
   const search = ref("");
   const currentPage = ref(1);
@@ -77,71 +79,71 @@ export function useEmployeeViewModel() {
     numberDocument: [
       {
         required: true,
-        message: "El número de documento es obligatorio",
+        message: t("doc_required"),
         trigger: "blur",
       },
       {
         pattern: /^\d{4,11}$/,
-        message: "El documento debe tener entre 4 y 11 dígitos numéricos",
+        message: t("doc_pattern"),
         trigger: "blur",
       },
     ],
     userFirstName: [
       {
         required: true,
-        message: "El primer nombre es obligatorio",
+        message:  t("lastName_required"),
         trigger: "blur",
       },
       {
         pattern: /^[a-zA-ZÁáÉéÍíÓóÚúÑñ\s]+$/,
-        message: "Solo se permiten letras y espacios",
+        message:  t("name_pattern"),
         trigger: "blur",
       },
     ],
     userMiddleName: [
       {
         pattern: /^[a-zA-ZÁáÉéÍíÓóÚúÑñ\s]*$/,
-        message: "Solo se permiten letras y espacios",
+        message:  t("name_pattern"),
         trigger: "blur",
       },
     ],
     surName: [
       {
         required: true,
-        message: "El primer apellido es obligatorio",
+        message: t("lastName_required"),
         trigger: "blur",
       },
     ],
     address: [
       {
         required: true,
-        message: "La dirección es obligatoria",
+        message: t("address_required"),
         trigger: "blur",
       },
     ],
     cellPhone: [
-      { required: true, message: "El celular es obligatorio", trigger: "blur" },
+      { required: true, message: t("phone_required"), trigger: "blur" },
       {
         pattern: /^\+?[0-9]{7,15}$/,
         message:
-          "Número inválido. Debe contener entre 7 y 15 dígitos y puede empezar con '+'",
+        t("phone_pattern"),
         trigger: "blur",
       },
     ],
     userEmail: [
-      { required: true, message: "El correo es obligatorio", trigger: "blur" },
-      { type: "email", message: "Formato de correo inválido", trigger: "blur" },
+      { required: true, message: t("email_required"), trigger: "blur" },
+      { type: "email", message: t("email_pattern"), trigger: "blur" },
     ],
     birthday: [
       {
         required: true,
-        message: "La fecha de nacimiento es obligatoria",
+        message: t("dob_required"),
         trigger: "blur",
       },
       {
         validator: (rule, value, callback) => {
           if (!value) {
-            return callback(new Error("La fecha de nacimiento es obligatoria"));
+            return callback(new Error(t("dob_required")));
           }
 
           const birthDate = new Date(value);
@@ -156,7 +158,7 @@ export function useEmployeeViewModel() {
           }
 
           if (age < 18) {
-            return callback(new Error("Debe ser mayor de edad"));
+            return callback(new Error(t("must_be_adult")));
           } else {
             return callback();
           }
@@ -170,86 +172,86 @@ export function useEmployeeViewModel() {
     id: [
       {
         required: true,
-        message: "Debe seleccionar una EPS",
+        message: t("select_eps"),
         trigger: "change",
       },
     ],
     epsTypeId: [
       {
         required: true,
-        message: "Debe seleccionar un tipo de EPS",
+        message: t("select_eps_type"),
         trigger: "change",
       },
     ],
   };
-
+  
   const arlDataRules: Record<string, Array<FormItemRule>> = {
     id: [
       {
         required: true,
-        message: "Debe seleccionar una ARL",
+        message: t("select_arl"),
         trigger: "change",
       },
     ],
     riskId: [
       {
         required: true,
-        message: "Debe seleccionar un nivel de riesgo",
+        message: t("select_risk_level"),
         trigger: "change",
       },
     ],
   };
-
+  
   const contractDataRules: Record<string, Array<FormItemRule>> = {
     contractTypeId: [
       {
         required: true,
-        message: "Debe seleccionar un tipo de contrato",
+        message: t("select_contract_type"),
         trigger: "change",
       },
     ],
     contractStartDate: [
       {
         required: true,
-        message: "Debe seleccionar una fecha de inicio",
+        message: t("select_start_date"),
         trigger: "blur",
       },
     ],
     contractEndDate: [
       {
         type: "date",
-        message: "La fecha de finalización debe ser válida",
+        message: t("valid_end_date"),
         trigger: "blur",
       },
     ],
   };
-
+  
   const bonificationDataRules: Record<string, Array<FormItemRule>> = {
     bonificationValue: [
       {
         required: true,
-        message: "Debe ingresar un valor de bonificación",
+        message: t("enter_bonus_value"),
         trigger: "blur",
       },
       {
         type: "number",
         min: 0.01,
         max: 1000000000,
-        message: "Debe estar entre 0.01 y 1,000,000,000",
+        message: t("bonus_value_range"),
         trigger: "blur",
       },
     ],
     activeBonusDate: [
       {
         required: true,
-        message: "Debe ingresar la fecha de inicio de la bonificación",
+        message: t("enter_bonus_start_date"),
         trigger: "blur",
       },
     ],
     bonusEndDate: [
       {
         required: true,
-        message: "Debe ingresar la fecha de fin de la bonificación",
+        message: t("enter_bonus_end_date"),
         trigger: "blur",
       },
     ],
@@ -278,62 +280,62 @@ export function useEmployeeViewModel() {
     id: [
       {
         required: true,
-        message: "Debe seleccionar un fondo de pensiones",
+        message: t("select_pension_fund"),
         trigger: "change",
       },
     ],
     pensionFundTypeId: [
       {
         required: true,
-        message: "Debe seleccionar un tipo de fondo de pensiones",
+        message: t("select_pension_fund_type"),
         trigger: "change",
       },
     ],
   };
-
+  
   const rules = reactive({
     salary: [
-      { required: true, message: "El salario es obligatorio", trigger: "blur" },
+      { required: true, message: t("salary_required"), trigger: "blur" },
       {
         type: "number",
         min: 0,
         max: 1000000000,
-        message: "El salario debe estar entre 0 y 1,000,000,000",
+        message: t("salary_range"),
         trigger: "blur",
       },
     ],
     divisionId: [
       {
         required: true,
-        message: "Debe seleccionar un departamento",
+        message: t("select_department"),
         trigger: "change",
       },
     ],
     jobTitleId: [
       {
         required: true,
-        message: "Debe seleccionar un cargo",
+        message: t("select_job_title"),
         trigger: "change",
       },
     ],
     bloodTypeId: [
       {
         required: true,
-        message: "El tipo de sangre es obligatorio",
+        message: t("blood_type_required"),
         trigger: "change",
       },
     ],
     severanceFundId: [
       {
         required: true,
-        message: "Debe seleccionar un fondo de cesantías",
+        message: t("select_severance_fund"),
         trigger: "change",
       },
     ],
     familyCompensationFundId: [
       {
         required: true,
-        message: "Debe seleccionar una caja de compensación",
+        message: t("select_compensation_fund"),
         trigger: "change",
       },
     ],

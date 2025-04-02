@@ -2,11 +2,13 @@ import { ref, computed, reactive, watch, onMounted } from "vue";
 import { ElNotification, type FormInstance } from "element-plus";
 import { useBenefitStore } from "../stores/benefit.store";
 import type { Benefits } from "@/domain/Interfaces/Benefits/Benefits.interface";
+import { useI18n } from "vue-i18n";
 
 export function useBenefitViewModel() {
   const benefitStore = useBenefitStore();
   const benefitList = ref<Benefits[]>([]);
   const isLoading = computed(() => benefitStore.isLoading);
+  const { t } = useI18n()
 
   const search = ref("");
   const currentPage = ref(1);
@@ -19,10 +21,10 @@ export function useBenefitViewModel() {
 
   const rules = reactive({
     nameBenefit: [
-      { required: true, message: "El nombre es obligatorio", trigger: "blur" },
+      { required: true, message: t("name_required"), trigger: "blur" },
       {
         pattern: /^[a-zA-ZÁáÉéÍíÓóÚúÑñ\s]+$/,
-        message: "Solo letras y espacios",
+        message: t("name_pattern"),
         trigger: "blur",
       },
     ],

@@ -4,12 +4,10 @@
       <el-card class="p-9 max-w-[550px]" style="border-radius: 0.5rem">
         <template #header>
           <div class="flex flex-col items-center">
-            <h2 class="text-3xl font-bold">Cambie su contraseña</h2>
-            <span class="text-lg text-center my-2 text-gray-500 font-medium"
-              >Ingrese una nueva contraseña a continuación para cambiar su
-              contraseña</span
-            >
-            <!-- <span class="bg-orange-100 w-full text-center py-2 rounded-md font-bold text-red-400">El token ha expirado, pida uno nuevo</span> -->
+            <h2 class="text-3xl font-bold">{{ t("password_reset.title") }}</h2>
+            <span class="text-lg text-center my-2 text-gray-500 font-medium">
+              {{ t("password_reset.subtitle") }}
+            </span>
           </div>
         </template>
         <el-form
@@ -20,7 +18,7 @@
           label-position="top"
           class="space-y-12"
         >
-          <el-form-item label="Nueva contraseña" prop="newPassword">
+          <el-form-item :label="t('password_reset.form.new_password')" prop="newPassword">
             <el-input
               size="large"
               type="password"
@@ -28,7 +26,7 @@
               v-model="form.newPassword"
             />
           </el-form-item>
-          <el-form-item label="Confirmar contraseña" prop="confirmPassword">
+          <el-form-item :label="t('password_reset.form.confirm_password')" prop="confirmPassword">
             <el-input
               size="large"
               type="password"
@@ -44,7 +42,7 @@
               class="w-full"
               @click="handleSubmit"
             >
-              Cambiar contraseña
+              {{ t("password_reset.form.submit_button") }}
             </el-button>
           </el-form-item>
         </el-form>
@@ -56,7 +54,9 @@
 <script lang="ts" setup>
 import { useRoute, useRouter } from "vue-router";
 import { useResetPasswordViewModel } from "../viewmodels/resetPasswordViewModel";
+import { useI18n } from "vue-i18n";
 
+const { t } = useI18n()
 const route = useRoute();
 const router = useRouter();
 const token = route.query.token as string;

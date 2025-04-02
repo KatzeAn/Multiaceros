@@ -2,11 +2,13 @@ import { ref, computed, reactive, watch, onMounted } from "vue";
 import { useFamilyCompensationFundStore } from "../stores/familyCompensationFund.store";
 import { ElNotification, type FormInstance } from "element-plus";
 import type { FamilyCompesationFunds } from "@/domain/Interfaces/FamilyCompesationFunds/FamilyCompesationFunds.interface";
+import { useI18n } from "vue-i18n";
 
 export function useFamilyCompensationFundViewModel() {
   const familyCompensationFundStore = useFamilyCompensationFundStore();
   const familyCompensationFundList = ref<FamilyCompesationFunds[]>([]);
   const isLoading = computed(() => familyCompensationFundStore.isLoading);
+  const { t } = useI18n()
 
   const search = ref("");
   const currentPage = ref(1);
@@ -18,11 +20,11 @@ export function useFamilyCompensationFundViewModel() {
   });
 
   const rules = reactive({
-    compensationFundName: [
-      { required: true, message: "El nombre es obligatorio", trigger: "blur" },
+    compensationFundName:[
+      { required: true, message: t("name_required"), trigger: "blur" },
       {
         pattern: /^[a-zA-ZÁáÉéÍíÓóÚúÑñ\s]+$/,
-        message: "Solo letras y espacios",
+        message: t("name_pattern"),
         trigger: "blur",
       },
     ],

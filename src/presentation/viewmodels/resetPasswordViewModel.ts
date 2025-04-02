@@ -2,10 +2,13 @@ import { ref, computed, reactive, watch, onMounted } from "vue";
 import { useAuthStore } from "../stores/auth.store";
 import { ElNotification, type FormInstance } from "element-plus";
 import { useRouter } from "vue-router";
+import { useI18n } from "vue-i18n";
 
 export function useResetPasswordViewModel() {
   const authStore = useAuthStore();
   const isLoading = computed(() => authStore.isLoading);
+  const errorMessage = ref<string | null | undefined>(null);
+  const { t } = useI18n();
 
   const ruleFormRef = ref<FormInstance>();
 
@@ -15,8 +18,7 @@ export function useResetPasswordViewModel() {
     callback: (error?: Error) => void
   ) => {
     if (value !== form.newPassword) {
-      callback(new Error("Las contraseñas no coinciden"));
-    } else {
+      callback(new Error(t("password_reset.validation.passwords_mismatch")));    } else {
       callback();
     }
   };
@@ -37,32 +39,30 @@ export function useResetPasswordViewModel() {
     newPassword: [
       {
         required: true,
-        message: "Por favor ingresa una nueva contraseña",
+        message: t("password_reset.validation.required_new_password"),
         trigger: "blur",
       },
       {
         min: 4,
         max: 64,
-        message: "La contraseña debe tener entre 4 y 64 caracteres",
+        message: t("password_reset.validation.length"),
         trigger: "blur",
       },
       {
-        pattern:
-          /^(?=.*[A-Z])(?=.*\d)(?=.*[!@#$%^&*()+\-=\[\]{}|\\:;"'<>,.?/~`])[A-Za-z\d!@#$%^&*()+\-=\[\]{}|\\:;"'<>,.?/~`]+$/,
-        message:
-          "La contraseña debe contener al menos una letra mayúscula, un número y un carácter especial",
+        pattern: /^(?=.*[A-Z])(?=.*\d)(?=.*[!@#$%^&*()+\-=\[\]{}|\\:;"'<>,.?/~`])[A-Za-z\d!@#$%^&*()+\-=\[\]{}|\\:;"'<>,.?/~`]+$/,
+        message: t("password_reset.validation.pattern"),
         trigger: "blur",
       },
     ],
     confirmPassword: [
       {
         required: true,
-        message: "Por favor confirma tu nueva contraseña",
+        message: t("password_reset.validation.required_confirm_password"),
         trigger: "blur",
       },
       { validator: validateConfirmPassword, trigger: "blur" },
     ],
-  });
+  });  
 
   const submitForm = async (
     formEl: FormInstance | undefined,
@@ -81,17 +81,17 @@ export function useResetPasswordViewModel() {
       console.log(response);
 
       ElNotification({
-        title: "Éxito",
-        message: "contraseña restablecida correctamente",
+        title: t("notifications.success.title"),
+        message:t("notifications.success.password_set"),
         type: "success",
       });
 
       return true;
-    } catch (error) {
-      const errorMessage = error as string;
+    } catch (error: any) {
+      errorMessage.value = error as string;
       ElNotification({
-        title: "Error",
-        message: "Ha sucedido un error al cambiar la contraseña",
+        title: t("notifications.error.title"),
+        message: errorMessage.value,
         type: "error",
       });
     }

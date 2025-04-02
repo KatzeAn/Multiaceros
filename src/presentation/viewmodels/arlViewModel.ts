@@ -2,11 +2,13 @@ import { ref, computed, reactive, watch, onMounted } from "vue";
 import { useArlStore } from "../stores/arl.store";
 import { ElNotification, type FormInstance } from "element-plus";
 import type { Arl } from "@/domain/Interfaces/Arl/Arl.interface";
+import { useI18n } from "vue-i18n";
 
 export function useArlViewModel() {
   const arlStore = useArlStore();
   const arlList = ref<Arl[]>([]);
   const isLoading = computed(() => arlStore.isLoading);
+const { t } = useI18n()
 
   const search = ref("");
   const currentPage = ref(1);
@@ -19,14 +21,14 @@ export function useArlViewModel() {
 
   const rules = reactive({
     nameArl: [
-      { required: true, message: "El nombre es obligatorio", trigger: "blur" },
+      { required: true, message: t("name_required"), trigger: "blur" },
       {
         pattern: /^[a-zA-ZÁáÉéÍíÓóÚúÑñ\s]+$/,
-        message: "Solo letras y espacios",
+        message: t("name_pattern"),
         trigger: "blur",
       },
     ],
-  });
+  });  
   const showInactive = ref(false);
   const filterTableData = computed(() =>
     arlList.value.filter(

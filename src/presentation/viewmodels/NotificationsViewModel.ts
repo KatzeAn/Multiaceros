@@ -3,6 +3,7 @@ import { useNotificationConfigStore } from "@/presentation/stores/Notifications.
 import { ElNotification, type FormInstance } from "element-plus";
 import type { NotificationConfig } from "@/domain/Interfaces/Notifications/Notifications.interface";
 import { useUserStore } from "@/presentation/stores/user.store";
+import { useI18n } from "vue-i18n";
 
 export function useNotificationConfigViewModel() {
   const notificationStore = useNotificationConfigStore();
@@ -10,6 +11,7 @@ export function useNotificationConfigViewModel() {
   const isLoading = computed(() => notificationStore.isLoading);
  const userStore = useUserStore(); 
   const userId = userStore.getUserId; 
+  const { t } = useI18n()
 
 
   const search = ref("");
@@ -29,7 +31,7 @@ export function useNotificationConfigViewModel() {
 
   const rules = reactive({
     name: [
-      { required: true, message: "El nombre es obligatorio", trigger: "blur" },
+      { required: true, message: t("name_required"), trigger: "blur" },
     ],
   });
 

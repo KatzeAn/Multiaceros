@@ -2,11 +2,13 @@ import { ref, computed, reactive, watch, onMounted } from "vue";
 import { useSeveranceFundStore } from "../stores/severanceFund.store";
 import { ElNotification, type FormInstance } from "element-plus";
 import type { SeveranceFund } from "@/domain/Interfaces/severanceFund/severanceFund.interface";
+import { useI18n } from "vue-i18n";
 
 export function useSeveranceFundViewModel() {
   const severanceFundStore = useSeveranceFundStore();
   const severanceFundList = ref<SeveranceFund[]>([]);
   const isLoading = computed(() => severanceFundStore.isLoading);
+  const { t } = useI18n()
 
   const search = ref("");
   const currentPage = ref(1);
@@ -19,10 +21,10 @@ export function useSeveranceFundViewModel() {
 
   const rules = reactive({
     severanceFundName: [
-      { required: true, message: "El nombre es obligatorio", trigger: "blur" },
+      { required: true, message: t("name_required"), trigger: "blur" },
       {
         pattern: /^[a-zA-ZÁáÉéÍíÓóÚúÑñ\s]+$/,
-        message: "Solo letras y espacios",
+        message: t("name_pattern"),
         trigger: "blur",
       },
     ],

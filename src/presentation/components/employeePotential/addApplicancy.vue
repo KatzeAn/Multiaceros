@@ -124,10 +124,10 @@ const emit = defineEmits(["update:dialog", "employee-saved"]);
 const handleSubmit = () => {
   if (!uploadedFile.value) {
     ElNotification({
-      title: "Error",
-      message: "Debe adjuntar un archivo antes de enviar el formulario.",
-      type: "error",
-    });
+        title: t("notifications.error.title"),
+        message: t("notifications.error.file_required"),
+        type: "error",
+      });
     return;
   }
   submitForm(ruleFormRef.value, (event) => emit(event as "employee-saved"));

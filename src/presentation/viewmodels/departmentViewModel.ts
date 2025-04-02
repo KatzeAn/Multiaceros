@@ -2,11 +2,13 @@ import { ref, computed, reactive, watch, onMounted } from "vue";
 import { useDivisionStore } from "../stores/division.store";
 import {  type FormInstance } from "element-plus";
 import type { Division } from "@/domain/Interfaces/Division/division.interface";
+import { useI18n } from "vue-i18n";
 
 export function useDepartmentViewModel() {
   const divisionStore = useDivisionStore();
   const divisionList = ref<Division[]>([]);
   const isLoading = computed(() => divisionStore.isLoading);
+  const { t } = useI18n()
 
   const search = ref("");
   const currentPage = ref(1);
@@ -20,10 +22,10 @@ export function useDepartmentViewModel() {
 
   const rules = reactive({
     name: [
-      { required: true, message: "El nombre es obligatorio", trigger: "blur" },
+      { required: true, message: t("name_required"), trigger: "blur" },
       {
         pattern: /^[a-zA-ZÁáÉéÍíÓóÚúÑñ\s]+$/,
-        message: "Solo letras y espacios",
+        message: t("name_pattern"),
         trigger: "blur",
       },
     ],
