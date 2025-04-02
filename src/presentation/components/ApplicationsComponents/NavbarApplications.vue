@@ -1,7 +1,7 @@
 <template>
   <el-menu
     :default-active="activeIndex"
-    class="el-menu-demo"
+    class="el-menu-demo w-full shadow-md"
     mode="horizontal"
     background-color="white"
     text-color="#2A3D66"
@@ -20,22 +20,20 @@
       <el-icon><InfoFilled /></el-icon> {{ t('sobreNosotros') }}
     </el-menu-item>
 
-    <el-menu-item index="3">
+    <div class="ml-auto flex items-center gap-4">
       <LanguageSwitcher />
-    </el-menu-item>
+    </div>
   </el-menu>
 </template>
-
 
 <script setup>
 import { ref } from "vue";
 import { Briefcase, InfoFilled } from "@element-plus/icons-vue";
 import logo from "@/presentation/assets/vertical.png";
-import LanguageSwitcher from "@/presentation/components/LanguageSwitcher.vue"
+import LanguageSwitcher from "@/presentation/components/LanguageSwitcher.vue";
 import { useI18n } from "vue-i18n";
 
-const { t } = useI18n()
-
+const { t } = useI18n();
 const activeIndex = ref("1");
 const emit = defineEmits(["navigate"]);
 
@@ -53,21 +51,24 @@ const handleSelect = (key) => {
   display: flex;
   align-items: center;
   width: 100%;
+  max-width: 100vw;
+  overflow: hidden;
   box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
-  padding: 0 20px;
+  padding: 0 16px;
+  gap: 1rem;
+  flex-wrap: wrap; /* Permite que los elementos se acomoden en varias líneas si es necesario */
 }
+
 
 .logo {
   padding: 0 15px;
   cursor: pointer;
 }
+
 .logo-img {
   height: 40px;
 }
 
-.flex-spacer {
-  flex-grow: 1;
-}
 .el-menu-item:hover,
 .el-sub-menu__title:hover {
   background-color: #3C4E80;
