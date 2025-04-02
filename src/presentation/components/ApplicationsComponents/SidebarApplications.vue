@@ -90,7 +90,7 @@ const navigate = (route: string) => {
 .sidebar {
   height: 100vh;
   position: fixed;
-  width: 250px;
+  width:  256px;
 }
 
 .bottom-navbar {

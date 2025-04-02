@@ -56,7 +56,7 @@ const handleSelect = (key) => {
   box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
   padding: 0 16px;
   gap: 1rem;
-  flex-wrap: wrap; /* Permite que los elementos se acomoden en varias líneas si es necesario */
+  flex-wrap: wrap; 
 }
 
 
