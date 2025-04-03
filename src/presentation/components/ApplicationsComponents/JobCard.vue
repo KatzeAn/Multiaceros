@@ -54,7 +54,7 @@ const paginatedJobs = computed(() => {
   return jobStore.jobPostings.slice(start, start + pageSize.value);
 });
 
-const updatePageSize = () => pageSize.value = window.innerWidth < 800 ? 1 : 6;
+const updatePageSize = () => pageSize.value = window.innerWidth < 800 ? 1 : 4;
 
 onMounted(() => {
   updatePageSize();
@@ -76,20 +76,19 @@ const toggleDescription = (id: number) => expandedDescriptions[id] = !expandedDe
 .job-list {
   display: grid;
   gap: 30px;
-  justify-content: center;
   padding: 20px;
+  width: 100%;
 }
 
 @media (min-width: 800px) {
-  .job-list { grid-template-columns: repeat(3, 1fr); }
+  .job-list { grid-template-columns: repeat(1, 1fr); }
 }
 
 @media (min-width: 1200px) {
-  .job-list { grid-template-columns: repeat(6, 1fr); }
+  .job-list { grid-template-columns: repeat(4, 1fr); }
 }
 
 .job-card {
-  max-width: 400px;
   box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
   border-radius: 10px;
   padding: 15px;
@@ -103,7 +102,7 @@ const toggleDescription = (id: number) => expandedDescriptions[id] = !expandedDe
 
 .pagination-container .el-pagination button {
   color: #f0f0f0;
-  background-color: #374151; 
+  background-color: #374151;
 }
 
 .pagination-container .el-pagination .is-active {
@@ -111,5 +110,4 @@ const toggleDescription = (id: number) => expandedDescriptions[id] = !expandedDe
   color: white;
   border-radius: 5px;
 }
-
 </style>
