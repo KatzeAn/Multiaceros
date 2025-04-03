@@ -37,8 +37,6 @@ const activeNames = ref(["1"]);
 const handleChange = (val: CollapseModelValue) => console.log(val);
 
 const collapseItems = [
-  { title: "conoceHicody", text: "descripcionHicody" },
-  { title: "porqueTrabajar", text: "porqueTrabajarTexto" },
   { title: "mision", text: "misionTexto" },
   { title: "vision", text: "visionTexto" },
 ];
@@ -58,8 +56,8 @@ const socialLinks = [
 }
 
 .collapse-item {
-  background-color: #f8fafc; /* Blanco con un leve tono gris */
-  color: #1f2937; /* Texto oscuro */
+  background-color: #f8fafc; 
+  color: #1f2937; 
   border-radius: 8px;
   transition: all 0.3s ease-in-out;
 }
