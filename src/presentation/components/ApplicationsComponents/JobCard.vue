@@ -12,19 +12,21 @@
         <p><strong>{{ t('salario') }}:</strong> {{ formatSalary(job.salaryRange) }}</p>
         <p><strong>{{ t('descripcion') }}:</strong></p>
         <p>
-          {{ expandedDescriptions[job.id] ? job.description : job.description.slice(0, 100) + '...' }}
-          <el-button text @click="toggleDescription(job.id)">
-            {{ expandedDescriptions[job.id] ? t('verMenos') : t('verMas') }}
+          {{ expandedDescriptions[job.id ?? 0] ? job.description : job.description.slice(0, 100) + '...' }}
+          <el-button text @click="toggleDescription(job.id ?? 0)">
+            {{ expandedDescriptions[job.id ?? 0] ? t('verMenos') : t('verMas') }}
           </el-button>
         </p>
+
         <p><strong>{{ t('requerimientos') }}:</strong></p>
         <ul>
           <li v-for="(requirement, index) in job.requirements" :key="index">- {{ requirement }}</li>
         </ul>
       </div>
       <template #footer>
-        <el-button type="primary" @click="openAddModal(job.id)">{{ t('aplicarAhora') }}</el-button>
-      </template>
+        <el-button type="primary" @click="openAddModal(job.id ?? 0)">
+          {{ t('aplicarAhora') }}
+        </el-button>      </template>
     </el-card>
   </div>
 
@@ -69,7 +71,9 @@ const openAddModal = (id: number) => {
   isAddModalOpen.value = true;
 };
 
-const toggleDescription = (id: number) => expandedDescriptions[id] = !expandedDescriptions[id];
+const toggleDescription = (id: number) => {
+  expandedDescriptions[id] = !expandedDescriptions[id];
+};
 </script>
 
 <style>
