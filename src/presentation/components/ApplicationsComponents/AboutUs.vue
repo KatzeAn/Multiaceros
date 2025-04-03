@@ -1,5 +1,5 @@
 <template>
-  <div class="demo-collapse p-6 bg-gray-50 rounded-lg shadow-lg w-full">
+  <div class="demo-collapse p-6 bg-gray-500 rounded-lg shadow-lg w-full">
     <el-collapse v-model="activeNames" @change="handleChange" class="space-y-4">
       <el-collapse-item 
         :title="t('conoceHicody')" 
@@ -105,7 +105,7 @@
   }
   
   .el-collapse-item .el-collapse-item__content {
-    background-color: #fff; 
+    background-color: gray; 
     padding: 15px;
     border-radius: 8px;
   }

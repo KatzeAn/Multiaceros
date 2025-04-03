@@ -4,7 +4,7 @@
     @employee-saved="handleEmployeeSaved"
     :idJobPosting="jobPostingId"
   />
-  <div class="job-list">
+  <div class="job-list grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4 mt-6">
     <el-card
       v-for="job in jobStore.jobPostings"
       :key="job.id"
@@ -82,14 +82,7 @@ onMounted(async () => {
 </script>
 
 <style>
-.job-list {
-  display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
-  grid-auto-rows: min-content; 
-  gap: 20px;
-  padding: 20px;
-  align-items: start;
-}
+
 
 .job-card {
   display: flex;
